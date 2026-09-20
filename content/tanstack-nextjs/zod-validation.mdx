@@ -1,0 +1,21 @@
+---
+title: "Zod Schema — Validation"
+label: "Zod Validation"
+order: 27
+level: "Intermediate"
+description: "zod v4-এ product schema, coerce, partial update ও error message — বাংলায়।"
+---
+
+<InParagraph text={"**zodResolver** দিয়ে RHF-কে আঙ্গুলে zest schema-এর ভিত্তিতে validate করে। schema টাইপ → `CreateProductInput`-এর উৎস। Zod 4 ব্যবহার করছি (project-এ `zod: ^4`)।"} />
+
+<CodeBlock code={"import { z } from \"zod\";\n\nexport const categorySchema = z.enum([\n  \"electronics\",\n  \"clothing\",\n  \"books\",\n  \"food\",\n]);\n\nexport const productSchema = z.object({\n  name: z.string().min(1, \"নাম আবশ্যক\").max(80),\n  description: z.string().max(500).optional(),\n  // form থেকে আসা string → number\n  price: z.coerce.number()\n    .finite(\"সঠিক দাম দিন\")\n    .min(1, \"দাম ১-এর বেশি হওয়া উচিত\"),\n  category: categorySchema,\n  stock: z.coerce.number().int().min(0, \"Stock ঋণাত্মক নয়\"),\n  status: z.enum([\"active\", \"inactive\"]),\n});\n\nexport type CreateProductInput = z.infer<typeof productSchema>;\n\n// edit-এ সব field বাধ্যতামূলক নয় চাইলে\nexport const updateProductSchema = productSchema.partial();\nexport type UpdateProductInput = z.infer<typeof updateProductSchema>;"} lang={"ts"} title={"src/lib/validators/product-schema.ts"} />
+
+## z.enum + category types
+
+<InParagraph text={"`z.enum([...])` থেকে আমরা type derive করি — যেন **category** ভুল টাইপ compile-time-এই আটকায়। এভাবে API types ও form schema একটাই সত্যের উৎস (single source)."} />
+
+## zodResolver যুক্ত করা
+
+<CodeBlock code={"import { zodResolver } from \"@hookform/resolvers/zod\";\nimport { productSchema } from \"@/lib/validators/product-schema\";\n\nuseForm<CreateProductInput>({\n  resolver: zodResolver(productSchema),\n  defaultValues: {\n    name: \"\",\n    description: \"\",\n    price: 0,\n    category: \"electronics\",\n    stock: 0,\n    status: \"active\",\n  },\n});"} lang={"tsx"} title={"Resolver-সহ useForm"} />
+
+<Tip tone={"warning"} title={"coerce কেন"} text={"HTML `type=\"number\"` input-এর concern `string` — কিন্তু আমরা চাই `number`। `z.coerce.number()` আগে শুধু string-কে number-এ রূপান্তর করে, তারপর validate করে। ছাড়া হলে type mismatch-এ resolver quarterback হতো।"} />

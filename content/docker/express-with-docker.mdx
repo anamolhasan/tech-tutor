@@ -1,0 +1,27 @@
+---
+title: "Express.js অ্যাপ Docker-এ"
+label: "Express.js + Docker"
+order: 14
+level: "Intermediate"
+description: "Express API ডকারাইজেশন, MongoDB-সহ compose setup ও health endpoint — বাংলায়।"
+---
+
+<InParagraph text={"Express-এর Dockerfile Node.js-এর মতোই, তবে এখানে স্কেল জন্য **ডাবল-purpose** (dev/production script) setup দেখি — আর সাথে MongoDB-এর compose।"} />
+
+## Dockerfile
+
+<CodeBlock code={"FROM node:20-slim\n\nWORKDIR /app\n\nCOPY package*.json ./\nRUN npm ci\n\nCOPY . .\n\nENV NODE_ENV=production\nEXPOSE 5000\n\nUSER node\n\nCMD [\"node\", \"src/index.js\"]"} lang={"dockerfile"} title={"Dockerfile"} />
+
+## Express с MongoDB compose
+
+<CodeBlock code={"services:\n  api:\n    build: .\n    ports:\n      - \"5000:5000\"\n    environment:\n      - NODE_ENV=production\n      - PORT=5000\n      - MONGODB_URI=mongodb://mongo:27017/blog\n    depends_on:\n      - mongo\n\n  mongo:\n    image: mongo:7\n    volumes:\n      - mongo-data:/data/db\n\nvolumes:\n  mongo-data:"} lang={"yaml"} title={"compose.yml"} />
+
+## Health endpoint
+
+<CodeBlock code={"const express = require(\"express\");\nconst mongoose = require(\"mongoose\");\n\nconst app = express();\nconst PORT = process.env.PORT || 5000;\n\napp.get(\"/health\", (_req, res) => {\n  const dbState = mongoose.connection.readyState === 1;\n  res.status(dbState ? 200 : 503).json({\n    uptime: process.uptime(),\n    db: dbState ? \"connected\" : \"disconnected\",\n  });\n});\n\napp.listen(PORT, () =>\n  console.log(\"Server চলছে: http://localhost:\" + PORT),\n);"} lang={"js"} title={"src/index.js"} />
+
+## Build ও run
+
+<CodeBlock code={"docker compose up -d --build\ndocker compose ps\ncurl http://localhost:5000/health"} lang={"bash"} title={"Run steps"} />
+
+<Tip tone={"info"} title={"startup order"} text={"MongoDB container start করতে maunted সময় লাগে — API-যেভাবে appear. Mongoose `serverSelectionTimeoutMS` বাড়িয়ে রাখুন যাতে retry করে।"} />

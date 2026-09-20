@@ -1,0 +1,19 @@
+---
+title: "app.json — ইকোন, splash, bundle id ও version"
+label: "App Config"
+order: 7
+level: "Beginner"
+description: "Native-level সেটিংস — app.json-এর গুরুত্বপূর্ণ key-গুলো বাংলায়।"
+---
+
+<InParagraph text={"অ্যাপের native-level সেটিংস থাকে **`app.json`**-এ। default template-এ এমন দেখায়:"} />
+
+<CodeBlock code={"{\n  \"expo\": {\n    \"name\": \"TaskTrack\",\n    \"slug\": \"tasktrack\",\n    \"version\": \"1.0.0\",\n    \"orientation\": \"portrait\",\n    \"icon\": \"./assets/icon.png\",\n    \"scheme\": \"tasktrack\",\n    \"userInterfaceStyle\": \"automatic\",\n    \"splash\": {\n      \"image\": \"./assets/splash-icon.png\",\n      \"resizeMode\": \"contain\"\n    },\n    \"ios\": {\n      \"bundleIdentifier\": \"com.example.tasktrack\"\n    },\n    \"android\": {\n      \"package\": \"com.example.tasktrack\",\n      \"adaptiveIcon\": {\n        \"foregroundImage\": \"./assets/adaptive-icon.png\"\n      }\n    }\n  }\n}"} lang={"json"} title={"app.json"} />
+
+- `name` / `slug` — store-এ দেখানো নাম ও build-এর পরিচয়
+- `version` — app version; build-এর সময় base
+- `scheme` — deep link prefix (`tasktrack://...`)
+- `icon` / `splash` — অ্যাপ icon ও launch screen
+- `ios.bundleIdentifier` / `android.package` — store-এ unique id
+
+<Tip tone={"warning"} title={"Version স্পর্শে সতর্ক"} text={"রিলিজের সময় Android-এ `versionCode` (integer) ও iOS-এ `buildNumber` আলাদাভাবে বাড়ান — 1.0.0 → 1.0.1 হলে দুটো update। `eas build --auto-increment` এটা নিজে করে।"} />

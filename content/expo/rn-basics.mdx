@@ -1,0 +1,27 @@
+---
+title: "React Native-এর মূল ধারণা — components, JSX, style"
+label: "RN Basics"
+order: 3
+level: "Beginner"
+description: "React Native-এ web-এর বদলে native components — পার্থক্যগুলো বাংলায়।"
+---
+
+<InParagraph text={"React Native-এ UI লেখা হয় **React-এর মতোই**, তবে browser DOM নেই। HTML element-এর বদলে **native component** ব্যবহার হয়।"} />
+
+| Web (HTML) | React Native |
+| --- | --- |
+| div | View |
+| span / p | Text |
+| input | TextInput |
+| button | Pressable / Button |
+| img | Image |
+
+<CodeBlock code={"import { View, Text, Pressable } from \"react-native\";\n\nexport default function Welcome() {\n  return (\n    <View style={{ padding: 24 }}>\n      <Text>Welcome to TaskTrack — টাস্ক যোগ করুন</Text>\n      <Pressable onPress={() => console.log(\"pressed\")}>\n        <Text>Add Task</Text>\n      </Pressable>\n    </View>\n  );\n}"} lang={"tsx"} title={"components/Welcome.tsx"} />
+
+<InParagraph text={"**JSX**-এ `View`, `Text` ট্যাগ, আর style দেওয়া হয় **object** দিয়ে। TypeScript আনলে props আরও safe হয়।"} />
+
+### একই JavaScript, ভিন্ন render target
+
+<InParagraph text={"React web-এ virtual DOM-কে browser-এ render করে; React Native সেটা render করে **native view hierarchy**-তে। আপনার logic, hooks, state management — সব একই থাকে।"} />
+
+<Tip tone={"info"} title={"মনে রাখুন"} text={"RN-এর ৩টি মূল ধারণা: **components**, **props**, **state**। এগুলো জানলে আপনি মূলত React-ই জানেন — শুধু component সেট আলাদা।"} />

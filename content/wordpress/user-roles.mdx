@@ -1,0 +1,33 @@
+---
+title: "User ও Role কী"
+label: "User ও Role"
+order: 10
+level: "Beginner"
+description: "WordPress-এর User account কী, Role-গুলো কী কী (Admin, Editor, Author ইত্যাদি) এবং প্রত্যেকের ক্ষমতা — বাংলায়।"
+---
+
+## User কী?
+
+<InParagraph text={"**User** হলো WordPress site-এ account — logger-in করা ব্যক্তি। প্রতিটি user-এর একটি **Role** থাকে, যা নির্ধারণ করে সে **কী কী কাজ করতে পারবে**।"} />
+
+## Role বলতে কী বোঝায়?
+
+<InParagraph text={"**Role** হলো permission-এর set। WordPress-এ ডিফল্ট পাঁচটি role আছে — প্রতিটির ক্ষমতা আলাদা।"} />
+
+| Role | ক্ষমতা |
+| --- | --- |
+| Administrator | সবকিছু — site setting, theme, plugin, user, content সব manage |
+| Editor | সব content manage — তার/তার teammate-এর লেখা publish/edit/delete |
+| Author | নিজের post লেখা, publish ও edit |
+| Contributor | নিজের post লেখা শুধু, publish-এর জন্য Editor-এর approval |
+| Subscriber | শুধু login ও comment — সাধারণ দর্শক |
+
+<CodeBlock code={"Admin      → পুরো site-এর owner\nEditor     → content team lead\nAuthor     → writer\nContributor→ guest writer\nSubscriber → site-র paid member"} lang={"text"} title={"Role use করার উদাহরণ"} />
+
+## কীভাবে user তৈরি হয়
+
+- **Users → Add New** থেকে ম্যানুয়ালি
+- Registration plugin (যেমন WooCommerce-এ customer account)
+- Theme/plugin-এর নিজস্ব system
+
+<Tip tone={"warning"} title={"Security"} text={"সব user-এর জন্য **Admin** role দেবেন না। যত কম ক্ষমতা, site-তত বেশি নিরাপদ। Default `admin` username ব্যবহার করা থেকেও বিরত থাকুন।"} />

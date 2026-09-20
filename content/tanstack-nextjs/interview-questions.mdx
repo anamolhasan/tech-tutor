@@ -1,0 +1,23 @@
+---
+title: "Interview Questions"
+label: "Interview Q&A"
+order: 41
+level: "Advanced"
+description: "TanStack Query / Table / RHF / Zod-এর ১৫টি দরকারি ইন্টারভিউ প্রশ্ন ও উত্তর — বাংলায়।"
+---
+
+<InParagraph text={"চাকরি/টেক-টেস্টের প্রস্তুতি এখানেই শেষ করুন। নিচে সম্ভাব্য প্রশ্ন আর উত্তর — নিজের ভাষায় বোঝার চেষ্টা সরাসরি।"} />
+
+## Query অংশ
+
+<CodeBlock code={"Q1: TanStack Query কীভাবে duplicate request এড়ায়?\n→ queryKey এক-এক cache entry। একই key-র queries একই cache\n  share করে — একই ফাঁকের মধ্যে duplicate fetch করা হয় না।\n\nQ2: staleTime ও cacheTime (gcTime) পার্থক্য?\n→ staleTime: ডেটা কতক্ষণ 'fresh' থাকবে (refetch হবে না)।\n  gcTime: কতক্ষণ cache-এ রেখে দেবে unmount-এর পর\n  (ঐ সময়ে re-mount হলে instant)।\n\nQ3: invalidateQueries কি করে?\n→ query গুলোকে stale করে + mounted-গুলিকে refetch করে।\n\nQ4: optimistic update-এ ৩ ধাপ?\n→ onMutate (snapshot) → onError (rollback) → onSettled (invalidate).\n\nQ5: placeholderData vs initialData?\n→ placeholder: সত্যসূচক নয়, cache-এ save হয় না।\n  initial: cache-এ ঢোকে, পরের fetch-এর ভিত্তি।"} lang={"text"} title={"Q & A"} />
+
+## Table অংশ
+
+<CodeBlock code={"Q6: TanStack Table headless মানে কী?\n→ শুধু state+logic (sorting, pagination, selection);\n  মার্কআপ/styling সম্পূর্ণ আপনার।\n\nQ7: flexRender কী?\n→ column-এ দেওয়া value (string/fn/Component)-কে context-সহ\n  সঠিকভাবে render করে।\n\nQ8: accessorKey vs id column?\n→ accessorKey: ডেটার নির্দিষ্ট প্রোপার্টি Map।\n  id: শুধু identity, access-হীন (যেমন Actions)।\n\nQ9: sorting server-side কেন?\n→ বড় data client-এ স্বস্তিতে বসে না;\n  server sort করলে page-এ শুধু প্রয়োজনীয় tail আসে।"} lang={"text"} title={"Q & A"} />
+
+## Form/Zod অংশ
+
+<CodeBlock code={"Q10: react-hook-form কেন uncontrolled?\n→ re-render কম (per-keystroke re-render নেই), পারফরম্যান্স ভালো।\n\nQ11: zodResolver কাজ কী?\n→ RHF-কে বলে schema-তে validate করতে; errors → formState.\n\nQ12: z.coerce.number() কেন?\n→ input string → number রূপান্তর → তারপর validation।\n\nQ13: Controller কখন দরকার?\n→ মাল্টি-ইনপুট/যে component-এ register কাজ করে না\n  (Select, Combobox, Switch, DatePicker)।\n\nQ14: অনুক্রম ProductForm create/edit দুটোতেই?\n→ defaultValues + key-ভিত্তিক remount/reset।\n\nQ15: client + server validation দুই দিকে কেন?\n→ client: instant feedback; server: security (bypass করা যায়)।"} lang={"text"} title={"Q & A"} />
+
+<Tip tone={"success"} title={"শেষ কথা"} text={"এই ১৫টি প্রশ্নের উত্তর দিতে পারলে আপনি project-টিকে নিজের করে নিয়েছেন। **প্রেমিকভাবে নিজে কোড করে** আবার review করলে আরো ভালো। পড়াশোনার জন্য ধন্যবাদ! 🎉"} />

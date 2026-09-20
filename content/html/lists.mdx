@@ -1,0 +1,31 @@
+---
+title: "HTML Lists (তালিকা)"
+label: "HTML Lists"
+order: 10
+level: "Beginner"
+description: "HTML-এ unordered, ordered ও description list — খুল, ol, li, dl, dt, dd নিয়ে বাংলা টিউটোরিয়াল।"
+---
+
+<InParagraph text={"তালিকা তৈরির জন্য HTML-এ তিন ধরনের list রয়েছে — **unordered list** (`<ul>`), **ordered list** (`<ol>`) এবং **description list** (`<dl>`)।"} />
+
+## Unordered List
+
+<CodeBlock code={"<ul>\n  <li>চা</li>\n  <li>দুধ</li>\n  <li>চিনি</li>\n</ul>"} lang={"html"} />
+
+<InParagraph text={"`<ul>`-এ আইটেমগুলো সাধারণত বুলেট দিয়ে দেখানো হয় — যখন ক্রম গুরুত্বপূর্ণ নয়।"} />
+
+## Ordered List
+
+<CodeBlock code={"<ol>\n  <li>ডিম ভাঙুন</li>\n  <li>ফেটান</li>\n  <li>ভেজে পরিবেশন করুন</li>\n</ol>"} lang={"html"} />
+
+<InParagraph text={"`<ol>`-এ সংখ্যা বা ক্রম দেখানো হয় — যেমন রেসিপি, ধাপ-ধাপে নির্দেশনা।"} />
+
+### List ভেতরে List (Nesting)
+
+<CodeBlock code={"<ul>\n  <li>ফল\n    <ul>\n      <li>আম</li>\n      <li>কলা</li>\n    </ul>\n  </li>\n  <li>সবজি</li>\n</ul>"} lang={"html"} />
+
+## Description List
+
+<CodeBlock code={"<dl>\n  <dt>HTML</dt>\n  <dd>ওয়েবপেজের গঠন তৈরির ভাষা</dd>\n  <dt>CSS</dt>\n  <dd>ওয়েবপেজের স্টাইলিংয়ের ভাষা</dd>\n</dl>"} lang={"html"} />
+
+<Tip tone={"info"} title={"উপযুক্ত list বাছুন"} text={"ধাপ-ধাপে কাজের জন্য `<ol>`, বাছাইয়ের জিনিসের জন্য `<ul>`, আর term ও তার ব্যাখ্যার জন্য `<dl>` — সঠিক ট্যাগ ব্যবহার করলে কনটেন্ট অর্থপূর্ণ হয়।"} />

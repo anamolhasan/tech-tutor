@@ -1,0 +1,22 @@
+---
+title: "সাধারণ ভুল — আশেপাশে ঘুরতে না"
+label: "Common Mistakes"
+order: 37
+level: "Intermediate"
+description: "চেনা ভুলগুলো এড়িয়ে যাওয়ার উপায়।"
+---
+
+| ভুল | সমাধান |
+| --- | --- |
+| new PrismaClient() প্রতি request | global singleton |
+| select না — সব column | select সঠিক |
+| include-এর ভেতরে loop-query | nested include |
+| upsert-এ ভুল unique-key | unique-field in where |
+| decimal-এ Number/float | Decimal type রাখা |
+| dev-এ migrate deploy | শুধু prod/CI |
+| raw string-concat | $queryRaw tag |
+| client-এ query support | সব Server-সাইড |
+
+<InParagraph text={"আরও: env-না commit, `$disconnect` app-ছাড়ায়, seed-বারবার-duplicate — upsert।"} />
+
+<Tip tone={"info"} title={"validation-প্রথম"} text={"মেয়াদ এড়াতে new feature-এর আগে `prisma validate` + `tsc` — সংকুচিত CI-এ শিওর।"} />

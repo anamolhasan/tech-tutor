@@ -1,0 +1,22 @@
+---
+title: "Window Functions — rank, row_number, over"
+label: "Window Functions"
+order: 22
+level: "Advanced"
+description: "GROUP BY ছাড়া row-wise ranking/aggregation — OVER()."
+---
+
+<InParagraph text={"Window function গ্রুপের ভেতরে প্রতিটি row-এর **পাশাপাশি** ফলাফল দেয় — aggregate-এর মতো গ্রুপ collapsed করে না।"} />
+
+<CodeBlock code={"SELECT u.name, o.total, o.created_at, rn\nFROM (\n  SELECT o.*, u.name,\n         ROW_NUMBER() OVER (\n           PARTITION BY o.user_id\n           ORDER BY o.created_at DESC\n         ) AS rn\n  FROM orders o JOIN users u ON u.id = o.user_id\n) ranked\nWHERE ranked.rn = 1;"} lang={"sql"} title={"user পার-এর সর্বশেষ order"} />
+
+| Function | কাজ |
+| --- | --- |
+| ROW_NUMBER() | ক্রমিক নম্বর (প্রতি উইন্ডো) |
+| RANK() / DENSE_RANK() | সমান মানে-এ same rank |
+| LAG / LEAD | আগের/পরের row-এর মান |
+| SUM() OVER | রানিং total (partition-ভিত্তিক) |
+
+<CodeBlock code={"-- রানিং total\nSELECT created_at::date AS day, total,\n       SUM(total) OVER (ORDER BY created_at::date) AS running\nFROM orders\nORDER BY created_at::date;"} lang={"sql"} />
+
+<Tip tone={"warning"} title={"কখন নয়"} text={"Window functions প্রায়ই সুদৃশ্য, তবে বড় scan-এ cost হয় — সচেতনভাবে ব্যবহার করুন। Top-N-এ filter করতে subquery/CTE-তে wrap জরুরি (WHERE-এ window function চলে না)।"} />

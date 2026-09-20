@@ -1,0 +1,46 @@
+---
+title: "Dockerfile — প্রতিটি Instruction"
+label: "Dockerfile"
+order: 7
+level: "Intermediate"
+description: "FROM, RUN, COPY, WORKDIR, ENV, EXPOSE, CMD, ENTRYPOINT — Dockerfile লেখা ও build — বাংলায়।"
+---
+
+<InParagraph text={"**Dockerfile** হলো একটি plain text file যাতে image কীভাবে গড়তে হবে তার ধাপ-ধাপে নির্দেশনা থাকে। প্রতিটি লাইন একটি instruction — প্রতিটি instruction একটি layer।"} />
+
+## সবচেয়ে গুরুত্বপূর্ণ instructions
+
+| Instruction | কাজ |
+| --- | --- |
+| `FROM` | base image বাছাই (প্রথম লাইন হতে হয়) |
+| `WORKDIR` | working directory নির্ধারণ |
+| `COPY` | host থেকে image-এ file কভার |
+| `RUN` | build-এর সময় কমান্ড চালায় (যেমন install) |
+| `ENV` | environment variable সেট |
+| `EXPOSE` | কোন port container-এর ব্যবহার হবে (documentation) |
+| `CMD` | container run-এর default command |
+| `ENTRYPOINT` | fixed command — যেটি override হয় না |
+| `USER` | কোন user-এ process চালবে |
+
+## প্রথম Dockerfile
+
+<CodeBlock code={"# ১. base image\nFROM node:20-alpine\n\n# ২. app-এর directory\nWORKDIR /app\n\n# ৩. dependencies আগে কপি (cache-কেন্দ্রিক)\nCOPY package*.json ./\nRUN npm install\n\n# ৪. বাকি কোড\nCOPY . .\n\n# ৫. port জানিয়ে দেওয়া\nEXPOSE 3000\n\n# ৬. default কমান্ড\nCMD [\"npm\", \"start\"]"} lang={"dockerfile"} title={"Dockerfile"} />
+
+## CMD vs ENTRYPOINT
+
+<InParagraph text={"`CMD` container run-এর **default** কমান্ড — `docker run image <arg>` লিখলে প্রতিস্থাপন হয়। `ENTRYPOINT` হলো **fixed** কমান্ড — run-এর সময় override হয় না (override করতে `--entrypoint` flag লাগে)। একসাথে ব্যবহার করলে ENTRYPOINT + CMD-এর args-এ পরিণত হয়।"} />
+
+<CodeBlock code={"# docker run myapp --port 4000\n# → 실제: node app.js --port 4000\nENTRYPOINT [\"node\", \"app.js\"]\nCMD [\"--port\", \"3000\"]"} lang={"dockerfile"} title={"ENTRYPOINT + CMD combo"} />
+
+## docker build
+
+<CodeBlock code={"docker build -t my-app:1.0 .\n# -t → tag/নাম,   . → build context (current folder)\n\n# build log-এ প্রতিটি লাইন হয় layer তৈরি করছে\ndocker image ls | grep my-app"} lang={"bash"} title={"Image build"} />
+
+## সাধারণ ভুল
+
+- `.dockerignore` না লাগানো — node_modules/Docker-dir image-এ কপি হয়
+- সম্পূর্ণ কোড আগে কপি করে তারপর install — চাইলে পুরো cache ভেঙে যায়
+- `CMD npm start` (shell form) — সিগন্যাল হ্যান্ডলিং-compatible নয়, `["npm","start"]` (exec form) ভালো
+- root user-এ সব চালানো — production-এ নিরাপদ নয়
+
+<Tip tone={"info"} title={"Exec form আসল best practice"} text={"`CMD [\"node\", \"app.js\"]` — এতে SIGTERM/SIGINT সঠিকভাবে process-এ পৌঁছায়, graceful shutdown হয়। শেল ফর্ম `npm start`-এ সেই signal main process-এ নাও পৌঁছাতে পারে।"} />

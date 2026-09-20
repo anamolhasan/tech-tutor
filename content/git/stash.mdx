@@ -1,0 +1,43 @@
+---
+title: "Stash — কাজ সাময়িকভাবে সরিয়ে রাখা"
+label: "Stash"
+order: 11
+level: "Intermediate"
+description: "git stash দিয়ে পরিবর্তন সাময়িক রাখা এবং পুনরুদ্ধার — বাংলায়।"
+---
+
+## Stash কেন দরকার?
+
+<InParagraph text={"মাঝপথে কাজ করছিলেন, কিন্তু হঠাৎ অন্য branch-এ যেতে হল — অসম্পূর্ণ পরিবর্তন নিয়ে switch করা ঝুঁকিপূর্ণ। **Stash** সেই পরিবর্তনগুলো সাময়িকভাবে আলাদা জায়গায় রেখে দেয়, পরে ফিরিয়ে আনা যায়।"} />
+
+## প্রধান stash কমান্ড
+
+| কমান্ড | কী করে |
+| --- | --- |
+| git stash push -m "work" | পরিবর্তন সেভ + work dir clean |
+| git stash | সাধারণত shorthand |
+| git stash list | সব stash দেখায় |
+| git stash pop | সর্বশেষ stash আবার প্রবেশ + list থেকে সরিয়ে |
+| git stash apply | stash পুনরুদ্ধার (list থেকে না সরিয়ে) |
+| git stash drop stash@\{1\} | নির্দিষ্ট stash মুছে ফেলো |
+| git stash clear | সব stash verwijder |
+
+## সাধারণ flow
+
+<CodeBlock code={"git stash push -m \"wip: dashboard charts\"\ngit switch fix-urgent\n# ... urgent কাজ, commit ...\ngit switch back\ngit stash pop"} lang={"bash"} />
+
+## Untracked / ignored ফাইল stash
+
+<CodeBlock code={"git stash push -u     # untracked ফাইলও stash\ngit stash push -a     # ignored সহ সব (rarely)"} lang={"bash"} />
+
+## Stash-এর commit ব্যবহার
+
+<CodeBlock code={"git stash show stash@{0}          # কী কী বদলে\ngit stash branch fix-branch stash@{0}   # stash থেকে নতুন branch\ngit stash apply && git stash drop stash@{0}   # apply + drop একসাথে"} lang={"bash"} />
+
+<InParagraph text={"`git stash apply` লিস্ট থেকে stash সরায় না — একে একাধিক branch-এ লাগানো যায়। `pop` এটি সরিয়ে দেয়।"} />
+
+## Stash conflict
+
+<InParagraph text={"যদি stash pop-এর সময় বর্তমান কাজের সঙ্গে পরিবর্তন লড়াই হয়, Git conflict বলবে — তখন merge conflict-এর মতোই manual সমাধান করে stage+commit করুন।"} />
+
+<Tip tone={"info"} title={"পরামর্শ"} text={"Stash-কে দীর্ঘ সময়ের storage মনে করবেন না। ভুলে না যাওয়ার জন্য message দিয়ে রাখুন। সম্ভব হলে branch-এ কাজ করুন — stash তবে জরুরি প্রয়োজনের টুল, না routine।"} />

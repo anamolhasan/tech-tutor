@@ -1,0 +1,42 @@
+---
+title: "REST API Development"
+label: "API Development"
+order: 13
+level: "Intermediate"
+description: "REST API design, CRUD operations, status codes, validation — Node.js/Express-এ API তৈরির বাংলা গাইড।"
+---
+
+<InParagraph text={"**API (Application Programming Interface)** হলো client ও server-এর মধ্যে কথা বলার মাধ্যম। **REST API** হলো সবচেয়ে জনপ্রিয় API architecture।"} />
+
+## REST API Design
+
+| Method | Endpoint | কাজ |
+| --- | --- | --- |
+| GET | /api/users | সব user আনা |
+| GET | /api/users/:id | নির্দিষ্ট user আনা |
+| POST | /api/users | নতুন user তৈরি |
+| PUT | /api/users/:id | user update |
+| DELETE | /api/users/:id | user মুছে ফেলা |
+
+## Full CRUD API
+
+<CodeBlock code={"const express = require(\"express\");\nconst router = express.Router();\n\nlet users = [\n  { id: 1, name: \"রহিম\", email: \"rahim@example.com\" },\n  { id: 2, name: \"করিম\", email: \"karim@example.com\" },\n];\n\n// GET /api/users\nrouter.get(\"/\", (req, res) => {\n  res.json(users);\n});\n\n// GET /api/users/:id\nrouter.get(\"/:id\", (req, res) => {\n  const user = users.find(u => u.id === parseInt(req.params.id));\n  if (!user) return res.status(404).json({ error: \"User পাওয়া যায়নি\" });\n  res.json(user);\n});\n\n// POST /api/users\nrouter.post(\"/\", (req, res) => {\n  const { name, email } = req.body;\n  if (!name || !email) {\n    return res.status(400).json({ error: \"Name ও email দরকার\" });\n  }\n  const newUser = { id: Date.now(), name, email };\n  users.push(newUser);\n  res.status(201).json(newUser);\n});\n\n// PUT /api/users/:id\nrouter.put(\"/:id\", (req, res) => {\n  const user = users.find(u => u.id === parseInt(req.params.id));\n  if (!user) return res.status(404).json({ error: \"User পাওয়া যায়নি\" });\n  Object.assign(user, req.body);\n  res.json(user);\n});\n\n// DELETE /api/users/:id\nrouter.delete(\"/:id\", (req, res) => {\n  users = users.filter(u => u.id !== parseInt(req.params.id));\n  res.json({ message: \"User মুছে ফেলা হয়েছে\" });\n});\n\nmodule.exports = router;"} lang={"javascript"} title={"routes/users.js"} />
+
+## HTTP Status Codes
+
+| Code | অর্থ |
+| --- | --- |
+| 200 | OK — সফল |
+| 201 | Created — নতুন resource তৈরি হয়েছে |
+| 204 | No Content — সফল কিন্তু response body নেই |
+| 400 | Bad Request — client ভুল |
+| 401 | Unauthorized — authentication লাগবে |
+| 403 | Forbidden — permission নেই |
+| 404 | Not Found — resource নেই |
+| 500 | Internal Server Error — server সমস্যা |
+
+## Request Validation
+
+<CodeBlock code={"// simple validation middleware\nconst validateUser = (req, res, next) => {\n  const { name, email } = req.body;\n  if (!name || name.length < 2) {\n    return res.status(400).json({\n      error: \"Name কমপক্ষে 2 characters হতে হবে\"\n    });\n  }\n  if (!email || !email.includes(\"@\")) {\n    return res.status(400).json({\n      error: \"Valid email দিন\"\n    });\n  }\n  next();\n};\n\nrouter.post(\"/\", validateUser, (req, res) => {\n  // validated data\n  const user = { id: Date.now(), ...req.body };\n  users.push(user);\n  res.status(201).json(user);\n});"} lang={"javascript"} />
+
+<Tip tone={"info"} title={"Production Libraries"} text={"বড় project-এ validation-এর জন্য **Zod** বা **Joi** library ব্যবহার করুন। এগুলো automatic type coercion ও detailed error message দেয়।"} />

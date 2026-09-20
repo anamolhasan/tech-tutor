@@ -1,0 +1,19 @@
+---
+title: "INSERT, UPDATE, DELETE — data বদল করা"
+label: "INSERT / UPDATE / DELETE"
+order: 9
+level: "Beginner"
+description: "DML-এর মূল ৩টি operation — নিরাপদ ব্যবহারের নিয়ম।"
+---
+
+<CodeBlock code={"-- একটি row\nINSERT INTO products (name, price, qty)\nVALUES ('Keyboard', 1200, 15);\n\n-- একাধিক row\nINSERT INTO products (name, price, qty)\nVALUES ('Monitor', 24000, 4), ('Mouse', 450, 40);"} lang={"sql"} />
+
+<CodeBlock code={"-- দাম বাড়ালাম (শর্তসহ)\nUPDATE products\nSET price = price * 1.05\nWHERE name = 'Monitor';\n\n-- qty-র কম স্টক মুছলাম\nDELETE FROM products WHERE qty = 0;"} lang={"sql"} />
+
+- `RETURNING` — বদলানো row ফিরে পাওয়া যায়
+- `WHERE` অপরিহার্য — সাবধান, উপরে বলে আসছি
+- প্রতিটি UPDATE/DELETE `WHERE`-এ primary key বা unique value
+
+<CodeBlock code={"DELETE FROM products WHERE id = 2 RETURNING id, name;"} lang={"sql"} />
+
+<Tip tone={"warning"} title={"সবচেয়ে সাধারণ দুর্ঘটনা"} text={"`UPDATE products SET qty = 0;` — WHERE বাদ পড়লেই সব row-র stock শূন্য। `transaction` দিয়ে শুরু/রোলব্যাক করা অভ্যেস করুন।"} />

@@ -1,0 +1,24 @@
+---
+title: "সাধারণ ভুল ও সমাধান"
+label: "Common Mistakes"
+order: 38
+level: "Intermediate"
+description: "Expo/React Native developers-দের ঘন ঘন ভুল — চিহ্নিত করুন।"
+---
+
+| ভুল | কেন সমস্যা | সঠিক |
+| --- | --- | --- |
+| string hardcode সব জায়গায় | maintenance nightmare | constants/ config |
+| browser-এ শুধু test | native আচরণ আলাদা | device/emulator-এ test |
+| icon-এর নাম ভুল | blank icon | icon directory দেখুন |
+| `Date` object সরাসরি save | serialize হয় না | ISO string |
+| key হিসেবে index | delete/insert-এ bug | stable id |
+| useEffect-এ fetch (unmount) | state set after unmount | cleanup/ignore flag |
+
+<InParagraph text={"আরও ঘুরনো ভুল:"} />
+
+- Expo SDK update skip করা — dependency drift
+- splash/icon-এ বড় text — notch/fold-এ খাপছাড়া
+- keystore/credentials backup না রাখা
+
+<Tip tone={"warning"} title={"সবচেয়ে বড় ভুল"} text={"**Device-এ test না করা**। Simulator/emulator সব সমস্যা ধরে না — ফিজিক্যাল ফোনে performance ও native behavior চেক করুন।"} />

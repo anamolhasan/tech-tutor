@@ -1,0 +1,23 @@
+---
+title: "Table Columns — Definitions"
+label: "Table Columns"
+order: 24
+level: "Intermediate"
+description: "accessorKey, header, cell-formatting — status badge, price ও date — বাংলায়।"
+---
+
+<CodeBlock code={"\"use client\";\n\n\nimport { Badge } from \"@/components/ui/badge\";\n\n\nexport const productColumns: ColumnDef<Product>[] = [\n  {\n    accessorKey: \"name\",\n    header: \"নাম\",\n    cell: ({ row }) => (\n      <div>\n        <p className=\"font-medium\">{row.original.name}</p>\n        <p className=\"line-clamp-1 max-w-60 text-xs text-muted-foreground\">\n          {row.original.description}\n        </p>\n      </div>\n    ),\n  },\n  {\n    accessorKey: \"category\",\n    header: \"Category\",\n  },\n  {\n    accessorKey: \"price\",\n    header: \"দাম\",\n    cell: ({ getValue }) => {\n      const price = getValue<number>();\n      return <span className=\"font-medium\">{price.toFixed(2)} টাকা</span>;\n    },\n  },\n  {\n    accessorKey: \"stock\",\n    header: \"Stock\",\n    cell: ({ getValue }) => <span>{getValue<number>()}</span>,\n  },\n  {\n    accessorKey: \"status\",\n    header: \"Status\",\n    cell: ({ getValue }) => {\n      const status = getValue<Product[\"status\"]>();\n      return (\n        <Badge variant={status === \"active\" ? \"success\" : \"secondary\"}>\n          {status}\n        </Badge>\n      );\n    },\n  },\n  {\n    accessorKey: \"createdAt\",\n    header: \"তৈরির তারিখ\",\n    cell: ({ getValue }) =>\n      new Date(getValue<string>()).toLocaleDateString(\"bn-BD\"),\n  },\n];"} lang={"tsx"} title={"src/components/products/product-columns.tsx"} />
+
+## প্রতিটি অংশ বুঝি
+
+| অংশ | কাজ |
+| --- | --- |
+| `accessorKey` | row-এর কোন property পড়বে |
+| `header` | column title (string বা component) |
+| `cell` | প্রতিটি cell কীভাবে render হবে |
+| `row.original` | সেই row-এর সম্পূর্ণ Product object |
+| `getValue<number>()` | accessorKey-এর মান type-সহ |
+
+<InParagraph text={"**Actions** column আলাদা রেখেছি (শুধু client context দরকার) — ওটা পরের অধ্যায়ে।"} />
+
+<Tip tone={"info"} title={"Formatting কোথায়"} text={"দাম/তারিখ-এর মতো formatting **cell-এ** রাখা ভালো — data মডেল কাঁচা থাকে। কারণ sort অথবা export তখন raw value-র উপর নির্ভর করতে পারে।"} />

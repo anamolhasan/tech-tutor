@@ -1,0 +1,32 @@
+---
+title: "Tailwind CSS Install"
+label: "Installation"
+order: 11
+level: "Beginner"
+description: "Tailwind CSS কীভাবে install করবেন — npm, CDN এবং বিভিন্ন build tool-এ setup।"
+---
+
+<InParagraph text={"Tailwind CSS install করার কয়েকটি পদ্ধতি আছে। সবচেয়ে সহজ হলো npm দিয়ে install করা।"} />
+
+## npm দিয়ে Install (Recommended)
+
+<CodeBlock code={"# Tailwind CSS v4 install\nnpm install tailwindcss @tailwindcss/cli"} lang={"bash"} title={"Terminal"} />
+
+<InParagraph text={"Tailwind v4-এ `postcss` এবং `autoprefixer` আলাদা করে install করার দরকার নেই। v3-এ এগুলো প্রয়োজন।"} />
+
+## CDN দিয়ে (Quick Testing)
+
+<CodeBlock code={"<head>\n  <script src=\"https://cdn.tailwindcss.com\"></script>\n</head>"} lang={"html"} title={"index.html"} />
+
+<Tip tone={"warning"} title={"CDN Production-এ ব্যবহার করবেন না"} text={"CDN শুধু testing বা learning-এর জন্য। Production-এ npm install করে build process ব্যবহার করুন — এতে unused CSS remove হয় এবং performance ভালো থাকে।"} />
+
+## Tailwind v3 vs v4 Install
+
+| বৈশিষ্ট্য | Tailwind v3 | Tailwind v4 |
+| --- | --- | --- |
+| Packages | tailwindcss, postcss, autoprefixer | tailwindcss, @tailwindcss/cli |
+| Config | tailwind.config.js | CSS-first (@theme directive) |
+| Build | PostCSS plugin | CLI / Vite plugin |
+| Engine | JIT | Oxide (Rust-based) |
+
+<Tip tone={"success"} title={"নতুন প্রজেক্টে v4 ব্যবহার করুন"} text={"নতুন প্রজেক্টে Tailwind v4 install করুন। এটি faster, simpler এবং more powerful। পুরোনো v3 project থাকলে v4-তে migrate করার documentation পড়ুন।"} />

@@ -1,0 +1,27 @@
+---
+title: "Tailwind Best Practices"
+label: "Best Practices"
+order: 32
+level: "Intermediate"
+description: "Tailwind CSS ব্যবহারের সেরা অভ্যাস — code organization, naming, performance।"
+---
+
+<InParagraph text={"Tailwind CSS ব্যবহারের সময় কিছু best practices মেনে চললে code maintainable ও performant থাকবে।"} />
+
+## ১. Class Order
+
+<InParagraph text={"Tailwind class গুলো একটি consistent order-এ লিখুন। সাধারণত: layout → display → spacing → sizing → typography → colors → borders → effects → responsive → dark।"} />
+
+## ২. Component Extraction
+
+<CodeBlock code={"<!-- ❌ একই class বারবার -->\n<button class=\"rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700\">\n  Button 1\n</button>\n<button class=\"rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700\">\n  Button 2\n</button>\n\n<!-- ✅ Component তৈরি করুন -->\n<button class=\"btn-primary\">Button 1</button>\n<button class=\"btn-primary\">Button 2</button>"} lang={"html"} />
+
+## ৩. Responsive Mobile-First
+
+<CodeBlock code={"<!-- ✅ Mobile-first -->\n<div class=\"p-4 md:p-8 lg:p-12\">Responsive padding</div>\n\n<!-- ❌ Desktop-first -->\n<div class=\"p-12 md:p-8 lg:p-4\">Harder to maintain</div>"} lang={"html"} />
+
+## ৪. Custom CSS Avoid করুন
+
+<InParagraph text={"যতটা সম্ভব Tailwind utility classes ব্যবহার করুন। Custom CSS শুধু অত্যন্ত প্রয়োজনীয় ক্ষেত্রে লিখুন।"} />
+
+<Tip tone={"success"} title={"Prettier Plugin"} text={"Tailwind class sort করতে `prettier-plugin-tailwindcss` install করুন। এটি save করার সময় automatic-ally class order ঠিক করবে।"} />

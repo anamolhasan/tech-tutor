@@ -1,0 +1,22 @@
+---
+title: "Prisma & connection — serverless চ্যালেঞ্জ"
+label: "Connection Pool"
+order: 29
+level: "Advanced"
+description: "PostgreSQL connection বেঁধে রাখা — scale-এ বুদ্ধি।"
+---
+
+- Prisma engine-এর `connection_limit` — default (≈ CPU-ভিত্তিক)
+- max_connections Postgres default 100
+- Serverless — প্রতি invoke এক client → pool burn
+- PgBouncer (transaction mode) / Supabase-RLS দক্ষ
+
+<CodeBlock code={"const prisma = new PrismaClient({\n  datasources: {\n    db: { url: process.env.DATABASE_URL },\n  },\n});"} lang={"ts"} title={"limit নিয়ন্ত্রণ"} />
+
+| Setup | উপায় |
+| --- | --- |
+| Long-lived server | global singleton, pool default |
+| Serverless per call | singleton + connection cap |
+| High concurrency | PgBouncer + DATABASE_URL ঢাল |
+
+<Tip tone={"warning"} title={"too many connections"} text={"`too many clients`/FATAL-র সঙ্গে balance — pool-limit ও DATABASE_URL-এ bouncer ঠিক করুন।"} />

@@ -1,0 +1,37 @@
+---
+title: "CSS Introduction"
+label: "Introduction"
+order: 1
+level: "Beginner"
+description: "CSS কীভাবে ওয়েবপেজকে সুন্দর করে তোলে, CSS-এর সাথে HTML-এর সম্পর্ক এবং প্রথম CSS ব্যবহারের বাংলা পরিচিতি।"
+---
+
+<InParagraph text={"**CSS** (Cascading Style Sheets) হলো ওয়েবপেজের **রূপ-সৌন্দর্যের** ভাষা। HTML যেখানে পেজের গঠন ঠিক করে, CSS সেখানে নির্ধারণ করে সে গঠনটি *কেমন দেখাবে* — রং, ফন্ট, ব্যবধান, অবস্থান এবং লেআউট সবকিছু।"} />
+
+## CSS ছাড়া কী হবে?
+
+<InParagraph text={"CSS ছাড়া একটি ওয়েবপেজ কেবল কালো-সাদা টেক্সটের সমষ্টি দেখাবে — কোনো রং, স্পেসিং বা সাজসজ্জা থাকবে না। CSS-ই সেই সাদামাটা কাঠামোকে একটি পেশাদার, সুন্দর ওয়েবপেজে রূপ দেয়।"} />
+
+## CSS কীভাবে কাজ করে
+
+- CSS **selector** দিয়ে কোন element-কে স্টাইল করা হবে তা বেছে নেয়
+- **Property** ও **value** দিয়ে সেই element-এর চেহারা ঠিক করে
+- HTML ফাইলে তিনভাবে CSS যুক্ত করা যায় — inline, internal, external
+
+### একটি সহজ উদাহরণ
+
+<CodeBlock code={"h1 {\n  color: #16a34a;\n  font-size: 2.5rem;\n  text-align: center;\n}"} lang={"css"} title={"style.css"} />
+
+<InParagraph text={"উপরের নিয়মটি পেজের প্রতিটি `<h1>` শিরোনামকে সবুজ রঙ, বড় ফন্ট এবং কেন্দ্রীভূত অবস্থান দেবে।"} />
+
+## CSS যুক্ত করার উপায়
+
+| পদ্ধতি | বর্ণনা |
+| --- | --- |
+| Inline | সরাসরি `style` অ্যাট্রিবিউটে |
+| Internal | HTML ফাইলে `<style>` ট্যাগের ভেতরে |
+| External | আলাদা `.css` ফাইলে (সবচেয়ে ভালো) |
+
+<CodeBlock code={"<head>\n  <link rel=\"stylesheet\" href=\"style.css\" />\n</head>"} lang={"html"} title={"external stylesheet লিংক"} />
+
+<Tip tone={"success"} title={"সেরা অভ্যাস"} text={"প্রজেক্টে সবসময় একটি আলাদা **external stylesheet** ব্যবহার করুন। এতে কোড সুপরিচ্ছন্ন থাকে এবং একাধিক পেজে একই স্টাইল সহজে প্রয়োগ করা যায় (DRY)।"} />

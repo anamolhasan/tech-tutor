@@ -1,0 +1,45 @@
+---
+title: "Express Best Practices"
+label: "Best Practices"
+order: 20
+level: "Advanced"
+description: "Structure, error handling, logging, environment, code-split — Express best practices বাংলায়।"
+---
+
+## 1. Structure App Properly
+
+<CodeBlock code={"src/\n├── app.js             # express app (middleware, routes)\n├── server.js          # listen (separate)\n├── config/            # db, env config\n├── models/            # mongoose schemas\n├── controllers/       # business logic\n├── routes/            # route definitions\n├── middleware/        # auth, validate, error\n├── validators/        # zod schemas\n├── utils/             # helpers\n└── __tests__/         # tests"} lang={"text"} />
+
+## 2. Use Controller Pattern
+
+<CodeBlock code={"// routes — ডাক |\nrouter.get(\"/\", userController.getAll);\n\n// controllers — logic |\nconst getAll = async (req, res, next) => {\n  try {\n    const users = await User.find();\n    res.json(users);\n  } catch (err) { next(err); }\n};"} lang={"javascript"} />
+
+## 3. Central Error Handler
+
+<CodeBlock code={"// এক জায়গায় সব error\napp.use((err, req, res, next) => {\n  logger.error(err.stack);\n\n  if (err.name === \"ValidationError\") {\n    return res.status(400).json({ error: \"Data invalid\" });\n  }\n  if (err.code === 11000) { // duplicate key\n    return res.status(409).json({ error: \"ডুপ্লিকেট\" });\n  }\n\n  res.status(err.status || 500).json({\n    error: err.message || \"Server error\",\n  });\n});"} lang={"javascript"} />
+
+## 4. Use Environment Config
+
+<CodeBlock code={"require(\"dotenv\").config();\n\nmodule.exports = {\n  NODE_ENV: process.env.NODE_ENV || \"development\",\n  PORT: process.env.PORT || 5000,\n  MONGO_URI: process.env.MONGO_URI,\n  JWT_SECRET: process.env.JWT_SECRET,\n  JWT_EXPIRES: process.env.JWT_EXPIRES || \"1d\",\n  FRONTEND_URL: process.env.FRONTEND_URL,\n};\n\n// ব্যবহার\nconst config = require(\"../config/env\");\nconsole.log(config.NODE_ENV);"} lang={"javascript"} title={"config/env.js"} />
+
+## 5. Logging
+
+<CodeBlock code={"const winston = require(\"winston\");\n\nconst logger = winston.createLogger({\n  level: process.env.NODE_ENV === \"production\" ? \"info\" : \"debug\",\n  format: winston.format.json(),\n  transports: [\n    new winston.transports.File({ filename: \"logs/error.log\", level: \"error\" }),\n    new winston.transports.File({ filename: \"logs/all.log\" }),\n  ],\n});\n\nif (process.env.NODE_ENV !== \"production\") {\n  logger.add(new winston.transports.Console({ format: winston.format.simple() }));\n}\n\nmodule.exports = logger;"} lang={"javascript"} title={"utils/logger.js"} />
+
+## Checklist
+
+| ✔ | অভ্যাস |
+| --- | --- |
+| ✔ | app.js ও server.js আলাদা (test friendly) |
+| ✔ | Controller pattern ব্যবহার |
+| ✔ | Central error handling |
+| ✔ | Environment variables (.env) |
+| ✔ | Validation (Zod) সর্বত্র |
+| ✔ | Logging (winston) |
+| ✔ | Test (jest+supertest) |
+| ✔ | Security (helmet, rate-limit, cors) |
+| ✔ | API versioning (/api/v1) |
+| ✔ | Pagination ও filtering |
+| ✔ | Gitignore + lock file |
+
+<Tip tone={"success"} title={"মূলমন্ত্র"} text={"clean structure, consistent pattern, error handling, security, testing — এই 5 জিনিস দিয়ে professional Express app বানানো যায়।"} />

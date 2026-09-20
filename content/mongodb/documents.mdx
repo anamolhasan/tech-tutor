@@ -1,0 +1,27 @@
+---
+title: "Document Lifecycle"
+label: "Document"
+order: 7
+level: "Intermediate"
+description: "Mongoose document নিয়ে কাজ — তৈরি, save, modify, validate, toObject — বাংলায়।"
+---
+
+## Document কী?
+
+<InParagraph text={"**Document** হলো MongoDB collection-এর একটি row — Mongoose-এ এটি Model-এর instance। ডেটাবেসের data memory-তে JavaScript object হিসেবে কাজ করে।"} />
+
+## নতুন document তৈরি ও save
+
+<CodeBlock code={"const user = new User({\n  name: \"রহিম\",\n  email: \"rahim@example.com\",\n  age: 24,\n});\n\nawait user.save(); // insert\n\n// সংক্ষেপে — create() এক কথায়\nconst user2 = await User.create({\n  name: \"করিম\",\n  email: \"karim@example.com\",\n});"} lang={"js"} title={"Create + save"} />
+
+## Document modify
+
+<InParagraph text={"Loaded document-এর field-এ value বসিয়ে `save()` দিলেই update হয়ে যায় — কোনটা change হয়েছে তা mongoose track করে:"} />
+
+<CodeBlock code={"const user = await User.findById(id);\n\nuser.age = 26;               // shortcut assignment\nuser.set(\"name\", \"রহিম আহমেদ\"); // বা set() দিয়ে\n\nconsole.log(user.isModified(\"age\"));  // true\nconsole.log(user.modifiedPaths());    // [ 'age', 'name' ]\n\nawait user.save();"} lang={"js"} title={"Update by document"} />
+
+## validate ও toObject
+
+<CodeBlock code={"const user = new User({ name: \"\", email: \"invalid\" });\n\n// save() চাইলে validation-ও চলে —\n// চাইলে নিজে হাতে validate করতে পারেন\nawait user.validate(); // fail হলে throw করবে\n\n// toObject() → plain JS object\nconst plain = user.toObject();\nconsole.log(plain.name); // schema-type অনুযায়ী value\n\n// JSON-এ রূপান্তর (API response-এর জন্য)\nconst json = user.toJSON();"} lang={"js"} title={"Manual validate + plain object"} />
+
+<Tip tone={"info"} title={"save() vs updateOne()"} text={"`document.save()` পুরো document validate ও mongoose middleware চালায় — সাধারণত পছন্দনীয়। `Model.updateOne()` সরাসরি ডেটাবেসে যায়, validate/middleware চালায় না।"} />

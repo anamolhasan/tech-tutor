@@ -1,0 +1,21 @@
+---
+title: "TanStack Query Devtools"
+label: "Devtools"
+order: 13
+level: "Beginner"
+description: "Devtools panel — cache, query state, refetch ও mutation inspection — বাংলায়।"
+---
+
+<InParagraph text={"ডেভেলপমেন্টের সেরা বন্ধু — **ReactQueryDevtools**। এটি ডান-নিচে ভাসমান button হিসেবে হাজির হয়; ক্লিক করলে query cache-এর ভেতর সব দেখা যায়।"} />
+
+<CodeBlock code={"\"use client\";\n\nimport { QueryClientProvider } from \"@tanstack/react-query\";\nimport { ReactQueryDevtools } from \"@tanstack/react-query-devtools\";\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <QueryClientProvider client={queryClient}>\n      {children}\n      {/* শুধু dev mode-এ */}\n      {process.env.NODE_ENV === \"development\" && (\n        <ReactQueryDevtools buttonPosition=\"bottom-right\" />\n      )}\n    </QueryClientProvider>\n  );\n}"} lang={"tsx"} title={"providers.tsx-এ যোগ"} />
+
+## Devtools-এ কী দেখা যায়
+
+- প্রতিটি query-র **key**, state (fresh/stale/inactive), fetch count
+- ডেটা কখন lastUpdated — cache hit হওয়ায় fetch skipped হয়েছে কিনা
+- Query inspect → **Refetch**, **Invalidate**, **Remove** button
+- Mutations tab — চলমান/সমাপ্ত mutation ও variables
+- Explorer — queryKey ও data-র ভেতর দেখতে পারে
+
+<Tip tone={"success"} title={"ভুলের অর্ধেক এখানেই"} text={"'ডেটা কেন নতুন হচ্ছে না?' লাগলে প্রথমে Devtools-এ ওই query-র state দেখুন — key মিলছে? stale? একটা fetch reload হয়েছে কিনা? কয়েক মিনিটেই motivation মিলে যাবে।"} />

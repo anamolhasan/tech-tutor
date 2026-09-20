@@ -1,0 +1,52 @@
+---
+title: "Git Installation & প্রথম সেটআপ"
+label: "Installation"
+order: 2
+level: "Beginner"
+description: "Windows, macOS ও Linux-এ Git install এবং প্রথমবারের config — বাংলায়।"
+---
+
+## Git Install (Windows)
+
+- [git-scm.com](https://git-scm.com) এ যান এবং Windows-এর download button এ ক্লিক করুন
+- Installer খুলে Next চাপুন (ডিফল্ট option-গুলিই ঠিক)
+- Install শেষে **Git Bash** নামে একটি টার্মিনাল পাওয়া যায়
+- **Git GUI** এবং **Git Bash** এই দুটি টুলসহ আসে
+
+## Git Install (macOS)
+
+<CodeBlock code={"brew install git"} lang={"bash"} title={"Homebrew দিয়ে install"} />
+
+<InParagraph text={"হয়তো আপনার Mac-এ git-এর সাথে Xcode Command Line Tools আছে। `git --version` লিখে check করুন।"} />
+
+## Git Install (Linux)
+
+<CodeBlock code={"sudo apt update\nsudo apt install git"} lang={"bash"} title={"Ubuntu / Debian"} />
+
+## নিশ্চিত করুন ইনস্টল সফল হয়েছে
+
+<CodeBlock code={"git --version\n# git version 2.45.0 (উদাহরণ)"} lang={"bash"} />
+
+## প্রথমবারের Config
+
+<InParagraph text={"Git install করার পর প্রথমেই দুটি জিনিস সেট করতে হয় — **user name** ও **user email**। এগুলো প্রতিটি commit-এ লেখা থাকে।"} />
+
+<CodeBlock code={"git config --global user.name \"Anamul Hasan\"\ngit config --global user.email \"anamolhasan@example.com\"\ngit config --global init.defaultBranch main\ngit config --global core.editor \"code --wait\""} lang={"bash"} title={"Global config"} />
+
+<InParagraph text={"`--global` মানে এই সেটিংস আপনার কম্পিউটারের সব প্রজেক্টের জন্য থাকবে। একটি নির্দিষ্ট প্রজেক্টের জন্য অন্য ইমেইল চাইলে `--global` বাদ দিয়ে লিখুন।"} />
+
+## Config যাচাই করা
+
+<CodeBlock code={"git config --global user.name\ngit config --global user.email\ngit config --list"} lang={"bash"} />
+
+## সবচেয়ে সাধারণ config কী কী?
+
+| Config | কী কাজ করে | উদাহরণ |
+| --- | --- | --- |
+| user.name | commit-এ লেখা নাম | Anamul Hasan |
+| user.email | commit-এ লেখা ইমেইল | anamolhasan@example.com |
+| init.defaultBranch | init করার সময় branch-এর নাম | main |
+| core.editor | commit message লিখতে editor | code --wait |
+| pull.rebase | pull-এ rebase ব্যবহার | true |
+
+<Tip tone={"warning"} title={"সাবধান"} text={"ফাঁকা user.name/email না রেখে কাজ করবেন না — হলে commit-এর সঙ্গে সঠিক পরিচয় থাকবে না, ফলে GitHub-এর contribution graph এ সঠিকভাবে দেখা যাবে না।"} />

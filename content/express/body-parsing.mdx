@@ -1,0 +1,27 @@
+---
+title: "Express Body Parsing"
+label: "Body Parsing"
+order: 10
+level: "Intermediate"
+description: "express.json(), urlencoded, raw, text — Request body parse করার বাংলা গাইড।"
+---
+
+<InParagraph text={"POST/PUT/PATCH request-এ client body পাঠায় — JSON, form, raw ইত্যাদি। Express-এর built-in middleware দিয়ে এগুলো parse করা হয়।"} />
+
+## express.json()
+
+<CodeBlock code={"// JSON body parse\napp.use(express.json());\n\n// limit ও strict option সহ\napp.use(express.json({\n  limit: \"10mb\", // max body size\n  strict: true,  // only objects & arrays\n}));\n\n// POST /users with body {\"name\":\"রহিম\"}\napp.post(\"/users\", (req, res) => {\n  console.log(req.body.name); // \"রহিম\"\n  res.json(req.body);\n});"} lang={"javascript"} />
+
+## express.urlencoded()
+
+<CodeBlock code={"// HTML form body parse\napp.use(express.urlencoded({ extended: true }));\n\n// /login form-এ (username=rahim&password=123)\napp.post(\"/login\", (req, res) => {\n  console.log(req.body.username); // \"rahim\"\n  console.log(req.body.password); // \"123\"\n});"} lang={"javascript"} />
+
+## express.text() ও raw()
+
+<CodeBlock code={"// Plain text body\napp.use(express.text());\n\napp.post(\"/note\", (req, res) => {\n  console.log(req.body); // \"my raw text\"\n});\n\n// Raw/binary body\napp.use(express.raw({ type: \"application/octet-stream\" }));\n\napp.post(\"/upload\", (req, res) => {\n  console.log(req.body.length); // bytes\n});"} lang={"javascript"} />
+
+## Validation সহ
+
+<CodeBlock code={"// Empty body check\napp.post(\"/users\", (req, res) => {\n  if (!req.body || Object.keys(req.body).length === 0) {\n    return res.status(400).json({ error: \"Body খালি\" });\n  }\n  res.json(req.body);\n});"} lang={"javascript"} />
+
+<Tip tone={"warning"} title={"সতর্কতা"} text={"`express.json()`-এ `limit` না দিলে default 100kb। বড় payload পাঠালে limit set করুন নাহলে Error হবে।"} />

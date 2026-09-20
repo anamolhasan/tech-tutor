@@ -1,0 +1,22 @@
+---
+title: "Common Data Types — text, numeric, date, uuid"
+label: "Data Types"
+order: 6
+level: "Intermediate"
+description: "সচরাচর ব্যবহার হওয়া PostgreSQL types — কখন কোনটা।"
+---
+
+| Type | কখন | উদাহরণ |
+| --- | --- | --- |
+| text / varchar(n) | text অংশ; varchar-এ length limit | name |
+| integer / bigint | সব small/medium number | qty |
+| numeric(p, s) | money/যথার্থতা ওয়ালা decimal | price |
+| boolean | true/false | in_stock |
+| timestamp / timestamptz | moment | created_at |
+| date | শুধু দিন | birth_date |
+| uuid | globally unique id | order_id |
+| jsonb | structure-less data | product_spec |
+
+<CodeBlock code={"CREATE TABLE measurements (\n  id       bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  label    text NOT NULL,\n  amount   numeric(10, 2),\n  taken_at timestamptz DEFAULT now()\n);"} lang={"sql"} title={"types দেখতে"} />
+
+<Tip tone={"warning"} title={"numeric vs float"} text={"money-তে কখনও `float`/`double` নয় — rounding error। `numeric(p,s)`-এ decimal exact থাকে।"} />

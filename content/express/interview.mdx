@@ -1,0 +1,53 @@
+---
+title: "Express.js Interview Questions"
+label: "Interview"
+order: 22
+level: "Advanced"
+description: "Express interview-এর গুরুত্বপূর্ণ প্রশ্ন ও উত্তর — বাংলায়।"
+---
+
+## 1. Express-এ Middleware কী?
+
+<InParagraph text={"Middleware হলো function যা request-response cycle-এ execute হয়। `req`, `res`, `next` parameter নেয়। `next()` পরবর্তী middleware/route-এ নেয়। যেমন: validation, logger, auth middleware।"} />
+
+## 2. app.use() vs app.get()?
+
+| app.use() | app.get() |
+| --- | --- |
+| সব method-এর জন্য | শুধু GET method |
+| path-বিহীন = সব | path match করতে হয় |
+| Middleware register | Route handler |
+
+## 3. req.params vs req.query?
+
+<InParagraph text={"`req.params` — URL path-এর অংশ (`/users/:id` → `:id`)। `req.query` — URL-এ `?` এর পরে (`/users?page=2` → `page`)।"} />
+
+## 4. 404 কীভাবে handle করবেন?
+
+<CodeBlock code={"// সব route-এর পরে\napp.use((req, res) => {\n  res.status(404).json({ error: \"Route খুঁজে পাওয়া যায়নি\" });\n});"} lang={"javascript"} />
+
+## 5. Error Handler-এর ৪টি Parameter কেন?
+
+<InParagraph text={"Express `(err, req, res, next)` — 4 পরামিতি দেখলে বুঝে যায় এটি error middleware। `next(err)` দিলে এই middleware-তে error যায়।"} />
+
+## 6. Router কী?
+
+<InParagraph text={"`express.Router()` — route handlers-এর একটি modular instance। এটি দিয়ে routes আলাদা ফাইলে ভাগ করা যায় এবং `app.use()` দিয়ে mount করা যায়।"} />
+
+## 7. Express কীভাবে async error handle করে?
+
+<InParagraph text={"Express 5 async handler rejected promise automatically next(error)-এ নেয়া হয়। Express 4-এ manually wrapper (`asyncHandler`) দরকার।"} />
+
+## 8. CORS কেন block হয় এবং fix কী?
+
+<InParagraph text={"Browser-এর same-origin policy ভিন্ন origin-এর request block করে। Fix: `cors` middleware দিয়ে `origin` restrict করে allow করা।"} />
+
+## 9. express.json() কী করে?
+
+<InParagraph text={"`express.json()` incoming JSON body parse করে `req.body`-তে দেয়। `urlencoded()` form data parse করে।"} />
+
+## 10. Large App-এ Structure কী?
+
+<InParagraph text={"Models + Controllers + Routes + Middleware + Validators + Config separation, controller pattern, central error handler, service layer (business logic), environment config।"} />
+
+<Tip tone={"info"} title={"সেরা প্রস্তুতি"} text={"সেরা প্রস্তুতি হলো নিজে একটি full CRUD API বানানো (auth সহ) ও testing লেখা — interview-এ তখন confidence অনেক বাড়বে।"} />

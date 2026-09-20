@@ -1,0 +1,22 @@
+---
+title: "Error Boundaries"
+label: "Error Boundaries"
+order: 18
+level: "Intermediate"
+description: "Rendering-এ error হলে crash আটকানো — class component error boundary — বাংলায়।"
+---
+
+## Error boundary কী?
+
+<InParagraph text={"Child-এ **rendering-এর সময়** error হলে পুরো app crash করে। **Error boundary** হলো wrapper যা সেই error ধরার পরে fallback UI দেখায়। React-এ এখনো শুধু class component দিয়ে সম্ভব।"} />
+
+<CodeBlock code={"class ErrorBoundary extends React.Component {\n  state = { hasError: false };\n\n  static getDerivedStateFromError() {\n    return { hasError: true }; // error হলে fallback\n  }\n\n  componentDidCatch(error, info) {\n    console.error(error, info.componentStack);\n  }\n\n  render() {\n    if (this.state.hasError) {\n      return <h1>কিছু একটা ভুল হয়েছে</h1>;\n    }\n    return this.props.children;\n  }\n}\n\n// ব্যবহার\n<ErrorBoundary>\n  <UserProfile />\n</ErrorBoundary>"} lang={"jsx"} title={"Error boundary class"} />
+
+## যেখানে কাজ করে না
+
+- Event handler-এর error — boundary ধরে না
+- Async code (fetch promise)
+- Server-side rendering
+- Error boundary নিজের ভেতরের error
+
+<Tip tone={"warning"} title={"Event error"} text={"Event handler-এ throw করা error **error boundary ধরে না**। সেখানে নিজে `try/catch` ও error reporting service-এ লগ করুন।"} />

@@ -1,0 +1,45 @@
+---
+title: "দল নিয়ে কাজ: PR, review, collaborate"
+label: "Teamwork"
+order: 19
+level: "Intermediate"
+description: "টিমে ভাগ করা repo-তে কীভাবে কাজ হয় — বাংলায়।"
+---
+
+## দলের repo-তে কাজের ধাপ
+
+- repo clone করুন
+- সবশেষ main-এ নিন
+- নতুন feature branch খোলেন
+- কাজ করে ছোট commit
+- push করুন ও PR বানান
+- review পাসে merge
+
+## git clone
+
+<CodeBlock code={"git clone https://github.com/org/project.git\ncd project\ngit switch -c feature/product-list\ngit pull origin main   # প্রতিদিন শুরুতে"} lang={"bash"} />
+
+## স্থাপনা ফুল
+
+<CodeBlock code={"git add .\ngit commit -m \"feat: product list added\"\ngit pull --rebase origin main   # up to date\ngit push -u origin feature/product-list"} lang={"bash"} />
+
+## Pull Request (PR) কী?
+
+<InParagraph text={"PR হলো আপনার branch-কে মূল branch-এ merge করার **আবেদন** — সাথে review, discussion, test ফলাফল। দল সামলায় কে কী অাপনার।"} />
+
+## Code Review-এর আলোচনা
+
+- review-এর comment-এ উত্তর দিন
+- নতুন commit দিয়ে ফিক্স করুন — `amend` নয় যদি PR-published
+- আলাপ-আলোচনার শেষে merge
+- সব conflict দূর হওয়া জরুরি
+
+## হয়তো একই ফাইলে কাজ
+
+<CodeBlock code={"git fetch origin\ngit switch feature/product-list\ngit rebase origin/main\n# conflict diligence → সঠিক সমাধান\ngit push --force-with-lease origin feature/product-list"} lang={"bash"} />
+
+## Protected branch
+
+<InParagraph text={"GitHub-এ `main`-এ সরাসরি push ব্লক রাখা যায়, এবং PR-এ reviewer approval ও CI পাস বাধ্যতামূলক করা যায় — এটাই দলের প্রতিরক্ষা।"} />
+
+<Tip tone={"info"} title={"নিয়ম"} text={"দলের সাথে আগে জমা-বাবদ কথা বলে বেছে নিন — সমস্ত PR review, কত reviewor, squash merge নাকি merge commit। Git-কে নয়, আপনার টিমকে মানিয়ে কলম।"} />

@@ -1,0 +1,15 @@
+---
+title: "TaskTrack — Today screen ও TaskItem component"
+label: "Project: Screens"
+order: 18
+level: "Intermediate"
+description: "Storage-এর tasks UI-তে — FlatList, empty state, toggle।"
+---
+
+<CodeBlock code={"import { useEffect } from \"react\";\nimport { View, FlatList, Text } from \"react-native\";\nimport { loadTasks } from \"../../lib/storage\";\nimport TaskItem from \"../../components/TaskItem\";\n\nexport default function TodayScreen() {\n  const [tasks, setTasks] = useState<Array<Task>>([]);\n  const [loading, setLoading] = useState(true);\n\n  useEffect(() => {\n    loadTasks().then((list) => {\n      setTasks(list);\n      setLoading(false);\n    });\n  }, []);\n\n  if (loading) {\n    return <Text>Loading…</Text>;\n  }\n\n  return (\n    <FlatList\n      data={tasks}\n      keyExtractor={(task) => task.id}\n      renderItem={({ item }) => <TaskItem task={item} />}\n      ListEmptyComponent={\n        <View style={{ padding: 24 }}>\n          <Text>আজ কিছু নেই — নিজের জন্য কাজ যোগ করুন</Text>\n        </View>\n      }\n    />\n  );\n}"} lang={"tsx"} title={"app/(tabs)/index.tsx"} />
+
+<CodeBlock code={"import { View, Text, Pressable, StyleSheet } from \"react-native\";\n\nexport default function TaskItem({ task }) {\n  return (\n    <View style={styles.row}>\n      <Pressable style={styles.title}>\n        <Text style={[styles.text, task.done && styles.done]}>\n          {task.done ? \"✓ \" : \"\"}{task.title}\n        </Text>\n      </Pressable>\n    </View>\n  );\n}\n\nconst styles = StyleSheet.create({\n  row: { padding: 16, borderBottomWidth: 1 },\n  text: { fontSize: 16 },\n  done: { textDecorationLine: \"line-through\", color: \"#94a3b8\" },\n});"} lang={"tsx"} title={"components/TaskItem.tsx"} />
+
+<InParagraph text={"একই pattern-এ `all` screen (filter: active/completed) ও progress bar — সবগুলিই `tasks` state-এর **derived**।"} />
+
+<Tip tone={"info"} title={"state কম রাখুন"} text={"প্রতিটি screen-এ data force না করে বরং **এক জায়গায়** (page-level) রাখা — পরে global store-এ move করা সহজ।"} />

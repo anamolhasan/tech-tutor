@@ -1,0 +1,24 @@
+---
+title: "ইন্টারভিউ প্রশ্ন ও নমুনা উত্তর"
+label: "Interview Questions"
+order: 40
+level: "Intermediate"
+description: "PostgreSQL interview-এ প্রায় আসা প্রশ্ন — নিজে উত্তর চেষ্টা করুন।"
+---
+
+<InParagraph text={"প্রতিটি প্রশ্নে আগে নিজের উত্তর, তারপর নমুনার সাথে তুলনা।"} />
+
+1. Primary key vs unique key? — PK= NOT NULL+UNIQUE, table-এ একটা
+1. JOIN ও subquery-র পার্থক্য? — join = rows মিশে; subquery = অভ্যন্তরীণ query
+1. INNER বনাম LEFT JOIN? — right/left পাশের matching policy
+1. GROUP BY-এর সাথে HAVING-এর ভূমিকা? — aggregate-আগে শ্রুতি
+1. NULL-এর সাথে `= NULL`? — তুলনা NULL; IS NULL ব্যবহৃত
+1. Index-এর খরচ? — write-slow, disk, maintenance
+1. EXPLAIN ANALYZE কী দেয়? — actual plan/time
+1. ACID-এর atomicity-অর্থ? — all-or-nothing
+1. CTE-এর সুবিধা? — readability, recursion, একাধিক বিভাগ
+1. N+1 problem? — loop-এ query; JOIN দিয়ে সমাধান
+1. transaction-এ isolation? — concurrent friendliness
+1. truncate ও delete পার্থক্য? — delete row-by-row+ trigger, truncate fast
+
+<Tip tone={"success"} title={"চরম সাফল্য"} text={"উত্তর-এর সাথে নিজের TechShop-experience যুক্ত করুন — \"আমি এটা করেছি\" উত্তরের চেয়ে দামী। পড়ার জন্য ধন্যবাদ! 🎉"} />

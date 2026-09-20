@@ -1,0 +1,20 @@
+---
+title: "PostgreSQL install ও tools"
+label: "Install & Setup"
+order: 3
+level: "Beginner"
+description: "লোকাল install, ডিফল্ট user/password, ব্যবহারযোগ্য tools।"
+---
+
+- **psql** — command-line client (সবচেয়ে জরুরি)
+- **pgAdmin** — GUI management
+- **DBeaver** — cross-platform universal tool
+- Cloud options — Neon, Supabase, Render (চাইলে skip local)
+
+<CodeBlock code={"# Ubuntu / Debian\nsudo apt install postgresql postgresql-contrib\n\n# macOS (Homebrew)\nbrew install postgresql\nbrew services start postgresql\n\n# Windows — install থেকে \"pgAdmin + psql\" নির্বাচন করুন"} lang={"bash"} title={"install (উদাহরণ)"} />
+
+<InParagraph text={"Install শেষে এখানে একটি `postgres` superuser তৈরি হয়। Windows install-এর সময় দেওয়া password মনে রাখুন।"} />
+
+<CodeBlock code={"docker run --name pg -e POSTGRES_PASSWORD=secret \\\n  -p 5432:5432 -d postgres:16"} lang={"bash"} title={"docker দ্রুত start (ঐচ্ছিক)"} />
+
+<Tip tone={"warning"} title={"default port"} text={"PostgreSQL default port **5432**। অন্য কিছু (যেমন docker) ওখানে চললে conflict — ভিন্ন port দিন বা service বন্ধ করুন।"} />

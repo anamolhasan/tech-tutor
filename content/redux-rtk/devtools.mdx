@@ -1,0 +1,19 @@
+---
+title: "Redux DevTools — Debug সেশনে"
+label: "Devtools"
+order: 12
+level: "Beginner"
+description: "Redux DevTools browser extension দিয়ে state, action ও time-travel debugging — বাংলায়।"
+---
+
+<InParagraph text={"Redux-এর সবচেয়ে বড় সুবিধা — **DevTools**। `configureStore` বক্সের বাইরে default-ভাবে এটি enable হয়; শুধু browser-এ extension লাগান।"} />
+
+## DevTools-এ কী করা যায়
+
+- প্রতিটি **action**-এর type, payload, timestamp
+- প্রতিটি action-এর পরে **state diff** (কী বদলেছে)
+- **Time-travel** — পুরনো action-এ ফিরে state পুনরায়
+- RTK Query cache/status tab-এ কী fetch হয়েছে
+- Dispatcher ও **skip/pause** action
+
+<Tip tone={"info"} title={"RTK Query tabs"} text={"DevTools-এ RTK Query-র উৎসর্গিত tab-এ প্রতিটি endpoint-এর queryKey, status, fetched data, fulfilledAt দেখতে পাবেন — caching debug-র অর্ধেক সমাধান এখানেই।"} />

@@ -1,0 +1,35 @@
+---
+title: "JavaScript Loops (লুপ)"
+label: "Loops"
+order: 7
+level: "Beginner"
+description: "for, while, do-while, for...of, for...in — JavaScript-এ বারবার কাজ করার পদ্ধতি বাংলায়।"
+---
+
+<InParagraph text={"একই কাজ বারবার করতে **লুপ** ব্যবহার হয়। যেমন ১ থেকে ১০ পর্যন্ত সংখ্যা প্রিন্ট করা।"} />
+
+## for লুপ
+
+<CodeBlock code={"for (let i = 1; i <= 5; i++) {\n  console.log(i);\n}\n// 1 2 3 4 5"} lang={"javascript"} />
+
+## while লুপ
+
+<CodeBlock code={"let i = 5;\nwhile (i > 0) {\n  console.log(i);\n  i--;\n}\n// 5 4 3 2 1"} lang={"javascript"} />
+
+## do-while
+
+<CodeBlock code={"let num = 0;\ndo {\n  console.log(\"একবার অন্তত চলবে\");\n} while (num !== 0);"} lang={"javascript"} />
+
+<InParagraph text={"`do-while` শর্ত পরীক্ষার আগেই একবার চলবেই।"} />
+
+## for...of (array)
+
+<CodeBlock code={"const fruits = [\"আম\", \"কলা\", \"কমলা\"];\n\nfor (const fruit of fruits) {\n  console.log(fruit);\n}"} lang={"javascript"} />
+
+## break ও continue
+
+<CodeBlock code={"for (let i = 1; i <= 10; i++) {\n  if (i === 3) continue;   // 3 স্কিপ\n  if (i === 7) break;      // 7-এ থাম\n  console.log(i);\n}\n// 1 2 4 5 6"} lang={"javascript"} />
+
+<Tip tone={"warning"} title={"অসীম লুপ এড়ান"} text={"লুপের শর্ত যেন কোনো না কোনো সময় মিথ্যা হয় তা নিশ্চিত করুন — নাহলে ব্রাউজার হ্যাং হয়ে যেতে পারে।"} />
+
+<Tip tone={"info"} title={"আধুনিক পছন্দ"} text={"array-এর জন্য `for...of` অথবা `array.forEach()` সবচেয়ে পরিষ্কার। সূচক (index) দরকার হলে `array.map((item, index))` ব্যবহার করতে পারেন।"} />

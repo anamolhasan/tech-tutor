@@ -1,0 +1,33 @@
+---
+title: "API + Query + Table + Form — একসাথে"
+label: "Full Integration"
+order: 33
+level: "Advanced"
+description: "চারটি স্তর কীভাবে কথা বলে — Data flow-এর ডায়াগ্রাম-সহ ব্যাখ্যা — বাংলায়।"
+---
+
+<InParagraph text={"পুরো system-এ চার স্তর। তুলে ধরলাম প্রতিটির ভূমিকা ও সংযোগ বিন্দু:"} />
+
+| স্তর | থাকে | দায়িত্ব |
+| --- | --- | --- |
+| **API layer** | `lib/products-api.ts` | Axios-সহ HTTP + types |
+| **Server/API route** | `app/api/products/*` | ডেটাবেজ read/write |
+| **Query layer** | `lib/hooks/*` | TanStack cache, mutations |
+| **UI layer** | `components/products/*` | Table, Form, Dialog render |
+
+## data flow — একটা সংক্ষিপ্ত ধাপ
+
+1. উপরের `ProductForm` → `useCreateProduct().mutate(values)`
+1. `mutationFn` → `productsApi.create(values)` → Axios POST
+1. server route: validate → insert → নতুন `Product` return
+1. query `onSuccess` → `invalidateQueries(productKeys.all)`
+1. table-এর query refetch → নতুন `items`-সহ render
+
+## খুঁজে বের করবেন ভুল কোথায়
+
+- **Form জমা নেই** → zod errors দেখুন (FieldError), API-তে ভুল body
+- **Table পুরনো** → invalidate হয়েছে কিনা; Devtools-এ lastUpdated দেখুন
+- **Query-র ডেটা undefined** → queryKey mismatch; API ভিন্ন shape
+- **loading চির** → staleTime বেশি/cache hit; network tab দেখুন
+
+<Tip tone={"success"} title={"এক-মুখী ডেটা flow"} text={"TanStack Query-র মূল সুবিধা — **একমুখী**: UI কখনো সরাসরি server-এ লেখে না, সব mutation মাধ্যমে। এতে পুরো app deterministic থাকে — debugging কঠিন নয়।"} />

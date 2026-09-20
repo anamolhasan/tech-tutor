@@ -1,0 +1,40 @@
+---
+title: "Organization ও Teams — দলগত GitHub"
+label: "Teams & Orgs"
+order: 16
+level: "Advanced"
+description: "Organization, team, role ও access control — বাংলায়।"
+---
+
+## Organization কী?
+
+<InParagraph text={"Organization হলো **একাধিক repository-র ওপর নিয়ন্ত্রণের স্তর** — এর সদস্য, team, নিয়ম আলাদা থাকে। একটি কোম্পানি/প্রকল্পের GitHub পরিচয়।"} />
+
+## ব্যক্তিগত vs Organization
+
+| ব্যক্তিগত অ্যাকাউন্ট | Organization |
+| --- | --- |
+| নিজস্ব repository | শেয়ারড repository |
+| নিজস্ব নিয়ন্ত্রণ | সদস্য ও team-based |
+| সহজ | এন্টারপ্রাইজ নিয়ন্ত্রণ |
+
+## Team কী?
+
+- Team হলো organization-এর ভেতরে সদস্যদের গ্রুপ
+- উদাহরণ: `frontend`, `backend`, `devops`
+- Team-কে repository-তে access দেয়া যায়
+- @frontend mention দিয়ে সবাইকে ডাকা যায়
+
+## Role/অনুমতি
+
+<CodeBlock code={"Owner          — সম্পূর্ণ নিয়ন্ত্রণ\nMaintainer     — manage করা যায় (force push নয়)\nDeveloper      — push, ক্ষমতা\nReviewer       — issue/PR see, কিন্তু push নয়\nReader         — শুধু পড়া"} lang={"markdown"} />
+
+## Organization settings
+
+- Member privileges
+- Default repository permissions
+- Require 2FA membership
+- Audit log
+- Security policies
+
+<Tip tone={"info"} title={"বড় দলের কথা"} text={"ব্যক্তিগত repo-তে ভুল অনুমতি দেওয়া এড়াতে organization + team-based access বড় দলে টেকসই — সঠিকভাবে পরিচালনা করলে দারুণ।"} />

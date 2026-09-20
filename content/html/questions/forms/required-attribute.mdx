@@ -1,0 +1,13 @@
+---
+question: "What is the required attribute?"
+order: 4
+description: "required attribute কী কাজ করে এবং ব্রাউজার কীভাবে validation করে।"
+---
+
+<InParagraph text={"`required` attribute ফর্মের কোনো ফিল্ডকে **বাধ্যতামূলক (mandatory)** করে তোলে। ব্যবহারকারী ফিল্ডটি না ভরে জমা দিতে চাইলে, ব্রাউজার একটি ত্রুটি দেখিয়ে জমা রোখে।"} />
+
+<InParagraph text={"এটি `<input>`, `<select>` এবং `<textarea>`-তে ব্যবহার করা যায়। কেবল `required` attribute-টুকু লিখলেই হয় — কোনো মান দিতে হয় না।"} />
+
+<CodeBlock code={"<form>\n  <label for=\"name\">নাম *</label>\n  <input id=\"name\" name=\"name\" type=\"text\" required />\n  <button type=\"submit\">জমা দিন</button>\n</form>"} lang={"html"} title={"উদাহরণ"} />
+
+<Tip tone={"warning"} title={"সতর্কতা"} text={"`required` শুধু ব্রাউজার-লেভেলের validation — সার্ভারেও data যাচাই করা জরুরি, কারণ ব্যবহারকারী সহজেই এটি বাইপাস করতে পারে।"} />

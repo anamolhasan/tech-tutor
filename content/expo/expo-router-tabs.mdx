@@ -1,0 +1,17 @@
+---
+title: "Tabs Navigation — bottom bar ও (group)"
+label: "Tabs Navigation"
+order: 10
+level: "Intermediate"
+description: "Main screens-এ bottom tabs — সেটআপ ও icon — বাংলায়।"
+---
+
+<InParagraph text={"অ্যাপের main screen (টুডে, সব কাজ) সাধারণত **bottom tabs**। `(tabs)` group-এ সেই layout:"} />
+
+<CodeBlock code={"import { Tabs } from \"expo-router\";\nimport { ListTodo, CalendarDays } from \"@expo/vector-icons\";\n\nexport default function TabsLayout() {\n  return (\n    <Tabs screenOptions={{ tabBarActiveTintColor: \"#2563eb\" }}>\n      <Tabs.Screen\n        name=\"index\"\n        options={{\n          title: \"টুডে\",\n          tabBarIcon: ({ color, size }) => (\n            <ListTodo size={size} color={color} />\n          ),\n        }}\n      />\n      <Tabs.Screen\n        name=\"all\"\n        options={{\n          title: \"সব কাজ\",\n          tabBarIcon: ({ color, size }) => (\n            <CalendarDays size={size} color={color} />\n          ),\n        }}\n      />\n    </Tabs>\n  );\n}"} lang={"tsx"} title={"app/(tabs)/_layout.tsx"} />
+
+- `tabBarIcon` — icon component (\{ color, size \}) props
+- `tabBarActiveTintColor` — active tab-এর রং
+- `headerShown` — top header চাই কিনা
+
+<Tip tone={"info"} title={"(group) bracket কী"} text={"`(tabs)` parenthesis মানে folder **URL-এ ঢুকবে না**, শুধু nested layout তৈরি করে — `/` এবং `/all` এই দুই URL-ই tabs-এর ভেতরে render হয়।"} />

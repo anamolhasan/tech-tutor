@@ -1,0 +1,16 @@
+---
+title: "TechShop — সম্পূর্ণ Prisma schema"
+label: "TechShop Schema"
+order: 20
+level: "Intermediate"
+description: "নিজেদের প্রজেক্ট data-model — সব relation সহ।"
+---
+
+<CodeBlock code={"enum Role {\n  customer\n  admin\n}\n\nmodel User {\n  id        Int     @id @default(autoincrement())\n  email     String  @unique\n  name      String\n  role      Role    @default(customer)\n  orders    Order[]\n  createdAt DateTime @default(now())\n}\n\nmodel Category {\n  id       Int       @id @default(autoincrement())\n  name     String    @unique\n  products Product[]\n}\n\nmodel Product {\n  id         Int       @id @default(autoincrement())\n  name       String\n  price      Decimal   @db.Decimal(10, 2)\n  qty        Int       @default(0)\n  spec       Json?\n  active     Boolean   @default(true)\n  category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)\n  categoryId Int?\n  items      OrderItem[]\n}\n\nmodel Order {\n  id        Int         @id @default(autoincrement())\n  total     Decimal     @default(0) @db.Decimal(10, 2)\n  status    String      @default(\"pending\")\n  user      User        @relation(fields: [userId], references: [id])\n  userId    Int\n  items     OrderItem[]\n  createdAt DateTime    @default(now())\n}\n\nmodel OrderItem {\n  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)\n  orderId   Int\n  product   Product @relation(fields: [productId], references: [id])\n  productId Int\n  qty       Int\n  price     Decimal @db.Decimal(10, 2)\n\n  @@id([orderId, productId])\n}"} lang={"prisma"} title={"prisma/schema.prisma"} />
+
+- enum → PostgreSQL-এ enum type
+- @db.Decimal(10,2) — precision scale
+- onDelete: SetNull / Cascade — FK behavior
+- @@id([orderId, productId]) — composite key
+
+<Tip tone={"info"} title={"migrate চালান"} text={"সংরক্ষিত schema → `npx prisma migrate dev --name techshop_init` — table তৈরি হয়ে যাবে।"} />

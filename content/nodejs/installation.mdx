@@ -1,0 +1,61 @@
+---
+title: "Node.js Installation ও প্রথম Project"
+label: "Installation"
+order: 2
+level: "Beginner"
+description: "Node.js ইনস্টল করা, npm/npx, package.json, version manager — সবকিছু বাংলায়।"
+---
+
+<InParagraph text={"Node.js শেখার প্রথম ধাপ হলো এটিকে আপনার কম্পিউটারে ইনস্টল করা। চলুন step-by-step দেখি।"} />
+
+## Node.js ইনস্টল করা
+
+- **Windows** — https://nodejs.org থেকে `.msi` installer ডাউনলোড করুন
+- **macOS** — https://nodejs.org থেকে `.pkg` installer বা Homebrew ব্যবহার করুন
+- **Linux (Ubuntu/Debian)** — `sudo apt install nodejs` বা nvm ব্যবহার করুন
+
+## Node.js LTS কী?
+
+<InParagraph text={"**LTS (Long Term Support)** হলো Node.js-এর স্থিতিশীল সংস্করণ যা production-এ ব্যবহারের জন্য সুপারিশ করা হয়। Non-LTS (Current) সংস্করণে নতুন features থাকে কিন্তু stability কম।"} />
+
+<Tip tone={"info"} title={"সুপারিশ"} text={"শেখার জন্য LTS সংস্করণ ব্যবহার করুন। এটি stable এবং documentation-ও বেশি পাওয়া যায়।"} />
+
+## Version Check
+
+<CodeBlock code={"# Node.js version check\nnode --version\n# Output: v22.x.x\n\n# npm version check\nnpm --version\n# Output: 10.x.x"} lang={"bash"} />
+
+## npm কী?
+
+<InParagraph text={"**npm (Node Package Manager)** হলো Node.js-এর সাথে এসে থাকা package manager। এটি দিয়ে আপনি third-party packages (libraries) ইনস্টল করতে পারবেন, scripts চালাতে পারবেন এবং আপনার project-এর dependencies ম্যানেজ করতে পারবেন।"} />
+
+<CodeBlock code={"# package install\nnpm install express\n\n# package install (dev dependency)\nnpm install --save-dev nodemon\n\n# global install\nnpm install -g typescript\n\n# সব package ইনস্টল (package.json থেকে)\nnpm install"} lang={"bash"} />
+
+## npx কী?
+
+<InParagraph text={"**npx (Node Package Execute)** হলো npm-এর সাথে এসে থাকা একটি tool যা packages ইনস্টল না করেই execute করতে দেয়। এটি temporary execution-এর জন্য খুব উপযোগী।"} />
+
+<CodeBlock code={"# package ইনস্টল না করেই create-next-app চালানো\nnpx create-next-app my-app\n\n# typescript compiler চালানো\nnpx tsc --version\n\n# create-react-app\nnpx create-react-app my-app"} lang={"bash"} />
+
+## Node Version Manager (nvm)
+
+<InParagraph text={"**nvm** দিয়ে আপনি একই সাথে Node.js-এর বিভিন্ন সংস্করণ রাখতে ও সুইচ করতে পারবেন। এটি developerদের জন্য অত্যন্ত উপযোগী।"} />
+
+<CodeBlock code={"# nvm install (macOS/Linux)\ncurl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash\n\n# Node.js version ইনস্টল\nnvm install 22\n\n# নির্দিষ্ট version ব্যবহার\nnvm use 22\n\n# সব version দেখুন\nnvm ls\n\n# default version সেট করুন\nnvm alias default 22"} lang={"bash"} />
+
+## package.json কী?
+
+<InParagraph text={"**package.json** হলো আপনার project-এর configuration file। এতে project-এর নাম, version, dependencies, scripts — সব থাকে। প্রতিটি Node.js project-এ package.json থাকা বাধ্যতামূলক।"} />
+
+<CodeBlock code={"# package.json তৈরি\nnpm init\n\n# defaults সহ package.json তৈরি\nnpm init -y"} lang={"bash"} />
+
+<CodeBlock code={"{\n  \"name\": \"my-node-app\",\n  \"version\": \"1.0.0\",\n  \"description\": \"আমার প্রথম Node.js app\",\n  \"main\": \"index.js\",\n  \"scripts\": {\n    \"start\": \"node index.js\",\n    \"dev\": \"nodemon index.js\",\n    \"test\": \"jest\"\n  },\n  \"dependencies\": {\n    \"express\": \"^4.21.0\"\n  },\n  \"devDependencies\": {\n    \"nodemon\": \"^3.1.0\"\n  }\n}"} lang={"json"} title={"package.json"} />
+
+## প্রথম Node.js Project
+
+<CodeBlock code={"# ১. একটি নতুন directory তৈরি\nmkdir my-first-node-app\ncd my-first-node-app\n\n# ২. package.json তৈরি\nnpm init -y\n\n# ৩. index.js তৈরি করুন"} lang={"bash"} />
+
+<CodeBlock code={"const http = require(\"node:http\");\n\nconst server = http.createServer((req, res) => {\n  res.writeHead(200, { \"Content-Type\": \"text/plain\" });\n  res.end(\"Hello from Node.js!\");\n});\n\nserver.listen(3000, () => {\n  console.log(\"Server চালু আছে http://localhost:3000\");\n});"} lang={"javascript"} title={"index.js"} />
+
+<CodeBlock code={"# ৪. সার্ভার চালু করুন\nnode index.js\n\n# Output: Server চালু আছে http://localhost:3000"} lang={"bash"} />
+
+<Tip tone={"success"} title={"সফল!"} text={"ব্রাউজারে http://localhost:3000 খুলে দেখুন — \"Hello from Node.js!\" লেখা দেখাবে। অভিনন্দন, আপনার প্রথম Node.js server চালু!"} />

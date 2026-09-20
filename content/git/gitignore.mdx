@@ -1,0 +1,46 @@
+---
+title: ".gitignore — কোন ফাইল Git-এ যাবে না"
+label: ".gitignore"
+order: 6
+level: "Beginner"
+description: ".gitignore ফাইল দিয়ে অবাঞ্ছিত ফাইল বাদ রাখা — বাংলায়।"
+---
+
+## .gitignore কী?
+
+<InParagraph text={"`.gitignore` একটি টেক্সট ফাইল যেখানে আপনি নিয়ম (patterns) লেখেন — কোন ফাইল বা ফোল্ডার Git track করবে না। বিশেষ করে **secret**, **dependency**, ও **build output** বাদ রাখতে এটি অপরিহার্য।"} />
+
+<CodeBlock code={"# Dependencies\nnode_modules/\n\n# Build outputs\ndist/\nbuild/\nout/\n\n# Environment / secret\n.env\n.env.local\n\n# Logs\n*.log\n\n# OS files\n.DS_Store\nThumbs.db"} lang={"bash"} title={"সাধারণ .gitignore"} />
+
+## Pattern-এর ধরণ
+
+| Pattern | অর্থ | উদাহরণ |
+| --- | --- | --- |
+| node_modules/ | ফোল্ডারটি বাদ | ঐ ফোল্ডারের সব |
+| *.log | যেকোনো .log ফাইল | app.log |
+| !.env.example | বাদ দেওয়া সত্ত্বেও এইটি রাখো | নেগেটিভ (=force include) |
+| build/ | build ফোল্ডার | build/index.html |
+| /config | লক্ষ্য করুন — নামের সাথে / | শুধু root-এর config |
+| dist/*.js | রুট ও নেস্টেড dist | dist/main.js |
+
+## নেগেটিভ (!) example
+
+<CodeBlock code={"*.env\n!.env.example"} lang={"bash"} />
+
+<InParagraph text={"এখানে সমস্ত `.env` বাদ কিন্তু `.env.example` রাখা হবে — কারণ এটি সবার দেখার জন্য মডেল ফাইল।"} />
+
+## ইতিমধ্যে tracked ফাইল বাদ দিতে
+
+<InParagraph text={"একটি ফাইল একবার commit হয়ে গেলে `.gitignore` যোগ করেও track থাকবে। তখন এটি থেকে সরাতে হবে:"} />
+
+<CodeBlock code={"git rm --cached .env        # repo থেকে remove, disk-এ থাকবে\ngit commit -m \"chore: .env আর ট্র্যাক হবে না\""} lang={"bash"} />
+
+## Global ignore
+
+<CodeBlock code={"git config --global core.excludesfile ~/.gitignore_global"} lang={"bash"} />
+
+## অনেক ল্যাঙ্গুয়েজের জন্য ready template
+
+<InParagraph text={"GitHub-এ [github.com/github/gitignore](https://github.com/github/gitignore)-এ Node, Python, Java — সব প্ল্যাটফর্মের প্রস্তুত `.gitignore` ফাইল পাবেন। `git init` করতে-করতেই Git-এর আসল সৌন্দর্য — একটি ভালো `.gitignore` প্রজেক্টকে পরিচ্ছন্ন রাখে।"} />
+
+<Tip tone={"warning"} title={"সবচেয়ে বড় সিকিউরিটি ভুল"} text={"`.env`-এ database password বা API key থাকে। একবার it commit হয়ে push হয়ে গেলে — এটি হাস্টোরি থেকে মুছে ফেলা কঠিন। প্রথমেই `.gitignore` দিয়ে নাম লিখুন!"} />

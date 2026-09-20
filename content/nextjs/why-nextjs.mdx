@@ -1,0 +1,43 @@
+---
+title: "Next.js কেন ব্যবহার করব?"
+label: "কেন Next.js?"
+order: 2
+level: "Beginner"
+description: "React-এর বদলে Next.js কেন ব্যবহার করবেন — SSR, SEO, performance ও developer experience-এর সুবিধাগুলো।"
+---
+
+<InParagraph text={"Pure React (React + Vite) দিয়েও স্থিতিশীল অ্যাপ তৈরি করা যায়। তাহলে কেন **Next.js**? চলুন কিছু গুরুত্বপূর্ণ কারণ দেখি।"} />
+
+## ১. SEO ও Server-side Rendering
+
+<InParagraph text={"Pure React-এ ব্রাউজারে JavaScript চালিয়ে page render হয় — ফলে SEO crawler-দের জন্য content দেখা কঠিন। **Next.js-এ সার্ভার-এ page render হয়**, তাই HTML-ই browser ও search engine-এই যায়।"} />
+
+## ২. Full-Stack একই প্রজেক্টে
+
+<InParagraph text={"Route Handlers ও Server Actions দিয়ে **backend এবারে frontend-এর পাশেই**। আলাদা API server তৈরি করার দরকার নেই।"} />
+
+## ৩. Performance Optimization
+
+- **Automatic code splitting** — প্রতিটি route-এর জন্য আলাদা JavaScript
+- **Image Optimization** — WebP/AVIF, lazy loading automatic
+- **Turbopack** — Rust-based fast bundler
+- **Prefetching** — `<Link>` hover করলেই পরের page preload
+
+## ৪. Developer Experience
+
+- File-based routing — router config লেখার দরকার নেই
+- TypeScript first-class support
+- Faster Refresh — edit করলেই instant update
+- Great error messaging
+
+## প্যারেন্ট Compare
+
+| বৈশিষ্ট্য | React (Vite) | Next.js |
+| --- | --- | --- |
+| Rendering | Client-side only | Server + Client |
+| Routing | React Router setup লাগে | File-based automatic |
+| SEO | Poor (JS লোডের পর render) | Excellent (SSR/SSG) |
+| API | আলাদা backend | Route Handlers built-in |
+| Optimization | Manual | Automatic |
+
+<Tip tone={"success"} title={"কখন Next.js বেছে নেবেন?"} text={"SEO-important ওয়েবসাইট, e-commerce, blog, SaaS product — যেখানে performance ও ranking গুরুত্বপূর্ণ, সেখানেই Next.js সবচেয়ে ভালো।"} />

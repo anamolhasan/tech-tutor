@@ -1,0 +1,29 @@
+---
+title: "JavaScript Introduction"
+label: "Introduction"
+order: 1
+level: "Beginner"
+description: "ওয়েবের প্রাণ JavaScript — কেন শিখবেন, কোথায় চলে, কীভাবে ব্রাউজারে চলবে — বাংলা পরিচিতি।"
+---
+
+<InParagraph text={"**JavaScript** হলো ওয়েবের প্রাণ। এটিই সেই ভাষা যা ওয়েবপেজকে `static` থেকে `dynamic` করে তোলে — ক্লিক, অ্যানিমেশন, ফর্ম ভ্যালিডেশন, ডেটা লোড — সবই JavaScript-এর কাজ।"} />
+
+## JavaScript কোথায় চলে?
+
+- **ব্রাউজার** — প্রতিটি আধুনিক ব্রাউজারে (Chrome, Firefox, Edge...) JavaScript ইঞ্জিন আছে
+- **Node.js** — সার্ভারে JavaScript চালানোর রানটাইম
+- **মোবাইল ও ডেস্কটপ অ্যাপ** — React Native, Electron ইত্যাদির মধ্যে
+
+## প্রথম JavaScript
+
+<CodeBlock code={"<body>\n  <h1>JavaScript Welcome</h1>\n  <script>\n    alert(\"হ্যালো, JavaScript!\");\n    console.log(\"এটি console-এ দেখা যাবে\");\n  </script>\n</body>"} lang={"html"} title={"index.html"} />
+
+<InParagraph text={"`script` ট্যাগের ভেতরের কোড ব্রাউজার লোড করার সাথে সাথে চালায়। তবে আধুনিক পদ্ধতিতে script আলাদা ফাইলে থাকে।"} />
+
+## একটি বাটনকে কাজে লাগানো
+
+<CodeBlock code={"<button id=\"like-btn\">লাইক</button>\n\n<script>\n  const btn = document.getElementById(\"like-btn\");\n  btn.addEventListener(\"click\", () => {\n    alert(\"লাইক দেওয়া হয়েছে!\");\n  });\n</script>"} lang={"html"} />
+
+<Tip tone={"success"} title={"ইতিবাচক ফলাফল"} text={"প্রতিটি ছোট ছোট উদাহরণ একবার নিজে চালিয়ে দেখুন — browser console-এ (F12) জিনিস দ্রুত test করা যায়।"} />
+
+<Tip tone={"info"} title={"অন্য ফাইলে script"} text={"বড় প্রজেক্টে `<script src=\"app.js\"></script>` — আলাদা ফাইল ব্যবহার করুন। এতে কোড manageable এবং বজায় রাখা সহজ হয়।"} />

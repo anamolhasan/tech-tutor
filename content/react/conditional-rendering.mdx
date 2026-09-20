@@ -1,0 +1,21 @@
+---
+title: "Conditional Rendering"
+label: "Conditional Rendering"
+order: 5
+level: "Beginner"
+description: "React-এ শর্ত দিয়ে UI — if/else, &&, ternary, null pattern — বাংলায়।"
+---
+
+## তিনটি উপায়
+
+<CodeBlock code={"function Greeting({ user }) {\n  // উপায় ১ — if/else (ভিন্ন return)\n  if (!user) {\n    return <p>লগইন করুন</p>;\n  }\n\n  // উপায় ২ — && (সত্য হলে দেখাও)\n  return (\n    <div>\n      <h2>স্বাগতম, {user.name}</h2>\n      {user.badge && <span className=\"badge\">{user.badge}</span>}\n\n      {/* উপায় ৩ — ternary */}\n      {user.age >= 18 ? <p>প্রাপ্তবয়স্ক</p> : <p>নাবালক</p>}\n    </div>\n  );\n}"} lang={"jsx"} title={"if / && / ternary"} />
+
+## null — কিছুই না দেখানো
+
+<CodeBlock code={"function Spinner({ show }) {\n  if (!show) return null; // কিছুই render হবে না\n  return <div className=\"spinner\" />;\n}"} lang={"jsx"} title={"null return"} />
+
+<Tip tone={"warning"} title={"0-এর সমস্যা"} text={"`{count && <p>…</p>}` লিখলে `count` 0 হলে **0** দেখাবে — ভুল। এর বদলে `{count > 0 && <p>…</p>}` বা `{!!count && <p>…</p>}` ব্যবহার করুন।"} />
+
+## List + condition
+
+<CodeBlock code={"const items = [\"মাইক\", \"হেডফোন\", \"ল্যাপটপ\"];\n\nfunction List() {\n  return (\n    <ul>\n      {items\n        .filter((name) => name !== \"মাইক\")\n        .map((name) => (\n          <li key={name}>{name}</li>\n        ))}\n    </ul>\n  );\n}"} lang={"jsx"} title={"filter + render"} />

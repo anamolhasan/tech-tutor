@@ -1,0 +1,33 @@
+---
+title: "Event Handling"
+label: "Events"
+order: 7
+level: "Beginner"
+description: "onClick, onChange, onSubmit — event handler, event object ও preventDefault — বাংলায়।"
+---
+
+## Event handler
+
+<CodeBlock code={"function Counter() {\n  const handleClick = () => {\n    console.log(\"Clicked!\");\n  };\n\n  return <button onClick={handleClick}>Click</button>;\n}\n\n// inline arrow\n<button onClick={() => console.log(\"Clicked!\")}>Click</button>"} lang={"jsx"} title={"onClick"} />
+
+## event object
+
+<CodeBlock code={"function Input() {\n  return (\n    <input\n      onChange={(event) => {\n        console.log(event.target.value);\n      }}\n      placeholder=\"লিখুন…\"\n    />\n  );\n}"} lang={"jsx"} title={"event argument"} />
+
+## সাধারণ event
+
+| Event | যখন |
+| --- | --- |
+| `onClick` | ক্লিক |
+| `onChange` | input/select/textarea-তে পরিবর্তন |
+| `onSubmit` | form submit |
+| `onMouseEnter` / `onMouseLeave` | hover enter/exit |
+| `onFocus` / `onBlur` | ফোকাস পাওয়া/হারানো |
+| `onKeyDown` | কীবোর্ড চাপা |
+| `onScroll` | স্ক্রল |
+
+## preventDefault
+
+<CodeBlock code={"function Form() {\n  return (\n    <form\n      onSubmit={(event) => {\n        event.preventDefault(); // page reload থামে\n        console.log(\"Form submitted!\");\n      }}\n    >\n      <input type=\"text\" name=\"query\" />\n      <button type=\"submit\">Search</button>\n    </form>\n  );\n}"} lang={"jsx"} title={"form submit আটকানো"} />
+
+<Tip tone={"info"} title={"handler function করুন"} text={"`onClick={() => doSomething()}` — inline arrow চলবে, কিন্তু function define করে `onClick={handleClick}` লিখা পরিষ্কার ও test-able।"} />

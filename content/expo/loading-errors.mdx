@@ -1,0 +1,15 @@
+---
+title: "Loading, error ও retry state"
+label: "Loading & Errors"
+order: 27
+level: "Intermediate"
+description: "async data-র ৩টি state — UI-তে সঠিকভাবে দেখানো।"
+---
+
+<InParagraph text={"প্রতিটি async কাজের ৩টি state — **loading / error / data**:"} />
+
+<CodeBlock code={"const [state, setState] = useState({\n  loading: true,\n  error: null,\n  tasks: [],\n});\n\nuseEffect(() => {\n  fetchTasks()\n    .then((tasks) => setState({ loading: false, error: null, tasks }))\n    .catch((error) =>\n      setState({ loading: false, error, tasks: [] })\n    );\n}, []);"} lang={"tsx"} />
+
+<CodeBlock code={"if (state.loading) return <ActivityIndicator size=\"large\" />;\n\nif (state.error) {\n  return (\n    <View>\n      <Text>লোড করা যায়নি</Text>\n      <Pressable onPress={reload}>\n        <Text>আবার চেষ্টা</Text>\n      </Pressable>\n    </View>\n  );\n}\n\nreturn <FlatList data={state.tasks} refreshing={reloading} onRefresh={reload} />;"} lang={"tsx"} />
+
+<Tip tone={"info"} title={"retry বাধ্যতামূলক"} text={"error state-এ শুধু text নয়, একটি **action** দিন (আবার চেষ্টা / সেটিংস)। pull-to-refresh-ও এক ধরণের retry।"} />

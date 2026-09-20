@@ -1,0 +1,35 @@
+---
+title: "CSS Display"
+label: "Display"
+order: 8
+level: "Beginner"
+description: "display: block, inline, inline-block, none, flex, grid — CSS display property-এর বাংলা গাইড।"
+---
+
+<InParagraph text={"`display` property নির্ধারণ করে একটি element ব্রাউজারে কেমন আচরণ করবে — block, inline নাকি অন্য কিছু।"} />
+
+## block
+
+<InParagraph text={"নতুন লাইন নেয়, পূর্ণ প্রস্থ দখল করে। `div`, `p`, `h1`, `section` — ডিফল্ট block।"} />
+
+## inline
+
+<InParagraph text={"একই লাইনে থাকে, যতটুকু জায়গা লাগে ততটুকু নেয়। `span`, `a`, `em` — ডিফল্ট inline।"} />
+
+## inline-block
+
+<InParagraph text={"inline-এর মতো একই লাইনে থাকে, তবে block-এর মতো width, height, padding দিতে পারে।"} />
+
+<CodeBlock code={".tag {\n  display: inline-block;\n  padding: 4px 10px;\n  width: 120px;\n}"} lang={"css"} />
+
+## none
+
+<InParagraph text={"`display: none` element-কে সম্পূর্ণ লুকিয়ে দেয় — জায়গাও নেয় না। (`visibility: hidden` শুধু চোখে লুকায়, জায়গা থেকে যায়।)"} />
+
+## flex ও grid
+
+<CodeBlock code={".row   { display: flex; }\n.profile-card { display: grid; }"} lang={"css"} />
+
+<InParagraph text={"`flex` একমাত্রিক (সারি/স্তম্ভ) লেআউট, `grid` দ্বিমাত্রিক (সারি + স্তম্ভ) লেআউটের জন্য। এই দুটি আধুনিক লেআউটের প্রাণ — পরবর্তী অধ্যায়ে বিস্তারিত।"} />
+
+<Tip tone={"info"} title={"display: contents"} text={"`display: contents` বাবা-এর বক্স ভেঙে সন্তানদের সরাসরি গ্র্যান্ড-প্যারেন্টের গ্রিড/ফ্লেক্স-এ দেখায়। তবে accessibility সতর্কতায় সতর্কভাবে ব্যবহার করুন।"} />

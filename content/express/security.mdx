@@ -1,0 +1,34 @@
+---
+title: "Express Security Best Practices"
+label: "Security"
+order: 16
+level: "Advanced"
+description: "Helmet, rate limiting, XSS/SQLi protection, data sanitization — Express security বাংলায়।"
+---
+
+<InParagraph text={"Web app-এর নিরাপত্তা গুরুত্বপূর্ণ। Express-এ নিচের middleware গুলোতে অপরিহার্য।"} />
+
+## নেওয়া Packages
+
+<CodeBlock code={"npm install helmet express-rate-limit express-mongo-sanitize xss-clean hpp"} lang={"bash"} />
+
+<CodeBlock code={"const express = require(\"express\");\nconst helmet = require(\"helmet\");\nconst rateLimit = require(\"express-rate-limit\");\nconst mongoSanitize = require(\"express-mongo-sanitize\");\nconst xss = require(\"xss-clean\");\nconst hpp = require(\"hpp\");\n\nconst app = express();\n\n// 1. Security headers\napp.use(helmet());\n\n// 2. Data sanitization — XSS\napp.use(xss());\n\n// 3. Prevent NoSQL injection\napp.use(mongoSanitize());\n\n// 4. Prevent parameter pollution\napp.use(hpp());\n\n// 5. Rate limiting\nconst limiter = rateLimit({\n  windowMs: 15 * 60 * 1000,  // 15 min\n  max: 100,                  // 100 request/IP\n  message: { error: \"অনেক বেশি request — পরে চেষ্টা করুন\" },\n});\napp.use(\"/api\", limiter);\n\n// 6. Body parsing (JSON only)\napp.use(express.json({ limit: \"10kb\" }));"} lang={"javascript"} title={"index.js"} />
+
+## একটি Hack Attempt
+
+<CodeBlock code={"# attacker চেষ্টা ↓\nPOST /api/users\n{ \"email\": { \"$gt\": \"\" } }\n\n# mongoSanitize-এ ক্লিন হয় →\n{ email: null }\n\n# user data corrupt হয় না"} lang={"bash"} title={"NoSQL injection"} />
+
+## Security Checklist
+
+| Area | অ্যাকশন |
+| --- | --- |
+| Headers | helmet() ব্যবহার |
+| Rate limit | 100-200 req/15min per IP |
+| Validation | Zod দিয়ে strict schema |
+| Password | bcrypt hash, দৃঢ় হলে |
+| JWT | short expiry + secure secret |
+| CORS | only trusted origins |
+| HTTPS | production-এ সদা HTTPS |
+| Logs | sensitive data লগে নেই |
+
+<Tip tone={"success"} title={"প্রতিটি request-এ"} text={"এই 6 middleware (helmet, xss, mongoSanitize, hpp, rateLimit, json limit) নতুন Express API-তে always যোগ করুন।"} />

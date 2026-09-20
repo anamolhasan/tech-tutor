@@ -1,0 +1,17 @@
+---
+title: "Studio — GUI-তে data দেখুন"
+label: "Prisma Studio"
+order: 30
+level: "Beginner"
+description: "browser-এ table browser — dev-হাতিয়ার।"
+---
+
+<CodeBlock code={"npx prisma studio"} lang={"bash"} />
+
+<InParagraph text={"Studio localhost-এ খোলে — model-তালিকা, rows edit/create/delete, filter/order — pgAdmin-এর lightweight বিকল্প।"} />
+
+- Read-only ভাবেন না — edit-ও চলে
+- Relation জোড়া browse — click করে
+- `--port`-এ custom পোর্ট
+
+<Tip tone={"warning"} title={"production নয়"} text={"Studio dev-only — production database-এ চালানো থেকে বিরত থাকুন। `prisma db execute`/CLI-ই prod-এর জন্য।"} />

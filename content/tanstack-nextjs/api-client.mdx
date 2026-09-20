@@ -1,0 +1,21 @@
+---
+title: "API Client — Typed Functions"
+label: "API Client"
+order: 6
+level: "Intermediate"
+description: "REST endpoints-এর জন্য typed function — getProducts, createProduct, updateProduct, deleteProduct — বাংলায়।"
+---
+
+<InParagraph text={"প্রতিটি `useQuery`-র `queryFn`-এর ভেতরে সরাসরি `api.get(...)` লেখার বদলে **আলাদা typed function** বানাব। এতে hooks পরিষ্কার থাকে এবং যেকোনো জায়গায় একই function reuse করা যায়।"} />
+
+<CodeBlock code={"import { api } from \"./axios\";\n\n\nexport function listProducts(params: ProductQueryParams) {\n  return api.get<ProductListResponse>(\"/products\", { params })\n    .then((res) => res.data);\n}\n\nexport function getProduct(id: string) {\n  return api.get<Product>(\"/products/\" + id)\n    .then((res) => res.data);\n}\n\nexport function createProduct(input: CreateProductInput) {\n  return api.post<Product>(\"/products\", input)\n    .then((res) => res.data);\n}\n\nexport function updateProduct(id: string, input: Partial<CreateProductInput>) {\n  return api.put<Product>(\"/products/\" + id, input)\n    .then((res) => res.data);\n}\n\nexport function deleteProduct(id: string) {\n  return api.delete<void>(\"/products/\" + id);\n}\n\n// অনুষঙ্গিক types import\n\n  CreateProductInput,\n  ProductListResponse,\n} from \"@/types/product\";"} lang={"ts"} title={"src/lib/products-api.ts"} />
+
+## কেন \`.then((res) => res.data)\`
+
+<InParagraph text={"আমরা চাই queryFn যেন সরাসরি ডেটা return করে — `Product` — axios response-এর `{ data: ... }` wrap-টা না। তাই প্রতিটি function-এ `res.data` বের করে দিচ্ছি। ফলে `useQuery` থেকে `data`-ই মেলে।"} />
+
+## কোথায় REST server
+
+<InParagraph text={"`baseURL` `/api`-তে থাকায় `listProducts()` আসলে আঘাত করবে `/api/products` — অর্থাৎ Next.js-এর নিজের route handler। ওই route handler-এ আমরা backend REST API-তে proxy করতে পারি অথবা সহজভাবে in-memory/products JSON file দিয়ে serve করতে পারি (পরের অধ্যায়ে)।"} />
+
+<Tip tone={"success"} title={"এক জায়গাতেই HTTP"} text={"সব Axios/dependency শুধু `lib/`-তেই রাখুন — `hooks/`, components-এ সরাসরি `axios` import করবেন না। তখন API-র ধাঁচ বদলালে (যেমন ক্লায়েন্ট SDK-এ) শুধু একটি লেয়ার বদলায়।"} />

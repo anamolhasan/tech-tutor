@@ -1,0 +1,21 @@
+---
+title: "Data Fetching — useQuery"
+label: "Data Fetching"
+order: 11
+level: "Intermediate"
+description: "useQuery দিয়ে list ও detail fetch — params-dependent queries — বাংলায়।"
+---
+
+<InParagraph text={"এবার মূল অংশ — **useQuery** দিয়ে ডেটা আনা। আমরা hooks-এ queryKey ও queryFn আলাদা রাখব, যাতে page-এ শুধু state-গুলো (page, search, filter) দিলেই বাকি সব নিজে হয়।"} />
+
+<CodeBlock code={"\"use client\";\n\nimport { keepPreviousData, useQuery } from \"@tanstack/react-query\";\nimport { listProducts } from \"@/lib/products-api\";\nimport { productKeys } from \"@/lib/query-keys\";\n\n\nexport function useProducts(params: ProductQueryParams) {\n  return useQuery({\n    queryKey: productKeys.list(params),\n    queryFn: () => listProducts(params),\n    // page/search বদলালে নতুন ডেটা আসা পর্যন্ত পুরনো দেখায়\n    placeholderData: keepPreviousData,\n  });\n}\n\nexport function useProduct(id: string | null) {\n  return useQuery({\n    queryKey: productKeys.detail(id ?? \"none\"),\n    queryFn: () => getProduct(id as string),\n    enabled: id !== null,   // id না থাকলে query চলে না\n  });\n}\n\nimport { getProduct } from \"@/lib/products-api\";"} lang={"ts"} title={"src/lib/hooks/use-products.ts"} />
+
+## keepPreviousData কী
+
+<InParagraph text={"page/search বদলালে TanStack Query **পুরনো ডেটা দেখাতে থাকে** নতুন আসা পর্যন্ত — এই UX কিছুটা smooth রাখে (pagination-এ ঝাঁকুনি কম)। ভেতরে নতুন fetch চলার সময় `isFetching` true থাকে।"} />
+
+## params সাথে queryKey
+
+<InParagraph text={"`queryKey`-তে `params` অন্তর্ভুক্ত করায় page ১-এর ডেটা page ২-এর থেকে আলাদা cache-এ থাকে। user page ১-এ ফিরলে **fetch ছাড়াই** instant দেখায়। এটাই TanStack Query-র সবচেয়ে বড় সুবিধা।"} />
+
+<Tip tone={"success"} title={"একমাত্র data-উৎস"} text={"Component-গুলো `useProducts` থেকে `data`-ই পড়ে — API function-গুলো hooks-এ ঢেকে রাখলে UI কখনো জানে না ডেটা কোথা থেকে আসছে। Refactoring তখন তুচ্ছ।"} />

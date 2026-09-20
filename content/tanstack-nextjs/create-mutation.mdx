@@ -1,0 +1,24 @@
+---
+title: "Create Mutation — New Product"
+label: "Create Mutation"
+order: 14
+level: "Intermediate"
+description: "useMutation দিয়ে নতুন product তৈরি এবং onSuccess-এ cache refresh — বাংলায়।"
+---
+
+<InParagraph text={"Queries পড়ে, **mutations** লেখে। `useMutation` দিয়ে POST চালাব; সফল হলে list query invalidate করে — table নিজে থেকেই refresh হয়।"} />
+
+<CodeBlock code={"\"use client\";\n\nimport { useMutation, useQueryClient } from \"@tanstack/react-query\";\nimport { toast } from \"sonner\";\nimport { createProduct } from \"@/lib/products-api\";\nimport { productKeys } from \"@/lib/query-keys\";\n\n\nexport function useCreateProduct() {\n  const queryClient = useQueryClient();\n\n  return useMutation({\n    mutationFn: (input: CreateProductInput) => createProduct(input),\n\n    onSuccess: () => {\n      // list cache পুরনো হয়ে গেছে → আবার fetch\n      queryClient.invalidateQueries({ queryKey: productKeys.all });\n      toast.success(\"Product তৈরি হয়েছে\");\n    },\n\n    onError: (error) => {\n      toast.error(error.message);\n    },\n  });\n}"} lang={"ts"} title={"src/lib/hooks/use-product-mutations.ts"} />
+
+## Component-এ ব্যবহার
+
+<CodeBlock code={"const createProduct = useCreateProduct();\n\nfunction handleSubmit(values: CreateProductInput) {\n  createProduct.mutate(values, {\n    onSuccess: () => {\n      onClose?.();   // dialog বন্ধ\n      form.reset();  // পরের create-এর জন্য ফরম পরিষ্কার\n    },\n  });\n}\n\n// button loading\n<Button disabled={createProduct.isPending}>\n  {createProduct.isPending ? \"সেভ হচ্ছে…\" : \"Create Product\"}\n</Button>"} lang={"tsx"} title={"Form submit-এ"} />
+
+## mutation কীভাবে কাজ করে
+
+1. `mutate(input)` → `mutationFn(input)` → Axios POST
+1. চলাকালে `isPending` true — UI-তে loading দেখায়
+1. সফল → `onSuccess` → list invalidate → toast
+1. ব্যর্থ → `onError` → error message
+
+<Tip tone={"warning"} title={"onSuccess≠cache guarantee"} text={"`onSuccess` shared হয়। ভেতরে যেহেতু আমরা `queryClient.invalidateQueries` করি — **ডেটা সার্ভার থেকে আসা** নিশ্চিত হয়। তাতে user-এর screen সবসময় server-এর সত্যিই latest উপস্থিতি দেখায়।"} />

@@ -1,0 +1,37 @@
+---
+title: "Production Performance"
+label: "Performance"
+order: 25
+level: "Advanced"
+description: "Bundle size, code splitting, 이미지/font optimization ও Core Web Vitals — Next.js performance বাংলায়।"
+---
+
+<InParagraph text={"Next.js অনেক optimization automatic করে, তবে কিছু বিষয় নিজেও নিয়ন্ত্রণ করা যায়।"} />
+
+## ১. Automatic Code Splitting
+
+<InParagraph text={"প্রতিটি route-এর জন্য আলাদা JavaScript bundle — ব্যবহারকারী শুধু current page-এর code load করে।"} />
+
+## ২. Use Client Components Carefully
+
+<InParagraph text={"`\"use client\"`-যত কম, browser-এ তত কম JavaScript। ধাপে ধাপে কেবল interactive অংশ client করুন।"} />
+
+## ৩. Image Optimization
+
+- `next/image` — WebP, lazy, sizes
+- `priority` prop — LCP image-এ true
+- যতটা সম্ভব remote image-এ `sizes` দিন
+
+## ৪. Font Optimization
+
+<InParagraph text={"`next/font` — self-hosted font, `display: swap` behavior দিয়ে CLS কমায়।"} />
+
+## ৫. Caching
+
+<InParagraph text={"`use cache` + `cacheLife` দিয়ে repeat data fetch এড়ানো যায়।"} />
+
+## ৬. Lazy Loading
+
+<CodeBlock code={"import dynamic from \"next/dynamic\";\n\nconst HeavyComponent = dynamic(() => import(\"../components/heavy\"), {\n  loading: () => <p>Loading...</p>,\n});\n\nexport default function Page() {\n  return <HeavyComponent />;\n}"} lang={"tsx"} title={"app/page.tsx (dynamic import)"} />
+
+<Tip tone={"success"} title={"Measure করুন"} text={"`npm run build`-এ bundle size দেখুন। Lighthouse/Chrome DevTools-এ Core Web Vitals (LCP, CLS, INP) পরীক্ষা করুন।"} />

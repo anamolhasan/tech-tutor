@@ -1,0 +1,24 @@
+---
+title: "SELECT, FROM, WHERE — প্রথম query"
+label: "SELECT basics"
+order: 5
+level: "Beginner"
+description: "data পড়ার মৌলিক ৩টি clause — বাংলায় উদাহরণসহ।"
+---
+
+<CodeBlock code={"SELECT name, price FROM products;"} lang={"sql"} />
+
+<CodeBlock code={"SELECT * FROM products WHERE qty > 0;"} lang={"sql"} />
+
+| Operator | অর্থ |
+| --- | --- |
+| = | সমান |
+| != | ভিন্ন |
+| > / \< / >= | বড় / ছোট |
+| BETWEEN | পরিসরে |
+| IN | তালিকায় |
+| LIKE | pattern match (text) |
+
+<CodeBlock code={"SELECT name FROM products\nWHERE price BETWEEN 1000 AND 50000\n  AND qty > 0;"} lang={"sql"} />
+
+<Tip tone={"info"} title={"WHERE ছাড়া সাবধান"} text={"`DELETE`/`UPDATE`-এ WHERE না দিলে সব row প্রভাবিত হয়। SELECT দিয়ে ঠিক করা row-টা আগে দেখে নিন, তারপর mod query-এ লাগান।"} />

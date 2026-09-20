@@ -1,0 +1,29 @@
+---
+title: "Hover, Focus & State Variants"
+label: "Hover & Focus States"
+order: 24
+level: "Intermediate"
+description: "Tailwind-এ hover, focus, active, disabled state variant — interactive styling বাংলায়।"
+---
+
+<InParagraph text={"Tailwind-এ pseudo-class variants prefix হিসেবে ব্যবহার হয় — যেমন `hover:`, `focus:`, `active:`।"} />
+
+## Hover State
+
+<CodeBlock code={"<!-- hover এর সময় পরিবর্তন -->\n<button class=\"bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-lg\">\n  Hover করুন\n</button>\n\n<!-- hover এ text color -->\n<a href=\"#\" class=\"text-blue-500 hover:text-blue-700 hover:underline\">\n  Link hover\n</a>"} lang={"html"} />
+
+## Focus State
+
+<CodeBlock code={"<!-- focus ring -->\n<input\n  class=\"border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500\"\n  placeholder=\"Input focus করুন\"\n/>\n\n<!-- focus-within -->\n<div class=\"focus-within:shadow-lg\">\n  <input placeholder=\"Parent detect করবে\" />\n</div>"} lang={"html"} />
+
+## Active & Disabled
+
+<CodeBlock code={"<!-- active (click করার সময়) -->\n<button class=\"bg-blue-500 active:bg-blue-800 text-white px-4 py-2 rounded-lg\">\n  Active state\n</button>\n\n<!-- disabled -->\n<button class=\"bg-blue-500 disabled:bg-gray-300 text-white px-4 py-2 rounded-lg\" disabled>\n  Disabled button\n</button>"} lang={"html"} />
+
+## Group Variants
+
+<InParagraph text={"Parent-কে group দিলে child element parent-এর state-এর উপর ভিত্তি করে style করতে পারে।"} />
+
+<CodeBlock code={"<!-- group hover -->\n<div class=\"group cursor-pointer\">\n  <img src=\"photo.jpg\" class=\"group-hover:opacity-75 transition-opacity\" />\n  <p class=\"group-hover:text-blue-600\">Hover parent, child change</p>\n</div>"} lang={"html"} />
+
+<Tip tone={"success"} title={"Transition যোগ করুন"} text={"Smooth animation-এর জন্য `transition-all duration-200` class যোগ করুন। এতে hover/focus state smooth transition হবে।"} />

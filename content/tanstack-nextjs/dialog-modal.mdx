@@ -1,0 +1,22 @@
+---
+title: "Dialog Modal — Create ও Edit"
+label: "Dialog Modal"
+order: 30
+level: "Intermediate"
+description: "shadcn Dialog দিয়ে state management — এক dialog-ই দুই মোড — বাংলায়।"
+---
+
+<InParagraph text={"আমরা create ও edit-এর জন্য একটি **Dialog**-ই রাখব এবং mode-নির্বাহ করব state দিয়ে। অথবা দুইটি আলাদা dialog-ও চলবে — দুটিই ঠিক। এক dialog-এর পদ্ধতি দেখি।"} />
+
+<CodeBlock code={"const [dialogOpen, setDialogOpen] = useState(false);\nconst [editingProduct, setEditingProduct] = useState<Product | null>(null);\n\n// create button\n<Button onClick={() => {\n  setEditingProduct(null);   // create mode\n  setDialogOpen(true);\n}}>\n  <Plus className=\"size-4\" /> নতুন Product\n</Button>\n\n// row-এর edit\nconst openEdit = (product: Product) => {\n  setEditingProduct(product);  // edit mode\n  setDialogOpen(true);\n};"} lang={"tsx"} title={"state management"} />
+
+<CodeBlock code={"<Dialog open={dialogOpen} onOpenChange={setDialogOpen}>\n  <DialogContent onPointerDownOutside={(e) => e.preventDefault()}>\n    <DialogHeader>\n      <DialogTitle>\n        {editingProduct ? \"সম্পাদনা\" : \"নতুন\"} Product\n      </DialogTitle>\n      <DialogDescription>\n        {editingProduct\n          ? \"তথ্য বদলে Save করুন\"\n          : \"নতুন product-এর তথ্য দিন\"}\n      </DialogDescription>\n    </DialogHeader>\n\n    <ProductForm\n      key={editingProduct?.id ?? \"create\"}\n      defaultValues={editingProduct\n        ? {\n            name: editingProduct.name,\n            description: editingProduct.description ?? \"\",\n            price: editingProduct.price,\n            category: editingProduct.category,\n            stock: editingProduct.stock,\n            status: editingProduct.status,\n          }\n        : undefined}\n      isSubmitting={editingProduct\n        ? updateProduct.isPending\n        : createProduct.isPending}\n      onSubmit={editingProduct\n        ? (values) => {\n            updateProduct.mutate(\n              { id: editingProduct!.id, input: values },\n              { onSuccess: () => setDialogOpen(false) },\n            );\n          }\n        : (values) => {\n            createProduct.mutate(values, {\n              onSuccess: () => setDialogOpen(false),\n            });\n          }}\n    />\n  </DialogContent>\n</Dialog>"} lang={"tsx"} title={"এক Dialog-এ দুই মোড"} />
+
+## কেন একটি Dialog
+
+- দুই code-path মিলে যাওয়ায় duplicate কম
+- `editingProduct === null` মানেই create — সুস্পষ্ট
+- Dialog component loop-height একবারই mount হয়
+- নতুন feature দরকার হলে (যেমন duplicate) সহজে মোড বাড়ানো যায়
+
+<Tip tone={"warning"} title={"loading state দুই দিক"} text={"`isSubmitting` আলাদা-আলাদা mutation-এর pending — dialog একটিই, কিন্তু নিশ্চিত রাখুন: create-চলাকালীন edit dialog নিজে-নিজে খুললে যেন ভুল pending না লাগে। `editingProduct ? updateProduct.isPending : createProduct.isPending` — এমন যুক্তি ঠিক।"} />

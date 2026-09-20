@@ -1,0 +1,20 @@
+---
+title: "Nested write — বাবা-সন্তান এক query-তে"
+label: "Nested Writes"
+order: 15
+level: "Intermediate"
+description: "order + items একসাথে create — relation-ভিত্তিক।"
+---
+
+<CodeBlock code={"const order = await prisma.order.create({\n  data: {\n    user: { connect: { id: 7 } },\n    items: {\n      create: [\n        { productId: 3, qty: 2, price: 4200 },\n        { productId: 8, qty: 1, price: 1800 },\n      ],\n    },\n  },\n});"} lang={"ts"} />
+
+| Nested op | কাজ |
+| --- | --- |
+| create | নতুন child row |
+| connect | অস্তিত্বমান PK link |
+| connectOrCreate | থাকলে connect, না হলে create |
+| update / delete | child modify |
+
+<InParagraph text={"ধারণ: নেস্টেড `create` একটা transaction-এ server-side সম্পূর্ণ হয় — আধা-state অবশিষ্ট থাকে না।"} />
+
+<Tip tone={"info"} title={"অর্ডার হিসাব"} text={"`total` নিজে হিসাব করে দিতে হয় হাতে — Prisma গণনা করে না। শেষে `$transaction` বা trigger-ধারা।"} />

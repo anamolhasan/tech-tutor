@@ -1,0 +1,25 @@
+---
+title: "সাধারণ ভুলগুলো ও সমাধান"
+label: "Common Mistakes"
+order: 39
+level: "Intermediate"
+description: "Postgres শেখার পথে বারবার ধরা ভুল — সচেতন হোন।"
+---
+
+| ভুল | ফল | সঠিক |
+| --- | --- | --- |
+| WHERE-এ `= NULL` | সব row বাদ | IS NULL |
+| `SELECT *` + huge table | ধীর/ব্যর্থ | প্রয়োজনীয় columns |
+| খুব বেশি index | write ধীর, disk বাড়ে | EXPLAIN-এর পর index |
+| float-এ money | rounding bug | numeric |
+| string concat-এ query | SQL injection | $1 params |
+| TRUNCATE-এ transaction skip | data রপ্তানি risk | BEGIN … COMMIT |
+
+<InParagraph text={"আরও:"} />
+
+- Unique-এর পরে upsert-এর আগে constraint নিশ্চিত নয়
+- `GROUP BY`-তে ভুল column — error বা ভুল aggregation
+- smart data-তে jsonb-এর ঢালাও ব্যবহার — query জটিল
+- bulk sync-এ update লক্ষাধিক row — loops-এ বনাম set-based
+
+<Tip tone={"warning"} title={"সবচেয়ে বড় ভুল"} text={"**Index, vacuum/analyze না করে production-এ দেয়া** — deploy-এর আগে query plan ঠিক আছে কিনা দেখুন।"} />

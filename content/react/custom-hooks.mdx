@@ -1,0 +1,24 @@
+---
+title: "Custom Hooks"
+label: "Custom Hooks"
+order: 16
+level: "Intermediate"
+description: "পুনরাবৃত্ত logic-কে reusable hook-এ ভাগ করা — naming convention, rules ও ব্যবহার — বাংলায়।"
+---
+
+## কেন custom hook
+
+<InParagraph text={"যখন একই logic (fetch, window resize, toggle, local storage) অনেক component-এ দরকার — তখন সেটাকে **custom hook**-এ রাখুন। যেকোনো function যার নাম `use` দিয়ে শুরু এবং ভেতরে থাকা hook functions-কে call করে — সেটিই custom hook।"} />
+
+<CodeBlock code={"import { useEffect, useState } from \"react\";\n\nfunction useFetch(url) {\n  const [data, setData] = useState(null);\n  const [loading, setLoading] = useState(true);\n  const [error, setError] = useState(null);\n\n  useEffect(() => {\n    let cancelled = false;\n    setLoading(true);\n\n    fetch(url)\n      .then((r) => {\n        if (!r.ok) throw new Error(\"Bad response\");\n        return r.json();\n      })\n      .then((json) => {\n        if (!cancelled) setData(json);\n      })\n      .catch((e) => {\n        if (!cancelled) setError(e);\n      })\n      .finally(() => {\n        if (!cancelled) setLoading(false);\n      });\n\n    return () => {\n      cancelled = true;\n    };\n  }, [url]);\n\n  return { data, loading, error };\n}\n\n// ব্যবহার\nfunction Profile() {\n  const { data: user, loading } = useFetch(\"/api/users/1\");\n  if (loading) return <p>Loading…</p>;\n  return <h1>{user.name}</h1>;\n}"} lang={"jsx"} title={"useFetch"} />
+
+## useLocalStorage
+
+<CodeBlock code={"import { useEffect, useState } from \"react\";\n\nfunction useLocalStorage(key, initialValue) {\n  const [value, setValue] = useState(() => {\n    const stored = localStorage.getItem(key);\n    return stored !== null ? JSON.parse(stored) : initialValue;\n  });\n\n  useEffect(() => {\n    localStorage.setItem(key, JSON.stringify(value));\n  }, [key, value]);\n\n  return [value, setValue];\n}\n\nconst [theme, setTheme] = useLocalStorage(\"theme\", \"light\");"} lang={"jsx"} title={"Persist data"} />
+
+## Rules of Hooks
+
+- **শুধু top-level** — loops/conditions/নেস্টেড function-এ hook লেখা যাবে না
+- **শুধু function component বা custom hook**-এ call করুন
+- নাম অবশ্যই `use` দিয়ে শুরু — lint তখন নিয়ম verify করতে পারে
+- Hook return — array বা object, যেটা ব্যবহারে সুবিধা

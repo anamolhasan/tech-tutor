@@ -1,0 +1,37 @@
+---
+title: "Issues, Labels, Milestones"
+label: "Issues"
+order: 8
+level: "Intermediate"
+description: "কাজ ও বাগ ট্র্যাক করার GitHub মূলতন্ত্র — বাংলায়।"
+---
+
+## Issue কী?
+
+<InParagraph text={"Issue হলো কাজের **একটি আইটেম** — বাগ রিপোর্ট, ফিচার প্রস্তাব, task। প্রতিটি issue-এর থাকে title, description, number, discussions।"} />
+
+## Issue তৈরি
+
+<CodeBlock code={"## বাগ রিপোর্ট\n**এক লাইনে** — \n\n**Step by step:**\n1. \n2. \n\n**প্রত্যাশিত ফলাফল:**\n...\n\n**প্রাপ্ত ফলাফল:**\n...\n\n**Environment:** OS / Browser / Version"} lang={"markdown"} title={"ভালো issue টেমপ্লেট"} />
+
+## Issue লিংক করুন commit/PR-তে
+
+<CodeBlock code={"git commit -m \"fix: solve #42 overflow issue\""} lang={"bash"} />
+
+<InParagraph text={"coment-এ `#42`, `closes #42`, `resolves #42` লিখলে merge-এর সময় issue স্বয়ংক্রিয়ভাবে close হয়।"} />
+
+## Labels
+
+<CodeBlock code={"- bug\n- enhancement\n- documentation\n- good first issue   (নতুনদের জন্য)\n- help wanted"} lang={"markdown"} />
+
+## Milestones — ধাপ বাঁধাই
+
+<InParagraph text={"Milestone হলো জোটে issues — যেমন **v1.0.0**। progress bar দেখায় কতটা শেষ।"} />
+
+## Assignees ও Priority
+
+- Assignees — কে এই কাজ করবে
+- Project — সালের board-এ issue যুক্ত
+- Due date — সময়সীমা
+
+<Tip tone={"success"} title={"অভ্যাস"} text={"বড় কাজকে ছোট ছোট issue-তে ভাগ করলে অগ্রগতি পরিষ্কার দেখা যায় ও দল সমন্বিত থাকে। PR issue-এর সাথে লিংক করতে ভুলবেন না।"} />

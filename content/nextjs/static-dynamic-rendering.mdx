@@ -1,0 +1,34 @@
+---
+title: "Static ও Dynamic Rendering"
+label: "Static ও Dynamic Rendering"
+order: 23
+level: "Advanced"
+description: "Prerendering, Partial Prerendering (PPR) ও dynamic rendering — rendering strategies বাংলায়।"
+---
+
+<InParagraph text={"Next.js-এ rendering-এর কয়েকটি স্তর — static (prerendered), dynamic (request-time) ও **Partial Prerendering** (দুইটির mix)। Cache Components চালু করলে PPR default।"} />
+
+## রেন্ডারিং এর ধরন
+
+| Strategy | কখন render হয় | কখন ভালো |
+| --- | --- | --- |
+| Prerendering (Static) | Build সময় | Content যেমন blog post |
+| Dynamic Rendering | প্রতিটি request-এ | Personalized data (user-specific) |
+| Partial Prerendering | Static + stream | অধিকাংশ page |
+
+## কখন Dynamic হয়?
+
+<InParagraph text={"এই Request-time API-গুলো ব্যবহার করলে component **dynamic** হয়:"} />
+
+- `cookies()` — user-এর cookie
+- `headers()` — request headers
+- `searchParams` — URL query
+- `params` — dynamic route (এতে copy না থাকলে)
+
+## Partial Prerendering (PPR)
+
+<InParagraph text={"Cache Components চালু থাকলে (Next 16 default), page-এর **static অংশ prerender** হয় আর **dynamic অংশ stream** হয় — একই page-এ দুটোর mix।"} />
+
+<CodeBlock code={"import { Suspense } from \"react\";\n\n// Static — static shell-এ যায়\nexport default function BlogPage() {\n  return (\n    <>\n      <header>\n        <h1>Our Blog</h1>\n      </header>\n\n      {/* Cached — static shell-এ যায় */}\n      <BlogPosts />\n\n      {/* Dynamic — request-time-এ stream */}\n      <Suspense fallback={<p>Loading preferences...</p>}>\n        <UserPreferences />\n      </Suspense>\n    </>\n  );\n}\n\n// সবার জন্য same — cached\nasync function BlogPosts() {\n  \"use cache\";\n  const res = await fetch(\"https://api.vercel.app/blog\");\n  const posts = await res.json();\n\n  return (\n    <ul>\n      {posts.map((p: any) => (\n        <li key={p.id}>{p.title}</li>\n      ))}\n    </ul>\n  );\n}\n\n// user-specific — runtime-এ\nasync function UserPreferences() {\n  const theme = (await cookies()).get(\"theme\")?.value || \"light\";\n  return <p>Your theme: {theme}</p>;\n}"} lang={"tsx"} title={"app/blog/page.tsx"} />
+
+<Tip tone={"info"} title={"Static Shell"} text={"প্রথম load-এ browser পুরো static shell পায় — সাথে সাথে দেখায়। Dynamic অংশ `<Suspense>` fallback-এর পর stream-এ আসে।"} />

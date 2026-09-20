@@ -1,0 +1,35 @@
+---
+title: "Population (Relationship)"
+label: "Population"
+order: 12
+level: "Intermediate"
+description: "ObjectId reference আর populate() দিয়ে related document আনা — select, match, nested populate — বাংলায়।"
+---
+
+## Populate কী?
+
+<InParagraph text={"MongoDB-তে related document পুরোটা save থাকে না — শুধু `ObjectId` reference রাখা হয়। **`populate()`** সেই reference দেখে কাজ করে সম্পর্কিত document-গুলো আবার ভরে তোলে — এক query-তেই।"} />
+
+## Reference schema
+
+<CodeBlock code={"const postSchema = new mongoose.Schema({\n  title: String,\n  body: String,\n  author: { type: mongoose.Schema.Types.ObjectId, ref: \"User\" },\n  comments: [{ type: mongoose.Schema.Types.ObjectId, ref: \"Comment\" }],\n});"} lang={"js"} title={"ref দিয়ে সম্পর্ক"} />
+
+## populate() ব্যবহার
+
+<CodeBlock code={"// author-এ ObjectId নয় — পুরো User document\nconst posts = await Post.find().populate(\"author\");\n\n// শুধু কয়েকটি field + match + nested populate\nconst result = await Post.find()\n  .populate({\n    path: \"author\",\n    select: \"name email\", // শুধু এই field-গুলো\n    match: { isActive: true },\n  })\n  .populate({\n    path: \"comments\",\n    options: { sort: { createdAt: -1 }, limit: 20 },\n  });\n\nconsole.log(posts[0].author.name); // এখন populated"} lang={"js"} title={"Basic populate"} />
+
+## Nested populate
+
+<CodeBlock code={"// comment-এ author আবার populate\nconst posts = await Post.find().populate({\n  path: \"comments\",\n  populate: { path: \"author\", select: \"name\" },\n});\n\n// populate করা field আবার populate — unlimited\nawait Order.find().populate({\n  path: \"items.product\", // array of refs\n});"} lang={"js"} title={"দুই স্তরের populate"} />
+
+## populate string vs object
+
+| কাজ | উদাহরণ |
+| --- | --- |
+| শুধু populate | `.populate("author")` |
+| নির্দিষ্ট field | `.populate({ path: "author", select: "name" })` |
+| শর্তসহ | `.populate({ path: "author", match: { isActive: true } })` |
+| সীমা সহ | `.populate({ path: "comments", options: { limit: 5 } })` |
+| Nested | `.populate({ path: "comments", populate: { path: "author" } })` |
+
+<Tip tone={"warning"} title={"N+1 সমস্যা এড়ান"} text={"লুপের ভেতরে একেক document-এর জন্য একেক query না চালিয়ে (`N+1`) একবারেই `populate()` ব্যবহার করুন — request প্রতি DB hit অনেক কমে যায়।"} />

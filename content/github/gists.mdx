@@ -1,0 +1,33 @@
+---
+title: "Gist — ছোট কোড শেয়ার"
+label: "Gists"
+order: 19
+level: "Beginner"
+description: "Gist কী, কীভাবে তৈরি — বাংলায়।"
+---
+
+## Gist কী?
+
+<InParagraph text={"Gist হলো GitHub-এ একটি **একক ফাইল/ছোট কোড snippet** শেয়ারের দ্রুত উপায় — general repo-র heavy setup ছাড়াই।"} />
+
+## Gist তৈরি
+
+- gist.github.com → লিখুন
+- Filename-এ extension দিন (`utils.js`)
+- Public / Secret নির্বাচন
+- Create public gist
+
+## কখন ব্যবহার করবেন
+
+- Stack Overflow-এ সাহায্য চাওয়া
+- টিমে ছোট JSON config শেয়ার
+- একটা কোড ধাঁচ demo
+- আন-বিলে snippets
+
+## CLI দিয়ে গিস্ট
+
+<CodeBlock code={"# gh CLI:\ngh gist create snippet.js\ngh gist list\ngh gist view <id>"} lang={"bash"} />
+
+<InParagraph text={"**Secret** গিস্ট মানে শুধু link-ধারকেরাই দেখতে পায় — এটি 'private repo' নয়; ইন্টারনেটে link যার কাছে যাবে সে দেখবে।"} />
+
+<Tip tone={"warning"} title={"সতর্কতা"} text={"Secret গিস্টকে security দিয়ে ভাববেন না — সত্যিকারের গোপন তথ্য সেখানে রাখবেন না।"} />

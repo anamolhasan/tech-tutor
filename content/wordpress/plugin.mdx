@@ -1,0 +1,37 @@
+---
+title: "Plugin কী এবং কীভাবে কাজ করে"
+label: "Plugin"
+order: 14
+level: "Beginner"
+description: "WordPress Plugin কী, installation, activate-এর process ও Plugin কীভাবে WordPress-এর সাথে hooked হয়।"
+---
+
+## Plugin কী?
+
+<InParagraph text={"**Plugin** হলো এমন code যা WordPress-এর core-এ অতিরিক্ত **functionality যোগ করে** — contact form, SEO, security, backup, e-commerce। Core-এ এসব কাজ গড়ে নেই — plugin install করলেই সেই feature যোগ হয়ে যায়।"} />
+
+## Plugin কীভাবে কাজ করে
+
+<InParagraph text={"WordPress-এর core-এ অনেক **hook** আছে — Plugin সেই hooks-এ নিজের code **attach** করে। অর্থাৎ Plugin WordPress-কে বলে: “এই জায়গায়/মুহূর্তে তুমি আমার এই code-টাও চালাও”।"} />
+
+<CodeBlock code={"<?php\n/**\n * Plugin Name: My First Plugin\n */\n\n// WordPress-এ একটি action hook এ code যোগ\nadd_action(\"the_content\", function ($content) {\n    return $content . \"<p>Plugin-এর লেখা footer!</p>\";\n});"} lang={"php"} title={"একটি Plugin-এর অতি সহজ উদাহরণ"} />
+
+## Plugin install করার উপায়
+
+- **Dashboard থেকে** — Plugins → Add New → খুঁজে Install → Activate
+- **Zip আপলোড** — Plugins → Add New → Upload Plugin
+- **Manually** — FTP দিয়ে `wp-content/plugins/` folder-এ রাখা
+
+## জনপ্রিয় Plugin-এর উদাহরণ
+
+| Plugin | কাজ কী |
+| --- | --- |
+| Elementor | Page builder |
+| Yoast / Rank Math SEO | SEO optimize |
+| Contact Form 7 / WPForms | Contact form |
+| WooCommerce | E-commerce |
+| Wordfence | Security |
+| UpdraftPlus | Backup |
+| WP Super Cache | Performance/Cache |
+
+<Tip tone={"warning"} title={"Plugin-এর জিনিস"} text={"৬০,০০০+ plugin-এর মধ্যে সব ভালো নয়। **unmaintained/অনেক পুরোনো plugin** site-কে vulnerable করে দিতে পারে। পরিচিত, regular-updated plugin ব্যবহার করুন — আর অকেজো plugin **delete** করুন।"} />

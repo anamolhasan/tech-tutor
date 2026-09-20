@@ -1,0 +1,19 @@
+---
+title: "Dark / Light theme — useColorScheme ও theme object"
+label: "Theming"
+order: 21
+level: "Intermediate"
+description: "সিস্টেমের color scheme অনুযায়ী অ্যাপ-এর রং বদলানো — বাংলায়।"
+---
+
+<InParagraph text={"**`useColorScheme`** — সিস্টেমের bright/dark state-এর hook:"} />
+
+<CodeBlock code={"const palette = {\n  light: { bg: \"#ffffff\", text: \"#0f172a\", accent: \"#2563eb\" },\n  dark: { bg: \"#0f172a\", text: \"#f8fafc\", accent: \"#60a5fa\" },\n};\n\nexport function getTheme(scheme) {\n  return scheme === \"dark\" ? palette.dark : palette.light;\n}"} lang={"ts"} title={"constants/theme.ts"} />
+
+<CodeBlock code={"const scheme = useColorScheme();\nconst theme = getTheme(scheme);\n\n<View style={{ backgroundColor: theme.bg }}>\n  <Text style={{ color: theme.text }}>টাস্ক টাইটেল</Text>\n</View>"} lang={"tsx"} />
+
+- `app.json`-এ `userInterfaceStyle: "automatic"` — সিস্টেম অনুযায়ী
+- status bar — `<StatusBar style="auto" />`
+- dark-এ হালকা রঙের কথা মাথা রাখা — contrasted accent
+
+<Tip tone={"info"} title={"রং এক জায়গায়"} text={"সব রং theme object-এ রাখুন, screen-এ hardcode করবেন না — theme বদলানোর সাথে সাথে সব জায়গা ঠিক থাকে।"} />

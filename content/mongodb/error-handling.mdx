@@ -1,0 +1,30 @@
+---
+title: "Error Handling"
+label: "Error Handling"
+order: 16
+level: "Intermediate"
+description: "ValidationError, CastError, duplicate key — চেনা ও সঠিকভাবে handle করা — বাংলায়।"
+---
+
+## Mongoose-এর সাধারণ error
+
+| Error | যখন ঘটে | কী করবেন |
+| --- | --- | --- |
+| `ValidationError` | schema validation ব্যর্থ | field-ভিত্তিক message দেখান |
+| `CastError` | ভুল ObjectId/type দেওয়া | Invalid ID response দিন |
+| `MongoServerError` | unique conflict (code 11000) | duplicate হিসেবে handle |
+| `MongooseError (buffer)` | disconnected অবস্থায় query | connection নিশ্চিত করুন |
+
+## Async handler
+
+<CodeBlock code={"async function getPost(req, res) {\n  try {\n    const post = await Post.findById(req.params.id);\n    if (!post) {\n      return res.status(404).json({ message: \"Post পাওয়া যায়নি\" });\n    }\n    res.json(post);\n  } catch (err) {\n    // mongoose-এর ভুল ID → CastError\n    if (err.name === \"CastError\") {\n      return res.status(400).json({ message: \"Invalid id\" });\n    }\n    console.error(err);\n    res.status(500).json({ message: \"Something went wrong\" });\n  }\n}"} lang={"js"} title={"try/catch wrapper"} />
+
+## Duplicate key
+
+<CodeBlock code={"try {\n  await User.create({ email: \"rahim@example.com\" });\n} catch (err) {\n  if (err.code === 11000) {\n    return res.status(409).json({\n      message: \"এই email-এ একটি অ্যাকাউন্ট ইতিমধ্যে আছে\",\n    });\n  }\n  throw err;\n}"} lang={"js"} title={"Unique conflict (11000)"} />
+
+## Global error middleware (Express)
+
+<CodeBlock code={"app.use((err, req, res, next) => {\n  if (err.name === \"ValidationError\") {\n    const errors = Object.fromEntries(\n      Object.entries(err.errors).map(([key, e]) => [key, e.message])\n    );\n    return res.status(400).json({ message: \"Validation failed\", errors });\n  }\n\n  res.status(err.statusCode || 500).json({\n    message: err.message || \"Internal server error\",\n  });\n});"} lang={"js"} title={"Central error handler"} />
+
+<Tip tone={"success"} title={"Error handler আগে পড়ুন"} text={"Async function-এ `throw` করা error Express-এ স্বয়ংক্রিয় ধরা পড়ে না (Express 4-এ) — প্রতিটি route-কে `try/catch` বা wrapper দিয়ে cover করুন (Express 5-এ async error-ও ধরা পড়ে)।"} />

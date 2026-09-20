@@ -1,0 +1,29 @@
+---
+title: "Linking ও Navigation"
+label: "Linking ও Navigation"
+order: 7
+level: "Beginner"
+description: "Link component, useRouter, prefetching ও client-side navigation — বাংলা গাইড।"
+---
+
+<InParagraph text={"Next.js-এ navigation-এর প্রধান উপায় হলো **`<Link>`** component (`next/link` থেকে), যা browser-কে full reload না করেই client-side navigation করে।"} />
+
+## Link Component
+
+<CodeBlock code={"import Link from \"next/link\";\n\nexport default function Page() {\n  return (\n    <nav>\n      <Link href=\"/\">Home</Link>\n      <Link href=\"/blog\">Blog</Link>\n      <Link href=\"/blog/my-first-post\">First Post</Link>\n    </nav>\n  );\n}"} lang={"tsx"} title={"app/page.tsx"} />
+
+## Dynamic Link
+
+<CodeBlock code={"import Link from \"next/link\";\n\nexport default async function BlogPage() {\n  const posts = await fetch(\"https://api.vercel.app/blog\").then((r) =>\n    r.json()\n  );\n\n  return (\n    <ul>\n      {posts.map((post) => (\n        <li key={post.id}>\n          <Link href={`/blog/${post.slug}`}>{post.title}</Link>\n        </li>\n      ))}\n    </ul>\n  );\n}"} lang={"tsx"} title={"app/blog/page.tsx"} />
+
+## useRouter Hook
+
+<InParagraph text={"Programmatic navigation-এর জন্য (form submit-এর পরে) `useRouter` ব্যবহার করুন — এটি একটি **Client Component** hook।"} />
+
+<CodeBlock code={"\"use client\";\n\nimport { useRouter } from \"next/navigation\";\n\nexport default function Button() {\n  const router = useRouter();\n\n  return (\n    <button type=\"button\" onClick={() => router.push(\"/dashboard\")}>\n      Go to Dashboard\n    </button>\n  );\n}"} lang={"tsx"} title={"app/ui/button.tsx"} />
+
+## Prefetching
+
+<InParagraph text={"`<Link>`-এ থাকা route viewport-এ প্রবেশ করলেই **auto-prefetch** হয় — ব্যবহারকারী ক্লিক করার আগেই data প্রস্তুত। ফলে navigation instant মনে হয়।"} />
+
+<Tip tone={"success"} title={"Full reload এড়িয়ে চলুন"} text={"`<a>` tag পরের page-এ গেলে full reload হয় — স্লো। তাই internal navigation-এ সবসময় `<Link>` ব্যবহার করুন। বাইরের সাইটে যেতে `<a>` ঠিক আছে।"} />

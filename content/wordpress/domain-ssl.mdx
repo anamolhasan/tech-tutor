@@ -1,0 +1,36 @@
+---
+title: "Domain ও SSL কী"
+label: "Domain ও SSL"
+order: 18
+level: "Beginner"
+description: "Domain name কীভাবে কাজ করে, DNS কী, এবং SSL certificate-এর মাধ্যমে https secure করতে হয় — বাংলায়।"
+---
+
+## Domain কী?
+
+<InParagraph text={"**Domain** হলো আপনার website-এর **ইন্টারনেট ঠিকানা** — যেমন `mysite.com`। মানুষ এই নাম লিখে আপনার site-এ আসে। আসলে server-এর ঠিকানা থাকে IP (যেমন `104.21.55.92`), domain-টি সেই IP-কে মনে রাখতে সুবিধা করে।"} />
+
+<CodeBlock code={"https://  www.  mysite  .com\n         │      │      │      │\nprotocol  subdomain  name  TLD (.com/.org/.bd)"} lang={"text"} title={"Domain structure"} />
+
+## Domain নিলেই Hosting লাগবে
+
+<InParagraph text={"Domain আর Hosting **দুই আলাদা জিনিস** — Domain হলো ঠিকানা, Hosting হলো বাসা। Domain-কে Hosting-এর সাথে সংযোগ করতে হয় **Nameserver** আর **DNS record** দিয়ে।"} />
+
+## SSL কী?
+
+<InParagraph text={"**SSL (Secure Sockets Layer)** হলো এমন প্রযুক্তি যা ব্রাউজার আর server-এর মধ্যে ডাটা **encrypt** করে। SSL থাকলে URL-এ **`https://`** আর লকের প্রতীক দেখা যায় — ছাড়া থাকলে `http://` (insecure)।"} />
+
+| বৈশিষ্ট্য | HTTP | HTTPS (SSL আছে) |
+| --- | --- | --- |
+| নির্ভরতা | প্লেইন টেক্সট | Encrypted |
+| প্যাডলক আইকন | নেই | আছে |
+| SEO | কম মূল্য | গুগল পছন্দ করে |
+| Payment সাইট | না | অবশ্যই |
+
+## SSL-এর প্রকারভেদ
+
+- **Let's Encrypt** — বিনামূল্যে, বেশিরভাগ host-এ auto-install হয়
+- Commercial certificates (DV, OV, EV) — paid, উচ্চ trust
+- Self-signed — শুধু test, browser warning
+
+<Tip tone={"info"} title={"পদক্ষেপ"} text={"আজকের দিনে SSL ছাড়া site-এর কল্পনা নেই — ব্রাউজার ভালোভাবে warning দেখাবে, SEO-তেও ক্ষতি। Host-এ **Let's Encrypt** এক ক্লিকে ইন্সটল করুন।"} />

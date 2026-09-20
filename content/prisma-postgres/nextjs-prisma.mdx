@@ -1,0 +1,17 @@
+---
+title: "Server Components & Route Handlers"
+label: "Next.js + Prisma"
+order: 25
+level: "Advanced"
+description: "Next.js 14/15-এ Prisma — server-সাইড data fetch ও API।"
+---
+
+<CodeBlock code={"import { prisma } from \"@/lib/prisma\";\n\nexport default async function ProductsPage() {\n  const products = await prisma.product.findMany({\n    where: { active: true },\n    orderBy: { price: \"desc\" },\n    take: 12,\n  });\n\n  return (\n    <main>\n      {products.map((p) => (\n        <div key={p.id}>\n          <h2>{p.name}</h2>\n          <p>{p.price} TK</p>\n        </div>\n      ))}\n    </main>\n  );\n}"} lang={"tsx"} title={"server component (page.tsx)"} />
+
+<CodeBlock code={"import { NextResponse } from \"next/server\";\nimport { prisma } from \"@/lib/prisma\";\n\nexport async function GET() {\n  const products = await prisma.product.findMany();\n  return NextResponse.json({ products });\n}"} lang={"ts"} title={"route handler (app/api/products/route.ts)"} />
+
+- Server Component-এ query — client-এ network নয়
+- Route handler — API/json
+- `cache` opt-in — data যতবার বদলায় (revalidate)
+
+<Tip tone={"info"} title={"সতর্ক"} text={"মনে রাখুন — `use client`-চিহ্নিত ফাইলে Prisma query চলে না; সব query Server Components/API-তে। এজ-runtime-এ Prisma full-connection দরকার (node runtime)।"} />

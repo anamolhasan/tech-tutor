@@ -1,0 +1,34 @@
+---
+title: "JavaScript Data Types (ডেটা টাইপ)"
+label: "Data Types"
+order: 4
+level: "Beginner"
+description: "Primitive ও reference — string, number, boolean, null, undefined, object, array সহ JavaScript ডেটা টাইপ বাংলায়।"
+---
+
+<InParagraph text={"JavaScript-এ ডেটার ধরন বুঝতে **primitive** ও **reference** — এই দুই ভাগ জানা দরকার।"} />
+
+## Primitive টাইপ
+
+- `string` — টেক্সট
+- `number` — সংখ্যা
+- `boolean` — true/false
+- `null` — ইচ্ছাকৃত খালি
+- `undefined` — মান দেওয়া হয়নি
+- `bigint`, `symbol` — বিশেষ ক্ষেত্রে
+
+### উদাহরণ
+
+<CodeBlock code={"const text = \"বাংলা টেক্সট\";\nconst math = 42;\nconst price = 99.5;\nconst isDone = true;\nconst nothing = null;\nlet notSet;           // undefined\n\nconsole.log(typeof text);   // \"string\"\nconsole.log(typeof price);  // \"number\"\nconsole.log(typeof isDone); // \"boolean\""} lang={"javascript"} />
+
+## Reference টাইপ
+
+<CodeBlock code={"const user = { name: \"রহিম\", age: 30 };\nconst colors = [\"লাল\", \"সবুজ\", \"নীল\"];\n\nconsole.log(typeof user);   // \"object\"\nconsole.log(typeof colors); // \"object\" (array-ও object)"} lang={"javascript"} />
+
+## টাইপ পরিবর্তন (type coercion)
+
+<CodeBlock code={"console.log(\"5\" + 3);  // \"53\"  (string)\nconsole.log(\"5\" - 3);  // 2     (number)"} lang={"javascript"} />
+
+<InParagraph text={"JavaScript আগে-পরে নিজে থেকেই টাইপ বদলানোর চেষ্টা করে — এটি সুবিধাও, আবার যত্ন না নিলে সমস্যাও।"} />
+
+<Tip tone={"info"} title={"নিরাপদ চেক"} text={"সুনির্দিষ্টভাবে চেক করতে `typeof value` এবং strict equality (`===`) ব্যবহার করুন — অবাঞ্ছিত টাইপ পরিবর্তন এড়াতে।"} />

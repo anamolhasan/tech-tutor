@@ -1,0 +1,31 @@
+---
+title: "Tailwind Customization"
+label: "Customization"
+order: 28
+level: "Intermediate"
+description: "Tailwind-এর theme, colors, spacing, fonts — সম্পূর্ণভাবে customize করুন।"
+---
+
+<InParagraph text={"Tailwind-এর default theme customize করা সম্পূর্ণ সম্ভব। Tailwind v4-তে এটি CSS-এই করা হয়, v3-তে `tailwind.config.js`-তে।"} />
+
+## Tailwind v4: CSS-first Customization
+
+<InParagraph text={"Tailwind v4-তে `@theme` directive দিয়ে customize করুন।"} />
+
+<CodeBlock code={"@import \"tailwindcss\";\n\n@theme {\n  /* Custom colors */\n  --color-brand: #3b82f6;\n  --color-brand-light: #93c5fd;\n  --color-brand-dark: #1d4ed8;\n\n  /* Custom fonts */\n  --font-heading: \"Inter\", sans-serif;\n  --font-body: \"Nunito\", sans-serif;\n\n  /* Custom spacing */\n  --spacing-18: 4.5rem;\n\n  /* Custom border radius */\n  --radius-card: 16px;\n}"} lang={"css"} title={"src/index.css"} />
+
+## Tailwind v3: Config File
+
+<CodeBlock code={"/** @type {import('tailwindcss').Config} */\nmodule.exports = {\n  theme: {\n    extend: {\n      colors: {\n        brand: {\n          DEFAULT: \"#3b82f6\",\n          light: \"#93c5fd\",\n          dark: \"#1d4ed8\",\n        },\n      },\n      fontFamily: {\n        heading: [\"Inter\", \"sans-serif\"],\n        body: [\"Nunito\", \"sans-serif\"],\n      },\n    },\n  },\n};"} lang={"javascript"} title={"tailwind.config.js (v3)"} />
+
+## Customization Options
+
+| বৈশিষ্ট্য | v4 Method | v3 Method |
+| --- | --- | --- |
+| Colors | @theme \{ --color-* \} | theme.extend.colors |
+| Fonts | @theme \{ --font-* \} | theme.extend.fontFamily |
+| Spacing | @theme \{ --spacing-* \} | theme.extend.spacing |
+| Screens | @theme \{ --breakpoint-* \} | theme.extend.screens |
+| Animations | @theme \{ --animate-* \} | theme.extend.animation |
+
+<Tip tone={"warning"} title={"v3 vs v4 Customization"} text={"Tailwind v4-তে CSS-first approach ব্যবহার করা হয়, ফলে `tailwind.config.js` প্রয়োজন হয় না। পুরোনো v3 config file v4-তে migrate করার জন্য official documentation দেখুন।"} />

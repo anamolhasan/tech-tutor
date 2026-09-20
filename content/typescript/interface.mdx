@@ -1,0 +1,55 @@
+---
+title: "Interface (ইন্টারফেস)"
+label: "Interface"
+order: 8
+level: "Beginner"
+description: "Interface কী, optional/readonly property, function interface, extends, declaration merging এবং type alias-এর পার্থক্য।"
+---
+
+<InParagraph text={"**Interface** হলো object-এর গঠন বর্ণনা করার আরেকটি শক্তিশালী উপায়। বিশেষত object-এর আকৃতি (shape) ধরতে interface খুবই জনপ্রিয় — বিশেষ করে বড় লাইব্রেরি ও framework-এ।"} />
+
+## Interface কী?
+
+<InParagraph text={"`interface` এক ধরনের contract — একটি object-এ কোন কোন প্রপার্টি থাকবে, সেটি ঘোষণা করে। annotation কিংবা `implements` — দুই ভাবেই কাজে লাগে।"} />
+
+## Basic Interface
+
+<CodeBlock code={"interface User {\n  name: string;\n  age: number;\n}\n\nfunction greet(user: User): string {\n  return \"হ্যালো, \" + user.name;\n}\n\nconst u: User = { name: \"রহিম\", age: 28 };\nconsole.log(greet(u));"} lang={"typescript"} />
+
+## Optional ও readonly
+
+<CodeBlock code={"interface Profile {\n  name: string;\n  email?: string;           // optional\n  readonly joinedAt: Date;  // readonly\n}\n\nconst p: Profile = {\n  name: \"রহিম\",\n  joinedAt: new Date(),\n};\n\n// p.joinedAt = new Date();  // ❌ readonly"} lang={"typescript"} />
+
+## Function Interface
+
+<CodeBlock code={"interface Comparator {\n  (a: number, b: number): number;\n}\n\nconst sortBy: Comparator = (a, b) => a - b;\nconsole.log(sortBy(3, 9));   // -6"} lang={"typescript"} />
+
+## Nested Interface
+
+<CodeBlock code={"interface Address {\n  city: string;\n  zip: string;\n}\n\ninterface Customer {\n  name: string;\n  address: Address;    // nested\n}\n\nconst c: Customer = {\n  name: \"করিম\",\n  address: { city: \"ঢাকা\", zip: \"1207\" },\n};"} lang={"typescript"} />
+
+## Interface Extension (extends)
+
+<CodeBlock code={"interface Animal {\n  name: string;\n}\n\ninterface Dog extends Animal {\n  breed: string;\n}\n\nconst myDog: Dog = {\n  name: \"টমি\",\n  breed: \"স্প্যানিয়েল\",\n};"} lang={"typescript"} />
+
+## Multiple Interface Extension
+
+<CodeBlock code={"interface Printable {\n  print(): void;\n}\n\ninterface Serializable {\n  toJSON(): string;\n}\n\ninterface Report extends Printable, Serializable {\n  build(): string;\n}\n\n// Report-এ তিনটির সব দাবি একসাথে থাকে"} lang={"typescript"} />
+
+## Declaration Merging
+
+<InParagraph text={"একই নামের interface একাধিকবার ঘোষণা করা যায় — TypeScript **মিশিয়ে** (merge) একটি বড় interface বানিয়ে নেয়। `type`-এ এই সুবিধা নেই।"} />
+
+<CodeBlock code={"interface Window {\n  version: number;\n}\n\ninterface Window {\n  appName: string;\n}\n\n// দুই ঘোষণা মিশে যায় → { version: number; appName: string }"} lang={"typescript"} />
+
+## Interface vs Type Alias
+
+| বিষয় | Interface | Type Alias |
+| --- | --- | --- |
+| object টাইপের জন্য | সেরা পছন্দ | দারুণ |
+| union / tuple | পারে না | পারে |
+| extends | পারে | intersection (&) দিয়ে |
+| declaration merging | পারে | পারে না |
+| primitive alias | পারে না | পারে |
+
+<Tip tone={"success"} title={"মুখস্থ নিয়ম"} text={"object-এর জন্য **interface** ডিফল্ট (সবচেয়ে বেশি সুবিধা), আর union/tuple/conditional টাইপের জন্য **type**। অনেক কোডবেসে দুইটিই মিশে ব্যবহৃত হয়।"} />

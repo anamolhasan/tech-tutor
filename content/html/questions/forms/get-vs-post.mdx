@@ -1,0 +1,20 @@
+---
+question: "What is the difference between GET and POST?"
+order: 2
+description: "ফর্ম জমা দেওয়ার দুটি পদ্ধতি — GET আর POST। কখন কোনটি ব্যবহার করবেন।"
+---
+
+<InParagraph text={"`GET` এবং `POST` হলো ফর্ম data সার্ভারে পাঠানোর দুটি পদ্ধতি (`method`)। মূল পার্থক্য হলো data কোথায় বসে এবং সেটি যতটা নিরাপদ।"} />
+
+<InParagraph text={"**GET**-এ data URL-এর query string-এ যায়, যেমন `/search?q=html` — অর্থাৎ data address bar-এ দৃশ্যমান ও bookmark করা যায়। এটি ছোট ও অ-সংবেদনশীল data-র জন্য উপযুক্ত, যেমন search বা filter।"} />
+
+<InParagraph text={"**POST**-এ data request body-র ভেতরে পাঠানো হয় — URL-এ দেখা যায় না, ফলে পাসওয়ার্ডের মতো সংবেদনশীল তথ্যের জন্য নিরাপদ। এটি বড় বা জটিল data-র জন্যও ব্যবহৃত হয়, যেমন login বা ফর্ম সাবমিশন।"} />
+
+| বৈশিষ্ট্য | GET | POST |
+| --- | --- | --- |
+| Data কোথায় যায় | URL query string-এ | request body-তে |
+| দৃশ্যমানতা | দৃশ্যমান | অদৃশ্য |
+| নিরাপত্তা | কম | বেশি |
+| ব্যবহার | search / filter | login / submit |
+
+<Tip tone={"warning"} title={"সতর্কতা"} text={"কোনো অবস্থাতেই পাসওয়ার্ড GET-এ পাঠাবেন না — কারণ এটি ব্রাউজার history ও লগে থেকে যেতে পারে।"} />

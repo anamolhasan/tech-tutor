@@ -1,0 +1,35 @@
+---
+title: "Providers এবং Dependency Injection"
+label: "Providers & DI"
+order: 5
+level: "Intermediate"
+description: "@Injectable, constructor injection, custom providers, scopes — NestJS DI বাংলায়।"
+---
+
+<InParagraph text={"**Provider** হলো যেকোনো class যা `@Injectable()` decorator ব্যবহার করে। **Dependency Injection (DI)** হলো এই providers-কে যেখানে দরকার সেখানে auto-প্রদান করা।"} />
+
+## @Injectable ও Service
+
+<CodeBlock code={"import { Injectable, NotFoundException } from \"@nestjs/common\";\n\nexport interface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\n@Injectable()\nexport class UsersService {\n  private users: User[] = [\n    { id: 1, name: \"রহিম\", email: \"rahim@example.com\" },\n    { id: 2, name: \"করিম\", email: \"karim@example.com\" },\n  ];\n\n  findAll(): User[] {\n    return this.users;\n  }\n\n  findOne(id: number): User {\n    const user = this.users.find((u) => u.id === id);\n    if (!user) throw new NotFoundException(\"User পাওয়া যায়নি\");\n    return user;\n  }\n\n  create(data: Omit<User, \"id\">): User {\n    const user = { id: Date.now(), ...data };\n    this.users.push(user);\n    return user;\n  }\n\n  update(id: number, data: Partial<User>): User {\n    const user = this.findOne(id);\n    Object.assign(user, data);\n    return user;\n  }\n\n  remove(id: number): void {\n    this.findOne(id);\n    this.users = this.users.filter((u) => u.id !== id);\n  }\n}"} lang={"typescript"} title={"src/users/users.service.ts"} />
+
+## Constructor DI — Service ব্যবহার
+
+<CodeBlock code={"import { Controller } from \"@nestjs/common\";\nimport { UsersService } from \"./users.service\";\n\n@Controller(\"users\")\nexport class UsersController {\n  // DI — constructor-এ inject\n  constructor(private readonly usersService: UsersService) {}\n\n  @Get()\n  findAll() {\n    return this.usersService.findAll();\n  }\n}"} lang={"typescript"} title={"users.controller.ts"} />
+
+<InParagraph text={"`constructor(private readonly usersService: UsersService)` — TypeScript এর shorthand। NestJS auto-detect করে `UsersService` created instance inject করে।"} />
+
+## Provider Scopes
+
+| Scope | Lifecycle | কখন |
+| --- | --- | --- |
+| SINGLETON (default) | পুরো app-এ এক instance | সাধারণত এটাই দরকার |
+| REQUEST | প্রতি request-এ নতুন instance | user-specific state দরকার হলে |
+| TRANSIENT | প্রতি injection-এ নতুন instance | তারপরই সম্প্রতি দরকার হলে |
+
+<CodeBlock code={"import { Injectable, Scope } from \"@nestjs/common\";\n\n@Injectable({ scope: Scope.REQUEST })\nexport class RequestScopedService {\n  private requestId = Math.random();\n  getRequestId() { return this.requestId; }\n}"} lang={"typescript"} />
+
+## Custom Provider (Factory)
+
+<CodeBlock code={"import { Module } from \"@nestjs/common\";\n\n@Module({\n  providers: [\n    {\n      provide: \"CONFIG\",\n      useFactory: () => ({\n        port: process.env.PORT || 3000,\n        env: process.env.NODE_ENV,\n      }),\n    },\n  ],\n})\nexport class AppModule {}\n\n// ব্যবহার\nconstructor(\n  @Inject(\"CONFIG\") private config: { port: string; env: string },\n) {}"} lang={"typescript"} />
+
+<Tip tone={"success"} title={"পরিবেশ type"} text={"Providers-এ business logic রাখুন, controller-এ শুধু request/response — এতে code testable ও maintainable হয়।"} />

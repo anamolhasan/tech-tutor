@@ -1,0 +1,19 @@
+---
+title: "ORDER BY, LIMIT/OFFSET, DISTINCT"
+label: "ORDER / LIMIT"
+order: 16
+level: "Intermediate"
+description: "sorting, pagination ও unique value।"
+---
+
+<CodeBlock code={"SELECT name, price\nFROM products\nORDER BY price DESC\nLIMIT 10;"} lang={"sql"} />
+
+<CodeBlock code={"-- page 2 (প্রতি page 20)\nSELECT * FROM products\nORDER BY id\nLIMIT 20 OFFSET 20;"} lang={"sql"} title={"pagination"} />
+
+<CodeBlock code={"-- unique value\nSELECT DISTINCT category FROM products;\n\n-- two-column distinct\nSELECT DISTINCT category, name FROM products;"} lang={"sql"} />
+
+- `ASC` default; `DESC` দিতে হবে
+- `LIMIT` বড় না নিয়ে সব, `OFFSET` page-count
+- NULL-এর ordering — `NULLS FIRST/LAST`
+
+<Tip tone={"info"} title={"OFFSET-এর দুর্বলতা"} text={"OFFSET বাড়লে scan বাড়ে — বড় list-এ **keyset (WHERE id > last_id)** pattern ভালো।"} />

@@ -1,0 +1,34 @@
+---
+title: "CSS Background"
+label: "Background"
+order: 6
+level: "Beginner"
+description: "background-color, background-image, repeat, position, size — background-এর সম্পূর্ণ বাংলা গাইড।"
+---
+
+<InParagraph text={"একটি element-এর পটভূমি সাজাতে `background`-সংক্রান্ত বিভিন্ন property ব্যবহার হয়।"} />
+
+## background-color
+
+<CodeBlock code={".card {\n  background-color: #f9fafb;\n}"} lang={"css"} />
+
+## background-image
+
+<CodeBlock code={".hero {\n  background-image: url(\"banner.jpg\");\n}"} lang={"css"} />
+
+## repeat ও position
+
+<CodeBlock code={".hero {\n  background-image: url(\"bg.png\");\n  background-repeat: no-repeat;\n  background-position: center;\n  background-size: cover;\n}"} lang={"css"} />
+
+| property | কাজ |
+| --- | --- |
+| background-repeat | ছবি কীভাবে পুনরাবৃত্ত হবে |
+| background-position | ছবির অবস্থান (center, top-left...) |
+| background-size | ছবির মাপ (cover / contain / px) |
+| background-attachment | স্ক্রলের সাথে ছবি চলবে নাকি স্থির |
+
+## shorthand
+
+<CodeBlock code={".hero {\n  background: #111 url(\"hero.jpg\") no-repeat center / cover;\n}"} lang={"css"} />
+
+<Tip tone={"info"} title={"cover বনাম contain"} text={"`cover` পুরো এলাকা পূরণ করে (ছবি ক্রপ হতে পারে), `contain` পুরো ছবিটি দেখায় (ফাঁকা জায়গা থাকতে পারে)। Hero সেকশনে প্রায়ই `cover` ব্যবহার হয়।"} />

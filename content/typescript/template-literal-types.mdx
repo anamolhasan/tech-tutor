@@ -1,0 +1,29 @@
+---
+title: "Template Literal Types"
+label: "Template Literal Types"
+order: 20
+level: "Advanced"
+description: "template literal দিয়ে string টাইপ-স্তরের রচনা, union-এর সাথে combination ও real-world ব্যবহার — বাংলায়।"
+---
+
+<InParagraph text={"**Template literal type** হলো string টাইপের ভেতরে template literal (`... ${...}`) ব্যবহার — যার ফলে string টাইপ-স্তরে গঠিত হতে পারে।"} />
+
+## মৌলিক ধারণা
+
+<CodeBlock code={"type World = \"world\";\ntype Greeting = `hello ${World}`;   // \"hello world\"\n\ntype UserId = `user_${number}`;\nconst u1: UserId = \"user_42\";    // ✅\n// const u2: UserId = \"guest\";   // ❌\n\ntype Coordinates = `${number}, ${number}`;"} lang={"typescript"} />
+
+## Union-এর সাথে Combination
+
+<CodeBlock code={"type Vertical = \"top\" | \"bottom\";\ntype Horizontal = \"left\" | \"right\";\n\ntype Position = `${Vertical}-${Horizontal}`;\n// \"top-left\" | \"top-right\" | \"bottom-left\" | \"bottom-right\"\n\nconst pos: Position = \"top-right\";   // ✅"} lang={"typescript"} />
+
+## Intrinsic Modifier
+
+<InParagraph text={"`Uppercase`, `Lowercase`, `Capitalize`, `Uncapitalize` — এগুলো intrinsic utility যা string টাইপ বদলে দেয়।"} />
+
+<CodeBlock code={"type Id = `id_${number}`;\ntype UppercaseId = Uppercase<Id>;    // `ID_${number}`\n\ntype EventType = \"click\" | \"hover\" | \"scroll\";\ntype HandlerName = `on${Capitalize<EventType>}`;\n// \"onClick\" | \"onHover\" | \"onScroll\"\n\nconst handler: Record<HandlerName, () => void> = {\n  onClick: () => {},\n  onHover: () => {},\n  onScroll: () => {},\n};"} lang={"typescript"} />
+
+## Real-world ব্যবহার
+
+<CodeBlock code={"// CSS-শৈলী key validation\ntype CssFont = `font-${\"small\" | \"medium\" | \"large\"}`;\n\n// ইভেন্ট listener প্যাটার্ন\ntype EventNames = `on${Capitalize<EventType>}`;\n\nfunction addListener(name: EventNames, fn: () => void): void {\n  // ...\n}\n\naddListener(\"onClick\", () => console.log(\"click\"));\n// addListener(\"onDoubleClick\", fn);   // ❌ টাইপেই আটকায়"} lang={"typescript"} />
+
+<Tip tone={"warning"} title={"জটিলতা সামলান"} text={"Template literal types string-কে বিস্তারিত ধরতে লাগে — ছোট ছোট union টাইপে ভেঙে combinations গড়ুন, নাহলে টাইপ explosion হয় (অনেক সম্ভাব্য দান বৃদ্ধি)।"} />

@@ -1,0 +1,29 @@
+---
+title: "Express Routing"
+label: "Routing"
+order: 3
+level: "Beginner"
+description: "HTTP methods, route parameters, query strings, route chaining — Express routing বাংলায়।"
+---
+
+<InParagraph text={"**Routing** হলো নির্দিষ্ট URL ও HTTP method-এর জন্য response define করা। Express-এ routing অত্যন্ত সহজ।"} />
+
+## HTTP Methods
+
+<CodeBlock code={"// GET — ডেটা পড়া\napp.get(\"/users\", (req, res) => {\n  res.send(\"সব users আনা হয়েছে\");\n});\n\n// POST — নতুন data তৈরি\napp.post(\"/users\", (req, res) => {\n  res.status(201).send(\"নতুন user তৈরি হয়েছে\");\n});\n\n// PUT — সম্পূর্ণ update\napp.put(\"/users/:id\", (req, res) => {\n  res.send(\"User update: \" + req.params.id);\n});\n\n// PATCH — partial update\napp.patch(\"/users/:id\", (req, res) => {\n  res.send(\"User partially update হয়েছে\");\n});\n\n// DELETE — delete\napp.delete(\"/users/:id\", (req, res) => {\n  res.send(\"User delete হয়েছে: \" + req.params.id);\n});"} lang={"javascript"} />
+
+## Route Parameters (:id)
+
+<CodeBlock code={"// URL-এর অংশকে parameter বানানো\napp.get(\"/users/:id\", (req, res) => {\n  res.json({ id: req.params.id });\n});\n\n// একাধিক parameter\napp.get(\"/users/:userId/posts/:postId\", (req, res) => {\n  const { userId, postId } = req.params;\n  res.json({ userId, postId });\n});\n\n// 404 handling\napp.get(\"/users/not-exist\", (req, res) => {\n  res.status(404).json({ error: \"পাওয়া যায়নি\" });\n});"} lang={"javascript"} />
+
+## Query Parameters
+
+<InParagraph text={"`req.query` দিয়ে URL query string (প্রশ্নবোধক-এর পরে অংশ) পড়া যায়।"} />
+
+<CodeBlock code={"// URL: /search?keyword=node&page=2&limit=10\napp.get(\"/search\", (req, res) => {\n  const { keyword, page, limit } = req.query;\n  res.json({\n    keyword,\n    page: page || 1,\n    limit: limit || 10,\n  });\n});"} lang={"javascript"} />
+
+## Route Chaining ও All
+
+<CodeBlock code={"// একই path-এ একাধিক method\napp.route(\"/events\")\n  .get((req, res) => res.send(\"List\"))\n  .post((req, res) => res.status(201).send(\"Create\"))\n  .put((req, res) => res.send(\"Update\"));\n\n// সব method respond\napp.all(\"/api\", (req, res) => {\n  res.send(\"যেকোনো method এইখানে respond করবে\");\n});\n\n// Regular expression route\napp.get(/^/(user|admin)/profile$/, (req, res) => {\n  res.send(\"Profile page\");\n});"} lang={"javascript"} />
+
+<Tip tone={"warning"} title={"Route Order Matters"} text={"Express route-গুলো উপরে থেকে নিচে match করে। তাই specific route আগে, generic/404 route পরে রাখুন।"} />

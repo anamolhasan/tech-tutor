@@ -1,0 +1,20 @@
+---
+title: "TaskTrack-এর Folder Structure — কোথায় কী থাকবে"
+label: "Project Structure"
+order: 6
+level: "Beginner"
+description: "Expo Router-ভিত্তিক project-এর ফোল্ডার কাঠামো — প্রতিটি directory-র কাজ।"
+---
+
+<CodeBlock code={"tasktrack/\n├─ app/\n│  ├─ (tabs)/\n│  │  ├─ index.tsx        # Today screen\n│  │  ├─ all.tsx          # All tasks\n│  │  └─ _layout.tsx\n│  ├─ _layout.tsx         # root Stack\n│  └─ task/[id].tsx       # detail screen\n├─ components/\n│  ├─ TaskItem.tsx\n│  └─ TaskForm.tsx\n├─ constants/\n│  └─ theme.ts\n├─ lib/\n│  └─ storage.ts          # AsyncStorage wrapper\n├─ assets/\n│  ├─ icons/\n│  └─ splash-icon.png\n└─ app.json"} lang={"text"} title={"folder tree"} />
+
+- `app/` — Router files; প্রতিটি file/folder একটি route
+- `components/` — reusable shared UI
+- `constants/` — theme, config মান
+- `lib/` — storage, api helpers
+- `assets/` — static files (icon, fonts)
+- `app.json` — app configuration
+
+<InParagraph text={"এই কাঠামোতে প্রতিটি screen আলাদা file, আর router ওই file-system থেকেই route তৈরি করে নেয়।"} />
+
+<Tip tone={"info"} title={"মনে রাখুন"} text={"Route-এর **folder/file** সরাসরি URL-এর **segment**। folder structure সাজালে navigation স্বয়ংক্রিয়ভাবে ঠিক থাকে।"} />

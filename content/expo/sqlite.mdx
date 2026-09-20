@@ -1,0 +1,19 @@
+---
+title: "expo-sqlite — local SQL database"
+label: "SQLite"
+order: 25
+level: "Advanced"
+description: "AsyncStorage-এর পরের ধাপ — expo-sqlite দিয়ে structured data।"
+---
+
+<InParagraph text={"বড়/relational data-তে **AsyncStorage**-এর চেয়ে **`expo-sqlite`** উপযুক্ত — full SQL।"} />
+
+<CodeBlock code={"npx expo install expo-sqlite"} lang={"bash"} title={"terminal"} />
+
+<CodeBlock code={"import * as SQLite from \"expo-sqlite\";\n\nconst db = SQLite.openDatabaseSync(\"tasktrack.db\");\n\nexport function setup() {\n  const sql =\n    \"CREATE TABLE IF NOT EXISTS tasks (\" +\n    \"id TEXT PRIMARY KEY NOT NULL,\" +\n    \"title TEXT NOT NULL,\" +\n    \"done INTEGER DEFAULT 0,\" +\n    \"created_at TEXT NOT NULL);\";\n  db.execSync(sql);\n}\n\nexport function getTasks() {\n  return db.getAllSync(\n    \"SELECT * FROM tasks ORDER BY created_at DESC\"\n  );\n}\n\nexport function insertTask(id, title) {\n  db.runSync(\n    \"INSERT INTO tasks (id, title, created_at) VALUES (?, ?, ?)\",\n    id,\n    title,\n    new Date().toISOString()\n  );\n}"} lang={"ts"} title={"lib/db.ts"} />
+
+- `getAllSync` / `runSync` / `execSync` — sync API (UI-heavy কাজে ডাকা উচিত না)
+- prepared statements `?` — SQL injection থেকে নিরাপদ
+- migration — `PRAGMA user_version` দিয়ে
+
+<Tip tone={"info"} title={"কখন SQLite"} text={"হাজার+ row, relation, filter/join দরকার — SQLite। আরামদায়ক ব্যক্তিগত small state — AsyncStorage যথেষ্ট।"} />

@@ -1,0 +1,20 @@
+---
+title: "Stack Navigation — _layout.tsx ও router.push"
+label: "Stack Navigation"
+order: 9
+level: "Intermediate"
+description: "root layout-এ Stack সেটআপ ও programmatic navigation — বাংলায়।"
+---
+
+<InParagraph text={"একক page যদিও stand-alone, **layout** (`_layout.tsx`) দিয়ে group-এর navigation আচরণ define করা হয়। Root layout-এ **Stack**:"} />
+
+<CodeBlock code={"import { Stack } from \"expo-router\";\n\nexport default function RootLayout() {\n  return (\n    <Stack>\n      <Stack.Screen name=\"index\" options={{ title: \"টুডে\" }} />\n      <Stack.Screen name=\"task/[id]\" options={{ title: \"Task Detail\" }} />\n    </Stack>\n  );\n}"} lang={"tsx"} title={"app/_layout.tsx"} />
+
+- `name` — route file-এর নাম (folder সহ)
+- `options` — header title, headerShown, animation ইত্যাদি
+
+<InParagraph text={"Programmatic navigation — **`router.push`**:"} />
+
+<CodeBlock code={"import { router } from \"expo-router\";\n\nfunction openDetail(id) {\n  router.push(\"/task/\" + id);\n}"} lang={"tsx"} title={"components/TaskItem.tsx"} />
+
+<Tip tone={"info"} title={"কখন Stack"} text={"ধাপে ধাপে detail flow-এ Stack সেরা (back button, header)। Main screen-গুলো tabs-এ রাখুন — next lesson।"} />

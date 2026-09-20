@@ -1,0 +1,30 @@
+---
+title: "Best Practices — Checklist"
+label: "Best Practices"
+order: 38
+level: "Intermediate"
+description: "Redux Toolkit + RTK Query-র final best-practice checklist — বাংলায়।"
+---
+
+## Store/slice
+
+- সব Redux code TypeScript — `PayloadAction<T>`, typed hooks
+- এক slice এক দায়িত্ব; `createSlice` সবসময়
+- derived-value selector via `createSelector`, duplicate-state নয়
+- serializable — ISO strings, plain objects
+
+## RTK Query
+
+- endpoints-এ `<Result, Arg>` টাইপ সবসময়
+- tagTypes + provides/invalidates design-page প্রথমে
+- query arg stable (primitive or memoized object)
+- `refetchOnFocus` + tailored `keepUnusedDataFor`
+- mutation `unwrap()` + try/catch
+
+## UI
+
+- সব loading/error/empty state রাখুন
+- optimistic only reversible scenarios
+- listener-এ side-effect (toast, refetch, analytics)
+
+<Tip tone={"success"} title={"আরও২টি মৌলিক"} text={"Reducer-কে সবসময় **pure** রাখি, Immer-এ draft-এ mutate করি। আর **DevTools-এ নিয়মিত ঢুকে** state-টা inspect করুন — ১০ মিনিটে কয়েক ঘণ্টা বাঁচবে।"} />

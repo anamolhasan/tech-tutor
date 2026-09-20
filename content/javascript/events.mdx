@@ -1,0 +1,35 @@
+---
+title: "JavaScript Events (ইভেন্ট)"
+label: "Events"
+order: 12
+level: "Intermediate"
+description: "ক্লিক, ইনপুট, কীপ্রেস — addEventListener দিয়ে ইভেন্ট হ্যান্ডলিং-এর সম্পূর্ণ বাংলা গাইড।"
+---
+
+<InParagraph text={"ব্যবহারকারী যখন পেজের সাথে কোনো interaction করে — ক্লিক, টাইপ, স্ক্রল — তখন **event** তৈরি হয়। JavaScript সেই event-এ সাড়া দিয়ে কাজ করতে পারে।"} />
+
+## addEventListener
+
+<CodeBlock code={"<button id=\"btn\">আমাকে চাপুন</button>\n\n<script>\n  const btn = document.getElementById(\"btn\");\n\n  btn.addEventListener(\"click\", () => {\n    alert(\"বাটন চাপা হয়েছে!\");\n  });\n</script>"} lang={"html"} />
+
+## সাধারণ ইভেন্ট
+
+| ইভেন্ট | কখন হয় |
+| --- | --- |
+| click | ক্লিকে |
+| dblclick | ডাবল ক্লিকে |
+| input | টেক্সট বদলালে |
+| change | মান বদলে ফোকাস ছাড়লে (select/checkbox) |
+| submit | ফর্ম জমা দিলে |
+| keydown | কীবোর্ড চাপলে |
+| mouseover | মাউস ঘোরালে |
+
+## লাইভ টাইপ কাউন্টার
+
+<CodeBlock code={"<input id=\"text\" type=\"text\" placeholder=\"লিখুন...\" />\n<p id=\"count\">0</p>\n\n<script>\n  const input = document.getElementById(\"text\");\n  const count = document.getElementById(\"count\");\n\n  input.addEventListener(\"input\", () => {\n    count.textContent = input.value.length;\n  });\n</script>"} lang={"html"} />
+
+## event object
+
+<CodeBlock code={"document.addEventListener(\"keydown\", (event) => {\n  console.log(\"চাপা কী:\", event.key);\n});"} lang={"javascript"} />
+
+<Tip tone={"info"} title={"form submit সংরক্ষণ"} text={"ফর্ম জমা দিলে পেজ reload হয় — `event.preventDefault()` দিয়ে থামিয়ে JavaScript-এ হ্যান্ডেল করতে হয়।"} />

@@ -1,0 +1,53 @@
+---
+title: "Utility Types (ইউটিলিটি টাইপ)"
+label: "Utility Types"
+order: 15
+level: "Intermediate"
+description: "Partial, Required, Pick, Omit, Record, Exclude, Extract, NonNullable, ReturnType, Parameters, Awaited — এক ফ্রেমে সব ম্যাপ টুল।"
+---
+
+<InParagraph text={"TypeScript-এর সাথে আসে **বিল্ট-ইন utility types** — যা একটি টাইপ থেকে তৈরি করে নতুন টাইপ। এগুলো ইউজ করে খুব কম কোডেই টাইপ রূপান্তর করা যায়।"} />
+
+## Partial ও Required
+
+<CodeBlock code={"type User = { name: string; age: number; email: string };\n\n// সব প্রপার্টি optional\nconst draft: Partial<User> = { name: \"রহিম\" };\n\n// সব প্রপার্টি বাধ্যতামূলক\ntype FullProfile = Required<User>;"} lang={"typescript"} />
+
+## Pick ও Omit
+
+<CodeBlock code={"type User = { id: number; name: string; email: string; role: string };\n\n// শুধু কিছু প্রপার্টি নাও\ntype Preview = Pick<User, \"id\" | \"name\">;\n\n// কিছু প্রপার্টি বাদ দাও\ntype WithoutEmail = Omit<User, \"email\">;\n\nconst card: Preview = { id: 1, name: \"রহিম\" };"} lang={"typescript"} />
+
+## Readonly ও Record
+
+<CodeBlock code={"type Point = { x: number; y: number };\n\ntype FixedPoint = Readonly<Point>;\n// x, y-কে আর বদলানো যাবে না\n\ntype AgeMap = Record<string, number>;\nconst ages: AgeMap = {\n  রহিম: 28,\n  করিম: 30,\n};\n\n// নির্দিষ্ট key-সেট দিতেও চলে\ntype Page = \"home\" | \"about\" | \"contact\";\ntype PageConfig = Record<Page, { title: string }>;"} lang={"typescript"} />
+
+## Exclude ও Extract
+
+<CodeBlock code={"type Status = \"active\" | \"pending\" | \"banned\";\ntype Remaining = Exclude<Status, \"banned\">;   // active | pending\n\ntype T1 = \"a\" | \"b\" | \"c\";\ntype T2 = \"b\" | \"c\" | \"d\";\ntype Common = Extract<T1, T2>;    // b | c"} lang={"typescript"} />
+
+## NonNullable
+
+<CodeBlock code={"type MaybeName = string | null | undefined;\ntype Name = NonNullable<MaybeName>;   // string\n\nconst name: Name = \"রহিম\";"} lang={"typescript"} />
+
+## ReturnType ও Parameters
+
+<CodeBlock code={"function createUser(name: string, age: number) {\n  return { name, age, createdAt: new Date() };\n}\n\ntype UserShape = ReturnType<typeof createUser>;\ntype Args = Parameters<typeof createUser>;   // [name: string, age: number]"} lang={"typescript"} />
+
+## Awaited
+
+<CodeBlock code={"async function fetchUser(id: number) {\n  // ... API call\n  return { id, name: \"রহিম\" };\n}\n\ntype UserResult = Awaited<ReturnType<typeof fetchUser>>;\n// Promise<{...}>-এর ভেতরের টাইপ"} lang={"typescript"} />
+
+| Utility | কাজ |
+| --- | --- |
+| Partial\<T> | সব প্রপার্টি optional |
+| Required\<T> | সব প্রপার্টি বাধ্যতামূলক |
+| Pick\<T,K> | নির্দিষ্ট প্রপার্টি বাছাই |
+| Omit\<T,K> | নির্দিষ্ট প্রপার্টি বাদ |
+| Readonly\<T> | সব প্রপার্টি readonly |
+| Record\<K,T> | object map টাইপ |
+| Exclude\<T,U> | U-কে বাদ দেওয়া |
+| Extract\<T,U> | শুধু U-সাথে মিল |
+| ReturnType\<F> | ফাংশনের return type |
+| Parameters\<F> | ফাংশনের parameter tuple |
+| Awaited\<T> | promise-এর ভেতরের মান |
+
+<Tip tone={"success"} title={"মনে রাখুন"} text={"Utility types compile-time-এই কাজ করে — কোড runtime-এ বাড়ে না। এগুলো টাইপ-চালিত রুপান্তরটির জন্য default toolbox।"} />

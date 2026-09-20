@@ -1,0 +1,50 @@
+---
+title: "CSS Selectors (সিলেক্টর)"
+label: "Selectors"
+order: 4
+level: "Beginner"
+description: "Class, id, element, attribute, pseudo-class ও combinator সহ CSS selector-এর সম্পূর্ণ বাংলা গাইড।"
+---
+
+<InParagraph text={"**Selector** হলো CSS-এর সেই অংশ যা নির্ধারণ করে কোন element-এ স্টাইল প্রযোজ্য হবে। সঠিক selector ব্যবহার মানেই কোডের অর্ধেক সমাধান।"} />
+
+## মৌলিক selector
+
+### Element selector
+
+<CodeBlock code={"p { color: dimgray; }       /* সব <p> */\nh1 { font-weight: bold; }  /* সব <h1> */"} lang={"css"} />
+
+### Class selector (.)
+
+<CodeBlock code={".btn { padding: 10px 20px; }\n/* HTML: <button class=\"btn\"> */"} lang={"css"} />
+
+### ID selector (#)
+
+<CodeBlock code={"#header { position: fixed; }\n/* HTML: <header id=\"header\"> */"} lang={"css"} />
+
+## Attribute selector
+
+<CodeBlock code={"input[type=\"email\"] { border-color: blue; }\na[target=\"_blank\"]::after { content: \" ↗\"; }"} lang={"css"} />
+
+## Pseudo-class
+
+- `:hover` — মাউস রাখলে
+- `:focus` — ফোকাস করলে
+- `:first-child` — প্রথম সন্তান
+- `:nth-child(2)` — ক্রমিক অনুযায়ী
+- `:not(selector)` — বাদ দিয়ে
+
+<CodeBlock code={"a:hover { color: green; }\nli:first-child { font-weight: bold; }"} lang={"css"} />
+
+## Combinator
+
+| প্রতীক | নাম | অর্থ |
+| --- | --- | --- |
+| A B | descendant | A-এর ভেতরের সব B |
+| A > B | child | A-এর সরাসরি সন্তান B |
+| A + B | adjacent sibling | A-র ঠিক পরের B |
+| A ~ B | general sibling | A-র পরে থাকা B |
+
+<CodeBlock code={"nav > ul { /* nav-এর সরাসরি ul */\n  display: flex;\n}\nh2 + p { /* h2-এর ঠিক পরের p */\n  margin-top: 0;\n}"} lang={"css"} />
+
+<Tip tone={"warning"} title={"specificity মাথায় রাখুন"} text={"ID-এর Specificity সবচেয়ে বেশি, তারপর class, তারপর element। বেশি নির্দিষ্ট selector দিয়ে সাধারণ selector-কে আবৃত করা কঠিন — তাই সহজ selector দিয়ে শুরু করুন।"} />

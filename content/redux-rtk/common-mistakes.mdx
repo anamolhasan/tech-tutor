@@ -1,0 +1,28 @@
+---
+title: "Common Mistakes — ১০টি"
+label: "Common Mistakes"
+order: 37
+level: "Beginner"
+description: "Redux/RTK Query developer-দের সবচেয়ে কমন ভুল — বাংলায়।"
+---
+
+| # | ভুল | সমাধান |
+| --- | --- | --- |
+| 1 | middleware miss → query hang | `configureStore.middleware.concat(api.middleware)` |
+| 2 | reducer-এ side effects (storage) | middleware/listener-এ করুন |
+| 3 | slice-এ server data copy | RTK Query cache-থেকে read |
+| 4 | `new Date()` state-এ | ISO string / timestamp |
+| 5 | `refetchOnFocus` সক্রিয় default-নয় | config-এ enable |
+| 6 | over-broad tags → প্রতিবার refetch | specific tag id |
+| 7 | useAppSelector এ object select | মেমো increased re-render |
+| 8 | mutations-এ unwrap না | try/catch দিয়ে wrapper |
+| 9 | list+detail একই tag-নয় → stale | provides/invalidates মিল |
+| 10 | per-request store SSR-হীন | makeStore factory |
+
+## আরও ৩টি সূক্ষ্ম
+
+- `selector`-এ অপ্রয়োজনীয় কাজ এড়াতে — `createSelector` শুধু input বদলে recompute করে
+- জটিল state-এ `isFetching` বনাম `isLoading`-এর পার্থক্য ভুলে যাওয়া
+- query arg object memo — প্রতিবার render-এ new object arg → নতুন fetch। useRef/ useMemo
+
+<Tip tone={"warning"} title={"১০-এর ৪তমটি দেখুন"} text={"`new Date()`-জাত non-serializable state DevTools-এ ভেঙে যায় ও persist সমস্যা — এই-একটাই reducer-এর সবচেয়ে সাধারন ভুল।"} />

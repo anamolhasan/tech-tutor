@@ -1,0 +1,27 @@
+---
+title: "Express CORS"
+label: "CORS"
+order: 12
+level: "Intermediate"
+description: "ক্রস-অরিজিন request, cors middleware, options — CORS বাংলায়।"
+---
+
+<InParagraph text={"**CORS (Cross-Origin Resource Sharing)** হলো browser-এর safety mechanism — যেটি ভিন্ন origin থেকে request নিয়ন্ত্রণ করে। Backend-এ CORS সঠিকভাবে set না করলে frontend API call ব্যর্থ হবে।"} />
+
+## CORS Problem
+
+<CodeBlock code={"Browser (localhost:3000)\n       │\n       │ fetch('http://localhost:5000/api/users')\n       ▼\nBackend (localhost:5000)\n       │\n       └──► ❌ 403 blocked!  Origin mismatch\n               (browser সতর্ক করে দেয়)"} lang={"text"} />
+
+## Fix — cors middleware
+
+<CodeBlock code={"npm install cors"} lang={"bash"} />
+
+<CodeBlock code={"const cors = require(\"cors\");\nconst app = express();\n\n// সব origin allow (basic — dev-এর জন্য)\napp.use(cors());"} lang={"javascript"} />
+
+## Restrict Origin
+
+<CodeBlock code={"// নির্দিষ্ট origin allow\nconst allowedOrigins = [\n  \"http://localhost:3000\",\n  \"https://myapp.vercel.app\",\n];\n\napp.use(cors({\n  origin: function (origin, callback) {\n    if (!origin || allowedOrigins.includes(origin)) {\n      callback(null, true);\n    } else {\n      callback(new Error(\"Not allowed by CORS\"));\n    }\n  },\n  credentials: true, // cookies/headers পাঠানোর জন্য\n  methods: [\"GET\", \"POST\", \"PUT\", \"DELETE\"],\n  allowedHeaders: [\"Content-Type\", \"Authorization\"],\n}));"} lang={"javascript"} />
+
+<CodeBlock code={"// শুধু নির্দিষ্ট route-এ\nconst cors = require(\"cors\");\napp.get(\"/api/public\", cors(), (req, res) => {\n  res.json({ public: true });\n});"} lang={"javascript"} title={"Per-route CORS"} />
+
+<Tip tone={"success"} title={"Best Practice"} text={"Production-এ `origin: '*'` দেবেন না। আপনার frontend domainগুলো স্পষ্টভাবে list করুন এবং `credentials: true` শুধু দরকার হলে দিন।"} />

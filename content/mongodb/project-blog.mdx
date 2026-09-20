@@ -1,0 +1,25 @@
+---
+title: "Real Project: Blog"
+label: "Blog Project"
+order: 20
+level: "Advanced"
+description: "User, Post, Comment — তিনটি collection-এর সাথে populate, aggregation ও subdocument দিয়ে পূর্ণাঙ্গ ব্লগ — বাংলায়।"
+---
+
+## Schema ডিজাইন
+
+<CodeBlock code={"import mongoose from \"mongoose\";\n\nconst commentSchema = new mongoose.Schema(\n  {\n    author: { type: mongoose.Schema.Types.ObjectId, ref: \"User\", required: true },\n    body: { type: String, required: true, minlength: 1 },\n    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: \"User\" }],\n  },\n  { timestamps: true }\n);\n\nconst postSchema = new mongoose.Schema(\n  {\n    title: { type: String, required: true, maxlength: 120 },\n    slug: { type: String, unique: true, index: true },\n    body: { type: String, required: true },\n    author: { type: mongoose.Schema.Types.ObjectId, ref: \"User\", required: true },\n    tags: [String],\n    views: { type: Number, default: 0 },\n    comments: [commentSchema],\n  },\n  { timestamps: true }\n);\n\n// slug স্বয়ংক্রিয় তৈরি\npostSchema.pre(\"save\", function (next) {\n  if (!this.slug) {\n    this.slug =\n      this.title.toLowerCase().replace(/[^a-z0-9]+/g, \"-\") +\n      \"-\" +\n      Math.random().toString(36).slice(2, 7);\n  }\n  next();\n});\n\nexport default mongoose.model(\"Post\", postSchema);"} lang={"js"} title={"models/Post.js"} />
+
+## Post + author populate
+
+<CodeBlock code={"// home: latest posts + author\nrouter.get(\"/\", async (req, res, next) => {\n  try {\n    const posts = await Post.find()\n      .populate(\"author\", \"name email\")\n      .sort({ createdAt: -1 })\n      .limit(20)\n      .lean();\n\n    res.json(posts);\n  } catch (err) {\n    next(err);\n  }\n});\n\n// single post — views বাড়িয়ে fields\nrouter.get(\"/:slug\", async (req, res, next) => {\n  try {\n    const post = await Post.findOneAndUpdate(\n      { slug: req.params.slug },\n      { $inc: { views: 1 } },\n      { new: true }\n    )\n      .populate({\n        path: \"author\",\n        select: \"name\",\n      })\n      .populate({\n        path: \"comments.author\",\n        select: \"name\",\n      });\n\n    if (!post) return res.status(404).json({ message: \"Post নেই\" });\n    res.json(post);\n  } catch (err) {\n    next(err);\n  }\n});"} lang={"js"} title={"post controller"} />
+
+## Comment যোগ (subdocument)
+
+<CodeBlock code={"router.post(\"/:slug/comments\", async (req, res, next) => {\n  try {\n    const post = await Post.findOne({ slug: req.params.slug });\n    if (!post) return res.status(404).json({ message: \"Post নেই\" });\n\n    post.comments.push({\n      author: req.body.author, // logged-in user ID\n      body: req.body.body,\n    });\n\n    await post.save(); // subdocument validation-ও হবে\n    res.status(201).json(post.comments);\n  } catch (err) {\n    next(err);\n  }\n});"} lang={"js"} title={"comment route"} />
+
+## Aggregation — top post
+
+<CodeBlock code={"// সবচেয়ে বেশি comment-এর পোস্ট ৫টি\nconst topCommented = await Post.aggregate([\n  { $project: { title: 1, commentCount: { $size: \"$comments\" }, views: 1 } },\n  { $sort: { commentCount: -1, views: -1 } },\n  { $limit: 5 },\n]);\n\n// tag ধরে গড় views\nconst tagStats = await Post.aggregate([\n  { $unwind: \"$tags\" },\n  {\n    $group: {\n      _id: \"$tags\",\n      avgViews: { $avg: \"$views\" },\n      total: { $sum: 1 },\n    },\n  },\n  { $sort: { total: -1 } },\n]);"} lang={"js"} title={"Stats pipeline"} />
+
+<Tip tone={"info"} title={"Subdocument vs separate collection"} text={"Comment-গুলো post-এর **subdocument** রাখলে পড়া দ্রুত এবং populate লাগে। তবে comment অনেক এনে ব্লগে (লাখো+) আলাদা collection + `$lookup` বা separate ref ভালো — পরিস্থিতি অনুযায়ী ডিজাইন বেছে নিন।"} />

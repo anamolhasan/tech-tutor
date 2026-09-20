@@ -1,0 +1,15 @@
+---
+title: "select (কয়েকটি ক্ষেত্র) ও include (relation)"
+label: "Select & Include"
+order: 14
+level: "Intermediate"
+description: "রেস্টrict ফেরত — connection join-er control।"
+---
+
+<CodeBlock code={"const users = await prisma.user.findMany({\n  where: { active: true },\n  select: { id: true, email: true, name: true },\n});"} lang={"ts"} title={"select — শুধু দরকারি fields"} />
+
+<CodeBlock code={"const orders = await prisma.order.findMany({\n  where: { status: \"pending\" },\n  include: {\n    items: { include: { product: true } },\n    user: { select: { name: true, email: true } },\n  },\n});"} lang={"ts"} title={"include — relation কে সাথে"} />
+
+<InParagraph text={"`select` পেলে result-এর shape ঠিক ততটাই টাইপ — nesting level indefinite (Prisma 5-এ depth পর্যন্ত)। `include` — relation field যোগ।"} />
+
+<Tip tone={"warning"} title={"N+1 গুজব"} text={"Prisma-র `include` এক query-তে relation fetch — app-কোডে loop-এ findMany call নয়। (raw SQL-তে JOIN আরও সরাসরি — দুটোই জানা ভালো।)"} />

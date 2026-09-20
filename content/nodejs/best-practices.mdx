@@ -1,0 +1,38 @@
+---
+title: "Node.js Best Practices"
+label: "Best Practices"
+order: 18
+level: "Advanced"
+description: "Project structure, error handling, security, performance — Node.js-এর সেরা অভ্যাসগুলো বাংলায়।"
+---
+
+## Project Structure
+
+<CodeBlock code={"my-app/\n├── src/\n│   ├── controllers/    # Request handlers\n│   ├── models/         # Database models\n│   ├── routes/         # API routes\n│   ├── middleware/      # Custom middleware\n│   ├── services/       # Business logic\n│   ├── utils/          # Helper functions\n│   ├── config/         # Configuration\n│   └── index.js        # Entry point\n├── tests/              # Test files\n├── .env                # Environment vars\n├── .gitignore\n├── package.json\n└── README.md"} lang={"text"} title={"Recommended Structure"} />
+
+## Error Handling
+
+<CodeBlock code={"// Custom error class\nclass AppError extends Error {\n  constructor(message, statusCode) {\n    super(message);\n    this.statusCode = statusCode;\n    this.isOperational = true;\n  }\n}\n\n// Global error handler\napp.use((err, req, res, next) => {\n  const status = err.statusCode || 500;\n  const message = err.isOperational\n    ? err.message\n    : \"Internal Server Error\";\n\n  res.status(status).json({\n    status: \"error\",\n    message,\n    ...(process.env.NODE_ENV === \"development\" && {\n      stack: err.stack,\n    }),\n  });\n});"} lang={"javascript"} />
+
+## Security
+
+- **Helmet** — Security headers সেট করে
+- **CORS** — Cross-origin request control
+- **Rate Limiting** — DDoS protection
+- **Input Validation** — User input sanitize করুন
+- **SQL Injection** — Parameterized queries ব্যবহার করুন
+- **Environment Variables** — Secrets কোডে hardcode করবেন না
+- **HTTPS** — Production-এ সবসময় HTTPS ব্যবহার করুন
+
+## Performance
+
+- **Caching** — Redis/Memcached ব্যবহার করুন
+- **Compression** — gzip/brotli middleware
+- **Database Indexing** — Query optimize করুন
+- **Connection Pooling** — DB connection reuse
+- **PM2 Clustering** — CPU cores ব্যবহার করুন
+- **Stream** — বড় ফাইলে Stream ব্যবহার করুন
+
+<CodeBlock code={"// Compression\nconst compression = require(\"compression\");\napp.use(compression());\n\n// Response time header\napp.use((req, res, next) => {\n  const start = Date.now();\n  res.on(\"finish\", () => {\n    const duration = Date.now() - start;\n    console.log(req.method, req.url, duration + \"ms\");\n  });\n  next();\n});"} lang={"javascript"} />
+
+<Tip tone={"success"} title={"মূল নীতি"} text={"Reusable কোড লিখুন, error handle করুন, security-কে গুরুত্ব দিন, test লিখুন, documentation রাখুন।"} />

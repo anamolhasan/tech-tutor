@@ -1,0 +1,21 @@
+---
+title: "Update Mutation — Edit Product"
+label: "Update Mutation"
+order: 15
+level: "Intermediate"
+description: "PUT/PATCH দিয়ে product edit এবং detail/list cache আপডেট — বাংলায়।"
+---
+
+<InParagraph text={"Edit-ও একই pattern — শুধু `mutationFn`-এ id আর নতুন values যায়। আমরা detail cache-ও আপডেট করব যেন পেজে edit-এর পর সঠিক ডেটা থাকে।"} />
+
+<CodeBlock code={"export function useUpdateProduct() {\n  const queryClient = useQueryClient();\n\n  return useMutation({\n    mutationFn: ({ id, input }: { id: string; input: CreateProductInput }) =>\n      updateProduct(id, input),\n\n    onSuccess: (data) => {\n      // list-গুলো ইনভালিড (table আপডেট)\n      queryClient.invalidateQueries({ queryKey: productKeys.lists() });\n\n      // edit করা product-এর detail cache-ও হালনাগাদ\n      queryClient.setQueryData(\n        productKeys.detail(data.id),\n        data\n      );\n\n      toast.success(\"Product আপডেট হয়েছে\");\n    },\n\n    onError: (error) => toast.error(error.message),\n  });\n}"} lang={"ts"} title={"use-product-mutations.ts (add)"} />
+
+## কেন setQueryData detail-এ
+
+<InParagraph text={"সংখ্যাগত দুই অপরে শুধু `invalidateQueries` করলে detail page আবার fetch করবে — দ্রুত তো ঠিকই, তবে ব্যবহারকারী যদি ঠিক edit-করা item-এ থাকেন, **instant** দেখানোর জন্য আমরা নিজে cache সেট করলাম। দুটোই জায়েজ।"} />
+
+## Edit form-এ call
+
+<CodeBlock code={"const updateProduct = useUpdateProduct();\n\nfunction handleUpdate(values: CreateProductInput) {\n  updateProduct.mutate(\n    { id: product.id, input: values },\n    { onSuccess: () => onClose?.() }\n  );\n}"} lang={"tsx"} title={"Dialog-এ"} />
+
+<Tip tone={"info"} title={"Partial update চাইলে"} text={"API পাশে `PATCH` support থাকলে `input: Partial<CreateProductInput>` ব্যবহার করা যায় — শুধু বদলানো fields-টিই পাঠানো হয়। PUT সম্পূর্ণ replace, PATCH আংশিক। আমরা PUT নেব (সব fields সম্পূর্ণ হিসেবে)।"} />

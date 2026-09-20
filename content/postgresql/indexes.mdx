@@ -1,0 +1,22 @@
+---
+title: "Index — পড়া দ্রুত করার বইয়ের সূচি"
+label: "Indexes"
+order: 24
+level: "Advanced"
+description: "index কী, কখন তৈরি হয় — query planner-এর বন্ধু।"
+---
+
+<CodeBlock code={"CREATE INDEX idx_orders_user ON orders (user_id);\nCREATE INDEX idx_products_name ON products (name);"} lang={"sql"} />
+
+<InParagraph text={"Index-এ থাকলে WHERE/JOIN/ORDER-এ scan-এর বদলে **lookup** — দ্রুত। তবে index **লেখা ধীর** করে (write-time-এ index update)।"} />
+
+| Index type | কখন |
+| --- | --- |
+| B-tree (default) | equality, range, ORDER BY |
+| GIN | array, jsonb, full-text |
+| BRIN | খুব বড়, sorted-tuple data |
+| Partial (WHERE সহ) | নির্দিষ্ট subset |
+
+<CodeBlock code={"-- partial + unique\nCREATE UNIQUE INDEX uq_coupons_code_active\nON coupons (code) WHERE active;"} lang={"sql"} />
+
+<Tip tone={"info"} title={"index দেখা"} text={"`\\d products` দিলে index-এর list। Proposal আসে EXPLAIN থেকে — analytics/big-table-এ সিদ্ধান্ত নিন, ছোট table-এ অতি-index ক্ষতি।"} />

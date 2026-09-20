@@ -1,0 +1,28 @@
+---
+title: "HTML Tables (টেবিল)"
+label: "HTML Tables"
+order: 11
+level: "Beginner"
+description: "table, tr, td, th, thead, tbody ও colspan/rowspan দিয়ে HTML টেবিল তৈরি — বাংলা টিউটোরিয়াল।"
+---
+
+<InParagraph text={"সারি ও কলামে ডেটা সাজানোর জন্য `<table>` ট্যাগ ব্যবহার করা হয়। প্রতিটি সারি `<tr>`, প্রতিটি ঘর (`cell`) `<td>` এবং শিরোনাম ঘর `<th>` দিয়ে তৈরি হয়।"} />
+
+## সাধারণ টেবিল
+
+<CodeBlock code={"<table>\n  <tr>\n    <th>নাম</th>\n    <th>বয়স</th>\n  </tr>\n  <tr>\n    <td>রহিম</td>\n    <td>২৫</td>\n  </tr>\n  <tr>\n    <td>করিম</td>\n    <td>৩০</td>\n  </tr>\n</table>"} lang={"html"} />
+
+## thead, tbody, tfoot
+
+<InParagraph text={"বড় টেবিলে অংশ ভাগ করতে `<thead>` (শিরোনাম), `<tbody>` (মূল ডেটা) ও `<tfoot>` (সারাংশ) ব্যবহার হয়।"} />
+
+## colspan ও rowspan
+
+- `colspan="2"` — একটি সেল দুইটি কলাম জুড়ে
+- `rowspan="2"` — একটি সেল দুইটি সারি জুড়ে
+
+<CodeBlock code={"<table>\n  <tr>\n    <th>বিষয়</th>\n    <th colspan=\"2\">নম্বর</th>\n  </tr>\n  <tr>\n    <td>ম্যাথ</td>\n    <td>৮০</td>\n    <td>৮৫</td>\n  </tr>\n</table>"} lang={"html"} title={"colspan ব্যবহার"} />
+
+<Tip tone={"info"} title={"টেবিল শুধু ডেটার জন্য"} text={"পেজের layout সাজাতে টেবিল ব্যবহার করবেন না — এ জন্য আধুনিক CSS (যেমন flexbox ও grid) ব্যবহার হয়। টেবিল শুধু *tabular ডেটা* দেখানোর জন্য।"} />
+
+<InParagraph text={"সঠিক `scope` অ্যাট্রিবিউট (`<th scope=\"col\">`) দিলে screen reader-এর জন্য টেবিল আরও বোধগম্য হয়।"} />

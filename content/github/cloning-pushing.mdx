@@ -1,0 +1,40 @@
+---
+title: "প্রথম কোড Push — সম্পূর্ণ রুফলো"
+label: "Cloning & Pushing"
+order: 4
+level: "Beginner"
+description: "লোকাল কাজ GitHub-এ push করা — বাংলায় step by step।"
+---
+
+## নতুন প্রজেক্ট push করার ধাপ
+
+<CodeBlock code={"mkdir my-app && cd my-app\ngit init\ngit add .\ngit commit -m \"feat: initial commit\""} lang={"bash"} title={"1. লোকাল repo initialization"} />
+
+<CodeBlock code={"git remote add origin https://github.com/user/my-app.git"} lang={"bash"} title={"2. GitHub-এ খালি repo বানান (আগে অধ্যায়)"} />
+
+<CodeBlock code={"git branch -M main\ngit push -u origin main"} lang={"bash"} title={"3. Push"} />
+
+## -u কেন?
+
+<InParagraph text={"`-u` (upstream) বলে দেয় এই branch-এর ঠিকানা — এরপর শুধু `git push` / `git pull` লিখলেই হয়।"} />
+
+## তখন Git-এর প্রথম push-এ করা ভুল
+
+- `git remote add` ভুলে wrong URL
+- `.gitignore` না থাকা → node_modules push
+- `.env` commit হয়ে যাওয়া
+- main না হয়ে master branch (যদিও এখন default main)
+
+## প্রতিদিনের flow
+
+<CodeBlock code={"git status\ngit add .\ngit commit -m \"fix: update styles\"\ngit pull --rebase origin main\ngit push origin main"} lang={"bash"} />
+
+## push rejected?
+
+<InParagraph text={"যদি remote-এ আপনার কাছে নেই এমন commit থাকে, Git push ব্লক করে। সমাধান: `git pull --rebase origin main` → conflict সমাধান → `git push`।"} />
+
+## git push -f (force) কখন?
+
+<InParagraph text={"rebase/squash এর পরে আপনার commit hash বদলায়, তখন push fail হয়। সাধারণত `git push --force-with-lease` ব্যবহার করুন — এতে হঠাৎ কেউ নতুন commit এলে force হবে না।"} />
+
+<Tip tone={"success"} title={"প্রথম সফলতা"} text={"আপনার প্রথম commit GitHub-এ দেখা গেল! এটি developer জীবনের একটি গুরুত্বপূর্ণ মাইলফলক — এখন এই flow যতবারই দরকার, ব্যবহার করবেন।"} />

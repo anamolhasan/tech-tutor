@@ -1,0 +1,47 @@
+---
+title: "Production-এর জন্য Docker"
+label: "Production"
+order: 18
+level: "Advanced"
+description: "Restart policy, healthcheck, logging, resource limits ও হালকা production image — বাংলায়।"
+---
+
+<InParagraph text={"প্রোডাকশন মানে — container-কে বিশ্বস্ত, আত্মসচেতন ও নিরাপদ রাখা। মিলল কয়েকটি essentials:"} />
+
+## Restart policy
+
+<CodeBlock code={"services:\n  api:\n    image: my-api\n    restart: unless-stopped    # crash হলে auto-restart"} lang={"yaml"} title={"compose.yml"} />
+
+| Policy | আচরণ |
+| --- | --- |
+| `no` | কিছুই না (default) |
+| `always` | যেকোনো অবস্থায় restart |
+| `unless-stopped` | manually stop করা ছাড়া restart |
+| `on-failure:5` | কথা ঠিকেই failure-এর পর restart (max 5) |
+
+## Healthcheck
+
+<CodeBlock code={"services:\n  api:\n    build: .\n    healthcheck:\n      test: [\"CMD\", \"node\", \"-e\", \"fetch('http://localhost:3000/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))\"]\n      interval: 30s\n      timeout: 5s\n      retries: 3\n      start_period: 10s"} lang={"yaml"} title={"compose.yml"} />
+
+## Resource limits
+
+<CodeBlock code={"services:\n  api:\n    image: my-api\n    deploy:\n      resources:\n        limits:\n          cpus: \"0.5\"      # সর্বোচ্চ ৫০% CPU\n          memory: 512M     # সর্বোচ্চ 512 MB\n        reservations:\n          memory: 128M"} lang={"yaml"} title={"Limit CPU/Memory"} />
+
+## Logging
+
+<InParagraph text={"Default JSON logger-কে stdout-এ লিখুন। Docker সেই logs collector-এ নিয়ে যায় — `docker logs`, or cloud logging service (যেমন loki, cloudwatch)।"} />
+
+<CodeBlock code={"services:\n  api:\n    image: my-api\n    logging:\n      driver: \"json-file\"\n      options:\n        max-size: \"10m\"\n        max-file: \"3\""} lang={"yaml"} title={"Rotate ও limit"} />
+
+## Production checklist
+
+- Multi-stage build + হালকা base image
+- Non-root user (`USER node`)
+- `NODE_ENV=production` set
+- Restart policy + healthcheck
+- Secrets env-তে, না image-এ
+- `.dockerignore` দিয়ে image ছোট করা
+- `docker compose config` দিয়ে file validate
+- `docker scout` / `trivy` দিয়ে vulnerability scan
+
+<Tip tone={"info"} title={"compose config"} text={"`docker compose config` কমান্ড file validate ও resolved output দেখায় — deploy-এর আগে চালিয়ে নিন; করে syntax/আরো অন্য ভুল ধরা পড়বে।"} />

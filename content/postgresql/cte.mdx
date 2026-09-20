@@ -1,0 +1,15 @@
+---
+title: "CTE — WITH clause-এ নামকरण query"
+label: "CTE (WITH)"
+order: 20
+level: "Advanced"
+description: "জটিল query টুকরা করে readable — WITH-এর ব্যবহার।"
+---
+
+<CodeBlock code={"WITH user_spend AS (\n  SELECT u.id, u.name, SUM(o.total) AS total_spent\n  FROM users u\n  LEFT JOIN orders o ON o.user_id = u.id\n  GROUP BY u.id, u.name\n)\nSELECT name, COALESCE(total_spent, 0) AS spent\nFROM user_spend\nORDER BY spent DESC\nLIMIT 5;"} lang={"sql"} title={"রেভেনিউ যুক্ত CTE"} />
+
+<CodeBlock code={"WITH stats AS (\n  SELECT product_id, SUM(qty) AS sold\n  FROM order_items\n  GROUP BY product_id\n),\ntop AS (\n  SELECT product_id FROM stats ORDER BY sold DESC LIMIT 3\n)\nSELECT p.name FROM products p\nJOIN top t ON t.product_id = p.id;"} lang={"sql"} title={"একাধিক CTE"} />
+
+<InParagraph text={"CTE-র ২টি উপকার — (১) query-এর readable বিভাজন, (২) recursion। তবে CTE-কে **material** ভাববেন না — planner নিজেই ইনলাইন করতে পারে।"} />
+
+<Tip tone={"info"} title={"readability first"} text={"বড় query-র section-গুলো CTE-তে রাখলে debugging (প্রতি অংশ আলাদা চালানো) অনেক সহজ।"} />

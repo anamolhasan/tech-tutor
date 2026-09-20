@@ -1,0 +1,23 @@
+---
+title: "Filter operators — where-এর অভিধান"
+label: "Query Filters"
+order: 12
+level: "Intermediate"
+description: "contains, gte, in, not, OR/AND — বড় list।"
+---
+
+<CodeBlock code={"await prisma.product.findMany({\n  where: {\n    name: { contains: \"mouse\", mode: \"insensitive\" },\n    price: { gte: 1000, lte: 5000 },\n    categoryId: { in: [1, 2, 3] },\n    active: true,\n  },\n});"} lang={"ts"} />
+
+| Operator | কাজ |
+| --- | --- |
+| equals / not | সমান / উল্টো |
+| in / notIn | তালিকার মধ্যে |
+| lt / lte / gt / gte | তুলনা |
+| contains / startsWith / endsWith | string |
+| mode: insensitive | case-insensitive |
+| isNull / not: null | NULL check |
+| every / some / none | relation-তালিকায় |
+
+<CodeBlock code={"await prisma.product.findMany({\n  where: {\n    OR: [\n      { name: { contains: \"keyboard\" } },\n      { categoryId: 3 },\n    ],\n    NOT: { qty: 0 },\n  },\n});"} lang={"ts"} title={"AND/OR/NOT"} />
+
+<Tip tone={"warning"} title={"insensitive-এ সতর্ক"} text={"`mode: insensitive` PostgreSQL/Postgres-এ হলেই lowercase-index চাই — না হলে scan। filter-থেকে composed index টপিক ৩২।"} />

@@ -1,0 +1,43 @@
+---
+title: "Remote Repository — push, pull, fetch"
+label: "Remotes"
+order: 12
+level: "Beginner"
+description: "Remote কী, origin, fetch/pull/push — বাংলায়।"
+---
+
+## Remote Repository কী?
+
+<InParagraph text={"Remote হলো আপনার repository-র একটি কপি যা **অন্য জায়গায়** অবস্থিত — সাধারণত GitHub/GitLab/Bitbucket-এ। লোকাল থেকে এতে push করা যায়, এবং অন্য থেকে pull করা যায়।"} />
+
+## GitHub-এ খালি repo তৈরি করলে
+
+<CodeBlock code={"# ...existing repo...\ngit remote add origin https://github.com/user/repo.git\ngit branch -M main\ngit push -u origin main"} lang={"bash"} title={"GitHub-এর দেওয়া কমান্ড"} />
+
+## Remote পরিচালনা
+
+<CodeBlock code={"git remote -v            # কি remote আছেন\ngit remote add origin <url>\ngit remote set-url origin <new-url>\ngit remote remove origin"} lang={"bash"} />
+
+## fetch vs pull
+
+| কমান্ড | কী করে |
+| --- | --- |
+| git fetch | রিমোটের পরিবর্তন সেভ করে রাখে (branch merge ছাড়া) |
+| git pull | fetch + merge একসাথে |
+| git pull --rebase | fetch + rebase |
+
+## fetch তারপর পরীক্ষা
+
+<CodeBlock code={"git fetch origin\ngit log --oneline origin/main      # রিমোটে কী নতুন\ngit merge origin/main              # decide করে আনছি"} lang={"bash"} />
+
+## push
+
+<CodeBlock code={"git push origin main              # main push\ngit push -u origin feature/x        # প্রথমবার, upstream সেট\ngit push origin --delete feature/x  # remote branch মুছে ফেলা\ngit push --tags                     # tags push"} lang={"bash"} />
+
+## push rejected হলে
+
+<InParagraph text={"রিমোটে এমন commit আছে যা আপনার কাছে নেই — তখন push ব্লক হয়। আগে `git pull --rebase` করে নিজের commit-গুলিকে উপরে বসিয়ে দিন, তারপর push করুন।"} />
+
+<CodeBlock code={"git pull --rebase origin main\n# (যদি conflict হয় তবে সমাধান)\ngit push origin main"} lang={"bash"} />
+
+<Tip tone={"warning"} title={"সাবধান"} text={"`git push --force` করুন শুধু তখনই যখন নিশ্চিত যে আপনি একমাত্র সেই branch-এ কাজ করছেন এবং ইতিহাস rewrite deliberately। অন্যথায় team-mate-দের কাজ ধ্বংস হতে পারে। প্রায়ই `--force-with-lease` ব্যবহার করুন।"} />

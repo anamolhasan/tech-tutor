@@ -1,0 +1,35 @@
+---
+title: "Theme কী এবং কীভাবে কাজ করে"
+label: "Theme"
+order: 13
+level: "Beginner"
+description: "WordPress-এর Theme-এর ধারণা, Theme file-গুলো কী কী, template hierarchy ও Child Theme-এর ব্যবহার — বাংলায়।"
+---
+
+## Theme কী?
+
+<InParagraph text={"**Theme** হলো website-এর **design এবং visual structure** নিয়ন্ত্রণ করার system। Theme-ই ঠিক করে — কোথায় sidebar, কী রঙ, কী font, header/footer কেমন হবে। Content আলাদা, আর Theme-এর উপর ভিত্তি করে content-কে কীভাবে present করা হবে।"} />
+
+<CodeBlock code={"Content  (আপনার লেখা, ছবি, page)\n   +\nTheme    (যেভাবে সাজিয়ে দেখানো হবে)\n   =\nWebsite-এর look"} lang={"text"} title={"Theme vs Content"} />
+
+## Theme কীভাবে কাজ করে?
+
+<InParagraph text={"WordPress-এর প্রতিটি page কোন **template** দেখাবে তা **template hierarchy** বলে ঠিক করে। Theme folder-এর ভেতরে থাকে multiple PHP template file।"} />
+
+<CodeBlock code={"wp-content/themes/mytheme/\n├── style.css        → theme এর তথ্য + CSS\n├── functions.php   → theme-র functions\n├── header.php      → উপরের অংশ (header)\n├── footer.php      → নিচের অংশ (footer)\n├── sidebar.php     → sidebar\n├── index.php       → default template\n├── single.php      → একক post/page\n├── page.php        → page-এর জন্য\n├── archive.php     → category/author list\n└── front-page.php  → homepage template"} lang={"text"} title={"একটি Theme-এর main files"} />
+
+## Template Hierarchy
+
+<InParagraph text={"যখন কোনো post/page-এর request আসে, WordPress প্রথমে **most specific** template খোঁজে, না মিললে সাধারণের দিকে যায়।"} />
+
+<CodeBlock code={"single-{slug}.php  →  single-{id}.php  →  single.php  →  index.php"} lang={"text"} title={"single.php-এর সন্ধান ক্রম"} />
+
+## Theme বনাম Page Builder
+
+<InParagraph text={"Theme-ই **পুরো site-এর global design** ঠিক করে। Page builder-কে ব্যবহার করে আলাদা page-specific design বানানো হয়। একটি ভালো theme + page builder = flexible site।"} />
+
+## Child Theme
+
+<InParagraph text={"Customization করতে চাইলে **Child Theme** ব্যবহার করা ভালো অভ্যাস। Child theme-এ মূল theme-এর কোড ঠিক থাকে — শুধু ছোট override-গুলো child-এ রাখা হয়, এতে parent theme update করলেও আপনার custom code অক্ষত থাকে।"} />
+
+<Tip tone={"warning"} title={"সাবধান"} text={"পুরোনো বা আপডেটহীন Theme নিরাপদ নয়। Theme নিয়মিত আপডেট করলে bug ও security issue ঠিক হয় — তাই সবসময় theme-টি latest version-এ রাখুন।"} />

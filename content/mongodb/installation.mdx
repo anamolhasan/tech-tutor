@@ -1,0 +1,23 @@
+---
+title: "Mongoose Installation"
+label: "Installation"
+order: 3
+level: "Beginner"
+description: "Node.js প্রজেক্টে mongoose প্যাকেজ ইনস্টল করা এবং প্রথম প্রজেক্ট সেটআপ — বাংলায়।"
+---
+
+<InParagraph text={"শুরু করার আগে দরকার একটি **Node.js** প্রজেক্ট (Node 16+ বা LTS) এবং একটি MongoDB — লোকালে `mongod` চালু বা **MongoDB Atlas** free cluster।"} />
+
+## mongoose ইনস্টল
+
+<CodeBlock code={"# নতুন প্রজেক্ট শুরু\nnpm init -y\n\n# mongoose যোগ করুন\nnpm install mongoose\n\n# TypeScript প্রজেক্ট হলে type declaration-ও আসবে সাথে"} lang={"bash"} title={"Terminal"} />
+
+<CodeBlock code={"{\n  \"name\": \"my-shop\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"dependencies\": {\n    \"mongoose\": \"^8.0.0\"\n  }\n}"} lang={"json"} title={"package.json (সংক্ষিপ্ত)"} />
+
+## প্রথম connection
+
+<CodeBlock code={"import mongoose from \"mongoose\";\n\nconst MONGODB_URI = \"mongodb://127.0.0.1:27017/myapp\";\n\nexport async function connectDB() {\n  try {\n    await mongoose.connect(MONGODB_URI);\n    console.log(\"MongoDB connected\");\n  } catch (err) {\n    console.error(\"Connection failed:\", err.message);\n    process.exit(1);\n  }\n}\n\nconnectDB();"} lang={"js"} title={"db.js — ESM style"} />
+
+<CodeBlock code={"const mongoose = require(\"mongoose\");\n\nmongoose\n  .connect(\"mongodb://127.0.0.1:27017/myapp\")\n  .then(() => console.log(\"MongoDB connected\"))\n  .catch((err) => console.error(\"Connection failed:\", err.message));"} lang={"js"} title={"db.js — CommonJS style"} />
+
+<Tip tone={"info"} title={"127.0.0.1 কেন?"} text={"`localhost` ব্যবহার করলে কিছু সিস্টেমে IPv6-এ resolve হওয়ায় connection fail হতে পারে। `127.0.0.1` সর্বত্র কাজ করে। Atlas connection string-এ `mongodb+srv://` prefix থাকে।"} />

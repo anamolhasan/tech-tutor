@@ -1,0 +1,17 @@
+---
+title: "INSERT … ON CONFLICT — inset বা update"
+label: "UPSERT"
+order: 26
+level: "Advanced"
+description: "একই key-এ লোমহর্ষক conflict — DO UPDATE / DO NOTHING।"
+---
+
+<CodeBlock code={"INSERT INTO users (email, name)\nVALUES ('a@b.com', 'Anamul')\nON CONFLICT (email)\nDO UPDATE SET name = EXCLUDED.name;"} lang={"sql"} title={"upsert: email থাকলে update"} />
+
+<CodeBlock code={"-- duplicates নিজে এড়াও\nINSERT INTO coupons (code, discount)\nVALUES ('SAVE10', 10)\nON CONFLICT DO NOTHING;"} lang={"sql"} />
+
+- `ON CONFLICT (col)` — UNIQUE/EXCLUSION constraint-এর নামেই conflict
+- `EXCLUDED` — প্রস্তাবিত row-এর value reference
+- `DO NOTHING` — ভুল ignoring-এর জন্য
+
+<Tip tone={"warning"} title={"কনফ্লিক্ট target"} text={"`ON CONFLICT (email)`-এর আগে সেই constraint অবশ্যই থাকতে হবে — না হলে runtime error। UNIQUE index-এর ক্ষেত্রে key সঠিক রাখুন।"} />

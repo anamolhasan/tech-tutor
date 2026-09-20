@@ -1,0 +1,15 @@
+---
+title: "Singleton — hot-reload-এ এক PrismaClient"
+label: "Global Client"
+order: 24
+level: "Advanced"
+description: "Node process-এ একটাই client — connection গলায় হাতল।"
+---
+
+<CodeBlock code={"import { PrismaClient } from \"@prisma/client\";\n\nconst globalForPrisma = globalThis as unknown as {\n  prisma?: PrismaClient;\n};\n\nexport const prisma =\n  globalForPrisma.prisma ?? new PrismaClient();\n\nif (process.env.NODE_ENV !== \"production\") {\n  globalForPrisma.prisma = prisma;\n}"} lang={"ts"} title={"src/lib/prisma.ts"} />
+
+- Next.js dev hot-reload — প্রতি import-এ নতুন client হলে connection pool ধ্বংস
+- globalThis-এ cache — process lifetime
+- Express/plain Node — module-level singleton যথেষ্ট
+
+<Tip tone={"warning"} title={"connection limit"} text={"প্রত্যেক serverless function নিজের instance — PostgreSQL max_connections-এর সাথে balance (Topic 29)।"} />

@@ -1,0 +1,33 @@
+---
+title: "HTML Elements ( এলিমেন্ট)"
+label: "HTML Elements"
+order: 4
+level: "Beginner"
+description: "HTML element কী, ট্যাগের সাথে এর পার্থক্য, ব্লক ও ইনলাইন এলিমেন্ট — বাংলায় বিস্তারিত।"
+---
+
+<InParagraph text={"যখন একটি start tag থেকে matching end tag পর্যন্ত পুরো অংশ — content সহ — একসাথে থাকে, তখন সেটিই একটি **element**। ট্যাগ শুধু চিহ্ন; element হলো ট্যাগ + content।"} />
+
+## Example
+
+<CodeBlock code={"<h1>Web Development</h1>"} lang={"html"} />
+
+<InParagraph text={"উপরের উদাহরণে `<h1>` start tag, `</h1>` end tag আর `Web Development` হলো content। পুরো জিনিসটি একটি `h1` element।"} />
+
+## Block-level এলিমেন্ট
+
+<InParagraph text={"Block-level এলিমেন্ট নতুন লাইন থেকে শুরু হয় এবং পূর্ণ প্রস্থ (width) জুড়ে থাকে। যেমন `div`, `p`, `h1`, `ul`, `table`।"} />
+
+## Inline এলিমেন্ট
+
+<InParagraph text={"Inline এলিমেন্ট নিজের content যতটুকু জায়গা নেয় তার বেশি নেয় না এবং নতুন লাইনে শুরু হয় না। যেমন `a`, `span`, `strong`, `em`, `img`।"} />
+
+### পার্থক্য এক নজরে
+
+| Block-level | Inline |
+| --- | --- |
+| নতুন লাইন থেকে শুরু হয় | একই লাইনের ভেতরে থাকে |
+| পূর্ণ প্রস্থ নেয় | প্রয়োজনীয় প্রস্থ নেয় |
+| `<div>`, `<p>`, `<h1>` | `<span>`, `<a>`, `<strong>` |
+
+<Tip tone={"info"} title={"সঠিক element বাছাই করুন"} text={"Semantic element ব্যবহার করা ভালো অভ্যাস — যেমন শিরোনামের জন্য `<h1>`, শুধু স্টাইলের জন্য `<span>`, বোতাম খোঁজা লিংকের জন্য `<a>`। এতে ওয়েবপেজ *accessible* ও *SEO-friendly* হয়।"} />

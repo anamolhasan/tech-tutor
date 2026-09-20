@@ -1,0 +1,15 @@
+---
+title: "Interview Questions — ১৫টি"
+label: "Interview Q&A"
+order: 39
+level: "Advanced"
+description: "Redux Toolkit ও RTK Query-এর দরকারি interview প্রশ্ন ও উত্তর — বাংলায়।"
+---
+
+<CodeBlock code={"Q1: Redux-এ একমুখী data flow কী?\n→ store → UI (selector) → dispatch(action) → reducer\n  → new state → re-render। সব পরিবর্তন action-মাধ্যমে।\n\nQ2: Reducer pure কেন?\n→ predictable, testable, time-travel-যোগ্য। mutate\n  করলে tracking ভেঙে যায়।\n\nQ3: createSlice-এর সুবিধা কী?\n→ action creators + reducer + action types এক জায়গা;\n  Immer-driven — boilerplate অর্ধেক।\n\nQ4: useSelector re-render নিয়ম?\n→ selected মান reference-change হলে re-render।\n  object সরাসরি select করলে subject re-render — সতর্ক।"} lang={"text"} title={"Redux অংশ"} />
+
+<CodeBlock code={"Q5: RTK Query-র কোন সমস্যা সমাধান?\n→ data fetching, caching, deduplication,\n  loading/error state, invalidation, refetch।\n\nQ6: providesTags vs invalidatesTags?\n→ provides: query cache-এর যোগ্য tag;\n   invalidates: mutation-এ কী পুরনো হবে।\n\nQ7: unwrap() কী?\n→ mutation trigger-এর Promise — success-এ value,\n  failure-এ error throw (await করতে সুবিধা)।\n\nQ8: isLoading vs isFetching?\n→ isLoading: প্রথম ফেচ (কোনো data নেই)।\n   isFetching: সব ফেচ (যেমন background refetch)।\n\nQ9: RTK Query-এ optimistic update?\n→ onQueryStarted-এ updateQueryData dispatch →\n  queryFulfilled success-এ invalidate / error-এ undo।\n\nQ10: createListenerMiddleware-এর কাজ?\n→ store action-এর side-effect (toast, refetch,\n  logout reset) — component-হীন logic।"} lang={"text"} title={"RTK Query অংশ"} />
+
+<CodeBlock code={"Q11: Cart-এ RTK Query নাকি slice?\n→ Cart client-session state → slice। Products/orders\n  server state → RTK Query।\n\nQ12: কীভাবে ইনভালিড list+detail একসাথে?\n→ tagTypes-এ \"Product\"; list provides \"Product:LIST\",\n  detail provides \"Product:id\" — update invalidates দুটোই।\n\nQ13: query arg object memo কেন দরকার?\n→ প্রতিটি render-এ নতুন object → RTK Query নতুন key\n  মনে করে → প্রতিবার refetch। useMemo/useRef।\n\nQ14: কীভাবে user-logout-এ cache reset?\n→ store.dispatch(api.util.resetApiState()) —\n  অথবা logout listener-এ।"} lang={"text"} title={"Scenario অংশ"} />
+
+<Tip tone={"success"} title={"নিয়ে যাওয়া"} text={"এই প্রশ্নগুলোর উত্তর দিতে পারলে আপনার আত্মবিশ্বাস আসবে। কিছু হাত-কোড অনুশীলনও করুন — interview-এ createSlice+createApi টুকরা লেখা প্রায়ই ask করে। পড়ার জন্য ধন্যবাদ! 🎉"} />

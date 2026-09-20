@@ -1,0 +1,53 @@
+---
+title: "GitHub Interview Questions"
+label: "Interview"
+order: 22
+level: "Advanced"
+description: "GitHub interview-এর গুরুত্বপূর্ণ প্রশ্ন ও উত্তর — বাংলায়।"
+---
+
+## 1. GitHub কী?
+
+<InParagraph text={"Git-ভিত্তিক কোড হোস্টিং প্ল্যাটফর্ম — repository hosting, PR, issue, Actions, Pages সহ developer-দের সহযোগিতার এক জায়গা।"} />
+
+## 2. fork ও clone-এর পার্থক্য?
+
+| Clone | Fork |
+| --- | --- |
+| একই repo-র local copy | নিজের GitHub অ্যাকাউন্টে copy |
+| direct থেকে টানে | মূল-এ PR দেওয়া যায় |
+| অনুমতি নিয়ে push | মূল nie-এ সরাসরি push নয় |
+
+## 3. PR-এ কী কী থাকে?
+
+<InParagraph text={"title, description, base/compare branch, commits/diff, reviewers, checks, discussion — এবং merge পরে issue close।"} />
+
+## 4. merge types মনে রাখুন?
+
+<InParagraph text={"Merge commit (সব + merge commit), Squash (এক commit), Rebase (linear history)।"} />
+
+## 5. Actions কীভাবে trigger?
+
+<InParagraph text={"`.github/workflows/*.yml`-এ `on:` ইভেন্ট — push, pull_request, schedule, workflow_dispatch।"} />
+
+## 6. branch protection-এ কি?
+
+<CodeBlock code={"Require PR + review\nRequire CI checks\nNo force push\nBlock deleting"} lang={"text"} />
+
+## 7. organization বনাম personal?
+
+<InParagraph text={"Organization — multiple repo + teams + access control; personal — নিজের single-level।"} />
+
+## 8. secret কখনো লিক হলে?
+
+<InParagraph text={"তোড়াই revoke/rotate, commit ઈতিহাস থেকে মুছুন (filter-repo), নিয়ম ঠিক করুন।"} />
+
+## 9. Pages কোন কোন ফাইল থাকে?
+
+<InParagraph text={"Static HTML/CSS/JS, Jekyll docs। Server code/DB চলে না।"} />
+
+## 10. fork-এর পরে upstream update?
+
+<CodeBlock code={"git remote add upstream <original-url>\ngit fetch upstream\ngit checkout main && git merge upstream/main"} lang={"bash"} />
+
+<Tip tone={"success"} title={"সেরা প্রস্তুতি"} text={"নিজের profile-এ একটি complete open-source contribution চিহ্নিত করুন — কথা হিসাবে বলা যাবে, সাথে নিজের অভিজ্ঞতা।"} />

@@ -1,0 +1,18 @@
+---
+title: "findUnique, findFirst, findMany"
+label: "Read Queries"
+order: 10
+level: "Intermediate"
+description: "read — exact, first, list — filter-এর গতিপথ।"
+---
+
+<CodeBlock code={"// unique by pk\nconst user =\n  await prisma.user.findUnique({ where: { id: 7 } });\n\n// first matching (ordering)\nconst firstActive =\n  await prisma.product.findFirst({\n    where: { active: true },\n    orderBy: { price: \"desc\" },\n  });\n\n// list\nconst products =\n  await prisma.product.findMany({\n    where: { categoryId: 3 },\n    take: 20,\n  });"} lang={"ts"} />
+
+| Method | Result |
+| --- | --- |
+| findUnique | একটি রেকর্ড \| null (pk/unique দিয়ে) |
+| findFirst | প্রথমটি \| null |
+| findMany | array (কোনোটিই না হলে []) |
+| count | সংখ্যা |
+
+<Tip tone={"info"} title={"findUnique scope"} text={"`findUnique` শুধু unique/pk field-এ — অন্য field-এ হলে `findFirst`।"} />

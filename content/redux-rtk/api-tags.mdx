@@ -1,0 +1,20 @@
+---
+title: "Tags — providesTags / invalidatesTags"
+label: "API Tags"
+order: 16
+level: "Advanced"
+description: "Tag system-এর মাধ্যমে cache invalidation — বাংলায়।"
+---
+
+<InParagraph text={"**Tags** RTK Query-এর 'invalidation ভাষা'। কোনো mutation সফল হলে `invalidatesTags` বলে দেয় কোন cache পুরনো — RTK Query তখন ওইসব query re-fetch করে।"} />
+
+<CodeBlock code={"tagTypes: [\"Product\", \"Order\"],\n\ngetProducts: builder.query<Product[], void>({\n  query: () => \"products\",\n  providesTags: (result) =>\n    result\n      ? [\n          ...result.map((p) => ({ type: \"Product\" as const, id: p.id })),\n          { type: \"Product\", id: \"LIST\" },\n        ]\n      : [{ type: \"Product\", id: \"LIST\" }],\n}),\n\ngetProduct: builder.query<Product, string>({\n  query: (id) => \"products/\" + id,\n  providesTags: (_result, _err, id) => [{ type: \"Product\", id }],\n}),\n\ndeleteProduct: builder.mutation<void, string>({\n  query: (id) => ({ url: \"products/\" + id, method: \"DELETE\" }),\n  // যেকোনো Product tag-সহ query (LIST/detail) সব invalid\n  invalidatesTags: [{ type: \"Product\", id: \"LIST\" }, \"Product\"],\n}),\n\nupdateProduct: builder.mutation<Product, { id: string; body: Partial<Product> }>({\n  query: ({ id, body }) => ({ url: \"products/\" + id, method: \"PATCH\", body }),\n  invalidatesTags: (_result, _err, { id }) => [\n    { type: \"Product\", id },\n    { type: \"Product\", id: \"LIST\" },\n  ],\n}),"} lang={"ts"} title={"Tag-সহ endpoint"} />
+
+## Tag-ID gist
+
+- `{ type: "Product", id: p.id }` → নির্দিষ্ট item-এর cache
+- `{ type: "Product", id: "LIST" }` → list-নির্দিষ্ট tag (ধরে নিলেন প্রতিটি GET list এ tag)
+- `"Order"` (id ছাড়া) → array-শর্টহ্যান্ড — সব Order tag
+- invalidatesTag `[LIST + type]` → list ও সব detail দুটোই invalid
+
+<Tip tone={"success"} title={"Tag kn-কেন?"} text={"Tags-এর মূল কথা — সার্ভার কী প্রভাব ফেলবে সেটাই index। একটি update list-ও invalidate করে detail cache — নির্ভরশীল সব query একসাথে updated থাকে।"} />

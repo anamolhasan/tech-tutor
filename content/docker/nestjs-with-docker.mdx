@@ -1,0 +1,27 @@
+---
+title: "NestJS অ্যাপ Docker-এ"
+label: "NestJS + Docker"
+order: 15
+level: "Advanced"
+description: "NestJS মাল্টি-stage docker build, production port ও PostgreSQL/Redis compose — বাংলায়।"
+---
+
+<InParagraph text={"NestJS TypeScript-ভিত্তিক — তাই build করে **dist** produce করতে হয় এবং production image-এ শুধু সেই output থাকে।"} />
+
+## package.json scripts
+
+<CodeBlock code={"{\n  \"scripts\": {\n    \"build\": \"nest build\",\n    \"start\": \"node dist/main.js\",\n    \"start:dev\": \"nest start --watch\",\n    \"start:prod\": \"node dist/main.js\"\n  }\n}"} lang={"json"} title={"scripts"} />
+
+## Multi-stage Dockerfile
+
+<CodeBlock code={"# Stage 1: install + build\nFROM node:20-alpine AS builder\nWORKDIR /app\n\nCOPY package*.json ./\nRUN npm ci\n\nCOPY . .\nRUN npm run build\n\n# Stage 2: runtime\nFROM node:20-alpine\nWORKDIR /app\n\nENV NODE_ENV=production\n\n# শুধু compiled output + production dependencies\nCOPY --from=builder /app/node_modules ./node_modules\nCOPY --from=builder /app/dist ./dist\n\nEXPOSE 3000\nUSER node\n\nCMD [\"node\", \"dist/main.js\"]"} lang={"dockerfile"} title={"Dockerfile"} />
+
+## PostgreSQL + Redis compose
+
+<CodeBlock code={"services:\n  api:\n    build: .\n    ports:\n      - \"3000:3000\"\n    environment:\n      - DATABASE_URL=postgresql://postgres:pass@postgres:5432/nest\n      - REDIS_HOST=redis\n      - REDIS_PORT=6379\n    depends_on:\n      - postgres\n      - redis\n\n  postgres:\n    image: postgres:16-alpine\n    environment:\n      - POSTGRES_USER=postgres\n      - POSTGRES_PASSWORD=pass\n      - POSTGRES_DB=nest\n    volumes:\n      - pg-data:/var/lib/postgresql/data\n\n  redis:\n    image: redis:7-alpine\n\nvolumes:\n  pg-data:"} lang={"yaml"} title={"compose.yml"} />
+
+## Run
+
+<CodeBlock code={"docker compose up -d --build\ndocker compose logs -f api\ncurl http://localhost:3000/api\n# migration (যদি থাকে)\ndocker compose exec api node dist/main.js migration:run"} lang={"bash"} title={"Run steps"} />
+
+<Tip tone={"warning"} title={"dist আর node_modules"} text={"Runtime stage-এ devDependencies কপি করবেন না — শুধু **production dependencies** রাখুন যাতে image হালকা ও নিরাপদ হয়।"} />

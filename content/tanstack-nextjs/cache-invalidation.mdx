@@ -1,0 +1,29 @@
+---
+title: "Cache Invalidation"
+label: "Cache Invalidation"
+order: 17
+level: "Advanced"
+description: "invalidateQueries-এর কৌশল, filtered invalidation ও কোথায় কীভাবে ইনভালিড করা উচিত — বাংলায়।"
+---
+
+<InParagraph text={"মিউটেশনের সফলতার পর biggest সিদ্ধান্ত — **কোন cache ইনভালিড করব**। খুব বেশি ইনভালিড = অনেক request; খুব কম = পুরনো ডেটা। সঠিক কৌশল শিখি।"} />
+
+## invalidateQueries
+
+<CodeBlock code={"queryClient.invalidateQueries({ queryKey: productKeys.all });\n// → key 'products' prefix-এর সব query 'stale' হয় + active গুলো refetch হয়"} lang={"ts"} title={"ভিত্তি"} />
+
+<CodeBlock code={"// শুধু list queries (table/filter)\nqueryClient.invalidateQueries({ queryKey: productKeys.lists() });\n\n// শুধু একটি detail\nqueryClient.invalidateQueries({ queryKey: productKeys.detail(\"p1\") });\n\n// শুধু অ্যাকটিভ queries refetch, বাকিদের শুধু stale\nqueryClient.invalidateQueries({\n  queryKey: productKeys.lists(),\n  refetchType: \"active\",\n});"} lang={"ts"} title={"অতি সুনির্দিষ্ট"} />
+
+## কোন mutation → কোন invalidation
+
+| Mutation | Invalidate | কেন |
+| --- | --- | --- |
+| Create | `productKeys.all` | নতুন item list/detail-তে আসতে পারে |
+| Update | `productKeys.lists()` + detail | list-গুলো বদলেছে; edit-করা item-ও |
+| Delete | `productKeys.all` | যেকোনো list থেকে item সরে যাবে |
+
+## Filtered invalidation (predicate)
+
+<CodeBlock code={"// category filter-এর list-গুলোর শুধু 'active' বিশেষ inform\nqueryClient.invalidateQueries({\n  queryKey: productKeys.lists(),\n  predicate: (query) => {\n    const params = query.queryKey[2] as ProductQueryParams;\n    return params.status === \"active\";\n  },\n});"} lang={"ts"} title={"শর্তমতো invalidate"} />
+
+<Tip tone={"info"} title={"invalidate ≠ refetch immediate"} text={"`invalidateQueries`-এ query 'stale' + **currently-mounted** গুলো refetch হয়। ব্যাকগ্রাউন্ড (unmounted) query পরে যাবতীয় refetch হয়। তাই প্রায়ই যে invalidate-ই আপনাকে ভাবে-ঠিক ঠিকই — অতর্কিত request-এর ভয় নেই।"} />

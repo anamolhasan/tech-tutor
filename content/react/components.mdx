@@ -1,0 +1,28 @@
+---
+title: "Component ও Props"
+label: "Component & Props"
+order: 4
+level: "Beginner"
+description: "Function component, props destructure, default value, children — বাংলায়।"
+---
+
+## Component তৈরি
+
+<CodeBlock code={"function Welcome(props) {\n  return <h1>স্বাগতম, {props.name}!</h1>;\n}\n\n// arrow function-ও চলে\nconst Welcome = (props) => <h1>স্বাগতম, {props.name}!</h1>;\n\nexport default Welcome;"} lang={"jsx"} title={"Function component"} />
+
+## Props
+
+<InParagraph text={"**Props** হলো component-এ পাঠানো arguments (HTML attribute-এর মতো)। Props **read-only** — component নিজে বদলায় না, উপরে থেকে পরিবর্তন হয়।"} />
+
+<CodeBlock code={"function UserCard({ name, age = 0, isAdmin = false }) {\n  return (\n    <div className=\"card\">\n      <h3>{name}</h3>\n      <p>বয়স: {age}</p>\n      {isAdmin && <span>ADMIN</span>}\n    </div>\n  );\n}\n\n<UserCard name=\"রহিম\" age={24} isAdmin />"} lang={"jsx"} title={"Props destructure"} />
+
+## children
+
+<CodeBlock code={"function Card({ children, title }) {\n  return (\n    <section className=\"card\">\n      <h2>{title}</h2>\n      {children}\n    </section>\n  );\n}\n\n<Card title=\"ব্যবহারকারী\">\n  <p>ভেতরের content — children হিসেবে আসে</p>\n</Card>"} lang={"jsx"} title={"children prop"} />
+
+## Component মূলনীতি
+
+- Component নাম **Capitalize** হতে হয়
+- Props function বা element-ও হতে পারে
+- Props change হলে component re-render হয়
+- Child-এর ডেটা বদলাতে চাইলে parent-এ callbacks পাঠান — **lifting state**

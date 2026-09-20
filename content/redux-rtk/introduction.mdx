@@ -1,0 +1,27 @@
+---
+title: "Redux কী ও কেন — একটি পরিচিতি"
+label: "Redux Intro"
+order: 1
+level: "Beginner"
+description: "Redux-এর মূল ধারণা — global state, একমুখী data flow — বাংলায়।"
+---
+
+<InParagraph text={"**Redux** হলো JavaScript অ্যাপের জন্য একটি **predictable state container**। বড় অ্যাপে একই data (যেমন cart, user, API response) অনেক component-এ দরকার হয়। Redux সেই data-কে **একটি central store-এ** রাখে — যাতে কোনো component সরাসরি পূর্বনির্ধারিত নিয়ম মেনে তাকে পড়তে ও বদলাতে পারে।"} />
+
+## কেন Redux দরকার
+
+- props drilling এড়ানো — grandchild-এ data পৌঁছাতে মাঝের সব layer-এ props বয়ে নেওয়া লাগে না
+- Debug করা সহজ — প্রতিটি পরিবর্তন identifiable action দিয়ে হয়
+- Undo/redo, time-travel debugging, predictable behavior
+- কেন্দ্রীয় predict — UI কোথাও random data-bদলায় না
+
+## কোন অ্যাপে Redux প্রয়োজন
+
+| পরিস্থিতি | Redux? Skip |
+| --- | --- |
+| ৫+ screen-এ shared state (cart, filters, user) | উপযুক্ত |
+| একই data-র অনেক cache/রিফ্রেশ (API list, detail) | RTK Query পারে ভালো |
+| ছোট এক-পেজ অ্যাপ, minimal shared state | skip — useState/context-ই যথেষ্ট |
+| Team-এ large scale app | Redux Toolkit দারুণ |
+
+<Tip tone={"info"} title={"Redux সব জায়গায় নয়"} text={"Redux **গ্লোবাল state**-এর সমাধান। প্রতিটি UI-state (input, toggle) reducer-এ যাওয়া উচিত নয় — শুধু যেটা multiple component-এ share/transact হয়। RTK Query-ও অনেক case-এ cache-এর ভূমিকায় Redux-কেই ব্যবহার করে।"} />

@@ -1,0 +1,17 @@
+---
+title: "$queryRaw / $executeRaw — Prisma-র নিয়ন্ত্রক"
+label: "Raw SQL"
+order: 19
+level: "Advanced"
+description: "Prisma-র API-র বাইরে — raw query ও execute।"
+---
+
+<CodeBlock code={"const rows = await prisma.$queryRaw`\n  SELECT c.name, SUM(oi.qty * oi.price) AS revenue\n  FROM order_items oi\n  JOIN products p ON p.id = oi.product_id\n  GROUP BY c.name\n  ORDER BY revenue DESC\n`;"} lang={"ts"} />
+
+<CodeBlock code={"// parameter tag-safe (প্রিয়: ${minQty} — নিজের variable)\nconst rows = await prisma.$queryRaw`\n  SELECT id, name FROM products WHERE qty < ${minQty}\n`;"} lang={"ts"} />
+
+- `$queryRaw` — SELECT-ধারা, return rows
+- `$executeRaw` — INSERT/UPDATE/DELETE, return count
+- Unsafe variant `$queryRawUnsafe` — নিজে দায়
+
+<Tip tone={"warning"} title={"injection নিষেধ"} text={"`$queryRaw`${...}``-এ ট্যাগ literal-ই parameterized — string concatenation কখনো নয়।"} />

@@ -1,0 +1,19 @@
+---
+title: "Install ও init — প্রথম Prisma project"
+label: "Setup & Install"
+order: 3
+level: "Beginner"
+description: "খালি folder থেকে Prisma পর্যন্ত — ৩ টি কমান্ড।"
+---
+
+<CodeBlock code={"npm init -y\nnpm install prisma typescript @types/node -D\nnpm install @prisma/client\n\nnpx prisma init --datasource-provider postgresql"} lang={"bash"} title={"terminal"} />
+
+<InParagraph text={"`prisma init`-এর ফল — `prisma/schema.prisma` ও `.env` (DATABASE_URL)।"} />
+
+<CodeBlock code={"DATABASE_URL=\"postgresql://postgres:secret@localhost:5432/techshop\""} lang={"bash"} title={".env"} />
+
+- `prisma` — CLI (dev dependency)
+- `@prisma/client` — runtime client + generated code
+- PostgreSQL আগে চালু; DB username/password সঠিক
+
+<Tip tone={"warning"} title={"secret file"} text={"`.env` কখনো commit করবেন না — `.gitignore`-এ দিন। Next/Express-server-এ env load হয় নিজে, তবে সচেতন থাকুন।"} />

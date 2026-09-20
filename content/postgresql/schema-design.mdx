@@ -1,0 +1,19 @@
+---
+title: "Schema Design — normalization ও ERD"
+label: "Schema Design"
+order: 11
+level: "Intermediate"
+description: "ভালো schema ছাড়া যেকোনো query-ই জটিল — key-গুলো এখানে।"
+---
+
+<InParagraph text={"ভালো schema-র লক্ষ্য: **duplication নেই, data সঠিক, query সুবিধাজনক**। ডিজাইনের সময় ৩টি প্রশ্ন: কী কী entity, প্রতিটির কী কী attribute, আর একটার সাথে অন্যটার relation কী।"} />
+
+- **Normalization** — একটি fact এক জায়গায়; duplicate না রাখা
+- Entity → table, attribute → column
+- প্রতিটি table-এ stable **primary key**
+- Relation — foreign key দিয়ে
+- Test query লিখে দেখুন — schema এর আগে-থেকে query"-able
+
+<CodeBlock code={"-- users\nid, email, name, role, created_at\n\n-- products\nid, name, price, qty, category_id"} lang={"sql"} title={"TechShop entities (২টি sample)"} />
+
+<Tip tone={"warning"} title={"খুব বেশি normalize-ও ক্ষতি"} text={"৩NF-এর বেশি split করলে join-এর জটিলতা বাড়ে — ডিজাইন equilibrium: ডিজাইন-সময়েই read-heavy হলে denormalized (cache column) জোড়ার সিদ্ধান্ত নিন।"} />

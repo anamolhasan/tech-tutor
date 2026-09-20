@@ -1,0 +1,24 @@
+---
+title: "Serializable State — Gotchas"
+label: "Serializability"
+order: 32
+level: "Advanced"
+description: "Redux-এর serializableCheck, Date/Map-জনিত সাবধানতা — বাংলায়।"
+---
+
+<InParagraph text={"Redux DevTools ও Redux cycle-এ state/action অবশ্যই **serializable** (JSON-able) হতে হবে। RTK-এর default `serializableCheck` middleware না-মেনে শুধু সতর্ক করে — runtime ভঙ্গ হয় না, তবে এড়িয়ে চলা ভালো।"} />
+
+## কোন মান serializable নয়
+
+- `Date` object (→ string timestamp রাখুন)
+- `Map` / `Set` (→ plain object/array)
+- class instance / function
+- `undefined` properties
+
+<CodeBlock code={"// খারাপ:\nitems.map((i) => ({ ...i, addedAt: new Date() }))\n\n// ভালো:\nitems.map((i) => ({ ...i, addedAt: Date.now() }))\n// বা ISO string: new Date().toISOString()"} lang={"ts"} title={"serializable state"} />
+
+## Ignore-যদি দরকার
+
+<CodeBlock code={"configureStore({\n  middleware: (getDefaultMiddleware) =>\n    getDefaultMiddleware({\n      serializableCheck: {\n        // নির্দিষ্ট non-serializable path এড়িয়ে\n        ignoredActions: [\"audio/play\"],\n        ignoredPaths: [\"ui.player\"],\n      },\n    }),\n  // ...\n});"} lang={"ts"} title={"specific paths ignore"} />
+
+<Tip tone={"warning"} title={"default-সতর্ক ignore নয়"} text={"সতর্কতা দেখলে `ignore` অপশন নয় — মূলত **state-এ string/ISO** ব্যবহার করা। serializable রেখে dispatching/DevTools/SSR সব মসৃণ।"} />

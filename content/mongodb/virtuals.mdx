@@ -1,0 +1,25 @@
+---
+title: "Virtual Properties"
+label: "Virtuals"
+order: 14
+level: "Intermediate"
+description: "কম্পিউটেড প্রপার্টি: virtual getter/setter ও toJSON-এ অন্তর্ভুক্তি — বাংলায়।"
+---
+
+## Virtual কী?
+
+<InParagraph text={"**Virtual** হলো এমন একটা property যা ডেটাবেসে save হয় না, কিন্তু runtime-এ অন্য field-গুলো থেকে computed হয় — যেমন `fullName` `firstName + lastName` থেকে।"} />
+
+## Virtual getter
+
+<CodeBlock code={"const userSchema = new mongoose.Schema({\n  firstName: String,\n  lastName: String,\n});\n\nuserSchema.virtual(\"fullName\").get(function () {\n  return this.firstName + \" \" + this.lastName;\n});\n\nconst user = await User.findById(id);\nconsole.log(user.fullName); // 'রহিম আহমেদ'\nconsole.log(user.toObject().fullName); // আসবে না (নিচে দেখুন)"} lang={"js"} title={"fullName virtual"} />
+
+## toJSON-এ virtual
+
+<CodeBlock code={"const userSchema = new mongoose.Schema(\n  {\n    firstName: String,\n    lastName: String,\n  },\n  {\n    toJSON: { virtuals: true }, // JSON-এও আসবে\n    toObject: { virtuals: true },\n  }\n);\n\nuserSchema.virtual(\"fullName\").get(function () {\n  return this.firstName + \" \" + this.lastName;\n});\n\n// API-তে এখন clear output\nres.json(user); // { ..., fullName: 'রহিম আহমেদ' }"} lang={"js"} title={"API response-এ virtual"} />
+
+## Virtual setter
+
+<CodeBlock code={"userSchema.virtual(\"fullName\").set(function (value) {\n  const parts = value.split(\" \");\n  this.firstName = parts[0];\n  this.lastName = parts.slice(1).join(\" \");\n});\n\nuser.fullName = \"রহিম আহমেদ\";\nconsole.log(user.firstName); // 'রহিম'\nconsole.log(user.lastName);  // 'আহমেদ'"} lang={"js"} title={"Set — UI থেকে split"} />
+
+<Tip tone={"warning"} title={"Virtual save হয় না"} text={"Virtual property **ডেটাবেসে যায় না**। এটি শুধু document instance-এ ও (proxy ছাড়াও) log/json-এ computed value দেখানোর জন্য। কিছু field persistently চাইলে schema-তে রাখুন।"} />

@@ -1,0 +1,39 @@
+---
+title: "CSS কী?"
+label: "CSS কী?"
+order: 2
+level: "Beginner"
+description: "CSS-এর পূর্ণরূপ, এর তিনটি অংশ — selector, property, value — এবং CSS-এর বিস্তারিত বাংলা ব্যাখ্যা।"
+---
+
+<InParagraph text={"**CSS**-এর পূর্ণরূপ হলো **Cascading Style Sheets**। বাংলায় বললে — *স্কন্দিত (ধাপে ধাপে প্রয়োগ হওয়া) স্টাইল শীট*।"} />
+
+## Cascading মানে কী?
+
+<InParagraph text={"**Cascading** অর্থ হলো একাধিক নিয়ম একই element-এ প্রযোজ্য হলে ব্রাউজার নির্দিষ্ট নিয়মে সিদ্ধান্ত নেয় কোনটি জিতবে — যেমন উৎস (source), নির্দিষ্টতা (specificity) এবং ক্রম (order)। এ কারণেই *“সবচেয়ে নির্দিষ্ট ও শেষের নিয়ম”* প্রায়ই প্রাধান্য পায়।"} />
+
+## একটি CSS নিয়মের তিনটি অংশ
+
+### 1. Selector
+
+<InParagraph text={"কোন element(গুলি) স্টাইল হবে তা চিহ্নিত করে। যেমন `h1`, `.btn`, `#header`।"} />
+
+### 2. Property
+
+<InParagraph text={"আপনি কী পরিবর্তন করতে চান। যেমন `color`, `margin`, `font-size`।"} />
+
+### 3. Value
+
+<InParagraph text={"প্রপার্টির কাঙ্ক্ষিত মান। যেমন `red`, `16px`, `center`।"} />
+
+<CodeBlock code={"selector {\n  property: value;\n}"} lang={"css"} title={"structure"} />
+
+<CodeBlock code={".card {\n  background: white;\n  border-radius: 12px;\n  padding: 24px;\n}"} lang={"css"} title={"বাস্তব উদাহরণ"} />
+
+## CSS-এর তিনটি মৌলিক উপায়
+
+- **Inline** — `style="color: red"`
+- **Internal** — একই HTML ফাইলের `<style>` ব্লক
+- **External** — আলাদা `.css` ফাইল, `<link>` দিয়ে যুক্ত
+
+<Tip tone={"info"} title={"কোনটি ব্যবহার করবেন?"} text={"বড় প্রজেক্টে **external** স্টাইল সবচেয়ে ভালো। Inline-এ specificity বেশি হওয়ায় পরে external স্টাইল দিয়ে বদলানো কঠিন হয়ে যায়।"} />

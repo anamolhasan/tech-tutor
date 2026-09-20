@@ -1,0 +1,18 @@
+---
+title: "Prisma কী ও কেন — TypeScript-first ORM"
+label: "Prisma Intro"
+order: 1
+level: "Beginner"
+description: "database-এর সাথে কথা বলা সহজ — schema-driven, type-safe ORM।"
+---
+
+<InParagraph text={"**Prisma** — Node.js/TypeScript-এর modern ORM। সারমর্ম: একটি `schema.prisma` ফাইল থেকে **type-safe Prisma Client** generate হয় — query লেখা হয় যেন TypeScript function call, আর database-এ তা হয়ে যায় PostgreSQL SQL।"} />
+
+- `schema.prisma` — data model: table-এর ছবি এক জায়গায়
+- Prisma Client — `npx prisma generate`-এর পর type-safe API
+- Migrations — schema বদলালে versioned SQL খোঁজ
+- বাংলা প্রজেক্ট — TechShop e-commerce (PostgreSQL-এর সাথে)
+
+<CodeBlock code={"const products = await prisma.product.findMany({\n  where: { price: { gte: 1000 } },\n  orderBy: { price: \"desc\" },\n});"} lang={"ts"} title={"এক নজর"} />
+
+<Tip tone={"info"} title={"আগের knowledge প্রজেক্ট"} text={"এই course কয়েকটা আগে-থেকে-থাকা PostgreSQL course-এ তৈরি — SQL ভালো জানলে Prisma আরও দ্রুত আত্মস্থ হবে।"} />

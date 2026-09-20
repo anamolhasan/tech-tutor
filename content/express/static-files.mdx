@@ -1,0 +1,27 @@
+---
+title: "Express Static Files"
+label: "Static Files"
+order: 6
+level: "Beginner"
+description: "Express.js-এ CSS, JS, images serve করা — express.static() বাংলায়।"
+---
+
+<InParagraph text={"HTML, CSS, JavaScript, images — এদেরকে **static files** বলে। `express.static()` middleware দিয়ে এদের serve করা হয়।"} />
+
+## Static Folder Setup
+
+<CodeBlock code={"const express = require(\"express\");\nconst path = require(\"node:path\");\n\nconst app = express();\n\n// public folder serve\napp.use(express.static(\"public\"));"} lang={"javascript"} />
+
+<CodeBlock code={"public/\n├── css/\n│   └── style.css     → /css/style.css\n├── js/\n│   └── script.js     → /js/script.js\n├── images/\n│   └── logo.png      → /images/logo.png\n└── index.html         → /"} lang={"text"} title={"public folder structure"} />
+
+<CodeBlock code={"<!DOCTYPE html>\n<html>\n<head>\n  <title>My App</title>\n  <link rel=\"stylesheet\" href=\"/css/style.css\">\n</head>\n<body>\n  <h1>Static File Test</h1>\n  <img src=\"/images/logo.png\" alt=\"Logo\">\n  <script src=\"/js/script.js\"></script>\n</body>\n</html>"} lang={"html"} title={"index.html"} />
+
+## Multiple Static Folders
+
+<CodeBlock code={"// একাধিক folder (প্রথমটির prioritized)\napp.use(express.static(\"public\"));\napp.use(express.static(\"uploads\"));\n\n// ভার্চুয়াল prefix দিয়ে\napp.use(\"/static\", express.static(\"public\"));\n// এখন /static/css/style.css এ access"} lang={"javascript"} />
+
+## Absolute Path ব্যবহার
+
+<CodeBlock code={"const path = require(\"node:path\");\n\n// production-এ safe — working directory উপর নির্ভর করে না\napp.use(express.static(path.join(__dirname, \"../public\")));"} lang={"javascript"} />
+
+<Tip tone={"info"} title={"নোট"} text={"Static files-এর order-এ তেমন গুরুত্ব দরকার নেই, তবে route-এর পরে static রাখলে কিছু conflict এড়ানো যায়।"} />

@@ -1,0 +1,38 @@
+---
+title: "Tailwind CSS কেন ব্যবহার করব?"
+label: "কেন Tailwind?"
+order: 2
+level: "Beginner"
+description: "Tailwind CSS কেন বেছে নেবেন, অন্য framework থেকে এর সুবিধা এবং বাস্তব প্রজেক্টে এর প্রয়োজনীয়তা — বাংলায়।"
+---
+
+<InParagraph text={"ওয়েব ডেভেলপমেন্টে অনেক CSS framework আছে। তাহলে **Tailwind CSS** কেন বেছে নেবেন? চলুন জানি এর প্রধান কারণগুলো।"} />
+
+## ধাপে ধাপে স্টাইল করুন
+
+<InParagraph text={"Tailwind-এ আপনি একটি utility class যোগ করে দেখতে পান সাথে সাথে পরিবর্তন। আলাদা CSS ফাইলে যাওয়ার দরকার নেই, সেভ করার দরকার নেই — **instant feedback**।"} />
+
+## ডেভেলপারদের পছন্দের কারণ
+
+- **দ্রুত ডেভেলপমেন্ট** — utility class দিয়ে দ্রুত UI তৈরি করুন
+- **Design consistency** — built-in spacing scale, color palette ব্যবহার করুন
+- **কোনো naming সমস্যা নেই** — `.btn-primary` নাম দিতে হয় না
+- **কোনো unused CSS নেই** — শুধু যা ব্যবহার করবেন তাই generate হয়
+- **Responsive সহজ** — `sm:`, `md:`, `lg:` prefix দিয়ে responsive করুন
+- **Dark mode সহজ** — `dark:` prefix দিয়ে dark mode support যোগ করুন
+
+## বড় প্রজেক্টে Tailwind
+
+<InParagraph text={"বড় প্রজেক্টে Tailwind-এর সবচেয়ে বড় সুবিধা হলো **consistency**। একই spacing, color, font-size scale ব্যবহার করায় পুরো অ্যাপ্লিকেশন জুড়ে একরকম চেহারা থাকে। আলাদা CSS class লিখতে গিয়ে যে inconsistency তৈরি হয়, তা Tailwind-এ হয় না।"} />
+
+<CodeBlock code={"<!-- সবাই একই scale ব্যবহার করে — ৪px-এর গুণিতক -->\n<div class=\"p-4\">padding: 16px</div>\n<div class=\"p-6\">padding: 24px</div>\n<div class=\"m-8\">margin: 32px</div>\n<div class=\"gap-4\">gap: 16px</div>"} lang={"html"} title={"Consistent spacing"} />
+
+## কোন প্রজেক্টে Tailwind ব্যবহার করবেন?
+
+1. Quick prototype বা MVP তৈরি করতে চাইলে
+1. React, Vue, Next.js বা অন্য framework ব্যবহার করলে
+1. Design system তৈরি করতে চাইলে
+1. UI/UX consistency বজায় রাখতে চাইলে
+1. দ্রুত development speed বাড়াতে চাইলে
+
+<Tip tone={"success"} title={"সেরা অভ্যাস"} text={"নতুন প্রজেক্টে Tailwind ব্যবহার করার চেষ্টা করুন। পুরোনো প্রজেক্টে Tailwind-এ migration করতে হলে ধীরে ধীরে utility classes যোগ করুন — একদম শুরু থেকে rewrite না করে।"} />

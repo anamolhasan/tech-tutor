@@ -1,0 +1,38 @@
+---
+title: "Union ও Intersection Types"
+label: "Union & Intersection"
+order: 9
+level: "Beginner"
+description: "Union (|) এবং intersection (&) — literal union, object combine এবং এদের পার্থক্য — বাংলায় উদাহরণসহ।"
+---
+
+<InParagraph text={"**Union type** (`|`) মানে যেকোনো একটি, আর **intersection type** (`&`) মানে সবগুলো একসাথে। এই দুই অপারেটর মিলেই TypeScript-এর শক্তির মূল ভিত্তি।"} />
+
+## Union Type
+
+<CodeBlock code={"type ID = string | number;\n\nfunction formatId(id: ID): string {\n  return \"ID: \" + id;\n}\n\nconsole.log(formatId(\"a-1\"));\nconsole.log(formatId(42));"} lang={"typescript"} />
+
+## Union with Literal Types
+
+<CodeBlock code={"type PaymentStatus = \"pending\" | \"paid\" | \"failed\";\ntype Result = \"success\" | \"error\";\n\nfunction show(status: PaymentStatus): void {\n  console.log(status);\n}\n\nshow(\"paid\");\n// show(\"done\");    // ❌ অনুমোদিত নয়"} lang={"typescript"} />
+
+## Intersection Type
+
+<InParagraph text={"**Union** মানে অথবা (একটা), **Intersection** মানে এবং (সবকিছু)। Intersection দিয়ে object টাইপ মিশিয়ে নতুন টাইপ বানানো হয়।"} />
+
+<CodeBlock code={"type User = {\n  name: string;\n};\n\ntype Admin = {\n  role: string;\n};\n\ntype AdminUser = User & Admin;\n\nconst boss: AdminUser = {\n  name: \"রহিম\",\n  role: \"admin\",\n};\n\n// boss-এ name ও role দুইটিই বাধ্যতামূলক"} lang={"typescript"} />
+
+## Combining Object Types
+
+<CodeBlock code={"type BaseUser = {\n  id: number;\n  name: string;\n};\n\ntype Premium = {\n  premium: true;\n  expiresAt: Date;\n};\n\ntype PremiumUser = BaseUser & Premium;\n\nconst member: PremiumUser = {\n  id: 1,\n  name: \"সুমন\",\n  premium: true,\n  expiresAt: new Date(\"2026-12-31\"),\n};"} lang={"typescript"} />
+
+## Union vs Intersection
+
+| অপারেটর | অর্থ | উদাহরণ |
+| --- | --- | --- |
+| \| (Union) | যেকোনো একটি | string \| number |
+| & (Intersection) | সবগুলো একসাথে | User & Admin |
+| \| ব্যবহার | সীমিত অপশন | 'paid' \| 'pending' |
+| & ব্যবহার | কম্বাইন্ড object | Base & Extra |
+
+<Tip tone={"info"} title={"Union নিয়ে কাজের কৌশল"} text={"union পাওয়ার পর কোনো প্রপার্টি ব্যবহার করতে TypeScript narrowing চায় — `typeof`, `in` বা `kind` (discriminated union) দিয়ে টাইপ সরু করতে হয়। পরের অধ্যায়ে বিস্তারিত।"} />

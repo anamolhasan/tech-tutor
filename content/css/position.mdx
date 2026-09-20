@@ -1,0 +1,33 @@
+---
+title: "CSS Position"
+label: "Position"
+order: 9
+level: "Beginner"
+description: "static, relative, absolute, fixed, sticky — CSS position property-এর পুরো বাংলা বুঝুন উদাহরণসহ।"
+---
+
+<InParagraph text={"`position` property নির্ধারণ করে element-টি পেজের কোথায় বসবে এবং কীভাবে অন্য element-এর সাথে সম্পর্কিত হবে।"} />
+
+## position-এর মানগুলো
+
+| মান | ব্যবহার |
+| --- | --- |
+| static | ডিফল্ট — স্বাভাবিক প্রবাহ |
+| relative | স্বাভাবিক জায়গায় থাকে, top/left-এ সরানো যায় |
+| absolute | প্যারেন্টের তুলনায় স্থির (anchoring) |
+| fixed | স্ক্রল করলেও ভিউপোর্টে স্থির থাকে |
+| sticky | স্ক্রল পর্যন্ত থাকবে, তারপর আটকে যায় |
+
+## relative + absolute
+
+<CodeBlock code={".card {\n  position: relative;   /* নোঙ্গর */\n}\n\n.badge {\n  position: absolute;\n  top: 8px;\n  right: 8px;\n}"} lang={"css"} />
+
+<Tip tone={"info"} title={"anchoring"} text={"`absolute` element তার **nearest positioned ancestor** (যার position static নয়) এর তুলনায় বসে। তাই প্যারেন্টে `position: relative` দেওয়া প্রয়োজন।"} />
+
+## z-index
+
+<CodeBlock code={".modal {\n  position: fixed;\n  z-index: 50;\n}"} lang={"css"} />
+
+<InParagraph text={"একাধিক element একই জায়গায় পড়লে `z-index` ঠিক করে কোনটি উপরে থাকবে।"} />
+
+<Tip tone={"warning"} title={"fixed-এর ব্যতিক্রম"} text={"`position: fixed` সাধারণত ভিউপোর্টের তুলনায় স্টিকি হয়, তবে কোনো ancestor-এ `transform` বা `filter` থাকলে তা সেই element-এর সাপেক্ষে হয়ে যায়।"} />

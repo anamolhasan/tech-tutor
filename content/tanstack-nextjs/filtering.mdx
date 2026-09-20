@@ -1,0 +1,17 @@
+---
+title: "Filtering — Category ও Status"
+label: "Filtering"
+order: 21
+level: "Intermediate"
+description: "Select-based filter, params-এ যোগ, ফিল্টার বদলালে reset — বাংলায়।"
+---
+
+<InParagraph text={"Pagination + search-এর সাথে **filter** যুক্ত করি — category ও status select-এর মাধ্যমে। সবগুলো state একসাথে query params-এ মেলে।"} />
+
+<CodeBlock code={"\"use client\";\n\nimport { Input } from \"@/components/ui/input\";\nimport {\n  Select,\n  SelectContent,\n  SelectItem,\n  SelectTrigger,\n  SelectValue,\n} from \"@/components/ui/select\";\n\nconst CATEGORIES = [\"electronics\", \"clothing\", \"books\", \"food\"];\n\nexport function ProductFilters({\n  searchInput,\n  onSearchChange,\n  category,\n  onCategoryChange,\n  status,\n  onStatusChange,\n}) {\n  return (\n    <div className=\"flex flex-wrap items-center gap-3\">\n      <Input\n        value={searchInput}\n        onChange={(e) => onSearchChange(e.target.value)}\n        placeholder=\"খুঁজুন…\"\n        className=\"w-56\"\n      />\n\n      <Select value={category === undefined ? \"all\" : category}\n        onValueChange={(v) => onCategoryChange(v === \"all\" ? undefined : v)}>\n        <SelectTrigger className=\"w-36\">\n          <SelectValue placeholder=\"Category\" />\n        </SelectTrigger>\n        <SelectContent>\n          <SelectItem value=\"all\">সব category</SelectItem>\n          {CATEGORIES.map((c) => (\n            <SelectItem key={c} value={c}>{c}</SelectItem>\n          ))}\n        </SelectContent>\n      </Select>\n\n      <Select value={status ?? \"all\"}\n        onValueChange={(v) => onStatusChange(v === \"all\" ? undefined : v)}>\n        <SelectTrigger className=\"w-36\">\n          <SelectValue placeholder=\"Status\" />\n        </SelectTrigger>\n        <SelectContent>\n          <SelectItem value=\"all\">সব status</SelectItem>\n          <SelectItem value=\"active\">Active</SelectItem>\n          <SelectItem value=\"inactive\">Inactive</SelectItem>\n        </SelectContent>\n      </Select>\n    </div>\n  );\n}"} lang={"tsx"} title={"product-filters.tsx"} />
+
+## Filter বদলালে reset
+
+<CodeBlock code={"// একসাথে সব filter effect: filter বদলে ১ম পেজে\nuseEffect(() => {\n  setPage(1);\n}, [search, category, status]);"} lang={"tsx"} title={"Page-এ"} />
+
+<Tip tone={"warning"} title={"অর্থহীন request এড়ান"} text={"`undefined` params **API-তে পাঠাবেন না**: `search: search || undefined` নিলে queryParams থেকে undefined property বাদ পরে যায়, ফলে আঘাত `/products` — clean URL ও কম কাজ। Axios-এ `{ params }`-এর ভেতরে undefined auto-skip হয়।"} />

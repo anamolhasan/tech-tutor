@@ -1,0 +1,35 @@
+---
+title: "Production Optimization"
+label: "Production"
+order: 31
+level: "Advanced"
+description: "Tailwind CSS-কে production-এ optimize করুন — minification, tree-shaking, CSS purge।"
+---
+
+<InParagraph text={"Production build-এ Tailwind CSS-কে optimize করা গুরুত্বপূর্ণ। এতে CSS file size ছোট এবং performance ভালো থাকে।"} />
+
+## Production Features
+
+- **JIT Engine** — শুধু ব্যবহৃত CSS generate হয়
+- **PurgeCSS** — unused CSS classes remove হয়
+- **Minification** — CSS file minify হয়
+- **Tree-shaking** — unused utilities বাদ যায়
+
+## Build Command
+
+<CodeBlock code={"# Tailwind v4\nnpx @tailwindcss/cli -i ./src/index.css -o ./dist/output.css --minify\n\n# Build script\nnpm run build"} lang={"bash"} title={"Terminal"} />
+
+## PurgeCSS Configuration (v3)
+
+<InParagraph text={"Tailwind v3-তে `tailwind.config.js`-তে content paths দিতে হয়। v4-তে auto-detection আছে।"} />
+
+<CodeBlock code={"module.exports = {\n  content: [\n    \"./src/**/*.{js,ts,jsx,tsx}\",\n    \"./pages/**/*.{js,ts,jsx,tsx}\",\n    \"./components/**/*.{js,ts,jsx,tsx}\",\n  ],\n};"} lang={"javascript"} title={"tailwind.config.js (v3)"} />
+
+## Performance Tips
+
+- Production-এ CDN ব্যবহার করবেন না — npm build ব্যবহার করুন
+- Dynamic class names avoid করুন (template literal এ classes)
+- `safelist` শুধু প্রয়োজনীয় classes-এর জন্য ব্যবহার করুন
+- CSS file minify করুন
+
+<Tip tone={"warning"} title={"Dynamic Classes এড়িয়ে চলুন"} text={"Tailwind JIT engine static string scan করে। Dynamic class construction (`text-${color}-500`) কাজ করবে না। সবসময় static full class names ব্যবহার করুন।"} />

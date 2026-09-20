@@ -1,0 +1,39 @@
+---
+title: "Express Installation ও প্রথম Server"
+label: "Installation"
+order: 2
+level: "Beginner"
+description: "Express install, folder structure, প্রথম server — সম্পূর্ণ বাংলা গাইড।"
+---
+
+<InParagraph text={"Express শেখার শুরুতে এটি install করে প্রথম server চালু করা যাক।"} />
+
+## প্রয়োজনীয় শর্ত
+
+- **Node.js** (v18 বা তার বেশি)
+- **npm** (Node-এর সাথে আসে)
+- **Code editor** (VS Code সুপারিশকৃত)
+
+## Project Setup
+
+<CodeBlock code={"# project directory তৈরি\nmkdir my-express-app\ncd my-express-app\n\n# package.json তৈরি\nnpm init -y\n\n# express install\nnpm install express\n\n# dev dependency (অটো-রিস্টার্টের জন্য)\nnpm install --save-dev nodemon"} lang={"bash"} />
+
+<CodeBlock code={"{\n  \"name\": \"my-express-app\",\n  \"scripts\": {\n    \"start\": \"node index.js\",\n    \"dev\": \"nodemon index.js\"\n  }\n}"} lang={"json"} title={"package.json scripts"} />
+
+## প্রথম Express Server
+
+<CodeBlock code={"const express = require(\"express\");\nconst app = express();\nconst PORT = process.env.PORT || 3000;\n\napp.get(\"/\", (req, res) => {\n  res.send(\"Hello, Express!\");\n});\n\napp.listen(PORT, () => {\n  console.log(\"Server চালু: http://localhost:\" + PORT);\n});"} lang={"javascript"} title={"index.js"} />
+
+<CodeBlock code={"npm run dev\n\n# Output: Server চালু: http://localhost:3000"} lang={"bash"} />
+
+<InParagraph text={"ব্রাউজারে http://localhost:3000 খুললে \"Hello, Express!\" দেখা যাবে। `nodemon` কোড পরিবর্তনের সাথে সাথে server অটো-রিস্টার্ট করে।"} />
+
+## ES Modules ব্যবহার করা
+
+<CodeBlock code={"import express from \"express\";\nconst app = express();\n\n// package.json-এ \"type\": \"module\" যোগ করুন */\n\napp.get(\"/\", (req, res) => res.send(\"ESM Mode!\"));\napp.listen(3000);"} lang={"javascript"} title={"using ESM (import)"} />
+
+## Recommended Folder Structure
+
+<CodeBlock code={"my-express-app/\n├── index.js            # entry point\n├── package.json\n├── .gitignore\n├── public/            # static files (css, images)\n├── views/             # template files (EJS, etc.)\n├── routes/            # route handlers\n├── middleware/        # custom middleware\n├── models/            # database models\n└── controllers/       # business logic"} lang={"text"} />
+
+<Tip tone={"info"} title={"Version চেক"} text={"`npm list express` দিয়ে আপনার Express version দেখতে পারেন। Express 5-এখানে `res.send` ও routing কিছুটা ভিন্ন।"} />

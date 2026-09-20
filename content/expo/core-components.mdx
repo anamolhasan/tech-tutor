@@ -1,0 +1,26 @@
+---
+title: "জরুরি Core Components — View, Text, Pressable"
+label: "Core Components"
+order: 11
+level: "Beginner"
+description: "প্রতিদিন ব্যবহার হওয়া React Native components — কাজ ও উদাহরণ।"
+---
+
+| Component | কাজ |
+| --- | --- |
+| View | container; layout (div-এর বদলে) |
+| Text | text rendering; nested text |
+| TextInput | user input |
+| Pressable | tap/click — feedback |
+| ScrollView | scrollable container |
+| FlatList | long list, optimized |
+| Modal | overlay dialog |
+| ActivityIndicator | loading spinner |
+
+<CodeBlock code={"import { View, Text, Pressable, StyleSheet } from \"react-native\";\n\nexport default function Button({ label, onPress }) {\n  return (\n    <Pressable style={styles.btn} onPress={onPress}>\n      <Text style={styles.text}>{label}</Text>\n    </Pressable>\n  );\n}\n\nconst styles = StyleSheet.create({\n  btn: { backgroundColor: \"#2563eb\", padding: 12, borderRadius: 8 },\n  text: { color: \"#fff\", fontWeight: \"600\" },\n});"} lang={"tsx"} title={"components/Button.tsx"} />
+
+<InParagraph text={"`Text`-এ **nested** হলে inline formatting সহজ:"} />
+
+<CodeBlock code={"<Text>আজ <Text style={{ fontWeight: \"bold\" }}>৩</Text>টা টাস্ক বাকি</Text>"} lang={"tsx"} />
+
+<Tip tone={"warning"} title={"Text ভুলে যাবেন না"} text={"string অবশ্যই `Text`-এর ভিতরে হতে হবে — `View`-এর ভিতরে সরাসরি text render হয় না।"} />

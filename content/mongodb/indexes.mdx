@@ -1,0 +1,30 @@
+---
+title: "Indexes"
+label: "Indexes"
+order: 15
+level: "Intermediate"
+description: "Unique, compound index এবং বড় collection-এ query দ্রুত করার উপায় — বাংলায়।"
+---
+
+## Index কী?
+
+<InParagraph text={"**Index** হলো ডেটাবেস-স্তরের একটি lookup structure যা query দ্রুত করে। ছোট collection-এ বোঝা যায় না, কিন্তু বড় collection-এ (আরো বেশি) index ছাড়া `find` পুরো collection scan করতে পারে।"} />
+
+## Schema থেকে index
+
+<CodeBlock code={"const userSchema = new mongoose.Schema({\n  email: { type: String, required: true, unique: true }, // unique index\n  username: { type: String, unique: true },\n  createdAt: { type: Date, index: true }, // plain index\n});"} lang={"js"} title={"Single-field index"} />
+
+## Compound index
+
+<CodeBlock code={"const orderSchema = new mongoose.Schema({\n  customer: { type: mongoose.Schema.Types.ObjectId, ref: \"User\" },\n  status: String,\n  createdAt: Date,\n});\n\n// customer + status + createdAt — এই combo-তে query দ্রুত\norderSchema.index({ customer: 1, status: 1, createdAt: -1 });\n\n// অথবা schema declaration-এও\n// orderSchema.index({ customer: 1 });"} lang={"js"} title={"Composite index"} />
+
+## Index সেটআপ
+
+<CodeBlock code={"// ডেভেলপমেন্টে index তৈরি/সংশোধন করা হয়\nawait User.syncIndexes();\nawait Order.syncIndexes();\n\n// production-এ migration সময় রান করুন, প্রতিদিন নয়"} lang={"js"} title={"syncIndexes"} />
+
+## Index design tips
+
+- **Equality field আগে**, range field পরে রাখুন (যেমন `{ status: 1, createdAt: -1 }`)
+- **1 = ascending, -1 = descending** — sort direction-ও index-এ ভূমিকা রাখে
+- প্রয়োজনের বেশি index **না** — প্রতিটি লেখা (write) index-ও আপডেট করে
+- ডিবাগের জন্য `.explain("executionStats")` দিয়ে দেখুন index ব্যবহার হচ্ছে কিনা

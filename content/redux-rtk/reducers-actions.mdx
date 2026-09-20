@@ -1,0 +1,15 @@
+---
+title: "Reducers ও Actions — Cart Logic"
+label: "Reducers & Actions"
+order: 9
+level: "Intermediate"
+description: "add/remove/increment/decrement/clear — cart-এর পূর্ণ reducer set — বাংলায়।"
+---
+
+<CodeBlock code={"import { createSlice } from \"@reduxjs/toolkit\";\n\n\ninterface CartState {\n  items: CartItem[];\n}\n\nconst initialState: CartState = { items: [] };\n\nconst cartSlice = createSlice({\n  name: \"cart\",\n  initialState,\n  reducers: {\n    addItem: (state, action: PayloadAction<{ productId: string; qty: number }>) => {\n      const existing = state.items.find(\n        (i) => i.productId === action.payload.productId,\n      );\n      if (existing) {\n        existing.qty += action.payload.qty;\n      } else {\n        state.items.push(action.payload);\n      }\n    },\n\n    increment: (state, action: PayloadAction<string>) => {\n      const item = state.items.find((i) => i.productId === action.payload);\n      if (item) item.qty += 1;\n    },\n\n    decrement: (state, action: PayloadAction<string>) => {\n      const item = state.items.find((i) => i.productId === action.payload);\n      if (item) {\n        item.qty -= 1;\n        if (item.qty <= 0) {\n          state.items = state.items.filter(\n            (i) => i.productId !== action.payload,\n          );\n        }\n      }\n    },\n\n    removeItem: (state, action: PayloadAction<string>) => {\n      state.items = state.items.filter(\n        (i) => i.productId !== action.payload,\n      );\n    },\n\n    clearCart: (state) => {\n      state.items = [];\n    },\n  },\n});\n\nexport const {\n  addItem,\n  increment,\n  decrement,\n  removeItem,\n  clearCart,\n} = cartSlice.actions;\n\nexport default cartSlice.reducer;"} lang={"ts"} title={"cartSlice.ts (complete reducers)"} />
+
+## কেন সরাসরি mutate
+
+<InParagraph text={"Immer look-এ সরাসরি `state.items.push` লিখলেও বাস্তবে **new state** কপি হয়। আপনি যা লিখছেন তা draft — শেষে Immer freeze করে। Classic immutable `{...state, items: ...}` লেখার প্রয়োজন নেই।"} />
+
+<Tip tone={"info"} title={"সতর্কতা"} text={"আপনি যা mutate করছেন তা **draft**। শুধু রিটার্ন করা state-টি দরকার হলে return mechanism-এ area break করে। সরাসরি `state` return না করে draft mutate ধরে চলুন — এটাই cleanest।"} />

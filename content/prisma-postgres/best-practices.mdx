@@ -1,0 +1,19 @@
+---
+title: "পরিপাটি Prisma — সুস্থ অভ্যাস"
+label: "Best Practices"
+order: 38
+level: "Advanced"
+description: "টিম-প্রজেক্টে প্রস্তুতি — naming, commit, review।"
+---
+
+- schema ফাইল format + validate commit
+- migration প্রেক্ষিত-এ নট deleted
+- প্রতি model-এ createdAt/updatedAt
+- money-তে Decimal (float নয়)
+- env-type-check -- schema-ছে Zod
+- Error map — user-friendly message
+- index — filter-থেকে list প্রজেক্ট
+
+<CodeBlock code={"# pre-commit\nnpx prisma format\nnpx prisma validate\nnpx prisma generate"} lang={"bash"} />
+
+<Tip tone={"success"} title={"no-raw-first"} text={"Raw অপ্রয়োজনীয় নয় — client-API-তে শুরু, তবে big/aggregate-এ `$queryRaw` লজ্জিত হবেন না।"} />

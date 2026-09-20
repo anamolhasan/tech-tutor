@@ -1,0 +1,36 @@
+---
+title: "HTML Images (ছবি)"
+label: "HTML Images"
+order: 9
+level: "Beginner"
+description: "img ট্যাগ দিয়ে ছবি যোগ করা, src ও alt অ্যাট্রিবিউট, ছবির সাইজ এবং figure/figurecaption — বাংলায়।"
+---
+
+<InParagraph text={"ওয়েবপেজে ছবি যোগ করতে `<img>` ট্যাগ ব্যবহার হয়। এটি একটি **empty element**। ছবির অবস্থান `src`-এ এবং বিকল্প টেক্সট `alt`-এ দেওয়া হয়।"} />
+
+## উদাহরণ
+
+<CodeBlock code={"<img src=\"team.jpg\" alt=\"আমাদের টিমের গ্রুপ ছবি\" />"} lang={"html"} />
+
+## প্রয়োজনীয় অ্যাট্রিবিউট
+
+| অ্যাট্রিবিউট | কাজ |
+| --- | --- |
+| src | ছবির ফাইলের ঠিকানা |
+| alt | ছবি না লোড হলে / screen reader-এ দেখানো টেক্সট |
+| width / height | ছবির প্রস্থ ও উচ্চতা |
+| loading | লোডিং কৌশল (lazy / eager) |
+
+## ছবির সাইজ
+
+<CodeBlock code={"<img src=\"banner.png\" alt=\"ব্যানার\" width=\"800\" height=\"200\" />"} lang={"html"} />
+
+<Tip tone={"success"} title={"সাইজ দেওয়ার সুবিধা"} text={"`width` ও `height` দিলে ছবি নামার আগেই সেই জায়গা reserved থাকে, ফলে পেজের layout লাফিয়ে পড়ে না (layout shift) — এটি করার *দক্ষতা বাড়ায়*।"} />
+
+## figure ও figcaption
+
+<InParagraph text={"ছবির সাথে ক্যাপশন যোগ করতে `<figure>` ও `<figcaption>` ব্যবহার করুন।"} />
+
+<CodeBlock code={"<figure>\n  <img src=\"city.png\" alt=\"রাতের শহর\" />\n  <figcaption>রাতের শহরের দৃশ্য</figcaption>\n</figure>"} lang={"html"} />
+
+<Tip tone={"warning"} title={"alt অ্যাট্রিবিউট কখন খালি হয়?"} text={"যদি ছবিটি সম্পূর্ণ decorative হয় (কোনো তথ্য বহন করে না), তাহলে `alt` খালি রাখুন — `alt=””`। খালি রাখলে screen reader সেটি স্কিপ করবে।"} />

@@ -1,0 +1,17 @@
+---
+title: "REST API থেকে data — fetch ও POST"
+label: "API & Fetch"
+order: 26
+level: "Intermediate"
+description: "নিজের mock API-তে task sync — fetch-এর সঠিক নিয়ম।"
+---
+
+<InParagraph text={"সার্ভার-এ task জমা/আনা — native **`fetch`**-ই যথেষ্ট:"} />
+
+<CodeBlock code={"const API_URL = \"https://api.example.com\";\n\nexport async function fetchTasks() {\n  const res = await fetch(API_URL + \"/tasks\");\n  if (!res.ok) throw new Error(\"Fetch failed\");\n  return await res.json();\n}\n\nexport async function createTaskOnServer(task) {\n  const res = await fetch(API_URL + \"/tasks\", {\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify(task),\n  });\n  if (!res.ok) throw new Error(\"Create failed\");\n  return await res.json();\n}"} lang={"ts"} title={"lib/api.ts"} />
+
+- `res.ok` check — 2xx-এর বাইরে error throw
+- timeout — `AbortController` দিয়ে
+- network error — catch-এ দেখান
+
+<Tip tone={"warning"} title={"localhost ভুলবে না"} text={"ফিজিক্যাল ফোনে `localhost` মানে ফোন নিজেই — আপনার কম্পিউটারের LAN IP (`http://192.168.x.x:3000`) ব্যবহার করুন; Android emulator-এ `10.0.2.2`।"} />

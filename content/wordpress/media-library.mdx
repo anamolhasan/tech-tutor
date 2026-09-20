@@ -1,0 +1,26 @@
+---
+title: "Media Library কী?"
+label: "Media Library"
+order: 8
+level: "Beginner"
+description: "WordPress-এর Media Library কেন দরকারি, কীভাবে upload-file manage হয় এবং upload-করা content কোথায় থাকে — বাংলায়।"
+---
+
+## Media Library কী?
+
+<InParagraph text={"**Media Library** হলো WordPress-এর **central gallery** — যেখানে site-এর সব **upload করা content** (ছবি, ভিডিও, audio, PDF) জমা থাকে। এখান থেকে ছবি খুঁজে, manage ও যেকোনো জায়গায় insert করা যায়।"} />
+
+## কী কী media আপলোড করা যায়
+
+- **Images** — JPG, PNG, WebP, GIF, SVG (নিরাপত্তার জন্য SVG সাবধান)
+- **Videos** — MP4, WebM
+- **Audio** — MP3, WAV
+- **Documents** — PDF, DOC, PPT, ZIP
+
+## Media কোথায় থাকে?
+
+<InParagraph text={"আপলোড হওয়া media-র ফাইল থাকে **`wp-content/uploads/`** folder-এ (date-গতভাবে সাজানো), আর তার **মেটা তথ্য** (title, caption, URL) থাকে **database**-এ।"} />
+
+<CodeBlock code={"wp-content/uploads/\n├── 2026/08/\n│   ├── banner.jpg\n│   ├── banner-300x150.jpg   ← WordPress auto-resize করে\n│   └── banner-768x384.jpg"} lang={"text"} title={"uploads folder structure"} />
+
+<Tip tone={"warning"} title={"শুরুতে optimize করুন"} text={"বড় ছবি site-কে ধীর করে। Upload-এর আগে ছবি **compress** করুন, বা plugin (যেমন Smush, ShortPixel) দিয়ে auto-optimize করুন।"} />

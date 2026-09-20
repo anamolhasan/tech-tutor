@@ -1,0 +1,23 @@
+---
+title: "Migrations — schema version control"
+label: "Prisma Migrations"
+order: 34
+level: "Advanced"
+description: "Schema-এর পরিবর্তনের ইতিহাস — dev/prod-এ একই থাকে।"
+---
+
+<CodeBlock code={"npx prisma migrate dev --name add_product_spec"} lang={"bash"} title={"terminal"} />
+
+<InParagraph text={"সরল relational-এ migrations: dev-এ apply, SQL ফাইল জেনারেট, prod-এ deploy।"} />
+
+| Command | কখন |
+| --- | --- |
+| migrate dev | development; schema+ DB sync |
+| migrate deploy | production/Cİ; বিদ্যমান SQL apply |
+| db push | দ্রুত dev — ইতিহাস ছাড়া |
+
+- Migration SQL-এ **ঐচ্ছিক পরিদর্শন** — dev/Prod mismatch ধরা
+- Breaking change-এ data migration আলাদা
+- বড় table-এ ALTER ধীর — lock avoidance
+
+<Tip tone={"warning"} title={"আবার ever reset?"} text={"`migrate reset` dev-এ সব data মুছে দেয় — কোথাও যেন deployment pipeline-এ না পড়ে। CI-তে test-এর জন্য পরিষ্কার DB-ই উদ্দেশ্য।"} />

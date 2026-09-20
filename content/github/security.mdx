@@ -1,0 +1,34 @@
+---
+title: "Security: secrets, Dependabot, permissions"
+label: "Security"
+order: 15
+level: "Advanced"
+description: "Repository-র নিরাপত্তা: vulnerabilities, SECRETS, permissions — বাংলায়।"
+---
+
+## কেন নিরাপত্তা গুরুত্বপূর্ণ?
+
+<InParagraph text={"আপনার repository-তে code, dependency, secrets — সব মিলে আপনার সিস্টেমের পরিচয়। এক ফাঁক হলে ভাঙার সুযোগ।"} />
+
+## Branch protection
+
+<CodeBlock code={"- Require PR review (1)\n- Require status checks to pass (CI)\n- Require linear history (যদি চান)\n- No force pushes\n- Block force pushes"} lang={"markdown"} title={"Settings → Branches → Add rule"} />
+
+## Dependabot
+
+- dependency vulnerability **আলাদা রিপোর্ট**
+- Security updates / version updates auto-PR
+- Settings → Code security
+
+## Secrets management
+
+- Repository Secrets (workflow-এ `${{ secrets.X }}`)
+- Environment secrets
+- নিশ্চিত করুন `.env` কখনো commit নয়
+- Required review অথবা environments দিয়ে gate
+
+## Granular permissions
+
+<CodeBlock code={"permissions:\n  contents: read\n  issues: write\n  # কম রাখা ভালো — শুধু দরকারি"} lang={"yaml"} title={"workflow permissions"} />
+
+<Tip tone={"warning"} title={"সবচেয়ে বড় ঝুঁকি"} text={"লিক হওয়া secret + force push নিয়ন্ত্রণহীন workflow — এই দুটি বড় ভাঙন। নিয়মিত শিখুন: কখনও `.env`, key print/commit নয়, permissions minimal।"} />

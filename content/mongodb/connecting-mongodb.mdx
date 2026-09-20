@@ -1,0 +1,38 @@
+---
+title: "MongoDB-র সাথে Connection"
+label: "Connection"
+order: 4
+level: "Beginner"
+description: "Connection string, connection events, readyState এবং প্রোডাকশনে secure connection — বাংলায়।"
+---
+
+## Connection string
+
+<InParagraph text={"লোকাল MongoDB এবং MongoDB Atlas — দুই জায়গাতেই `mongoose.connect()` দিয়ে যুক্ত হওয়া যায়:"} />
+
+<CodeBlock code={"// Local MongoDB\nconst local = \"mongodb://127.0.0.1:27017/myapp\";\n\n// MongoDB Atlas (cloud)\nconst atlas =\n  \"mongodb+srv://USERNAME:PASSWORD@cluster0.xxxxx.mongodb.net/myapp?retryWrites=true&w=majority\";\n\n// password-এ special char থাকলে encodeURIComponent দিয়ে encode করুন\nawait mongoose.connect(process.env.MONGODB_URI || local);"} lang={"js"} title={"Local + Atlas connection"} />
+
+## Connection events
+
+<InParagraph text={"Connection খোলা, error ও disconnect — এই তিনটি ঘটনা track করা ভালো অভ্যাস:"} />
+
+<CodeBlock code={"mongoose.connection.on(\"connected\", () => {\n  console.log(\"Mongoose connected to\", mongoose.connection.host);\n});\n\nmongoose.connection.on(\"error\", (err) => {\n  console.error(\"Mongoose connection error:\", err.message);\n});\n\nmongoose.connection.on(\"disconnected\", () => {\n  console.log(\"Mongoose disconnected\");\n});"} lang={"js"} title={"Connection listener"} />
+
+## readyState
+
+<InParagraph text={"Connection-এর বর্তমান অবস্থা `mongoose.connection.readyState` দিয়ে জানা যায়:"} />
+
+| State | মান | অর্থ |
+| --- | --- | --- |
+| disconnected | 0 | সংযুক্ত নয় |
+| connected | 1 | সংযুক্ত |
+| connecting | 2 | সংযুক্ত হওয়া চলছে |
+| disconnecting | 3 | সংযোগ বিচ্ছিন্ন হচ্ছে |
+
+## Best practice
+
+- **Secret কখনোই কোডে না** — connection string `.env`-এ রাখুন, কোডে `process.env` থেকে নিন
+- **একটা প্রজেক্টে এক connection manager** — প্রতিটি request-এ নতুন connection খুলবেন না
+- **Serverless (Next.js)**-এ global cache দিয়ে connection reuse করুন যেন cold start ধীর না হয়
+
+<CodeBlock code={"import mongoose from \"mongoose\";\n\nconst MONGODB_URI = process.env.MONGODB_URI!;\n\ndeclare global {\n  var mongooseCache: { conn: typeof mongoose | null };\n}\n\nglobal.mongooseCache ||= { conn: null };\n\nexport async function connectDB() {\n  if (global.mongooseCache.conn) return global.mongooseCache.conn;\n  global.mongooseCache.conn = await mongoose.connect(MONGODB_URI);\n  return global.mongooseCache.conn;\n}"} lang={"ts"} title={"Next.js-এ reusable connection"} />

@@ -1,0 +1,17 @@
+---
+title: "Cart Slice — Persistence সহ"
+label: "Cart Slice Full"
+order: 26
+level: "Advanced"
+description: "localStorage sync, rehydrate, lazily-load — বাংলায়।"
+---
+
+<InParagraph text={"Cart সাধারণত persistence-এর শিকার (refresh-এ বাঁচে)। **localStorage**-এ save/load দিয়ে slice-টা upgrade করি — Redux pattern-এর সাথে মানানসই (slice + subscribe)।"} />
+
+<CodeBlock code={"import { createSlice } from \"@reduxjs/toolkit\";\n\nconst CART_KEY = \"shop_cart\";\n\nfunction loadCart(): CartItem[] {\n  // browser-হীন পরিবেশে গার্ড\n  if (typeof window === \"undefined\") return [];\n  try {\n    return JSON.parse(localStorage.getItem(CART_KEY) ?? \"[]\");\n  } catch {\n    return [];\n  }\n}\n\ninterface CartState {\n  items: CartItem[];\n}\n\nconst initialState: CartState = {\n  items: loadCart(),\n};\n\nconst cartSlice = createSlice({\n  name: \"cart\",\n  initialState,\n  reducers: {\n    // ... আগের reducers (addItem, increment, decrement, removeItem, clearCart)\n  },\n});\n\n// সর্বদা সব পরিবর্তনে localStorage-এ sync\nexport function saveCart(items: CartItem[]) {\n  if (typeof window !== \"undefined\") {\n    localStorage.setItem(CART_KEY, JSON.stringify(items));\n  }\n}\n\nexport default cartSlice.reducer;"} lang={"ts"} title={"cartSlice.ts with persistence"} />
+
+## Persist via middleware
+
+<CodeBlock code={"import { store } from \"@/app/store\";\n\n// প্রতিটি state change-এ cart আপডেট localStorage\nstore.subscribe(() => {\n  saveCart(store.getState().cart.items);\n});"} lang={"ts"} title={"store.ts-এ subscribe"} />
+
+<Tip tone={"info"} title={"reducer-এ side effect ছাড়া"} text={"Reducer **pure** — localStorage-এ লেখা side-effect। তাই এটা middleware/subscribe-তেই করা উচিত, reducer-এ নয়। State-পরিবর্তন ও side-effect আলাদা রাখা clean architecture-র ভিত্তি।"} />

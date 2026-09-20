@@ -1,0 +1,33 @@
+---
+title: "Express.js — Node.js Framework"
+label: "Express.js"
+order: 12
+level: "Intermediate"
+description: "Express.js setup, routing, middleware, static files — Node.js-এ web server তৈরির বাংলা গাইড।"
+---
+
+<InParagraph text={"**Express.js** হলো Node.js-এর সবচেয়ে জনপ্রিয় web framework। এটি minimal ও flexible — routing, middleware, template engine সহ সবকিছু সহজে করে।"} />
+
+## Express ইনস্টল করা
+
+<CodeBlock code={"mkdir my-express-app\ncd my-express-app\nnpm init -y\nnpm install express"} lang={"bash"} />
+
+## প্রথম Express Server
+
+<CodeBlock code={"const express = require(\"express\");\nconst app = express();\nconst PORT = process.env.PORT || 3000;\n\napp.get(\"/\", (req, res) => {\n  res.send(\"Hello from Express!\");\n});\n\napp.listen(PORT, () => {\n  console.log(\"Server চালু http://localhost:\" + PORT);\n});"} lang={"javascript"} title={"app.js"} />
+
+## Routing
+
+<CodeBlock code={"// GET route\napp.get(\"/users\", (req, res) => {\n  res.json([{ id: 1, name: \"রহিম\" }]);\n});\n\n// POST route\napp.post(\"/users\", (req, res) => {\n  res.status(201).json({ message: \"Created\" });\n});\n\n// Route parameters\napp.get(\"/users/:id\", (req, res) => {\n  res.json({ id: req.params.id });\n});\n\n// Router ব্যবহার\nconst router = express.Router();\nrouter.get(\"/\", (req, res) => res.json({ message: \"List\" }));\nrouter.get(\"/:id\", (req, res) => res.json({ id: req.params.id }));\napp.use(\"/api/users\", router);"} lang={"javascript"} />
+
+## Middleware
+
+<InParagraph text={"**Middleware** হলো functions যা request ও response-এর মধ্যে execute হয়। logging, authentication, error handling — সব middleware দিয়ে করা হয়।"} />
+
+<CodeBlock code={"// Built-in middleware\napp.use(express.json());\napp.use(express.urlencoded({ extended: true }));\n\n// Custom middleware\napp.use((req, res, next) => {\n  console.log(req.method, req.url, Date.now());\n  next();\n});\n\n// Static files\napp.use(express.static(\"public\"));"} lang={"javascript"} />
+
+## Error Handling
+
+<CodeBlock code={"// 404 handler\napp.use((req, res) => {\n  res.status(404).json({ error: \"Not Found\" });\n});\n\n// Error handler middleware\napp.use((err, req, res, next) => {\n  console.error(err.stack);\n  res.status(500).json({ error: \"Internal Server Error\" });\n});"} lang={"javascript"} />
+
+<Tip tone={"success"} title={"পরবর্তী ধাপ"} text={"Express.js দিয়ে API Development ও Authentication শিখুন — এরপরই।"} />

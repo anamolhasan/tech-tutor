@@ -1,0 +1,19 @@
+---
+title: "Relations — একে-অনেক, অনেক-অনে"
+label: "Relations"
+order: 6
+level: "Intermediate"
+description: "model-এর মধ্যে relation — relation field + foreign key।"
+---
+
+<CodeBlock code={"model User {\n  id    Int    @id @default(autoincrement())\n  email String @unique\n  posts Post[]\n}\n\nmodel Post {\n  id     Int  @id @default(autoincrement())\n  title  String\n  author User @relation(fields: [authorId], references: [id])\n  authorId Int\n}"} lang={"prisma"} title={"1:N — User ও Post"} />
+
+<InParagraph text={"`User.posts Post[]` — virtual list; `Post.author` — relation field. একটি model-এ `Int` (FK) + relation, অন্যটিতে মাত্র `Model[]`।"} />
+
+<CodeBlock code={"model Product {\n  id    Int    @id @default(autoincrement())\n  name  String\n  tag   Tag[]\n}\n\nmodel Tag {\n  id      Int       @id @default(autoincrement())\n  name    String    @unique\n  product Product[]\n}"} lang={"prisma"} title={"N:M — implicit"} />
+
+- Implicit N:M — Prisma নিজেই bridge table (`_TagToProduct`) বানায়
+- প্রয়োজন `@relation('name')` একমাত্র যখন multiple relations একই jোড়া
+- `onDelete: Cascade` মাঝে-মাঝে দরকার
+
+<Tip tone={"info"} title={"ampersand-মনে রাখুন"} text={"Prisma-র relation পড়তে হলে দুই দিকের field টাইপ মিললে তবেই OK — ভুল হলে `prisma validate`-এ ধরা পড়ে।"} />

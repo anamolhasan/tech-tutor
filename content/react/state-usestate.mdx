@@ -1,0 +1,32 @@
+---
+title: "State ও useState"
+label: "State (useState)"
+order: 8
+level: "Intermediate"
+description: "useState, state update নিয়ম, immutability ও re-render ধারণা — বাংলায়।"
+---
+
+## State কী?
+
+<InParagraph text={"**State** হলো component-এর নিজস্ব ডেটা যা বদলালে UI automatically re-render হয়। `useState` সেই state-এর জন্য hook।"} />
+
+<CodeBlock code={"import { useState } from \"react\";\n\nfunction Counter() {\n  const [count, setCount] = useState(0); // [value, setter]\n\n  const increment = () => setCount(count + 1);\n\n  return (\n    <div>\n      <p>Count: {count}</p>\n      <button onClick={increment}>+1</button>\n    </div>\n  );\n}"} lang={"jsx"} title={"useState basics"} />
+
+## Update নিয়ম
+
+- সরাসরি `count = 5` লিখা **হয় না** — সবসময় setter ব্যবহার করুন
+- Setter-এর নতুন value পুরনো value replace করে, merge হয় না
+- এক event-এ একাধিক update হলে `setCount((prev) => prev + 1)` functional update দরকার
+- State change ⇒ **re-render** ⇒ UI আপডেট
+
+<CodeBlock code={"function Counter() {\n  const [count, setCount] = useState(0);\n\n  // এক event-এ ৩ বার +১\n  const addThree = () => {\n    setCount((prev) => prev + 1);\n    setCount((prev) => prev + 1);\n    setCount((prev) => prev + 1);\n  };\n\n  return (\n    <button onClick={addThree}>+3 (count: {count})</button>\n  );\n}"} lang={"jsx"} title={"Functional update"} />
+
+## Object/Array state
+
+<CodeBlock code={"const [user, setUser] = useState({ name: \"রহিম\", age: 24 });\n\n// পুরনো object-টি বদলাবেন না — নতুন বানান\nconst changeName = () => {\n  setUser({ ...user, name: \"রহিম আহমেদ\" });\n};\n\nconst [todos, setTodos] = useState([]);\n\nconst add = (todo) => setTodos([...todos, todo]);\nconst remove = (id) => setTodos(todos.filter((t) => t.id !== id));"} lang={"jsx"} title={"Immutability"} />
+
+## Lazy initial state
+
+<InParagraph text={"প্রাথমিক value computation ব্যয়বহুল হলে function দিন — শুধু প্রথমবার কল হবে:"} />
+
+<CodeBlock code={"const [students, setStudents] = useState(() => {\n  return studentsFromDB(); // শুধু mount-এর সময় চলে\n});"} lang={"jsx"} title={"Lazy initial state"} />

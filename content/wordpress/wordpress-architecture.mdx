@@ -1,0 +1,46 @@
+---
+title: "WordPress-এর ভিতরের Architecture কীভাবে কাজ করে"
+label: "Architecture"
+order: 20
+level: "Intermediate"
+description: "PHP, Core, Theme, Plugin, Database — WordPress-এর সম্পূর্ণ internal architecture ও request lifecycle।"
+---
+
+## WordPress Architecture-এর স্তর
+
+<InParagraph text={"WordPress-এর পুরো architecture চারটি স্তরে ভাগ করা যায়:"} />
+
+| স্তর | কী থাকে |
+| --- | --- |
+| Core WordPress | PHP engine, admin area, API, hooks |
+| Theme | Template files — visual output |
+| Plugin | Extensible functionality |
+| Database | সব content, options, users |
+
+<CodeBlock code={"                    ┌──────────────────────┐\n                    │   BROWSER (Visitor)   │\n                    └──────────┬───────────┘\n                               │ HTTP request (https://mysite.com/)\n                               │\n                    ┌──────────▼───────────┐\n                    │   index.php          │  ← ONLY entry point\n                    │   (Front Controller) │\n                    └──────────┬───────────┘\n                               │ wp-blog-header.php → wp-load.php\n                    ┌──────────▼───────────┐\n                    │   WORDPRESS CORE     │\n                    │  (PHP)               │\n                    │  • load settings     │\n                    │  • parse URL         │\n                    │  • fire hooks        │──────────────┐\n                    └──────────┬───────────┘              │ Plugin\n                               │                          │ (hooks)\n                    ┌──────────▼───────────┐              │\n                    │   THEME TEMPLATES     │◄─────────────┘\n                    │   (header, content,   │\n                    │    footer …)          │\n                    └──────────┬───────────┘\n                               │\n                    ┌──────────▼───────────┐\n                    │   MYSQL DATABASE     │\n                    │  wp_posts, wp_options│\n                    │  wp_users …          │\n                    └──────────────────────┘"} lang={"text"} title={"Complete Architecture Diagram"} />
+
+## Request Lifecycle — ধাপে ধাপে
+
+- Visitor `https://mysite.com/` লিখে
+- server **index.php** চালায় — WordPress-এর front controller
+- `wp-blog-header.php` অবশিষ্ট core-কে initialize করে
+- Core `wp-load.php` দিয়ে core file, theme, plugin load হয়
+- URL parse করে নির্ধারণ করে কোন content/page request করা হচ্ছে
+- **Hooks** trigger হয় — plugin নিজেদের logic-এ যোগ করতে পারে
+- Theme-এর template/functions execute হয়ে HTML তৈরি করে
+- HTML + response browser-এ, visitor-এর কাছে যায়
+
+## Hooks — Plugin ও Theme-এর bridge
+
+<InParagraph text={"WordPress-এর সবচেয়ে গুরুত্বপূর্ণ architectural বৈশিষ্ট্য হলো **Hooks**। দুটি ধরণের hook আছে:"} />
+
+- **Action hooks** — কোনো মুহূর্তে নিজের code চালানো (`init`, `wp_head`)
+- **Filter hooks** — কোনো data বদলানো/পরিবর্তন করা (`the_content`, `title`)
+
+<CodeBlock code={"// Action: page- এর প্রথমে কিছু যোগ\nadd_action(\"wp_head\", \"add_custom_meta\");\n\n// Filter: post content-এর শেষে বড় অক্ষর\nadd_filter(\"the_content\", \"make_first_letter_big\");"} lang={"php"} title={"Action ও Filter hook-এর উদাহরণ"} />
+
+## WordPress Core কী?
+
+<InParagraph text={"**Core** হলো WordPress-এর মূল software — ডাউনলোড করা zip-এ যা থাকে। Theme ও Plugin core-এর কোড পরিবর্তন না করে, core-এর hooks-এ নিজেদের feature দুয়ে দেয়। এই smart design-ই WordPress-কে এত flexible রাখে।"} />
+
+<Tip tone={"success"} title={"মূল উপলব্ধি"} text={"WordPress-এর architecture = **Core (engine) + Theme (look) + Plugin (features) + Database (memory)**। এদের সম্পর্ক বোঝলে WordPress-box পুরোটা নিজের কন্ট্রোলে।"} />

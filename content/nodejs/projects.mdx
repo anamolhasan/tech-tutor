@@ -1,0 +1,21 @@
+---
+title: "Real-world Node.js Projects"
+label: "Projects"
+order: 19
+level: "Advanced"
+description: "Blog API, Chat App, File Upload — বাস্তব world-এর Node.js project examples বাংলায়।"
+---
+
+## Project 1: Blog API
+
+<CodeBlock code={"const express = require(\"express\");\nconst mongoose = require(\"mongoose\");\nconst bcrypt = require(\"bcryptjs\");\nconst jwt = require(\"jsonwebtoken\");\n\nconst app = express();\napp.use(express.json());\n\n// Connect MongoDB\nmongoose.connect(\"mongodb://localhost:27017/blog\");\n\n// Schema\nconst postSchema = new mongoose.Schema({\n  title: String,\n  content: String,\n  author: { type: mongoose.Schema.Types.ObjectId, ref: \"User\" },\n});\n\nconst Post = mongoose.model(\"Post\", postSchema);\n\n// Routes\napp.get(\"/api/posts\", async (req, res) => {\n  const posts = await Post.find().populate(\"author\", \"name\");\n  res.json(posts);\n});\n\napp.post(\"/api/posts\", authenticate, async (req, res) => {\n  const post = await Post.create({\n    ...req.body,\n    author: req.user.id,\n  });\n  res.status(201).json(post);\n});\n\napp.listen(3000);"} lang={"javascript"} title={"Full Blog API with Auth"} />
+
+## Project 2: Real-time Chat
+
+<CodeBlock code={"const express = require(\"express\");\nconst http = require(\"node:http\");\nconst { Server } = require(\"socket.io\");\n\nconst app = express();\nconst server = http.createServer(app);\nconst io = new Server(server);\n\nio.on(\"connection\", (socket) => {\n  console.log(\"User connected:\", socket.id);\n\n  socket.on(\"chat-message\", (msg) => {\n    io.emit(\"chat-message\", msg); // broadcast\n  });\n\n  socket.on(\"disconnect\", () => {\n    console.log(\"User disconnected:\", socket.id);\n  });\n});\n\nserver.listen(3000);"} lang={"javascript"} title={"Chat with Socket.IO"} />
+
+## Project 3: File Upload API
+
+<CodeBlock code={"const express = require(\"express\");\nconst multer = require(\"multer\");\nconst path = require(\"node:path\");\n\nconst app = express();\n\n// storage config\nconst storage = multer.diskStorage({\n  destination: \"uploads/\",\n  filename: (req, file, cb) => {\n    const unique = Date.now() + path.extname(file.originalname);\n    cb(null, unique);\n  },\n});\n\nconst upload = multer({\n  storage,\n  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB\n  fileFilter: (req, file, cb) => {\n    const allowed = /jpeg|jpg|png|gif/;\n    const ext = allowed.test(path.extname(file.originalname));\n    cb(null, ext);\n  },\n});\n\napp.post(\"/upload\", upload.single(\"image\"), (req, res) => {\n  res.json({ file: req.file });\n});\n\napp.listen(3000);"} lang={"javascript"} title={"Multer file upload"} />
+
+<Tip tone={"success"} title={"পরামর্শ"} text={"এই projectsগুলো নিজে বানিয়ে দেখুন। প্রতিটিতে নতুন কিছু শেখার সুযোগ আছে। GitHub-এ push করুন যাতে portfolio strong হয়।"} />

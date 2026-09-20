@@ -1,0 +1,20 @@
+---
+question: "What are HTML5 semantic elements?"
+order: 3
+description: "HTML5-এ আসা semantic elements-গুলো কী কী এবং প্রতিটি কী কাজ করে।"
+---
+
+<InParagraph text={"HTML5-এ বেশ কিছু নতুন element এসেছে যেগুলো পেজের বিভিন্ন অংশকে নাম দিয়ে চেনায়। সবচেয়ে গুরুত্বপূর্ণগুলো হলো:"} />
+
+- `<header>` — পেজ বা section-এর শুরুর অংশ (শিরোনাম, লোগো)
+- `<nav>` — নেভিগেশন লিংকের জায়গা
+- `<main>` — পেজের মূল, একমাত্র কনটেন্ট
+- `<section>` — সম্পর্কিত কনটেন্টের একটি ভাগ
+- `<article>` — স্বাধীন, আত্মনির্ভর কনটেন্ট (blog post, product)
+- `<aside>` — মূল কনটেন্টের পাশের তথ্য (sidebar, বিজ্ঞাপন)
+- `<footer>` — পেজ বা section-এর শেষ অংশ (যোগাযোগ, কপিরাইট)
+- `<figure>` — ছবি + `<figcaption>` caption-সহ প্রেজেন্টেশন
+
+<CodeBlock code={"<body>\n  <header>লোগো ও মেনু</header>\n  <main>\n    <article>একটি সম্পূর্ণ লেখা</article>\n    <aside>সাইডবার</aside>\n  </main>\n  <footer>কপিরাইট</footer>\n</body>"} lang={"html"} title={"গঠন উদাহরণ"} />
+
+<Tip tone={"success"} title={"মনে রাখুন"} text={"এই element-গুলো `div`-এর মতোই সাধারণ container, কিন্তু এরা কনটেন্টের অর্থও বোঝায় — তাই কম 'div soup', কম জটিলতা।"} />

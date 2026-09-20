@@ -1,0 +1,28 @@
+---
+title: "Error Handling — পূর্ণাঙ্গ"
+label: "Error Handling"
+order: 34
+level: "Advanced"
+description: "API error shapes, interceptor message, retry policy ও query error UI — বাংলায়।"
+---
+
+<InParagraph text={"প্রোডাক্টের সবচেয়ে গুরুত্বপূর্ণ অংশ — **ব্যর্থতা কীভাবে দেখাবে**। আমরা একটি standard error shape নেব:"} />
+
+<CodeBlock code={"import axios from \"axios\";\n\nexport function getErrorMessage(error: unknown): string {\n  if (axios.isAxiosError(error)) {\n    // server থেকে আমাদের shape: { message: string }\n    const serverMsg = error.response?.data?.message;\n    if (typeof serverMsg === \"string\") return serverMsg;\n\n    if (error.code === \"ECONNABORTED\") return \"সময় বেশি লেগেছে, আবার চেষ্টা করুন\";\n    if (!error.response) return \"নেটওয়ার্ক সমস্যা — ইন্টারনেট চেক করুন\";\n\n    return \"সার্ভারে কিছু ভুল হয়েছে\";\n  }\n  return error instanceof Error ? error.message : \"অজানা ভুল\";\n}"} lang={"ts"} title={"lib/axios.ts-এ error normalizer"} />
+
+## retry policy
+
+<CodeBlock code={"queries: {\n  retry: (failureCount, error) => {\n    // 4xx হলে retry নেই (সেটা আমাদের ভুল/ব্যবহারকারীর ভুল)\n    if (axios.isAxiosError(error) && error.response?.status < 500) {\n      return false;\n    }\n    // 5xx/নেটওয়ার্ক হলে ২-৩ বার\n    return failureCount < 2;\n  },\n  refetchOnWindowFocus: false,\n},"} lang={"ts"} title={"query-client-এ"} />
+
+## server route-এ error handling
+
+<CodeBlock code={"export async function POST(request: NextRequest) {\n  const body = await request.json();\n\n  const parsed = productSchema.safeParse(body);\n  if (!parsed.success) {\n    return Response.json(\n      { message: \"তথ্য ঠিক নেই\", issues: parsed.error.issues },\n      { status: 400 },\n    );\n  }\n\n  try {\n    const product = await prisma.product.create({\n      data: parsed.data,\n    });\n    return Response.json(product, { status: 201 });\n  } catch {\n    return Response.json(\n      { message: \"product তৈরি করা যায়নি, পরে চেষ্টা করুন\" },\n      { status: 500 },\n    );\n  }\n}"} lang={"ts"} title={"app/api/products/route.ts"} />
+
+## form-এ error permanent
+
+- mutation `onError` → `toast.error(getErrorMessage(error))`
+- form error → `form.formState.errors` → FieldError-এ
+- query error → `isError` branch-এ retry button
+- Devtools — inspect mutation-এর error tab
+
+<Tip tone={"warning"} title={"ঠিক করুন যেভাবেই হোক"} text={"Error আড়াল করবেন না। user-কে বুঝতে হবে **কী হয়নি** এবং **কী করা যায়** (retry button / error text)। প্রতিটি error-এ কমপক্ষে একটি recovery path দিন।"} />

@@ -1,0 +1,34 @@
+---
+title: "Layout: Flexbox ও Grid"
+label: "Layout (Flex, Grid)"
+order: 20
+level: "Beginner"
+description: "Tailwind-এ Flexbox ও Grid দিয়ে layout তৈরি — container, flex, grid utilities বাংলায়।"
+---
+
+<InParagraph text={"Tailwind-এ CSS Flexbox ও Grid-কে সহজ utility classes-এ রূপান্তর করেছে।"} />
+
+## Container
+
+<CodeBlock code={"<div class=\"container mx-auto px-4\">\n  এটি centered container\n</div>"} lang={"html"} />
+
+## Flexbox
+
+<CodeBlock code={"<!-- হরাইজন্টাল flex -->\n<div class=\"flex justify-between items-center\">\n  <span>Left</span>\n  <span>Center</span>\n  <span>Right</span>\n</div>\n\n<!-- ভার্টিকাল flex -->\n<div class=\"flex flex-col items-center\">\n  <span>Up</span>\n  <span>Down</span>\n</div>\n\n<!-- wrap -->\n<div class=\"flex flex-wrap gap-4\">\n  <div class=\"w-32\">Item 1</div>\n  <div class=\"w-32\">Item 2</div>\n  <div class=\"w-32\">Item 3</div>\n</div>"} lang={"html"} title={"Flexbox utilities"} />
+
+## Flexbox Justify Content
+
+| Class | কাজ |
+| --- | --- |
+| justify-start | শুরুতে |
+| justify-center | কেন্দ্রে |
+| justify-end | শেষে |
+| justify-between | দুই প্রান্তে, gap মাঝে |
+| justify-around | প্রতিটির চারপাশে gap |
+| justify-evenly | সমান gap |
+
+## Grid
+
+<CodeBlock code={"<!-- 3 columns grid -->\n<div class=\"grid grid-cols-3 gap-4\">\n  <div class=\"bg-blue-100 p-4\">1</div>\n  <div class=\"bg-blue-200 p-4\">2</div>\n  <div class=\"bg-blue-300 p-4\">3</div>\n</div>\n\n<!-- Responsive grid -->\n<div class=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4\">\n  <div>Responsive 1</div>\n  <div>Responsive 2</div>\n  <div>Responsive 3</div>\n</div>\n\n<!-- Span 2 columns -->\n<div class=\"grid grid-cols-3 gap-4\">\n  <div class=\"col-span-2 bg-blue-100 p-4\">2 columns span</div>\n  <div class=\"bg-blue-200 p-4\">1 column</div>\n</div>"} lang={"html"} title={"Grid layout"} />
+
+<Tip tone={"info"} title={"Flex vs Grid"} text={"এক-মাত্রিক লেআউটে (এক দিকে সাজানো) **flex**, দ্বিমাত্রিক লেআউটে (সারি + কলাম) **grid** ব্যবহার করুন। অনেক ক্ষেত্রে দুটি একসাথেও ব্যবহার হয়।"} />

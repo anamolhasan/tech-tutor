@@ -1,0 +1,15 @@
+---
+question: "What is the difference between id and class?"
+order: 2
+description: "id এবং class attribute-এর পার্থক্য এবং কখন কোনটি ব্যবহার করবেন।"
+---
+
+<InParagraph text={"`id` এবং `class` দুটোই element চেনার (identify) জন্য ব্যবহৃত attribute। মূল পার্থক্য হলো — **id হয় অনন্য**, আর **class পুনরায় ব্যবহারযোগ্য**।"} />
+
+<InParagraph text={"একটি পেজে প্রতিটি `id` একবারই ব্যবহৃত হতে পারে — একটি element-কে নির্দিষ্টভাবে টার্গেট করতে (CSS, JavaScript বা link anchor হিসেবে)। অন্যদিকে একই `class` একাধিক element-এ দেওয়া যায় — যাতে সবগুলো একসাথে স্টাইল হয়।"} />
+
+<CodeBlock code={"<nav id=\"main-nav\">...</nav>\n<button class=\"btn\">চালু</button>\n<button class=\"btn\">বন্ধ</button>"} lang={"html"} title={"উদাহরণ"} />
+
+<InParagraph text={"একটি element-এ `id` কেবল একটি থাকতে পারে, কিন্তু `class` একাধিক থাকতে পারে (স্পেস দিয়ে আলাদা): `class=\"btn btn-large\"`।"} />
+
+<Tip tone={"info"} title={"সংক্ষেপে"} text={"id = একক পরিচয়, class = দলের সদস্যপদ।"} />

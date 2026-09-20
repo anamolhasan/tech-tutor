@@ -1,0 +1,31 @@
+---
+title: "Typography (text, font)"
+label: "Typography"
+order: 19
+level: "Beginner"
+description: "Tailwind-এ text size, font weight, line height, letter spacing, text alignment — টাইপোগ্রাফি সম্পূর্ণ বাংলায়।"
+---
+
+<InParagraph text={"Tailwind-এ typography utilities দিয়ে font size, weight, alignment, line-height এবং আরও অনেক কিছু নিয়ন্ত্রণ করা যায়।"} />
+
+## Font Size
+
+<CodeBlock code={"<p class=\"text-xs\">Extra small (12px)</p>\n<p class=\"text-sm\">Small (14px)</p>\n<p class=\"text-base\">Base (16px)</p>\n<p class=\"text-lg\">Large (18px)</p>\n<p class=\"text-xl\">Extra large (20px)</p>\n<p class=\"text-2xl\">2X large (24px)</p>\n<p class=\"text-3xl\">3X large (30px)</p>\n<p class=\"text-4xl\">4X large (36px)</p>"} lang={"html"} />
+
+## Font Weight
+
+<CodeBlock code={"<p class=\"font-thin\">Thin (100)</p>\n<p class=\"font-light\">Light (300)</p>\n<p class=\"font-normal\">Normal (400)</p>\n<p class=\"font-medium\">Medium (500)</p>\n<p class=\"font-semibold\">Semibold (600)</p>\n<p class=\"font-bold\">Bold (700)</p>\n<p class=\"font-extrabold\">Extra Bold (800)</p>"} lang={"html"} />
+
+## Text Alignment
+
+<CodeBlock code={"<p class=\"text-left\">বামে alignment</p>\n<p class=\"text-center\">কেন্দ্রে alignment</p>\n<p class=\"text-right\">ডানে alignment</p>"} lang={"html"} />
+
+## Line Height & Letter Spacing
+
+<CodeBlock code={"<p class=\"leading-tight\">সরু line height</p>\n<p class=\"leading-relaxed\">আরামদায়ক line height</p>\n<p class=\"tracking-tight\">সরু letter spacing</p>\n<p class=\"tracking-wide\">চওড়া letter spacing</p>"} lang={"html"} />
+
+## Text Decoration & Transform
+
+<CodeBlock code={"<p class=\"underline\">Underline</p>\n<p class=\"line-through\">Strikethrough</p>\n<p class=\"uppercase\">UPPERCASE</p>\n<p class=\"lowercase\">lowercase</p>\n<p class=\"capitalize\">capitalize each word</p>"} lang={"html"} />
+
+<Tip tone={"success"} title={"Responsive Typography"} text={"বড় স্ক্রিনে বড় font, ছোট স্ক্রিনে ছোট font — `text-sm md:text-base lg:text-lg` এইভাবে responsive করুন।"} />

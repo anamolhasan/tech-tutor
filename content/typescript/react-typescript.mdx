@@ -1,0 +1,27 @@
+---
+title: "React ও TypeScript"
+label: "React + TypeScript"
+order: 24
+level: "Intermediate"
+description: "Props, useState, event handler, useRef, children ও component টাইপ — React-এ TypeScript ব্যবহার বাংলায়।"
+---
+
+<InParagraph text={"React-এর সাথে TypeScript একটি জনপ্রিয় জুটি। কম্পোনেন্টের **props**, **state** ও **event** — প্রতিটিতে টাইপ দিলে UI-তে হওয়া ভুলগুলো কমে যায়।"} />
+
+## Props Typing
+
+<CodeBlock code={"interface UserCardProps {\n  name: string;\n  age?: number;          // optional\n  onGreet: (name: string) => void;\n}\n\nfunction UserCard({ name, age, onGreet }: UserCardProps) {\n  return (\n    <button onClick={() => onGreet(name)}>\n      {name} {age ? \"(\" + age + \")\" : \"\"}\n    </button>\n  );\n}\n\nexport default UserCard;"} lang={"tsx"} title={"UserCard.tsx"} />
+
+## State (useState)
+
+<CodeBlock code={"const [count, setCount] = useState<number>(0);\nconst [user, setUser] = useState<User | null>(null);\n\n// union state — উপযুক্ত\ntype View = \"list\" | \"grid\";\nconst [view, setView] = useState<View>(\"list\");"} lang={"tsx"} />
+
+## Events ও Handlers
+
+<CodeBlock code={"import type { ChangeEvent, FormEvent } from \"react\";\n\nfunction SearchBox() {\n  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {\n    console.log(event.target.value);\n  };\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    // ...\n  };\n\n  return (\n    <form onSubmit={handleSubmit}>\n      <input onChange={handleChange} placeholder=\"সার্চ...\" />\n    </form>\n  );\n}"} lang={"tsx"} />
+
+## useRef ও children
+
+<CodeBlock code={"import { useRef } from \"react\";\n\n\nfunction Box({ children }: { children: ReactNode }) {\n  const inputRef = useRef<HTMLInputElement>(null);\n\n  const focus = () => inputRef.current?.focus();\n\n  return (\n    <div onClick={focus}>\n      <input ref={inputRef} />\n      <div>{children}</div>\n    </div>\n  );\n}"} lang={"tsx"} />
+
+<Tip tone={"success"} title={"props-name নিয়ম"} text={"Always props-এর interface আলাদা রাখুন (যেমন `UserCardProps`)। `React.FC`-এর দরকার নেই — সাধারণ function + explicit children টাইপই যথেষ্ট ও পরিষ্কার।"} />

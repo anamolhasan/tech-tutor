@@ -1,0 +1,23 @@
+---
+title: "Tailwind CSS with React"
+label: "Tailwind + React"
+order: 14
+level: "Beginner"
+description: "React (Vite) প্রজেক্টে Tailwind CSS setup — step by step।"
+---
+
+<InParagraph text={"React-এ Tailwind CSS ব্যবহার করতে Vite ব্যবহার করা সবচেয়ে সহজ।"} />
+
+## Setup Steps
+
+<CodeBlock code={"# React project তৈরি\nnpm create vite@latest my-react-app -- --template react-ts\ncd my-react-app\nnpm install\n\n# Tailwind install\nnpm install tailwindcss @tailwindcss/vite"} lang={"bash"} title={"Terminal"} />
+
+<CodeBlock code={"import { defineConfig } from \"vite\";\nimport react from \"@vitejs/plugin-react\";\nimport tailwindcss from \"@tailwindcss/vite\";\n\nexport default defineConfig({\n  plugins: [react(), tailwindcss()],\n});"} lang={"typescript"} title={"vite.config.ts"} />
+
+<CodeBlock code={"@import \"tailwindcss\";"} lang={"css"} title={"src/index.css"} />
+
+## React Component-এ ব্যবহার
+
+<CodeBlock code={"function App() {\n  return (\n    <div className=\"min-h-screen bg-gray-100 p-8\">\n      <h1 className=\"text-3xl font-bold text-indigo-600\">\n        React + Tailwind\n      </h1>\n      <button className=\"mt-4 rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700\">\n        Get Started\n      </button>\n    </div>\n  );\n}\n\nexport default App;"} lang={"tsx"} title={"App.tsx"} />
+
+<Tip tone={"success"} title={"className মনে রাখুন"} text={"React-এ `class` নয়, `className` ব্যবহার করুন। তবে Tailwind utility classes একই থাকে — শুধু `class` এর বদলে `className` লিখুন।"} />

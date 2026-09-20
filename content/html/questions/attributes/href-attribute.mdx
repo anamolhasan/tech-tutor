@@ -1,0 +1,15 @@
+---
+question: "What is the href attribute?"
+order: 4
+description: "href attribute কী কাজ করে এবং কীভাবে লিংকের গন্তব্য ঠিক করা হয়।"
+---
+
+<InParagraph text={"`href` মানে **hypertext reference**। এটি `<a>` (anchor) element-এ লিংকের **গন্তব্য (destination)** ঠিক করে — অর্থাৎ ব্যবহারকারী ক্লিক করলে কোথায় যাবে।"} />
+
+<InParagraph text={"`href`-এর মান তিন রকমের হতে পারে — (১) সম্পূর্ণ URL: `https://example.com` (বাইরের ওয়েবসাইট), (২) আপেক্ষিক পাথ: `about.html` বা `../docs/` (project-এর ভেতরের পেজ), (৩) anchor: `#contact` (একই পেজের নির্দিষ্ট অংশ)।"} />
+
+<CodeBlock code={"<a href=\"https://example.com\">বাইরের সাইট</a>\n<a href=\"/about\">আমাদের সম্পর্কে</a>\n<a href=\"#contact\">যোগাযোগ</a>"} lang={"html"} title={"উদাহরণ"} />
+
+<InParagraph text={"লিংককে নতুন ট্যাবে খুলতে চাইলে `target=\"_blank\"` এবং নিরাপত্তার জন্য `rel=\"noopener noreferrer\"` যোগ করতে হয়।"} />
+
+<Tip tone={"success"} title={"মনে রাখুন"} text={"`href` ছাড়া `<a>` ক্লিকযোগ্য হয় না — এটি লিংক element-এর সবচেয়ে গুরুত্বপূর্ণ attribute।"} />

@@ -1,0 +1,27 @@
+---
+title: "Mongoose কেন ব্যবহার করব?"
+label: "কেন Mongoose?"
+order: 2
+level: "Beginner"
+description: "Mongoose-এর প্রধান সুবিধাগুলো — schema, validation, populate, middleware — যা native MongoDB driver-এ নেই — বাংলায়।"
+---
+
+<InParagraph text={"MongoDB-র সাথে কথা বলার সরাসরি উপায় হলো **native driver** (`mongodb` package)। তাহলে Mongoose কেন? কয়েকটি বাস্তব কারণ নিচে দেখুন।"} />
+
+## Major সুবিধা
+
+- **Schema ডিফাইন** — document-এর structure, field type ও default এক জায়গায়
+- **Built-in validation** — `required`, `enum`, `min`/`max`, pattern matching
+- **Populate** — `ObjectId` reference দিয়ে related document এক query-তেই আনা
+- **Middleware hooks** — save/find/delete-এর আগে-পরে custom logic
+- **Chainable query builder** — clear ও readable query লেখা
+- **Indexes** — schema থেকে সহজে index define
+- **TypeScript support** — strong typing সহ ডেটা মডেল
+
+## Native Driver vs Mongoose
+
+<CodeBlock code={"const { MongoClient } = require(\"mongodb\");\nconst client = await MongoClient.connect(uri);\nconst db = client.db(\"shop\");\n\n// কোনো structure বা validation নেই — সব নিজে handle করতে হয়\nawait db.collection(\"users\").insertOne({\n  name: \"রহিম\",\n  email: \"rahim@example.com\",\n  age: 25, // string দিলেও কোনো বাধা নেই\n});"} lang={"js"} title={"Native MongoDB driver"} />
+
+<CodeBlock code={"const userSchema = new mongoose.Schema({\n  name: { type: String, required: true },\n  email: { type: String, required: true },\n  age: { type: Number, min: 0 },\n});\n\nconst User = mongoose.model(\"User\", userSchema);\n\n// age-তে string দিলে validation error — structure বাধ্যতামূলক\nawait User.create({ name: \"রহিম\", email: \"rahim@example.com\", age: 25 });"} lang={"js"} title={"Mongoose-এ একই কাজ"} />
+
+<Tip tone={"warning"} title={"কখন Mongoose-এর দরকার নাও হতে পারে"} text={"শুধু সহজ read/write, aggregation-heavy বা extreme performance-sensitive কাজের জন্য native driver-ই যথেষ্ট ও হালকা। কিন্তু একটি growing application-এ structure, validation ও relationship manage করতে Mongoose সময় বাঁচায়।"} />

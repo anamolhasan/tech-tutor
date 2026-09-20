@@ -1,0 +1,19 @@
+---
+title: "useRef — DOM ও Mutable Value"
+label: "useRef"
+order: 12
+level: "Intermediate"
+description: "useRef দিয়ে DOM access, re-render ছাড়া ডেটা ও আগের value মনে রাখা — বাংলায়।"
+---
+
+## useRef কী?
+
+<InParagraph text={"**`useRef`** একটি box যা value ধরে রাখে, কিন্তু value বদলালে **re-render হয় না**। দুই ব্যবহার: (১) DOM element-এর access, (২) re-render ছাড়া mutable value (যেমন আগের state)।"} />
+
+<CodeBlock code={"import { useRef } from \"react\";\n\nfunction Search() {\n  const inputRef = useRef(null);\n\n  const focusInput = () => {\n    inputRef.current.focus();\n    inputRef.current.style.borderColor = \"#3b82f6\";\n  };\n\n  return (\n    <>\n      <input ref={inputRef} placeholder=\"সার্চ…\" />\n      <button onClick={focusInput}>Focus</button>\n    </>\n  );\n}"} lang={"jsx"} title={"DOM focus"} />
+
+## Previous value
+
+<CodeBlock code={"import { useEffect, useRef, useState } from \"react\";\n\nfunction Counter() {\n  const [count, setCount] = useState(0);\n  const prevCount = useRef(0);\n\n  useEffect(() => {\n    prevCount.current = count; // render-এর পরে আপডেট\n  }, [count]);\n\n  return (\n    <p>\n      এখন: {count} — আগে: {prevCount.current}\n    </p>\n  );\n}"} lang={"jsx"} title={"useRef দিয়ে আগের value"} />
+
+<Tip tone={"warning"} title={"ref-এর সীমা"} text={"Ref value-র পরিবর্তন আবার render trigger করে না। যেটা ভিজিবল হতে হবে সেটা state-এ রাখুন; ref-এ শুধু DOM/render-বহির্ভূত কাজ রাখুন।"} />

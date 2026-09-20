@@ -1,0 +1,20 @@
+---
+title: "Dashboard stats — aggregate + groupBy"
+label: "TechShop Stats API"
+order: 34
+level: "Intermediate"
+description: "admin dashboard-এর numbers — count, sum, group।"
+---
+
+<CodeBlock code={"await prisma.order.aggregate({\n  where: {\n    status: \"paid\",\n    createdAt: { gte: thirtyDaysAgo },\n  },\n  _count: { _all: true },\n  _sum: { total: true },\n});"} lang={"ts"} />
+
+<CodeBlock code={"const popular = await prisma.orderItem.groupBy({\n  by: [\"productId\"],\n  _sum: { qty: true },\n  orderBy: { _sum: { qty: \"desc\" } },\n  take: 5,\n});\n\n// productId → name join সহজ\nconst names = await prisma.product.findMany({\n  where: { id: { in: popular.map((p) => p.productId) } },\n});"} lang={"ts"} />
+
+| Stat | API |
+| --- | --- |
+| মোট order/revenue | count + _sum aggregate |
+| জনপ্রিয় পণ্য | groupBy _sum qty |
+| category-count | groupBy categoryId |
+| monthly trend | raw-sql date_trunc |
+
+<Tip tone={"info"} title={"rewrite SQL"} text={"অধিকাংশ stat-এ `groupBy`/`aggregate`-ই যথেষ্ট; date-series/জটিল report-এ `$queryRaw` (json_agg) আরও পরিষ্কার।"} />

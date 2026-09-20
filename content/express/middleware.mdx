@@ -1,0 +1,41 @@
+---
+title: "Express Middleware"
+label: "Middleware"
+order: 4
+level: "Intermediate"
+description: "Middleware কী, custom middleware, built-in middleware, application-level middleware — বাংলায়।"
+---
+
+<InParagraph text={"**Middleware** হলো functions যা request-এর আগে বা পরে execute হয়। প্রতিটি middleware-এর access থাকে `req`, `res`, `next` — `next()` call করলে পরবর্তী middleware-তে যায়।"} />
+
+## Middleware Flow
+
+<CodeBlock code={"Request coming\n       │\n       ▼\n[Middleware 1] ── next() ──► [Middleware 2] ── next() ──► [Route Handler]\n       ▲                          ▲\n       └─── response lo pass ─────┘\n                              │\n                              ▼\n                        Response send"} lang={"text"} />
+
+## Custom Middleware তৈরি
+
+<CodeBlock code={"// Simple logger middleware\nconst logger = (req, res, next) => {\n  const start = Date.now();\n  console.log(\"➡️\", req.method, req.url);\n\n  res.on(\"finish\", () => {\n    const ms = Date.now() - start;\n    console.log(\"⬅️\", res.statusCode, ms + \"ms\");\n  });\n\n  next();\n};\n\nmodule.exports = logger;"} lang={"javascript"} title={"middleware/logger.js"} />
+
+<CodeBlock code={"const express = require(\"express\");\nconst logger = require(\"./middleware/logger\");\n\nconst app = express();\napp.use(logger); // সব routes-এ apply\n\napp.get(\"/\", (req, res) => {\n  res.send(\"Middleware আছি!\");\n});\n\n// নির্দিষ্ট path-এ middleware\napp.use(\"/api\", require(\"./middleware/apiAuth\"));"} lang={"javascript"} title={"index.js"} />
+
+## Built-in Middleware
+
+<CodeBlock code={"// Body parsing — JSON\napp.use(express.json());\n\n// Body parsing — URL encoded form\napp.use(express.urlencoded({ extended: true }));\n\n// Static files\napp.use(express.static(\"public\"));\n\n// Raw data\napp.use(express.raw({ type: \"application/octet-stream\" }));"} lang={"javascript"} />
+
+## Third-party Middleware
+
+<CodeBlock code={"npm install cors helmet morgan compression"} lang={"bash"} />
+
+<CodeBlock code={"const cors = require(\"cors\");\nconst helmet = require(\"helmet\");\nconst morgan = require(\"morgan\");\nconst compression = require(\"compression\");\n\napp.use(helmet());           // security headers\napp.use(cors());             // cross-origin\napp.use(morgan(\"dev\"));      // logging\napp.use(compression());      // gzip compression"} lang={"javascript"} />
+
+## Middleware Types
+
+| Type | ব্যবহার |
+| --- | --- |
+| Application-level | app.use() — সব request-এ |
+| Router-level | router.use() — ওই router-এ |
+| Error-handling | (err, req, res, next) — error এর জন্য |
+| Built-in | express.json() ইত্যাদি |
+| Third-party | cors, helmet, multer ইত্যাদি |
+
+<Tip tone={"success"} title={"মনে রাখুন"} text={"Middleware-কে `next()` call করতে ভুলবেন না — না করলে request আটকে যাবে। কিংবা `res.send()` 같이 response পাঠিয়ে শেষ করুন।"} />

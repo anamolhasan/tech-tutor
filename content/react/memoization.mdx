@@ -1,0 +1,21 @@
+---
+title: "memo, useMemo, useCallback"
+label: "Memoization"
+order: 15
+level: "Intermediate"
+description: "অপ্রয়োজনীয় re-render কমাতে memo, expensive computation-এর জন্য useMemo, stable function-এর জন্য useCallback — বাংলায়।"
+---
+
+## React.memo
+
+<CodeBlock code={"import { memo } from \"react\";\n\n// props না বদলালে re-render হবে না\nconst ProductCard = memo(function ProductCard({ product }) {\n  return (\n    <div>\n      <strong>{product.name}</strong> — {product.price} টাকা\n    </div>\n  );\n});\n\nexport default ProductCard;"} lang={"jsx"} title={"React.memo example"} />
+
+## useMemo
+
+<CodeBlock code={"import { useMemo } from \"react\";\n\nfunction Report({ transactions, filter }) {\n  const filtered = useMemo(\n    () => {\n      // ব্যয়বহুল গণনা — লুপ/score\n      return transactions.filter((t) => t.status === filter);\n    },\n    [transactions, filter] // এগুলো বদলালেই শুধু আবার হিসাব\n  );\n\n  return <ul>{filtered.map((t) => <li key={t.id}>{t.amount}</li>)}</ul>;\n}"} lang={"jsx"} title={"Expensive computation"} />
+
+## useCallback
+
+<CodeBlock code={"import { useCallback } from \"react\";\n\nfunction App() {\n  // deps না বদলানো পর্যন্ত একই function reference\n  const handleSave = useCallback(async (id) => {\n    await saveItem(id);\n  }, []);\n\n  // child-এর memo-এ তখন beneficial\n  return <SaveButton onSave={handleSave} />;\n}"} lang={"jsx"} title={"Stable function"} />
+
+<Tip tone={"success"} title={"React Compiler"} text={"React 19-এর **React Compiler** (babel plugin) automatic memo করে — তখন `memo`/`useMemo`/`useCallback` প্রায়ই লাগবে না। তবুও ধারণাগুলো জানা দরকার — fallback ও library-র সাথে মিলিয়ে বুঝতে।"} />

@@ -1,0 +1,23 @@
+---
+title: "Image, expo-image ও asset sizes"
+label: "Images & Assets"
+order: 19
+level: "Beginner"
+description: "static ও remote image render করা — caching সহ।"
+---
+
+<InParagraph text={"Bundled static image — `require` দিয়ে:"} />
+
+<CodeBlock code={"import { Image } from \"react-native\";\n\n<Image\n  source={require(\"../../assets/icon.png\")}\n  style={{ width: 48, height: 48 }}\n/>"} lang={"tsx"} />
+
+<InParagraph text={"Remote image-এর জন্য caching/performance ভালো চাইলে **`expo-image`**:"} />
+
+<CodeBlock code={"npx expo install expo-image"} lang={"bash"} title={"terminal"} />
+
+<CodeBlock code={"import { Image } from \"expo-image\";\n\n<Image\n  source=\"https://example.com/avatar.png\"\n  style={{ width: 64, height: 64, borderRadius: 32 }}\n  transition={200}\n/>"} lang={"tsx"} />
+
+- `resizeMode` — cover / contain / stretch
+- `placeholder` — blurHash / blurRadius
+- `transition` — load হওয়ার fade-in সময়
+
+<Tip tone={"info"} title={"density naming"} text={"ছোট icon-এর জন্য `icon.png`, `icon@2x.png`, `icon@3x.png` রাখুন — ডিভাইস density অনুযায়ী নিজে বাছাই হয়, bundle হালকা হয়।"} />

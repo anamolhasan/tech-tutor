@@ -1,0 +1,27 @@
+---
+title: "Model তৈরি"
+label: "Model"
+order: 6
+level: "Beginner"
+description: "Schema থেকে Model তৈরি, collection naming এবং model ব্যবহারের নিয়ম — বাংলায়।"
+---
+
+## Model কী?
+
+<InParagraph text={"**Model** হলো Schema-এর উপর নির্মিত একটি constructor — এটি একটি নির্দিষ্ট `collection`-এর সাথে যুক্ত থাকে এবং এর মাধ্যমেই আমরা document read/write করি।"} />
+
+<CodeBlock code={"import mongoose from \"mongoose\";\n\nconst userSchema = new mongoose.Schema({\n  name: String,\n  email: String,\n});\n\n// 'User' → collection: 'users'\nconst User = mongoose.model(\"User\", userSchema);\n\nexport default User;"} lang={"js"} title={"Model তৈরি"} />
+
+## Collection naming
+
+<InParagraph text={"Mongoose automatically **pluralize** ও **lowercase** করে: `User` → `users`, `BlogPost` → `blogposts`, `Category` → `categories`। collection নাম না মানলে schema-এর তৃতীয় argument থেকে নিজের নাম দিন:"} />
+
+<CodeBlock code={"const User = mongoose.model(\"User\", userSchema, \"my_users\");\n\n// v8: createModel() — নতুন ও recommended\nconst User2 = mongoose.createModel(\"User\", userSchema, \"my_users\");"} lang={"js"} title={"Custom collection name"} />
+
+## একই প্রজেক্টে একবারই model
+
+<Tip tone={"warning"} title={"Duplicate model error"} text={"একই নামে আবার `mongoose.model()` দিলে `OverwriteModelError` হয়। যেসব জায়গায় file reload হতে পারে (যেমন hot reload), সেখানে `mongoose.models.User || mongoose.model(...)` গার্ড ব্যবহার করুন।"} />
+
+## Model instance
+
+<CodeBlock code={"const user = new User({ name: \"রহিম\", email: \"rahim@example.com\" });\n\n// memory-তে document আছে, ডেটাবেসে এখনো যায়নি\nconsole.log(user.isNew); // true\n\nawait user.save(); // এখন collection-এ ঢুকলো\nconsole.log(user.isNew); // false\nconsole.log(user._id); // automatic ObjectId"} lang={"js"} title={"Model থেকে document"} />

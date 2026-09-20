@@ -1,0 +1,35 @@
+---
+title: "NestJS Authentication (JWT)"
+label: "Authentication"
+order: 12
+level: "Advanced"
+description: "JWT install, register/login, passport/guard, bcrypt — NestJS auth বাংলায়।"
+---
+
+<InParagraph text={"NestJS-এ JWT authentication অফিসিয়াল **@nestjs/jwt** ও **Passport** দিয়ে করা হয়। সম্পূর্ণ flow এখানে।"} />
+
+## Setup
+
+<CodeBlock code={"npm i @nestjs/jwt bcryptjs\nnpm i -D @types/bcryptjs"} lang={"bash"} />
+
+<CodeBlock code={"JWT_SECRET=your_super_secret\nJWT_EXPIRES=3600,"} lang={"env"} title={".env"} />
+
+## Auth Service
+
+<CodeBlock code={"import { Injectable, UnauthorizedException } from \"@nestjs/common\";\nimport { JwtService } from \"@nestjs/jwt\";\nimport * as bcrypt from \"bcryptjs\";\nimport { UsersService } from \"../users/users.service\";\n\n@Injectable()\nexport class AuthService {\n  constructor(\n    private readonly usersService: UsersService,\n    private readonly jwtService: JwtService,\n  ) {}\n\n  async register(dto: any) {\n    const hashed = await bcrypt.hash(dto.password, 10);\n    const user = await this.usersService.create({\n      ...dto,\n      password: hashed,\n    });\n    return user;\n  }\n\n  async login(email: string, password: string) {\n    const user = await this.usersService.findByEmail(email);\n    if (!user) throw new UnauthorizedException(\"Email বা password ভুল\");\n\n    const ok = await bcrypt.compare(password, user.password);\n    if (!ok) throw new UnauthorizedException(\"Email বা password ভুল\");\n\n    const payload = { sub: user._id, email: user.email, role: user.role };\n\n    return {\n      access_token: await this.jwtService.signAsync(payload),\n      user: { id: user._id, email: user.email },\n    };\n  }\n}"} lang={"typescript"} title={"src/auth/auth.service.ts"} />
+
+## Auth Module & JwtModule
+
+<CodeBlock code={"import { Module } from \"@nestjs/common\";\nimport { JwtModule } from \"@nestjs/jwt\";\nimport { AuthService } from \"./auth.service\";\nimport { AuthController } from \"./auth.controller\";\n\n@Module({\n  imports: [\n    UsersModule,\n    JwtModule.registerAsync({\n      global: true,\n      useFactory: () => ({\n        secret: process.env.JWT_SECRET,\n        signOptions: {\n          expiresIn: process.env.JWT_EXPIRES,\n        },\n      }),\n    }),\n  ],\n  controllers: [AuthController],\n  providers: [AuthService],\n})\nexport class AuthModule {}"} lang={"typescript"} title={"src/auth/auth.module.ts"} />
+
+## Auth Controller
+
+<CodeBlock code={"import { Body, Controller, Post, HttpCode } from \"@nestjs/common\";\nimport { AuthService } from \"./auth.service\";\n\n@Controller(\"auth\")\nexport class AuthController {\n  constructor(private readonly authService: AuthService) {}\n\n  @Post(\"register\")\n  register(@Body() dto: any) {\n    return this.authService.register(dto);\n  }\n\n  @Post(\"login\")\n  @HttpCode(200)\n  login(@Body() dto: { email: string; password: string }) {\n    return this.authService.login(dto.email, dto.password);\n  }\n}"} lang={"typescript"} title={"src/auth/auth.controller.ts"} />
+
+## Guards-এ JWT verify
+
+<CodeBlock code={"import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from \"@nestjs/common\";\nimport { JwtService } from \"@nestjs/jwt\";\nimport { Request } from \"express\";\n\n@Injectable()\nexport class JwtAuthGuard implements CanActivate {\n  constructor(private jwtService: JwtService) {}\n\n  async canActivate(context: ExecutionContext): Promise<boolean> {\n    const request = context.switchToHttp().getRequest<Request>();\n    const [type, token] = request.headers.authorization?.split(\" \") ?? [];\n\n    if (type !== \"Bearer\" || !token) {\n      throw new UnauthorizedException();\n    }\n\n    try {\n      request[\"user\"] = await this.jwtService.verifyAsync(token);\n    } catch {\n      throw new UnauthorizedException();\n    }\n    return true;\n  }\n}\n\n// ব্যবহার\n@Get(\"me\")\n@UseGuards(JwtAuthGuard)\ngetMe(@Req() req) {\n  return req[\"user\"];\n}"} lang={"typescript"} title={"src/common/jwt-auth.guard.ts"} />
+
+<CodeBlock code={"# test flow\nPOST /auth/register  { name, email, password }\nPOST /auth/login     { email, password } → access_token\n\nGET /users/me\nAuthorization: Bearer <access_token>"} lang={"bash"} />
+
+<Tip tone={"info"} title={"Production সতর্কতা"} text={"JWT_SECRET শক্তিশালী ও environment-এ রাখুন। refresh token ও logout-এর জন্য `@nestjs/jwt` refresh strategy গবেষণা করুন।"} />

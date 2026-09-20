@@ -1,0 +1,47 @@
+---
+title: "Server Components ও Client Components"
+label: "Server & Client Components"
+order: 8
+level: "Intermediate"
+description: "React Server Components (RSC) ও Client Components কী, কখন ব্যবহার করবেন — বাংলায় সম্পূর্ণ গাইড।"
+---
+
+<InParagraph text={"App Router-এ সব component ডিফল্ট **Server Component**। শুধু client-side interactivity (state, event handler, browser API) লাগলে **Client Component** বানান।"} />
+
+## Server Component কখন?
+
+- Data fetch — database/API থেকে, secret নিজের কাছে রাখতে
+- Backend resources — database, API key
+- Client-এ পাঠানো JavaScript কমানো
+- SEO-এর জন্য rendering google-এ দেখা
+
+## Client Component কখন?
+
+- State ও event handler (`useState`, `onClick`)
+- Effects (`useEffect`, lifecycle)
+- Browser-only API (`localStorage`, `window`)
+- Custom hooks
+
+## Client Component তৈরি
+
+<InParagraph text={"ফাইলের শুরুতে **`\"use client\"`** directive যোগ করুন। এরপর ওই ফাইলের সব import/boundary client graph-এ চলে যায়।"} />
+
+<CodeBlock code={"\"use client\";\n\nimport { useState } from \"react\";\n\nexport default function Counter() {\n  const [count, setCount] = useState(0);\n\n  return (\n    <div>\n      <p>Count: {count}</p>\n      <button onClick={() => setCount(count + 1)}>Increment</button>\n    </div>\n  );\n}"} lang={"tsx"} title={"app/ui/counter.tsx"} />
+
+## Server → Client Data Pass
+
+<InParagraph text={"Server Component-এ data fetch করে Client Component-কে **props হিসেবে** পাঠান। সব props অবশ্যই serializable হতে হবে।"} />
+
+<CodeBlock code={"import LikeButton from \"../ui/like-button\";\n\nexport default async function Page() {\n  const data = await fetch(\"https://api.vercel.app/blog\").then((r) => r.json());\n\n  return <LikeButton likes={data.length} />;\n}"} lang={"tsx"} title={"app/blog/page.tsx"} />
+
+<CodeBlock code={"\"use client\";\n\nexport default function LikeButton({ likes }: { likes: number }) {\n  return <button onClick={() => console.log(\"liked\")}>Like ({likes})</button>;\n}"} lang={"tsx"} title={"app/ui/like-button.tsx"} />
+
+## Interleaving (children pattern)
+
+<InParagraph text={"Server Component কে Client Component-এর **children** হিসেবে পাঠানো যায় — client provider-এর ভেতরে server-rendered UI। Theme providers-এ এই pattern ব্যবহার হয়।"} />
+
+<CodeBlock code={"import ThemeProvider from \"./theme-provider\";\n\nexport default function RootLayout({\n  children,\n}: {\n  children: React.ReactNode;\n}) {\n  return (\n    <html>\n      <body>\n        <ThemeProvider>{children}</ThemeProvider>\n      </body>\n    </html>\n  );\n}"} lang={"tsx"} title={"app/layout.tsx"} />
+
+<Tip tone={"warning"} title={"সবকিছু client করবেন না"} text={"প্রতিটি `\"use client\"` browser-এ JavaScript পাঠায়। যতটা সম্ভব **server-এ রাখুন**, শুধু interactive অংশ client করুন — এতে bundle size ছোট, performance ভালো।"} />
+
+<Tip tone={"info"} title={"server-only-elading"} text={"Secret (API key) ব্যবহারের ফাইল client থেকে রক্ষা করতে `import 'server-only'` দিন — client-এ import চেষ্টা করলে build error দেখাবে।"} />

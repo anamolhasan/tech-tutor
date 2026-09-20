@@ -1,0 +1,21 @@
+---
+title: "Folder Structure"
+label: "Folder Structure"
+order: 3
+level: "Beginner"
+description: "Project-এর পরিষ্কার folder structure — components, lib, hooks, types আলাদা করা — বাংলায়।"
+---
+
+<InParagraph text={"Project বড় হলেই পরিষ্কার folder structure জীবন বাঁচায়। আমাদের dashboard-এর structure দেখে চোখ বুলিয়ে নিন:"} />
+
+<CodeBlock code={"src/\n├─ app/\n│  ├─ layout.tsx             # root layout\n│  ├─ providers.tsx          # QueryClientProvider (client)\n│  ├─ page.tsx               # home page\n│  ├─ products/\n│  │  └─ page.tsx            # dashboard page (client)\n│  └─ api/\n│     └─ products/\n│        ├─ route.ts         # GET list + POST create\n│        └─ [id]/route.ts    # GET one + PUT + DELETE\n├─ components/\n│  ├─ ui/                    # shadcn/ui components\n│  ├─ layout/\n│  │  └─ page-header.tsx\n│  └─ products/\n│     ├─ product-table.tsx\n│     ├─ product-columns.tsx\n│     ├─ product-form.tsx    # create + edit (একই form)\n│     ├─ product-dialog.tsx  # modal wrapper\n│     ├─ delete-product-dialog.tsx\n│     ├─ product-filters.tsx\n│     └─ product-pagination.tsx\n├─ lib/\n│  ├─ axios.ts               # axios instance + interceptors\n│  ├─ products-api.ts        # typed API functions\n│  ├─ query-keys.ts          # productKeys\n│  ├─ validators/\n│  │  └─ product-schema.ts   # zod schema\n│  └─ hooks/\n│     ├─ use-products.ts     # list/detail queries\n│     └─ use-product-mutations.ts\n└─ types/\n   └─ product.ts             # Product + API types"} lang={"bash"} title={"Folder tree"} />
+
+## প্রতিটি folder-এর কাজ
+
+- `app/products/page.tsx` — dashboard page, সবকিছু যুক্ত হয় এখানে
+- `components/products/` — this domain-এর UI টুকরো
+- `lib/hooks/` — TanStack Query hooks (query + mutation)
+- `lib/` — Axios, API functions, query keys, schemas
+- `types/` — ডেটা ও API-এর TypeScript types
+
+<Tip tone={"info"} title={"Feature-based grouping"} text={"ছোট project-এ folder-গুলো flat (সমান স্তরের) রাখা ঠিক; বড় project-এ **feature-first** grouping (প্রতিটি feature-এর নিজস্ব components/hooks) বেশি maintainable। এই কোর্সে products feature-কে আলাদা রেখেছি — pattern-টা এভাবেই বোঝা যায়।"} />

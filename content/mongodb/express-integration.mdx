@@ -1,0 +1,27 @@
+---
+title: "Express + Mongoose REST API"
+label: "Express Integration"
+order: 19
+level: "Advanced"
+description: "Express দিয়ে Mongoose-ভিত্তিক পূর্ণাঙ্গ REST API — route, controller, model — বাংলায়।"
+---
+
+## প্রজেক্ট কাঠামো
+
+<CodeBlock code={"my-api/\n├── models/\n│   └── User.js\n├── routes/\n│   └── users.js\n├── db.js\n├── server.js\n└── package.json"} lang={"text"} title={"Folder structure"} />
+
+## Model + db
+
+<CodeBlock code={"import mongoose from \"mongoose\";\n\nconst userSchema = new mongoose.Schema(\n  {\n    name: { type: String, required: true },\n    email: { type: String, required: true, unique: true },\n    age: Number,\n  },\n  { timestamps: true }\n);\n\nexport default mongoose.model(\"User\", userSchema);"} lang={"js"} title={"models/User.js"} />
+
+<CodeBlock code={"import mongoose from \"mongoose\";\n\nexport async function connectDB(uri) {\n  await mongoose.connect(uri);\n  console.log(\"MongoDB connected\");\n}"} lang={"js"} title={"db.js"} />
+
+## Routes + Controller
+
+<CodeBlock code={"import { Router } from \"express\";\nimport User from \"../models/User.js\";\n\nconst router = Router();\n\n// GET /api/users — সব user (pagination সহ)\nrouter.get(\"/\", async (req, res, next) => {\n  try {\n    const page = Number(req.query.page) || 1;\n    const limit = Number(req.query.limit) || 10;\n\n    const [users, total] = await Promise.all([\n      User.find().skip((page - 1) * limit).limit(limit).lean(),\n      User.countDocuments(),\n    ]);\n\n    res.json({ users, total, page });\n  } catch (err) {\n    next(err);\n  }\n});\n\n// GET /api/users/:id\nrouter.get(\"/:id\", async (req, res, next) => {\n  try {\n    const user = await User.findById(req.params.id).lean();\n    if (!user) return res.status(404).json({ message: \"User নেই\" });\n    res.json(user);\n  } catch (err) {\n    next(err);\n  }\n});\n\n// POST /api/users\nrouter.post(\"/\", async (req, res, next) => {\n  try {\n    const user = await User.create(req.body);\n    res.status(201).json(user);\n  } catch (err) {\n    next(err);\n  }\n});\n\n// PATCH /api/users/:id\nrouter.patch(\"/:id\", async (req, res, next) => {\n  try {\n    const user = await User.findByIdAndUpdate(req.params.id, req.body, {\n      new: true,\n      runValidators: true,\n    });\n    if (!user) return res.status(404).json({ message: \"User নেই\" });\n    res.json(user);\n  } catch (err) {\n    next(err);\n  }\n});\n\n// DELETE /api/users/:id\nrouter.delete(\"/:id\", async (req, res, next) => {\n  try {\n    const deleted = await User.findByIdAndDelete(req.params.id);\n    if (!deleted) return res.status(404).json({ message: \"User নেই\" });\n    res.sendStatus(204);\n  } catch (err) {\n    next(err);\n  }\n});\n\nexport default router;"} lang={"js"} title={"routes/users.js"} />
+
+## Server
+
+<CodeBlock code={"import express from \"express\";\nimport { connectDB } from \"./db.js\";\nimport usersRouter from \"./routes/users.js\";\n\nconst app = express();\napp.use(express.json());\n\napp.use(\"/api/users\", usersRouter);\n\n// কেন্দ্রীয় error handler\napp.use((err, req, res, next) => {\n  if (err.name === \"ValidationError\") {\n    return res.status(400).json({ message: \"Validation failed\" });\n  }\n  if (err.code === 11000) {\n    return res.status(409).json({ message: \"Duplicate value\" });\n  }\n  res.status(500).json({ message: \"Internal server error\" });\n});\n\nconst PORT = process.env.PORT || 3000;\n\nawait connectDB(process.env.MONGODB_URI);\napp.listen(PORT, () => console.log(\"Server on\", PORT));"} lang={"js"} title={"server.js"} />
+
+<Tip tone={"success"} title={"runValidators"} text={"`findByIdAndUpdate`-এ schema validation চালাতে **`{ runValidators: true }`** অপরিহার্য — না দিলে required/enum ইত্যাদি check হয় না।"} />

@@ -1,0 +1,17 @@
+---
+title: "Client instantiate ও প্রথম query"
+label: "Prisma Client"
+order: 8
+level: "Beginner"
+description: "generated client import → query শুরু।"
+---
+
+<CodeBlock code={"import { PrismaClient } from \"@prisma/client\";\n\nconst prisma = new PrismaClient();\n\nasync function main() {\n  const products = await prisma.product.findMany({\n    where: { active: true },\n  });\n  console.log(products);\n}\n\nmain()\n  .catch(console.error)\n  .finally(() => prisma.$disconnect());"} lang={"ts"} />
+
+- type-specific — field spelling ভুল compile-এ ধরা
+- `findMany` শেষে Promise — `await`
+- `$disconnect` app বন্ধে
+
+<InParagraph text={"Prisma Client-এর **query engine** (Rust) SQL বানায় — counting/SELECT-projection নিজে করে।"} />
+
+<Tip tone={"info"} title={"hot reload-এ caution"} text={"dev server (Next/Express hot-reload) বারবার `new PrismaClient()` করলে connection problem — solution টপিক ২৪।"} />

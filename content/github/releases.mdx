@@ -1,0 +1,39 @@
+---
+title: "Release তৈরি ও সংস্করণ ব্যবস্থা"
+label: "Releases"
+order: 13
+level: "Intermediate"
+description: "GitHub Release কী, releases/new, assets — বাংলায়।"
+---
+
+## Release কী?
+
+<InParagraph text={"Release হলো repository-এর একটি নির্দিষ্ট সংস্করণ যা **নিষ্পাপভাবে** ব্যবহারকারীকে দেখানো হয় — tag, release notes, downloadable assets সহ।"} />
+
+## git tag → GitHub release
+
+<CodeBlock code={"git tag -a v1.0.0 -m \"প্রথম stable release\"\ngit push origin v1.0.0"} lang={"bash"} />
+
+## Release তৈরি (UI)
+
+- repo → **Releases** → **Draft a new release**
+- Choose a tag: করে আগের tag বাছাই/নতুন
+- Title + notes (আর সম্ভব preview)
+- Attach binaries (যদি থাকে)
+- Set as latest → Publish
+
+## Release notes-এ কী লিখবেন
+
+<CodeBlock code={"## ভেঙে যাওয়া পরিবর্তন\n- API base URL পরিবর্তিত\n\n## নতুন\n- dark mode\n- search API\n\n## বাগ ফিক্স\n- #42 login crash solved"} lang={"markdown"} />
+
+## Pre-release ও draft
+
+- **Draft** — এখনই প্রকাশ নয়, পরে publish
+- **Pre-release** — test/RC সংস্করণ, latest হিসেবে labeled নয়
+- **Latest** — default-release হিসেবে দেখায়
+
+## SemVer স্মরণ
+
+<InParagraph text={"`MAJOR.MINOR.PATCH` — ভাঙা/ফিচার/ফিক্স। সংস্করণ বাড়ানো সময় এই নিয়ম অনুসরণ করলে ব্যবহারকারীরা confident।"} />
+
+<Tip tone={"success"} title={"অভ্যাস"} text={"প্রতিটি production release-এ tag + Release notes লিখুন। চেঞ্জলগ পরে নিজেরই সহায়ক হবে — (এ কী আসলে ছিল?) প্রশ্নের জবাব।"} />

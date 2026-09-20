@@ -1,0 +1,29 @@
+---
+title: "NestJS WebSockets (Gateway)"
+label: "WebSockets"
+order: 15
+level: "Advanced"
+description: "@WebSocketGateway, events, rooms, real-time — NestJS websocket বাংলায়।"
+---
+
+<InParagraph text={"**WebSocket** bidirectional real-time communication— chat, notification, live updates। NestJS-এ `@WebSocketGateway` দিয়ে সহজ।"} />
+
+## Setup
+
+<CodeBlock code={"npm i @nestjs/websockets @nestjs/platform-socket.io socket.io"} lang={"bash"} />
+
+## Chat Gateway
+
+<CodeBlock code={"import {\n  ConnectedSocket,\n  MessageBody,\n  OnGatewayConnection,\n  OnGatewayDisconnect,\n  SubscribeMessage,\n  WebSocketGateway,\n  WebSocketServer,\n} from \"@nestjs/websockets\";\nimport { Server, Socket } from \"socket.io\";\n\n@WebSocketGateway({ cors: { origin: \"*\" } })\nexport class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {\n  @WebSocketServer()\n  server: Server;\n\n  handleConnection(client: Socket) {\n    console.log(\"Client connected:\", client.id);\n  }\n\n  handleDisconnect(client: Socket) {\n    console.log(\"Client disconnected:\", client.id);\n  }\n\n  @SubscribeMessage(\"message\")\n  handleMessage(\n    @ConnectedSocket() client: Socket,\n    @MessageBody() data: { room: string; text: string },\n  ) {\n    // room-এ broadcast\n    client.to(data.room).emit(\"message\", {\n      from: client.id,\n      text: data.text,\n    });\n  }\n\n  @SubscribeMessage(\"join\")\n  joinRoom(@ConnectedSocket() client: Socket, @MessageBody() room: string) {\n    client.join(room);\n    this.server.to(room).emit(\"system\", \"A user joined \" + room);\n  }\n}"} lang={"typescript"} title={"src/chat/chat.gateway.ts"} />
+
+## Module & Client
+
+<CodeBlock code={"import { Module } from \"@nestjs/common\";\nimport { ChatGateway } from \"./chat.gateway\";\n\n@Module({\n  providers: [ChatGateway],\n})\nexport class ChatModule {}"} lang={"typescript"} title={"src/chat/chat.module.ts"} />
+
+<CodeBlock code={"import { io } from \"socket.io-client\";\n\nconst socket = io(\"http://localhost:3000\");\n\nsocket.on(\"connect\", () => {\n  console.log(\"connected:\", socket.id);\n  socket.emit(\"join\", \"room-1\");\n});\n\nsocket.on(\"message\", (data) => {\n  console.log(data.from, \"says:\", data.text);\n});\n\nsocket.on(\"system\", (msg) => console.log(\"System:\", msg));\n\n// send message\nsocket.emit(\"message\", {\n  room: \"room-1\",\n  text: \"হ্যালো রুম!\",\n});"} lang={"javascript"} title={"Client side (socket.io-client)"} />
+
+## NestJS থেকে Server-এ emit
+
+<CodeBlock code={"// service-এ gateway inject\n@Injectable()\nexport class NotificationService {\n  constructor(private readonly chatGateway: ChatGateway) {}\n\n  notifyAll(message: string) {\n    this.chatGateway.server.emit(\"notification\", message);\n  }\n\n  notifyRoom(room: string, payload: any) {\n    this.chatGateway.server.to(room).emit(\"event\", payload);\n  }\n}"} lang={"typescript"} />
+
+<Tip tone={"warning"} title={"Scalability"} text={"একাধিক server-এ websocket চালাতে **Redis adapter** দরকার (`@socket.io/redis-adapter`) — এতে socket event shared হয়।"} />

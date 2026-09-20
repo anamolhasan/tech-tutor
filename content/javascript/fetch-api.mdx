@@ -1,0 +1,31 @@
+---
+title: "Fetch API"
+label: "Fetch API"
+order: 15
+level: "Intermediate"
+description: "fetch() দিয়ে ডেটা আনা, response কনভার্ট, error handling, POST + async/await — সম্পূর্ণ বাংলা গাইড।"
+---
+
+<InParagraph text={"**Fetch API** হলো ব্রাউজারের built-in উপায় — নেটওয়ার্ক থেকে ডেটা আনা-পাঠানো করতে। এটি `Promise`-ভিত্তিক।"} />
+
+## GET রিকোয়েস্ট
+
+<CodeBlock code={"fetch(\"https://api.example.com/users\")\n  .then((response) => response.json())\n  .then((users) => console.log(users))\n  .catch((error) => console.error(error));"} lang={"javascript"} />
+
+## async/await দিয়ে
+
+<CodeBlock code={"async function loadUsers() {\n  try {\n    const response = await fetch(\n      \"https://api.example.com/users\"\n    );\n\n    if (!response.ok) {\n      throw new Error(\"নেটওয়ার্ক ভুল\");\n    }\n\n    const users = await response.json();\n    console.log(users);\n  } catch (error) {\n    console.error(\"ডেটা আনা ব্যর্থ:\", error);\n  }\n}\n\nloadUsers();"} lang={"javascript"} />
+
+<InParagraph text={"`response.ok` false হলে (যেমন 404) `json()` এখনও চলে, তাই এর আগেই চেক করা ভালো অভ্যাস।"} />
+
+## POST রিকোয়েস্ট
+
+<CodeBlock code={"const newUser = {\n  name: \"রহিম\",\n  email: \"rahim@example.com\",\n};\n\nfetch(\"https://api.example.com/users\", {\n  method: \"POST\",\n  headers: {\n    \"Content-Type\": \"application/json\",\n  },\n  body: JSON.stringify(newUser),\n})\n  .then((response) => response.json())\n  .then((data) => console.log(\"তৈরি হয়েছে:\", data));"} lang={"javascript"} />
+
+## UI-তে দেখানো
+
+<CodeBlock code={"<button id=\"load\">ডেটা লোড</button>\n<ul id=\"list\"></ul>\n\n<script>\n  document.getElementById(\"load\")\n    .addEventListener(\"click\", async () => {\n      const res = await fetch(\"/api/users\");\n      const users = await res.json();\n      const list = document.getElementById(\"list\");\n\n      list.innerHTML = users\n        .map(u => \"<li>\" + u.name + \"</li>\")\n        .join(\"\");\n    });\n</script>"} lang={"html"} />
+
+<Tip tone={"warning"} title={"Error handle ভুলবেন না"} text={"নেটওয়ার্ক বিপর্যয় (offline, server down) `catch`-এ ধরা পড়ে। data-কে `try/catch` এ wrap করুন যাতে UI crash না হয়।"} />
+
+<Tip tone={"success"} title={"সংক্ষেপ"} text={"`fetch` → `response.json()` → data ব্যবহার; ভুল হ্যান্ডলে `response.ok` চেক + `try/catch`। এটাই মূল রুটিন।"} />

@@ -1,0 +1,21 @@
+---
+title: "EAS Build — cloud-এ native binary"
+label: "EAS Build"
+order: 35
+level: "Advanced"
+description: "eas-cli, build profiles — dev/preview/production।"
+---
+
+<InParagraph text={"**EAS Build** — cloud-এ android/iOS binary তৈরি। Local Xcode/Gradle লাগে না।"} />
+
+<CodeBlock code={"npm install -g eas-cli\nnpx eas login\nnpx eas init"} lang={"bash"} title={"terminal"} />
+
+<CodeBlock code={"{\n  \"cli\": { \"version\": \">= 12.0.0\" },\n  \"build\": {\n    \"development\": {\n      \"developmentClient\": true,\n      \"distribution\": \"internal\"\n    },\n    \"preview\": { \"distribution\": \"internal\" },\n    \"production\": { \"autoIncrement\": true }\n  }\n}"} lang={"json"} title={"eas.json"} />
+
+<CodeBlock code={"npx eas build --platform android --profile development\nnpx eas build --platform ios --profile production\nnpx eas build --platform all"} lang={"bash"} title={"terminal"} />
+
+- development — dev client, যেখানে native module debug
+- preview — বন্ধু/QA-এ install-এর জন্য
+- production — store-এ upload-এর জন্য
+
+<Tip tone={"info"} title={"local build"} text={"Cloud পছন্দ না হলে `--local` flag-এ নিজের মেশিনেও build হয় — তবে সময় লাগে বেশি, উপরন্তু native tooling দরকার।"} />

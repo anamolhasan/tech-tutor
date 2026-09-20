@@ -1,0 +1,37 @@
+---
+title: "Production Deployment & Optimization"
+label: "Production"
+order: 16
+level: "Advanced"
+description: "PM2, clustering, logging, rate limiting, security — production-এ Node.js app চালানো বাংলায়।"
+---
+
+## Process Manager (PM2)
+
+<InParagraph text={"**PM2** production-এ Node.js process manage করার জন্য ব্যবহৃত হয়। এটি auto-restart, clustering, log management — সব করে।"} />
+
+<CodeBlock code={"# install\nnpm install -g pm2\n\n# start app\npm2 start app.js\n\n# start with name\npm2 start app.js --name \"my-app\"\n\n# list all processes\npm2 list\n\n# logs\npm2 logs\n\n# restart\npm2 restart my-app\n\n# stop\npm2 stop my-app\n\n# cluster mode (CPU cores ব্যবহার)\npm2 start app.js -i max"} lang={"bash"} />
+
+## Clustering
+
+<CodeBlock code={"const cluster = require(\"node:cluster\");\nconst os = require(\"node:os\");\nconst http = require(\"node:http\");\n\nif (cluster.isPrimary) {\n  const numCPUs = os.cpus().length;\n  console.log(\"Master process:\", process.pid);\n  console.log(\"Forking\", numCPUs, \"workers\");\n\n  for (let i = 0; i < numCPUs; i++) {\n    cluster.fork();\n  }\n\n  cluster.on(\"exit\", (worker) => {\n    console.log(\"Worker\", worker.process.pid, \"died. Restarting...\");\n    cluster.fork();\n  });\n} else {\n  http.createServer((req, res) => {\n    res.end(\"Hello from worker \" + process.pid);\n  }).listen(3000);\n\n  console.log(\"Worker\", process.pid, \"started\");\n}"} lang={"javascript"} title={"cluster.js"} />
+
+## Rate Limiting
+
+<CodeBlock code={"npm install express-rate-limit"} lang={"bash"} />
+
+<CodeBlock code={"const rateLimit = require(\"express-rate-limit\");\n\nconst limiter = rateLimit({\n  windowMs: 15 * 60 * 1000, // 15 minutes\n  max: 100, // per IP max 100 requests\n  message: \"অনেক বেশি request পাঠানো হয়েছে\",\n});\n\napp.use(\"/api/\", limiter);"} lang={"javascript"} />
+
+## Security Best Practices
+
+<CodeBlock code={"npm install helmet cors"} lang={"bash"} />
+
+<CodeBlock code={"const helmet = require(\"helmet\");\nconst cors = require(\"cors\");\n\n// Security headers\napp.use(helmet());\n\n// CORS\napp.use(cors({\n  origin: \"https://myfrontend.com\",\n  methods: [\"GET\", \"POST\"],\n}));\n\n// Disable X-Powered-By\napp.disable(\"x-powered-by\");"} lang={"javascript"} />
+
+## Logging
+
+<CodeBlock code={"npm install winston"} lang={"bash"} />
+
+<CodeBlock code={"const winston = require(\"winston\");\n\nconst logger = winston.createLogger({\n  level: \"info\",\n  format: winston.format.combine(\n    winston.format.timestamp(),\n    winston.format.json()\n  ),\n  transports: [\n    new winston.transports.File({ filename: \"error.log\", level: \"error\" }),\n    new winston.transports.File({ filename: \"combined.log\" }),\n  ],\n});\n\nlogger.info(\"Server started\");\nlogger.error(\"Database connection failed\");"} lang={"javascript"} />
+
+<Tip tone={"warning"} title={"Production Checklist"} text={"Environment variables সেট করুন, Helmet ও CORS যোগ করুন, Rate limiting চালু করুন, PM2 দিয়ে process manage করুন, log file রাখুন।"} />

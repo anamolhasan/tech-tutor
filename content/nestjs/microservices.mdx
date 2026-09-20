@@ -1,0 +1,36 @@
+---
+title: "NestJS Microservices"
+label: "Microservices"
+order: 16
+level: "Advanced"
+description: "Transport strategies, TCP/RMQ, client proxy, service communication — বাংলায়।"
+---
+
+<InParagraph text={"**Microservices** দিয়ে আপনার application-কে আলাদা আলাদা services-এ ভাগ করা যায় — প্রতিটি নিজের port/transport-এ চলবে।"} />
+
+## Transport Strategies
+
+| Transport | ব্যবহার |
+| --- | --- |
+| TCP | ডিফল্ট, typical microservice |
+| Redis | pub/sub pattern |
+| NATS | cloud-native messaging |
+| gRPC | Type-safe RPC |
+| Kafka | streaming/event |
+| RabbitMQ | message queue enterprise |
+
+## MicroService App তৈরি
+
+<CodeBlock code={"import { NestFactory } from \"@nestjs/core\";\nimport { MicroserviceOptions, Transport } from \"@nestjs/microservices\";\nimport { MathModule } from \"./math.module\";\n\nasync function bootstrap() {\n  const app = await NestFactory.createMicroservice<MicroserviceOptions>(\n    MathModule,\n    {\n      transport: Transport.TCP,\n      options: { host: \"127.0.0.1\", port: 3001 },\n    },\n  );\n  await app.listen();\n}\nbootstrap();"} lang={"typescript"} title={"math-service/main.ts"} />
+
+<CodeBlock code={"import { Controller } from \"@nestjs/common\";\nimport { MessagePattern, Payload } from \"@nestjs/microservices\";\n\n@Controller()\nexport class MathController {\n  @MessagePattern({ cmd: \"add\" })\n  add(@Payload() data: { a: number; b: number }): number {\n    return data.a + data.b;\n  }\n}"} lang={"typescript"} title={"math-service/math.controller.ts"} />
+
+## Client Proxy — Main App থেকে call
+
+<CodeBlock code={"import { Module } from \"@nestjs/common\";\nimport { ClientsModule, Transport } from \"@nestjs/microservices\";\nimport { AppController } from \"./app.controller\";\n\n@Module({\n  imports: [\n    ClientsModule.register([\n      {\n        name: \"MATH_SERVICE\",\n        transport: Transport.TCP,\n        options: { host: \"127.0.0.1\", port: 3001 },\n      },\n    ]),\n  ],\n  controllers: [AppController],\n})\nexport class AppModule {}"} lang={"typescript"} title={"main-app/app.module.ts"} />
+
+<CodeBlock code={"import { Controller, Get, Inject } from \"@nestjs/common\";\nimport { ClientProxy } from \"@nestjs/microservices\";\nimport { lastValueFrom } from \"rxjs\";\n\n@Controller(\"math\")\nexport class AppController {\n  constructor(\n    @Inject(\"MATH_SERVICE\") private readonly client: ClientProxy,\n  ) {}\n\n  @Get()\n  async add() {\n    const result = await lastValueFrom(\n      this.client.send({ cmd: \"add\" }, { a: 5, b: 3 }),\n    );\n    return { result }; // 8\n  }\n}"} lang={"typescript"} title={"main-app/app.controller.ts"} />
+
+<CodeBlock code={"# run service প্রথমে\nnode dist/main.js   # or npm run start:prod\n\n# তারপর main app\nnpm run start:dev\n# GET http://localhost:3000/math → { result: 8 }"} lang={"bash"} />
+
+<Tip tone={"success"} title={"কখন Microservices?"} text={"ছোট project-এ monolith sufficient — দল/অ্যাপ বড় হলে, scaling-এ services split করুন। শুরু থেকেই modular monolith (module separation) রাখুন।"} />

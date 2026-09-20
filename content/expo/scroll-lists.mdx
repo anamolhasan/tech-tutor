@@ -1,0 +1,15 @@
+---
+title: "ScrollView বনাম FlatList — long list সবসময় FlatList"
+label: "Scroll & Lists"
+order: 14
+level: "Intermediate"
+description: "scrollable content-এ ScrollView/FlatList বাছাই — নিয়ম ও উদাহরণ।"
+---
+
+<InParagraph text={"ছোট, নির্দিষ্ট content-এ **`ScrollView`**, আর বড় অথবা dynamic list-এ **`FlatList`** — performance ও memory-র তফাতই আসল কারণ।"} />
+
+<CodeBlock code={"import { FlatList, Text, View } from \"react-native\";\n\nconst tasks = [\"দুধ\", \"রুটি\", \"ডিম\"];\n\nexport default function AllTasks() {\n  return (\n    <FlatList\n      data={tasks}\n      keyExtractor={(item, index) => String(index)}\n      renderItem={({ item }) => (\n        <View style={{ padding: 12 }}>\n          <Text>{item}</Text>\n        </View>\n      )}\n    />\n  );\n}"} lang={"tsx"} title={"app/(tabs)/all.tsx"} />
+
+<InParagraph text={"FlatList শুধু দৃশ্যমান item render করে (**virtualization**); ScrollView সব একসাথে — হাজার item-এ lag নিশ্চিত।"} />
+
+<Tip tone={"info"} title={"FlatList-এর ৩টি bonus"} text={"`ListEmptyComponent` (খালি state), `onRefresh` + `refreshing` (pull-to-refresh), `keyExtractor` (unique key)। তিনটিই আসল app-এ প্রায়ই দরকার।"} />

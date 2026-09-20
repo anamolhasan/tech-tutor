@@ -1,0 +1,29 @@
+---
+title: "Async ও Promise (টাইপ সহ)"
+label: "Async TypeScript"
+order: 17
+level: "Intermediate"
+description: "Promise<T>, async/await, try/catch এবং typed fetch response — asynchronous কোডে টাইপ ব্যবহার বাংলায়।"
+---
+
+<InParagraph text={"আধুনিক অ্যাপ আসলে async-ভিত্তিক। TypeScript-এ **Promise<T>** — T হলো eventual মানের টাইপ — দিয়ে async কোডও পুরো টাইপ-সুরক্ষিত হয়।"} />
+
+## Promise\<T>
+
+<CodeBlock code={"function wait(ms: number): Promise<void> {\n  return new Promise((resolve) => setTimeout(resolve, ms));\n}\n\nfunction fetchSettings(): Promise<{ dark: boolean }> {\n  return Promise.resolve({ dark: true });\n}\n\nfetchSettings().then((settings) => {\n  console.log(settings.dark);   // boolean\n});"} lang={"typescript"} />
+
+## async/await
+
+<CodeBlock code={"async function loadUser(id: string): Promise<string> {\n  const response = await fetch(\"/api/users/\" + id);\n  const data = (await response.json()) as { name: string };\n  return data.name;\n}\n\n// async ফাংশন সবসময় Promise ফিরত দেয়\nconst user: Promise<string> = loadUser(\"u-1\");"} lang={"typescript"} />
+
+## Error Handling
+
+<CodeBlock code={"async function safeLoad(id: string): Promise<{ ok: boolean; error?: string }> {\n  try {\n    const response = await fetch(\"/api/users/\" + id);\n    if (!response.ok) throw new Error(\"সার্ভার ত্রুটি\");\n    return { ok: true };\n  } catch (error) {\n    const message = error instanceof Error ? error.message : \"অজানা ত্রুটি\";\n    return { ok: false, error: message };\n  }\n}"} lang={"typescript"} />
+
+## Typed API Response
+
+<CodeBlock code={"interface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\ninterface ApiResponse<T> {\n  data: T;\n  message?: string;\n}\n\nasync function getUsers(): Promise<ApiResponse<User[]>> {\n  const response = await fetch(\"/api/users\");\n  if (!response.ok) {\n    throw new Error(\"ডেটা পাওয়া যায়নি\");\n  }\n  return (await response.json()) as ApiResponse<User[]>;\n}\n\nconst users = await getUsers();\nusers.data.forEach((user) => console.log(user.name));"} lang={"typescript"} />
+
+<CodeBlock code={"// Parallel — দুটো আরেকটা fetch একসাথে\nconst [userA, userB] = await Promise.all([\n  getUsers(),\n  getUsers(),\n]);\n\n// formatError-এ known type-কেবল\ntype ErrorType = { code: number; message: string };\nfunction formatError(err: unknown): string {\n  if (err instanceof Error) return err.message;\n  if (typeof err === \"object\" && err !== null && \"code\" in err) {\n    return (err as ErrorType).message;\n  }\n  return \"অজানা ত্রুটি\";\n}"} lang={"typescript"} />
+
+<Tip tone={"success"} title={"fetch-এ টাইপ"} text={"`response.json()` সবসময় `any`/`unknown` ফেরত দেয় — তাই interface define করে `as` বা narrowing করে ব্যবহার করুন। API-তে API-নির্দিষ্ট schema যদি থাকে, তা সবচেয়ে ভালো।"} />

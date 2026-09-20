@@ -1,0 +1,32 @@
+{
+  "name": "@tech-tutor/utils",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./content": "./src/content.ts",
+    "./inline": "./src/inline.ts",
+    "./cn": "./src/cn.ts",
+    "./questions": "./src/questions.ts"
+  },
+  "sideEffects": false,
+  "scripts": {
+    "check-types": "tsc --noEmit",
+    "lint": "eslint . --max-warnings 0",
+    "clean": "node -e \"require('fs').rmSync('.turbo',{recursive:true,force:true});require('fs').rmSync('dist',{recursive:true,force:true});require('fs').rmSync('node_modules',{recursive:true,force:true})\""
+  },
+  "dependencies": {
+    "@tech-tutor/types": "workspace:*",
+    "clsx": "^2.1.1",
+    "gray-matter": "^4.0.3",
+    "tailwind-merge": "^3.3.1"
+  },
+  "devDependencies": {
+    "@tech-tutor/eslint-config": "workspace:*",
+    "@tech-tutor/typescript-config": "workspace:*",
+    "@types/node": "catalog:typescript5",
+    "eslint": "catalog:eslint9",
+    "typescript": "catalog:typescript5"
+  }
+}

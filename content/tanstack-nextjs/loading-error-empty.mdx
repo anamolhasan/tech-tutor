@@ -1,0 +1,25 @@
+---
+title: "Loading, Error ও Empty State"
+label: "States"
+order: 12
+level: "Intermediate"
+description: "useQuery-এর status/state থেকে তিনটি UI অবস্থা বের করা — বাংলায়।"
+---
+
+<InParagraph text={"প্রতিটি data-fetching UI-র তিনটি অবশ্যক অবস্থা: **loading**, **error**, **empty**। TanStack Query এই state গুলোর ব্যবস্থা করে — শুধু render করতে হয়।"} />
+
+<CodeBlock code={"\"use client\";\n\nimport { useProducts } from \"@/lib/hooks/use-products\";\nimport { ProductTable } from \"./product-table\";\nimport { Skeleton } from \"@/components/ui/skeleton\";\n\nexport function ProductList({ params }: { params: ProductQueryParams }) {\n  const { data, isPending, isError, error, refetch } = useProducts(params);\n\n  // 1) Loading\n  if (isPending) {\n    return <ProductTableSkeleton />;\n  }\n\n  // 2) Error\n  if (isError) {\n    return (\n      <div className=\"rounded-xl border p-6 text-center\">\n        <p className=\"font-medium\">ডেটা লোড করা যায়নি</p>\n        <p className=\"mt-1 text-sm text-muted-foreground\">{error.message}</p>\n        <Button onClick={() => refetch()} className=\"mt-3\">\n          আবার চেষ্টা করুন\n        </Button>\n      </div>\n    );\n  }\n\n  // 3) Empty\n  if (data.items.length === 0) {\n    return <EmptyState message=\"কোনো product পাওয়া যায়নি\" />;\n  }\n\n  // 4) Success\n  return <ProductTable data={data.items} />;\n}"} lang={"tsx"} title={"src/components/products/product-list.tsx"} />
+
+## কোন status কখন
+
+| State | কখন সত্য |
+| --- | --- |
+| `isPending` | প্রথমবার ডেটা নেই, fetch চলছে |
+| `isFetching` | যেকোনো fetch চললে (background সহ) |
+| `isError` | query শেষবার ভুল হয়েছে |
+| `isSuccess` | data আছে |
+| `isRefetching` | ডেটা আছে + আবার fetch হচ্ছে |
+
+<CodeBlock code={"export function EmptyState({\n  message,\n  action,\n}: {\n  message: string;\n  action?: React.ReactNode;\n}) {\n  return (\n    <div className=\"rounded-xl border py-16 text-center\">\n      <p className=\"text-muted-foreground\">{message}</p>\n      {action && <div className=\"mt-4\">{action}</div>}\n    </div>\n  );\n}"} lang={"tsx"} title={"Reusable EmptyState"} />
+
+<Tip tone={"info"} title={"v4 slug মনে রাখুন"} text={"TanStack Query **v4/ v5**-এ `isLoading` আসলে `isPending && isFetching` — অর্থাৎ ডেটা পূর্বেই কার থাকলে `isLoading` false। সাধারণত `isPending` আর `isFetching` দিয়েই কাজ করুন; `data === undefined` চেকও নির্ভরযোগ্য।"} />

@@ -1,0 +1,25 @@
+---
+title: "Transactions (Multi-Document ACID)"
+label: "Transactions"
+order: 18
+level: "Advanced"
+description: "Session দিয়ে একাধিক document-এর atomic পরিবর্তন: startTransaction, commit, abort — বাংলায়।"
+---
+
+## Transaction কবে দরকার
+
+- টাকা ট্রান্সফার — এক account থেকে subtract, অন্য account-এ add
+- Order + stock + payment — তিনটা-ই সফল বা তিনটাই fail
+- একাধিক collection/document যেখানে পারস্পরিক নির্ভরতা গুরুত্বপূর্ণ
+
+## Session + transaction
+
+<CodeBlock code={"async function transfer(fromId, toId, amount) {\n  const session = await mongoose.startSession();\n  session.startTransaction();\n\n  try {\n    // session দেওয়া অপারেশন atomic — সব সফল না হলে কেউই save হয় না\n    await Account.updateOne(\n      { _id: fromId },\n      { $inc: { balance: -amount } },\n      { session }\n    );\n\n    await Account.updateOne(\n      { _id: toId },\n      { $inc: { balance: amount } },\n      { session }\n    );\n\n    await session.commitTransaction();\n    console.log(\"Success\");\n  } catch (err) {\n    await session.abortTransaction();\n    console.error(\"Rolled back:\", err.message);\n    throw err;\n  } finally {\n    session.endSession();\n  }\n}"} lang={"js"} title={"Fund transfer"} />
+
+## save() সহ transaction
+
+<CodeBlock code={"const session = await mongoose.startSession();\nsession.startTransaction();\n\ntry {\n  const user = new User({ name: \"রহিম\", email: \"rahim@example.com\" });\n  await user.save({ session });\n\n  const profile = new Profile({ user: user._id, bio: \"...\" });\n  await profile.save({ session });\n\n  await session.commitTransaction();\n} catch (err) {\n  await session.abortTransaction();\n} finally {\n  session.endSession();\n}"} lang={"js"} title={"create + save session"} />
+
+## Transaction limit
+
+<Tip tone={"warning"} title={"Transaction-এর শর্ত"} text={"Transaction চলে **Replica Set/Atlas**-এ, standalone MongoDB-তে নয়। Sessions ৬০ সেকেন্ড inactive থাকলে timeout হয়। ছোট, দ্রুত কাজের জন্য transaction এড়িয়ে — শুধু সত্যিই atomic-এর দরকার হলে ব্যবহার করুন।"} />

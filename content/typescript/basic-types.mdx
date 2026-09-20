@@ -1,0 +1,51 @@
+---
+title: "TypeScript Basic Types (প্রাথমিক টাইপ)"
+label: "Basic Types"
+order: 3
+level: "Beginner"
+description: "string, number, boolean, array, tuple, object, any, unknown, never, void, bigint, symbol — প্রতিটি টাইপের বাংলা উদাহরণ।"
+---
+
+<InParagraph text={"**Type annotation** দিয়ে আমরা বুঝিয়ে দিই একটি মান কী ধরনের হবে। TypeScript-এরপর সেই নিয়ম সে নিজেই মেনে নেয় এবং ভুল করলে এডিটরেই জানিয়ে দেয়।"} />
+
+## Type Annotation
+
+<InParagraph text={"ভেরিয়েবলের নামের পরে `: টাইপ` লিখে annotation করা হয়।"} />
+
+<CodeBlock code={"let name: string;\nname = \"রহিম\";\n// name = 42;    // ❌ number string-এ দেওয়া যাবে না"} lang={"typescript"} />
+
+## String, Number, Boolean
+
+<CodeBlock code={"const fullName: string = \"আনামুল হাসান\";\nconst age: number = 28;\nconst price: number = 99.5;\nconst isActive: boolean = true;\n\nconst total: number = price * 2;\nconst message: string = \"আমার বয়স \" + age + \" বছর\";"} lang={"typescript"} />
+
+## Array ও Tuple
+
+<InParagraph text={"**Array** একই টাইপের তালিকা, আর **tuple** নির্দিষ্ট সংখ্যক ভিন্ন-টাইপের মান।"} />
+
+<CodeBlock code={"// Array\nconst scores: number[] = [60, 80, 92];\nconst names: string[] = [\"রহিম\", \"করিম\"];\nconst mixed: (string | number)[] = [\"নাম\", 28];\n\n// Tuple — নির্দিষ্ট মাপ ও ক্রম\nconst person: [string, number] = [\"রহিম\", 28];\n// person[1] = \"wrong\";   // ❌ number প্রত্যাশিত"} lang={"typescript"} />
+
+## Object
+
+<CodeBlock code={"const user: { name: string; age: number } = {\n  name: \"রহিম\",\n  age: 28,\n};\n// user.age = \"তিরিশ\";   // ❌ number প্রত্যাশিত"} lang={"typescript"} />
+
+## null ও undefined
+
+<CodeBlock code={"const empty: null = null;\nlet notAssigned: undefined;\n\n// strictNullChecks চালু থাকলে null সরাসরি number-এ যায় না\nlet count: number | null = null;   // ✅"} lang={"typescript"} />
+
+## any ও unknown
+
+<InParagraph text={"`any` মানে টাইপ-চেক বন্ধ — যেকোনো কিছু যায়, তবে সুরক্ষাও শেষ। `unknown` মানে **মান আছে, তবে টাইপ জানি না** — ব্যবহারের আগে তা সরু করে (narrowing) নিতে হয়।"} />
+
+<CodeBlock code={"let a: any = 1;\na = \"টেক্সট\";          // ✅ সাবধান!\na.toUpperCase();       // runtime-এ ভুল হতে পারে\n\nlet b: unknown = \"টেক্সট\";\n// b.toUpperCase();    // ❌ unknown-এ সরাসরি call করা যায় না\nif (typeof b === \"string\") {\n  b.toUpperCase();     // ✅ narrowing করার পরে\n}"} lang={"typescript"} />
+
+## void ও never
+
+<InParagraph text={"কোনো ফাংশন কিছু **return** না করলে `void`, আর কখনোই ফাংশন শেষ না হলে (শুধু error throw বা চিরন্তন লুপে) `never`।"} />
+
+<CodeBlock code={"function log(message: string): void {\n  console.log(message);    // কিছু return করে না\n}\n\nfunction fail(message: string): never {\n  throw new Error(message);   // এখান থেকে ফেরা যায় না\n}\n\nfunction infiniteLoop(): never {\n  while (true) {}\n}"} lang={"typescript"} />
+
+## bigint ও symbol
+
+<CodeBlock code={"const bigNumber: bigint = 9007199254740991n;\nconst sym: symbol = Symbol(\"id\");\n\n// target-এ bigint বন্ধ থাকলে এই টাইপ ব্যবহার করা যাবে না\nconsole.log(typeof bigNumber);   // \"bigint\""} lang={"typescript"} />
+
+<Tip tone={"warning"} title={"any এড়িয়ে চলুন"} text={"`any` দিলে আপাতদৃষ্টিতে কম ঝামেলা লাগে, কিন্তু টাইপের সুরক্ষা চলে যায়। সম্ভব হলে `unknown` ব্যবহার করুন অথবা সঠিক টাইপ দিন — কম `any`-ই ভালো TypeScript।"} />

@@ -1,0 +1,21 @@
+---
+title: "প্রথম Project — create-expo-app ও Expo Go"
+label: "Project Setup"
+order: 5
+level: "Beginner"
+description: "create-expo-app দিয়ে TaskTrack project শুরু — প্রথমবার কোড ফোনে চালানো।"
+---
+
+<CodeBlock code={"npx create-expo-app@latest tasktrack\ncd tasktrack\nnpx expo start"} lang={"bash"} title={"terminal"} />
+
+<InParagraph text={"`npx expo start` চালালে console-এ QR code আসে। ফোনের **Expo Go** দিয়ে QR scan করলেই অ্যাপ ফোনে লোড হয়। `w` চাপলে web, `a` চাপলে Android emulator।"} />
+
+### কোন template বেছে নেব
+
+- **default** — Expo Router + TypeScript আগে থেকেই সাজানো
+- **blank** — minimal, নিজে সব গোছান
+- **blank-typescript** — TypeScript সহ minimal
+
+<InParagraph text={"আমরা **default template** ব্যবহার করব — Expo Router, TypeScript, tab navigation প্রস্তুত। প্রজেক্টের নাম: **TaskTrack — একটি daily task tracker app**।"} />
+
+<Tip tone={"info"} title={"প্রথমবার"} text={"প্রথম `npx expo start`-এ SDK-র package ডাউনলোড হয় — একটু সময় লাগে। ইন্টারনেট চালু রাখুন।"} />

@@ -1,0 +1,29 @@
+---
+title: "Tailwind CSS with Next.js"
+label: "Tailwind + Next.js"
+order: 13
+level: "Beginner"
+description: "Next.js প্রজেক্টে Tailwind CSS কীভাবে setup করবেন — App Router সহ modern Next.js conventions।"
+---
+
+<InParagraph text={"Next.js v13+ থেকে Tailwind CSS **built-in** support সহ আসে। নতুন Next.js project তৈরি করলেই Tailwind configure হয়ে থাকে।"} />
+
+## নতুন Next.js Project তৈরি
+
+<CodeBlock code={"npx create-next-app@latest my-app\n# Tailwind বাছাই করুন: Yes"} lang={"bash"} title={"Terminal"} />
+
+<InParagraph text={"`create-next-app` interactive prompt-এ “Would you like to use Tailwind CSS?” — **Yes** বাছাই করলেই setup হয়ে যায়।"} />
+
+## Manual Setup (যদি already project থাকে)
+
+<CodeBlock code={"npm install tailwindcss @tailwindcss/postcss"} lang={"bash"} title={"Terminal"} />
+
+<CodeBlock code={"const config = {\n  plugins: {\n    \"@tailwindcss/postcss\": {},\n  },\n};\nexport default config;"} lang={"javascript"} title={"postcss.config.mjs"} />
+
+<CodeBlock code={"@import \"tailwindcss\";"} lang={"css"} title={"src/app/globals.css"} />
+
+## App Router-এ ব্যবহার
+
+<CodeBlock code={"export default function Home() {\n  return (\n    <main className=\"flex min-h-screen flex-col items-center justify-center\">\n      <h1 className=\"text-4xl font-bold text-blue-600\">\n        Hello Tailwind!\n      </h1>\n    </main>\n  );\n}"} lang={"tsx"} title={"src/app/page.tsx"} />
+
+<Tip tone={"info"} title={"Next.js + Tailwind v4"} text={"Next.js 15+ এ Tailwind v4 built-in support দেয়। `create-next-app@latest` দিয়ে তৈরি করলে Tailwind v4 automatically setup হবে।"} />

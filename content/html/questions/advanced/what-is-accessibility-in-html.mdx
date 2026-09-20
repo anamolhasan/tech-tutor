@@ -1,0 +1,19 @@
+---
+question: "What is accessibility in HTML?"
+order: 2
+description: "Web accessibility (a11y) কী এবং কীভাবে HTML-এ প্রয়োগ করা হয়।"
+---
+
+<InParagraph text={"**Accessibility** (সংক্ষেপে **a11y**) মানে ওয়েবসাইটকে এমনভাবে বানানো যাতে **সবাই** ব্যবহার করতে পারে — যাদের রয়েছে শারীরিক সীমাবদ্ধতা, যেমন অন্ধত্ব, দুর্বল দৃষ্টি, বা মাউস ব্যবহারের অক্ষমতা।"} />
+
+<InParagraph text={"HTML-এর মাধ্যমেই accessibility-র ভিত্তি তৈরি হয়। কিছু প্রয়োজনীয় অভ্যাস নিচে দেওয়া হলো:"} />
+
+- semantic tag ব্যবহার (`header`, `nav`, `main`) যাতে screen reader সঠিকভাবে পড়তে পারে
+- প্রতিটি `img`-এ অর্থবহ `alt` টেক্সট দেওয়া
+- প্রতিটি input-এর সাথে `<label>` যুক্ত করা
+- কিবোর্ড দিয়ে যেন সবকিছু ব্যবহারযোগ্য হয় (focus ঠিক রাখা)
+- যথেষ্ট color contrast বজায় রাখা
+
+<CodeBlock code={"<label for=\"email\">ইমেইল</label>\n<input id=\"email\" type=\"email\" aria-describedby=\"hint\" required />\n<p id=\"hint\">আমরা আপনার ইমেইল কখনো ভাগ করবো না।</p>"} lang={"html"} title={"accessibility উদাহরণ"} />
+
+<Tip tone={"info"} title={"মনে রাখুন"} text={"Accessibility কোনো অতিরিক্ত কাজ নয় — এটি প্রতিটি ওয়েব প্রকল্পের মৌলিক দায়িত্ব।"} />

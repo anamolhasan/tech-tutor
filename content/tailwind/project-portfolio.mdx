@@ -1,0 +1,23 @@
+---
+title: "Real-world Project: Portfolio Website"
+label: "Project: Portfolio"
+order: 33
+level: "Advanced"
+description: "Tailwind CSS দিয়ে একটি complete portfolio website তৈরি করুন — hero, about, projects, contact।"
+---
+
+<InParagraph text={"চলুন একটি complete portfolio website তৈরি করি। এতে আমরা সব Tailwind concepts ব্যবহার করবো।"} />
+
+## Hero Section
+
+<CodeBlock code={"<!-- Hero Section -->\n<section class=\"flex min-h-screen items-center bg-gradient-to-br from-blue-600 to-purple-700\">\n  <div class=\"container mx-auto px-6 text-center text-white\">\n    <h1 class=\"text-4xl font-bold md:text-6xl\">\n      আমি <span class=\"text-yellow-300\">Anamol Hasan</span>\n    </h1>\n    <p class=\"mt-4 text-lg text-blue-100 md:text-xl\">\n      Full Stack Developer\n    </p>\n    <div class=\"mt-8 flex justify-center gap-4\">\n      <a href=\"#projects\" class=\"rounded-lg bg-white px-6 py-3 font-semibold text-blue-600 hover:bg-blue-50 transition-colors\">\n        Projects\n      </a>\n      <a href=\"#contact\" class=\"rounded-lg border border-white px-6 py-3 font-semibold hover:bg-white/10 transition-colors\">\n        Contact\n      </a>\n    </div>\n  </div>\n</section>"} lang={"html"} />
+
+## Projects Grid
+
+<CodeBlock code={"<!-- Projects Section -->\n<section id=\"projects\" class=\"bg-gray-50 py-16\">\n  <div class=\"container mx-auto px-6\">\n    <h2 class=\"text-3xl font-bold text-center\">আমার Projects</h2>\n    <div class=\"mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3\">\n      <!-- Card 1 -->\n      <div class=\"rounded-xl bg-white p-6 shadow-md hover:shadow-lg transition-shadow\">\n        <h3 class=\"text-xl font-semibold\">Project 1</h3>\n        <p class=\"mt-2 text-gray-600\">Description goes here.</p>\n        <a href=\"#\" class=\"mt-4 inline-block text-blue-600 hover:underline\">View →</a>\n      </div>\n    </div>\n  </div>\n</section>"} lang={"html"} />
+
+## Contact Form
+
+<CodeBlock code={"<!-- Contact Section -->\n<section id=\"contact\" class=\"py-16\">\n  <div class=\"container mx-auto max-w-lg px-6\">\n    <h2 class=\"text-3xl font-bold text-center\">যোগাযোগ</h2>\n    <form class=\"mt-8 space-y-4\">\n      <input\n        type=\"text\"\n        placeholder=\"আপনার নাম\"\n        class=\"w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500\"\n      />\n      <input\n        type=\"email\"\n        placeholder=\"ইমেইল\"\n        class=\"w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500\"\n      />\n      <textarea\n        rows=\"4\"\n        placeholder=\"বার্তা\"\n        class=\"w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500\"\n      ></textarea>\n      <button\n        type=\"submit\"\n        class=\"w-full rounded-lg bg-blue-600 py-3 font-semibold text-white hover:bg-blue-700 transition-colors\"\n      >\n        পাঠান\n      </button>\n    </form>\n  </div>\n</section>"} lang={"html"} />
+
+<Tip tone={"success"} title={"Practice"} text={"এই portfolio কোড copy করে নিজের মতো করে customize করুন। রং, content, layout পরিবর্তন করুন। dark mode যোগ করুন!"} />

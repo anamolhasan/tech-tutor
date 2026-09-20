@@ -1,0 +1,15 @@
+---
+title: "Order creation — stock + transaction"
+label: "TechShop Cart"
+order: 33
+level: "Advanced"
+description: "cart-checkout: User-এর order — atomic stock।"
+---
+
+<CodeBlock code={"export async function createOrder(\n  userId: number,\n  items: { productId: number; qty: number }[],\n) {\n  const order = await prisma.$transaction(async (tx) => {\n    const lines = [];\n\n    for (const item of items) {\n      const product = await tx.product.findUnique({\n        where: { id: item.productId },\n      });\n\n      if (!product || product.qty < item.qty) {\n        throw new Error(\"insufficient stock - \" + item.productId);\n      }\n\n      await tx.product.update({\n        where: { id: item.productId },\n        data: { qty: { decrement: item.qty } },\n      });\n\n      lines.push({\n        productId: item.productId,\n        qty: item.qty,\n        price: product.price,\n      });\n    }\n\n    const total = lines.reduce(\n      (sum, l) => sum + Number(l.price) * l.qty,\n      0,\n    );\n\n    return tx.order.create({\n      data: {\n        userId,\n        total,\n        items: { create: lines },\n      },\n    });\n  });\n\n  return order;\n}"} lang={"ts"} />
+
+- এক transaction — কোনো step ব্যর্থ হলে সব rollback
+- stock check + decrement atomic-ish (single-user demo)
+- concurrency-তে optimistic/row-lock ভাবলে আরো শক্ত
+
+<Tip tone={"info"} title={"real-world"} text={"production-এ batch/efficiency-তে `$queryRaw`-UPDATE-এর সঙ্গে WHERE (id, qty >= x) — সু-রক্ষা।"} />

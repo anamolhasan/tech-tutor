@@ -1,0 +1,25 @@
+---
+title: "Optimistic Update"
+label: "Optimistic Update"
+order: 18
+level: "Advanced"
+description: "সার্ভার response-এর আগেই UI আপডেট — snapshot, rollback ও settle pattern — বাংলায়।"
+---
+
+<InParagraph text={"**Optimistic update** মানে সার্ভারের জবাবের অপেক্ষা না করে UI-কে **আগে** বদলে ফেলা — আর অপব্যবহার হলে rollback করা। Delete-তে এটি খুব কার্যকর (UI lag disappears)।"} />
+
+<CodeBlock code={"export function useDeleteProductOptimistic() {\n  const queryClient = useQueryClient();\n\n  return useMutation({\n    mutationFn: (id: string) => deleteProduct(id),\n\n    // 1) UI আগেই বদলে ফেলি\n    onMutate: async (id) => {\n      await queryClient.cancelQueries({ queryKey: productKeys.all });\n\n      // পুরনো সব list entries snapshot করে রাখি\n      const previousEntries = queryClient.getQueriesData({\n        queryKey: productKeys.lists(),\n      });\n\n      // সব list cache থেকে item সরিয়ে ফেলি\n      queryClient.setQueriesData<ProductListResponse>(\n        { queryKey: productKeys.lists() },\n        (old) => {\n          if (!old) return old;\n          return {\n            ...old,\n            items: old.items.filter((p) => p.id !== id),\n            total: old.total - 1,\n          };\n        }\n      );\n\n      return { previousEntries };\n    },\n\n    // 2) ব্যর্থ হলে রোলব্যাক\n    onError: (_error, _id, context) => {\n      context?.previousEntries.forEach(([key, data]) => {\n        queryClient.setQueryData(key, data);\n      });\n      toast.error(\"মুছতে ব্যর্থ — আবার চেষ্টা করুন\");\n    },\n\n    // 3) শেষে সার্ভার-সত্যে মিলিয়ে নিই\n    onSettled: () => {\n      queryClient.invalidateQueries({ queryKey: productKeys.all });\n    },\n  });\n}"} lang={"ts"} title={"Optimistic delete"} />
+
+## তিনটি ধাপের গুরুত্ব
+
+| ধাপ | কাজ |
+| --- | --- |
+| `onMutate` | cache cancel, snapshot, optimist UI |
+| `onError` | snapshot ফিরিয়ে rollback + toast |
+| `onSettled` | সবসময় invalidate → server-সত্য আসে |
+
+## কেন cancelQueries আগে
+
+<InParagraph text={"আগে চলা refetch আমাদের optimistic পরিবর্তনকে ওভাররাইট করতে পারে। `cancelQueries` সেগুলো বাতিল করে — তাই যতোক্ষণ না mutation শেষ, cache সেই জায়গায় stable থাকে।"} />
+
+<Tip tone={"warning"} title={"সংযমে ব্যবহার"} text={"Optimistic সব জায়গায় নয় — যেখানে UI delay স্পষ্ট (delete, toggle) আর rollback সহজ। Create-তে সার্ভার id-এর প্রয়োজন, তাই সাধারণত নন-optimistic + invalidate-এই ভালো।"} />

@@ -1,0 +1,17 @@
+---
+title: "$transaction — সব-or-নাতথাক ATOMICITY"
+label: "Transactions"
+order: 16
+level: "Advanced"
+description: "একাধিক query-batch বা sequential — অখণ্ডতা।"
+---
+
+<CodeBlock code={"const [order, updatedStock] = await prisma.$transaction([\n  prisma.order.create({\n    data: { userId: 7, total: 10200, status: \"pending\" },\n  }),\n  prisma.product.update({\n    where: { id: 3 },\n    data: { qty: { decrement: 2 } },\n  }),\n]);"} lang={"ts"} title={"array (batch)"} />
+
+<CodeBlock code={"await prisma.$transaction(async (tx) => {\n  const stock = await tx.product.findUnique({ where: { id: 3 } });\n\n  if (!stock || stock.qty < 2) {\n    throw new Error(\"stock insufficient\");\n  }\n\n  await tx.product.update({\n    where: { id: 3 },\n    data: { qty: { decrement: 2 } },\n  });\n});"} lang={"ts"} title={"interactive — condition সহ"} />
+
+- Batch ($transaction([...])) — এক SQL batch, দ্রুত
+- Interactive (async fn) — ভেতরে যেকোনো query, transaction-এ
+- Throw হলে সব rollback — কোন আংশিক বদল নয়
+
+<Tip tone={"warning"} title={"concurrency"} text={"একই row দুই request-এ বদলালে lost update হয় — `qty: { decrement }` atomic সুবিধা। গুরুতর হলে row-lock/optimistic-versioning।"} />

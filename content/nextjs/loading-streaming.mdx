@@ -1,0 +1,31 @@
+---
+title: "Loading UI ও Streaming"
+label: "Loading ও Streaming"
+order: 11
+level: "Intermediate"
+description: "loading.tsx ও Suspense দিয়ে progressive rendering — streaming বাংলায়।"
+---
+
+<InParagraph text={"Slow data fetch-এর কারণে পুরো page block হয়ে থাকা ঠিক নয়। **Streaming** দিয়ে page-এর কিছু অংশ আগে, কিছু অংশ পরে পাঠানো যায় (progressive rendering)।"} />
+
+## loading.tsx
+
+<InParagraph text={"route segment-এ `loading.tsx` ফাইল যোগ করলে Next.js স্বয়ংক্রিয়ভাবে page-কে `<Suspense>`-এ মোড়ায় — fetch চলাকালীন loading UI দেখায়।"} />
+
+<CodeBlock code={"export default function Loading() {\n  return (\n    <div className=\"animate-pulse space-y-4 p-4\">\n      <div className=\"h-8 rounded bg-gray-200\" />\n      <div className=\"h-8 rounded bg-gray-200\" />\n      <div className=\"h-8 rounded bg-gray-200\" />\n    </div>\n  );\n}"} lang={"tsx"} title={"app/blog/loading.tsx"} />
+
+## Suspense
+
+<InParagraph text={"`<Suspense>` দিয়ে page-এর **নির্দিষ্ট অংশ** আলাদা ভাবে stream করা যায় — বাকিটা সাথে সাথে show হয়।"} />
+
+<CodeBlock code={"import { Suspense } from \"react\";\nimport BlogList from \"../components/blog-list\";\nimport BlogListSkeleton from \"../components/blog-list-skeleton\";\n\nexport default function BlogPage() {\n  return (\n    <div>\n      <header>\n        <h1>Welcome to the Blog</h1>\n      </header>\n      <main>\n        <Suspense fallback={<BlogListSkeleton />}>\n          <BlogList />\n        </Suspense>\n      </main>\n    </div>\n  );\n}"} lang={"tsx"} title={"app/blog/page.tsx"} />
+
+<InParagraph text={"এখানে header সাথে সাথে আসে, আর `BlogList`-এর data ready হলে stream হয়।"} />
+
+## Meaningful Loading States
+
+- **Skeleton** — ভবিষ্যৎ UI-এর আভাস, best practice
+- **Spinner** — কিছু process চলছে বোঝায়
+- **Priority Content** — cover photo, title ইত্যাদি আগে
+
+<Tip tone={"warning"} title={"Loading-এ কী করবেন না"} text={"Text-only “Loading...” ফাঁকা-ফোঁকা মনে হয়। Skeleton বা page-এর গুরুত্বপূর্ণ অংশ আগে দেখান।"} />

@@ -1,0 +1,37 @@
+---
+title: "NestJS Installation ও Project Structure"
+label: "Installation"
+order: 2
+level: "Beginner"
+description: "Nest CLI install, নতুন project, ফাইল structure, প্রথম server — বাংলায় গাইড।"
+---
+
+<InParagraph text={"NestJS শেখার জন্য **Nest CLI** ব্যবহার করাই সেরা — এটি সঠিক structure সহ project তৈরি করে দেয়।"} />
+
+## Prerequisites
+
+- Node.js v18+ (LTS version)
+- npm (Node-এর সাথে আসে)
+- একটি code editor (VS Code recommended)
+
+## Nest CLI ইনস্টল ও Project তৈরি
+
+<CodeBlock code={"# global install\nnpm install -g @nestjs/cli\n\n# নতুন project\nnest new my-nest-app\n\n# project-এ ঢুকুন\ncd my-nest-app\n\n# dev server চালু\nnpm run start:dev\n\n# output: Nest application successfully started"} lang={"bash"} />
+
+## Project Structure
+
+<CodeBlock code={"my-nest-app/\n├── src/\n│   ├── main.ts             # bootstrap — app start\n│   ├── app.module.ts       # root module\n│   ├── app.controller.ts   # basic controller\n│   ├── app.service.ts      # basic provider/service\n│   └── app.controller.spec.ts  # unit test\n├── test/                   # e2e tests\n├── nest-cli.json           # CLI config\n├── package.json\n├── tsconfig.json\n└── .eslintrc.js"} lang={"text"} title={"Generated Structure"} />
+
+## main.ts বোঝা
+
+<CodeBlock code={"import { NestFactory } from \"@nestjs/core\";\nimport { AppModule } from \"./app.module\";\n\nasync function bootstrap() {\n  const app = await NestFactory.create(AppModule);\n  await app.listen(process.env.PORT ?? 3000);\n}\nbootstrap();"} lang={"typescript"} title={"src/main.ts"} />
+
+<InParagraph text={"`NestFactory.create()` — application instance তৈরি করে। `app.listen()` — HTTP server চালু করে।"} />
+
+## app.module.ts বোঝা
+
+<CodeBlock code={"import { Module } from \"@nestjs/common\";\nimport { AppController } from \"./app.controller\";\nimport { AppService } from \"./app.service\";\n\n@Module({\n  imports: [],       // other modules\n  controllers: [AppController],  // routes\n  providers: [AppService],       // services\n})\nexport class AppModule {}"} lang={"typescript"} title={"src/app.module.ts"} />
+
+<CodeBlock code={"# useful CLI commands\nnest g module users     # new module\nnest g controller users # controller\nnest g service users    # service\nnest g resource products # full CRUD resource\nnest g class user/dto/create-user.dto --no-spec"} lang={"bash"} />
+
+<Tip tone={"info"} title={"Nest CLI magic"} text={"`nest g resource` দিয়ে সম্পূর্ণ CRUD (controller + service + module + DTO) এক কমান্ডে তৈরি হয় — খুবই time-saving।"} />

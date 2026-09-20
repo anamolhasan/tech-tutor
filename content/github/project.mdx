@@ -1,0 +1,39 @@
+---
+title: "প্রজেক্ট: পূর্ণাঙ্গ GitHub workflow"
+label: "Project"
+order: 21
+level: "Advanced"
+description: "একটি বাস্তব প্রজেক্ট GitHub-এ প্রোফেশনালি পরিচালনা — বাংলায়।"
+---
+
+## দৃশ্যপট
+
+<InParagraph text={"আপনার একটি **blog-app** আছে। এখন এটি একা না করে GitHub-এ প্রোফেশনালি সাজাবেন — issue, branch, review, CI, release সহ।"} />
+
+## ধাপ 1 — সেটআপ
+
+<CodeBlock code={"# GitHub-এ খালি repo বানান\ngit init\ngit remote add origin https://github.com/you/blog-app.git\necho \"node_modules/\" > .gitignore\ngit add . && git commit -m \"init: project setup\"\ngit push -u origin main"} lang={"bash"} />
+
+## ধাপ ২ — issue + branch
+
+<CodeBlock code={"# GitHub-এ issue তৈরি:\n## feat: পোস্টের লিস্টিং পেজ\n\nআসলে একটি চাক্ষুষ তালিকা + filtering।\nlabels: enhancement"} lang={"markdown"} />
+
+<CodeBlock code={"git switch -c feature/post-listing\n# ... কাজ করুন ..."} lang={"bash"} />
+
+## ধাপ ৩ — PR + review + merge
+
+<CodeBlock code={"git add .\ngit commit -m \"feat: post listing page closes #12\"\ngit push -u origin feature/post-listing\n# GitHub-এ Compare & pull request →\n# Reviewer নির্ধারণ → আলোচনা → checks পাস → squash merge → delete branch"} lang={"bash"} />
+
+## ধাপ 4 — CI চালু
+
+<CodeBlock code={"on: [push, pull_request]\njobs:\n  lint-test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-node@v4\n        with: { node-version: 20 }\n      - run: npm ci\n      - run: npm run lint\n      - run: npm test"} lang={"yaml"} title={".github/workflows/ci.yml"} />
+
+## ধাপ 5 — docs + release
+
+<CodeBlock code={"# README লিখুন\n# Wiki/পরিচিত docs\n# Release v1.0.0 draft + notes + publish"} lang={"markdown"} />
+
+## দৈনন্দিন ভিত্তি
+
+<CodeBlock code={"# প্রতিদিন শুরু:\ngit pull origin main\ngit switch -c fix/next-bug\n# ... কাজ ... push → PR → merge"} lang={"bash"} />
+
+<Tip tone={"success"} title={"এখন আপনার পালা"} text={"ছোট একটি personal project নিন এবং গোটা প্রক্রিয়াটি (repo → issue → branch → PR → CI → release) মিলিয়ে খেলেন। GitHub তখন আপনার দ্বিতীয় ঘর।"} />

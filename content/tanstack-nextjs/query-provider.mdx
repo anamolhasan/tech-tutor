@@ -1,0 +1,23 @@
+---
+title: "QueryClientProvider সেটআপ"
+label: "Query Provider"
+order: 9
+level: "Beginner"
+description: "App-এ tanstack Query provider যুক্ত করা — client component ও root layout — বাংলায়।"
+---
+
+<InParagraph text={"QueryClient-কে পুরো app-এ পৌঁছে দিতে **QueryClientProvider** দিয়ে ঘিরে দিতে হয়। Next.js App Router-এ provider অবশ্যই **client component** হতে হবে — তাই আলাদা `providers.tsx` বানাব।"} />
+
+<CodeBlock code={"\"use client\";\n\nimport { QueryClientProvider } from \"@tanstack/react-query\";\nimport { queryClient } from \"@/lib/query-client\";\nimport { ReactQueryDevtools } from \"@tanstack/react-query-devtools\";\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <QueryClientProvider client={queryClient}>\n      {children}\n      <ReactQueryDevtools initialIsOpen={false} />\n    </QueryClientProvider>\n  );\n}"} lang={"tsx"} title={"src/app/providers.tsx (client)"} />
+
+## Root layout-এ যোগ
+
+<CodeBlock code={"import { Providers } from \"./providers\";\n\nexport default function RootLayout({\n  children,\n}: {\n  children: React.ReactNode;\n}) {\n  return (\n    <html lang=\"en\">\n      <body>\n        <Providers>{children}</Providers>\n      </body>\n    </html>\n  );\n}"} lang={"tsx"} title={"src/app/layout.tsx"} />
+
+## কেন client component
+
+<InParagraph text={"QueryClientProvider-এর ভেতরে **React context**, **hooks**, **state** ব্যবহার হয় — এসব Server Component-এ চলতে পারে না। তাই `\"use client\"` লাগে। তবে যুক্ত করার এটাই একমাত্র প্রভাব — বাচ্চারা Server Components-ই থাকতে পারে।"} />
+
+<CodeBlock code={"import { QueryClient } from \"@tanstack/react-query\";\n\n// important: মডিউল লেভেলে এক instance export\nexport const queryClient = new QueryClient({\n  defaultOptions: {\n    queries: { staleTime: 60_000, retry: 1 },\n    mutations: { retry: 0 },\n  },\n});"} lang={"ts"} title={"src/lib/query-client.ts"} />
+
+<Tip tone={"warning"} title={"প্রতি render-এ নতুন QueryClient না"} text={"কখনো component body-তে `new QueryClient()` লিখবেন না — প্রতি render-এ cache ভরে যাবে ও refetch বারবার হবে। মডিউল-লেভেল singleton বা `useState(() => new QueryClient())` — দুইটাই চলবে; আমরা singleton নিলাম।"} />

@@ -1,0 +1,27 @@
+---
+title: "NestJS File Upload (Multer)"
+label: "File Upload"
+order: 14
+level: "Intermediate"
+description: "FileInterceptor, single/multiple upload, validation, static serve — বাংলায়।"
+---
+
+<InParagraph text={"NestJS-এ file upload **multer**-ভিত্তিক `FileInterceptor` / `FilesInterceptor` decorator দিয়ে সহজে করা যায়।"} />
+
+## Single File Upload
+
+<CodeBlock code={"import {\n  Controller,\n  Post,\n  UploadedFile,\n  UseInterceptors,\n} from \"@nestjs/common\";\nimport { FileInterceptor } from \"@nestjs/platform-express\";\nimport { diskStorage } from \"multer\";\nimport { extname } from \"node:path\";\n\n@Controller(\"upload\")\nexport class UploadController {\n  @Post(\"avatar\")\n  @UseInterceptors(\n    FileInterceptor(\"file\", {\n      storage: diskStorage({\n        destination: \"./uploads\",\n        filename: (req, file, cb) => {\n          const unique = Date.now() + \"-\" + Math.round(Math.random() * 1e9);\n          cb(null, unique + extname(file.originalname));\n        },\n      }),\n      limits: { fileSize: 5 * 1024 * 1024 }, // 5MB\n    }),\n  )\n  uploadAvatar(\n    @UploadedFile() file: Express.Multer.File,\n  ) {\n    return { message: \"Upload সফল\", file };\n  }\n}"} lang={"typescript"} title={"src/upload/upload.controller.ts"} />
+
+## Multiple Files
+
+<CodeBlock code={"import { FilesInterceptor, FileFieldsInterceptor } from \"@nestjs/platform-express\";\n\n@Post(\"gallery\")\n@UseInterceptors(\n  FilesInterceptor(\"files\", 10), // ঘরে 10 files\n)\nuploadGallery(@UploadedFiles() files: Express.Multer.File[]) {\n  return { count: files.length };\n}\n\n@Post(\"profile\")\n@UseInterceptors(\n  FileFieldsInterceptor([\n    { name: \"avatar\", maxCount: 1 },\n    { name: \"cover\", maxCount: 1 },\n  ]),\n)\nuploadProfile(@UploadedFiles() files: { avatar: File[]; cover: File[] }) {\n  return files;\n}"} lang={"typescript"} />
+
+## File Validation
+
+<CodeBlock code={"import { BadRequestException } from \"@nestjs/common\";\n\nconst fileFilter = (req: any, file: any, cb: any) => {\n  const allowedTypes = [\"image/jpeg\", \"image/png\", \"image/webp\"];\n\n  if (!allowedTypes.includes(file.mimetype)) {\n    return cb(new BadRequestException(\"শুধু image allowed\"), false);\n  }\n  cb(null, true);\n};\n\n// Multer options-এ\n{\n  storage: diskStorage({ ... }),\n  fileFilter,\n  limits: { fileSize: 5 * 1024 * 1024 },\n}"} lang={"typescript"} />
+
+## Uploaded Files Serve
+
+<CodeBlock code={"import { NestFactory } from \"@nestjs/core\";\nimport { AppModule } from \"./app.module\";\nimport { join } from \"node:path\";\n\nasync function bootstrap() {\n  const app = await NestFactory.create(AppModule);\n\n  // static serve\n  app.useStaticAssets(join(process.cwd(), \"uploads\"));\n\n  await app.listen(3000);\n}\nbootstrap();"} lang={"typescript"} title={"main.ts"} />
+
+<Tip tone={"info"} title={"Production"} text={"Production-এ local disk-এ না — **Cloudinary**, **S3**, বা **GCS** bucket-এ upload করাই আদর্শ।"} />

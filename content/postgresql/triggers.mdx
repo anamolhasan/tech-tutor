@@ -1,0 +1,23 @@
+---
+title: "Trigger + Function — event-চালিত action"
+label: "Triggers"
+order: 29
+level: "Advanced"
+description: "insert/update-এ automatic কাজ — updated_at-এর উদাহরণ।"
+---
+
+<CodeBlock code={"CREATE OR REPLACE FUNCTION set_updated_at()\nRETURNS TRIGGER AS $$\nBEGIN\n  NEW.updated_at = now();\n  RETURN NEW;\nEND;\n$$ LANGUAGE plpgsql;"} lang={"sql"} title={"updated_at auto-set"} />
+
+<CodeBlock code={"CREATE TRIGGER trg_products_updated\nBEFORE UPDATE ON products\nFOR EACH ROW\nEXECUTE FUNCTION set_updated_at();"} lang={"sql"} />
+
+| কারণ | Trigger-stack |
+| --- | --- |
+| created_at / updated_at | BEFORE INSERT/UPDATE |
+| audit log | AFTER INSERT/UPDATE/DELETE |
+| stock/history sync | AFTER ... FOR EACH ROW |
+
+- Trigger-এ user-defined **function** run হয়
+- `TG_OP` — operation type, `NEW`/`OLD` — row
+- Trigger logic-র সত্যতা constraint-এর মতো automatic নয় — পরীক্ষা নিজে করুন
+
+<Tip tone={"warning"} title={"সতর্ক"} text={"Trigger invisible — debugging ও bulk-load-এ surprise আসে। জটিল ব্যবসায়িক logic অ্যাপ-স্তরেও — trigger ব্যবহারে অনুমতি control রাখুন।"} />

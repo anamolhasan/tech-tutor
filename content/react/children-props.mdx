@@ -1,0 +1,17 @@
+---
+title: "Children ও Advanced Props"
+label: "Children & Props"
+order: 17
+level: "Intermediate"
+description: "children pattern, element-as-prop ও composition প্যাটার্ন — বাংলায়।"
+---
+
+## Children pattern
+
+<CodeBlock code={"function Modal({ title, children, footer }) {\n  return (\n    <div className=\"modal\">\n      <h2>{title}</h2>\n      <div className=\"modal-body\">{children}</div>\n      <footer>{footer}</footer>\n    </div>\n  );\n}\n\n<Modal\n  title=\"Delete?\"\n  footer={<button className=\"danger\">Confirm</button>}\n>\n  <p>আপনি কি নিশ্চিত?</p>\n</Modal>"} lang={"jsx"} title={"Composition"} />
+
+## Element as prop
+
+<CodeBlock code={"function Card({ header, body }) {\n  return (\n    <section>\n      <header>{header}</header>\n      <div>{body}</div>\n    </section>\n  );\n}\n\n<Card\n  header={<Avatar user={user} />}\n  body={<UserName user={user} />}\n/>"} lang={"jsx"} title={"Flexible layout"} />
+
+<Tip tone={"info"} title={"Composition শ্রেষ্ঠ"} text={"Props দিয়ে complex children পাঠাতে হলে **composition** (children/footer props) সবচেয়ে পরিষ্কার। ভেতরের যেকোনো element বাইরে জেনে-রেখে render করলে coupling বাড়ে।"} />

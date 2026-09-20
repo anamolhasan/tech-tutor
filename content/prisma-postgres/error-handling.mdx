@@ -1,0 +1,21 @@
+---
+title: "PrismaClientKnownRequestError — P কোড"
+label: "Error Handling"
+order: 27
+level: "Intermediate"
+description: "problems ত্ত client-থেকে read করা — অর্থ বুঝা।"
+---
+
+| Code | অর্থ |
+| --- | --- |
+| P2002 | unique constraint violation |
+| P2025 | record না মিলে (update/delete/upsert) |
+| P2003 | foreign key violation |
+| P2010 | raw query error |
+| P1001 | database reachable নয় |
+
+<CodeBlock code={"import { Prisma } from \"@prisma/client\";\n\ntry {\n  await prisma.user.create({\n    data: { email: \"a@b.com\" },\n  });\n} catch (error) {\n  if (error instanceof Prisma.PrismaClientKnownRequestError) {\n    if (error.code === \"P2002\") {\n      // email duplicate\n      return \"email already exists\";\n    }\n    console.error(error.meta?.target);\n  }\n  throw error;\n}"} lang={"ts"} />
+
+<InParagraph text={"`error.code` স্ট্রিং; `error.meta` — ভাঙা target-column ইত্যাদি। Known/Unknown/Validation/Initialization — ৪ family।"} />
+
+<Tip tone={"info"} title={"user-friendly"} text={"Raw error user-কে নয় — map করে HTTP status। Express middle-error/Next notFound-এ ব্যবহার।"} />

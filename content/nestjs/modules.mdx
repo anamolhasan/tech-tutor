@@ -1,0 +1,27 @@
+---
+title: "NestJS Modules"
+label: "Modules"
+order: 3
+level: "Beginner"
+description: "Feature module, @Module decorator, imports/exports, shared module — NestJS module বাংলায়।"
+---
+
+<InParagraph text={"**Module** হলো NestJS-এর মৌলিক বিল্ডিং ব্লক। প্রতিটি module তার নিজের controller ও providers encapsulate করে রাখে।"} />
+
+## @Module Decorator
+
+<CodeBlock code={"import { Module } from \"@nestjs/common\";\nimport { UsersController } from \"./users.controller\";\nimport { UsersService } from \"./users.service\";\n\n@Module({\n  imports: [],                    // dependency modules\n  controllers: [UsersController], // routes\n  providers: [UsersService],      // injectable services\n  exports: [UsersService],        // অন্য module-এ ব্যবহারের জন্য\n})\nexport class UsersModule {}"} lang={"typescript"} title={"src/users/users.module.ts"} />
+
+## Feature Module তৈরি
+
+<CodeBlock code={"nest g module users"} lang={"bash"} />
+
+<CodeBlock code={"import { Module } from \"@nestjs/common\";\nimport { UsersModule } from \"./users/users.module\";\nimport { AuthModule } from \"./auth/auth.module\";\n\n@Module({\n  imports: [UsersModule, AuthModule],\n  controllers: [],\n  providers: [],\n})\nexport class AppModule {}"} lang={"typescript"} title={"app.module.ts — রুট module"} />
+
+## Shared Module (Reusable)
+
+<CodeBlock code={"import { Module, Global } from \"@nestjs/common\";\nimport { PrismaService } from \"./prisma.service\";\n\n@Global() // কোনো module-এ import ছাড়াও accessible\n@Module({\n  providers: [PrismaService],\n  exports: [PrismaService],\n})\nexport class SharedModule {}"} lang={"typescript"} title={"src/shared/shared.module.ts"} />
+
+<CodeBlock code={"// এখন কোনো module-এ export না করেও\n@Module({\n  providers: [UsersService], // PrismaService auto-inject\n})\nexport class UsersModule {}"} lang={"typescript"} />
+
+<Tip tone={"warning"} title={"@Global() সাবধান"} text={"`@Global()` সব module-এ service visible করে দেয়, কিন্তু module boundaries ভেঙে code-এর দৃশ্যমানতা নষ্ট হতে পারে। প্রয়োজন না থাকলে use না করাই ভালো।"} />

@@ -1,0 +1,18 @@
+---
+title: "TextInput ও useState — ফর্ম তাদের সহজ নিয়ম"
+label: "Forms & State"
+order: 15
+level: "Beginner"
+description: "controlled TextInput-ফর্ম — useState দিয়ে — বাংলায়।"
+---
+
+<CodeBlock code={"import { useState } from \"react\";\nimport { TextInput, Pressable, Text, View } from \"react-native\";\n\nexport default function TaskForm({ onSubmit }) {\n  const [title, setTitle] = useState(\"\");\n  return (\n    <View>\n      <TextInput\n        value={title}\n        onChangeText={setTitle}\n        placeholder=\"নতুন কাজের নাম\"\n        style={{ borderWidth: 1, padding: 12, borderRadius: 8 }}\n      />\n      <Pressable onPress={() => onSubmit(title)}>\n        <Text>যোগ করুন</Text>\n      </Pressable>\n    </View>\n  );\n}"} lang={"tsx"} title={"components/TaskForm.tsx"} />
+
+- `value` + `onChangeText` — controlled pattern
+- `keyboardType` — numeric / email
+- `returnKeyType` — done, next
+- `multiline` — বড় text
+
+<InParagraph text={"Validation সহজ রাখুন — submit-এ empty check, প্রয়োজনে error message দেখান।"} />
+
+<Tip tone={"info"} title={"controlled ফিল্ড"} text={"controlled মানে value React-এর হাতে — `TextInput`-এর একটাই নিয়ম: `value` আর `onChangeText` জোড়া।"} />

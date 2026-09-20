@@ -1,0 +1,39 @@
+---
+title: "HTML Forms (ফর্ম)"
+label: "HTML Forms"
+order: 12
+level: "Beginner"
+description: "form, input, label, button, select, textarea — ব্যবহারকারীর কাছ থেকে ডেটা নেওয়ার পূর্ণাঙ্গ বাংলা টিউটোরিয়াল।"
+---
+
+<InParagraph text={"ব্যবহারকারীর কাছ থেকে ডেটা সংগ্রহ করার জন্য `<form>` ব্যবহার হয়। ফর্মের ভেতরে থাকে বিভিন্ন input, বোতাম এবং লেবেল।"} />
+
+## সাধারণ ফর্ম
+
+<CodeBlock code={"<form action=\"/register\" method=\"post\">\n  <label for=\"name\">নাম:</label>\n  <input type=\"text\" id=\"name\" name=\"name\" required />\n\n  <button type=\"submit\">রেজিস্টার</button>\n</form>"} lang={"html"} />
+
+## input-এর কিছু ধরন
+
+| type | কাজ |
+| --- | --- |
+| text | সাধারণ টেক্সট |
+| email | ইমেইল ঠিকানা |
+| password | পাসওয়ার্ড |
+| number | সংখ্যা |
+| tel | ফোন নম্বর |
+| date | তারিখ |
+| checkbox | চেক বক্স |
+| radio | একটি বাছাই |
+| file | ফাইল আপলোড |
+
+## label কেন গুরুত্বপূর্ণ
+
+<InParagraph text={"`<label>`-এর `for` অ্যাট্রিবিউট input-এর `id`-এর সাথে মিললে লেবেলে ক্লিক করলে input active হয় — এটি accessibility ও ব্যবহার-সৌন্দর্য বাড়ায়।"} />
+
+## select ও textarea
+
+<CodeBlock code={"<label for=\"city\">শহর:</label>\n<select id=\"city\" name=\"city\">\n  <option value=\"dhaka\">ঢাকা</option>\n  <option value=\"ctg\">চট্টগ্রাম</option>\n</select>\n\n<label for=\"msg\">বার্তা:</label>\n<textarea id=\"msg\" name=\"msg\" rows=\"4\"></textarea>"} lang={"html"} title={"ড্রপডাউন ও বড় টেক্সট"} />
+
+<Tip tone={"success"} title={"Built-in ভ্যালিডেশন"} text={"`required`, `minlength`, `pattern` ইত্যাদি দিলে ব্রাউজার নিজেই ডেটা যাচাই করে — অতিরিক্ত JavaScript ছাড়াই।"} />
+
+<Tip tone={"warning"} title={"action ও method মনে রাখুন"} text={"`action`-এ ডেটা কোথায় যাবে, `method`-এ কীভাবে যাবে (`GET` / `POST`) তা দেওয়া হয়। সংবেদনশীল ডেটার জন্য সবসময় `POST` ব্যবহার করুন।"} />

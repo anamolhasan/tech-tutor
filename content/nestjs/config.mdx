@@ -1,0 +1,33 @@
+---
+title: "NestJS Configuration"
+label: "Config & Env"
+order: 13
+level: "Intermediate"
+description: "@nestjs/config, .env, environment validation, typed config — বাংলায়।"
+---
+
+<InParagraph text={"**Configuration** server-এর setting manage করা — port, db url, secrets ইত্যাদি। официальный **@nestjs/config** ব্যবহার করাই সেরা।"} />
+
+## Setup
+
+<CodeBlock code={"npm i @nestjs/config joi"} lang={"bash"} />
+
+<CodeBlock code={"PORT=3000\nMONGO_URI=mongodb://localhost:27017/nestapp\nJWT_SECRET=my_secret\nNODE_ENV=development"} lang={"env"} title={".env"} />
+
+<CodeBlock code={"import { Module } from \"@nestjs/common\";\nimport { ConfigModule } from \"@nestjs/config\";\n\n@Module({\n  imports: [\n    ConfigModule.forRoot({\n      isGlobal: true, // সব module-এ accessible\n      envFilePath: [\".env.development\", \".env\"],\n    }),\n  ],\n})\nexport class AppModule {}"} lang={"typescript"} title={"app.module.ts"} />
+
+## ConfigService Inject
+
+<CodeBlock code={"import { Injectable } from \"@nestjs/common\";\nimport { ConfigService } from \"@nestjs/config\";\n\n@Injectable()\nexport class DatabaseService {\n  constructor(private configService: ConfigService) {}\n\n  getConfig() {\n    return {\n      port: this.configService.get<number>(\"PORT\", 3000), // default\n      dbUrl: this.configService.get<string>(\"MONGO_URI\"),\n      env: this.configService.get(\"NODE_ENV\"),\n    };\n  }\n}"} lang={"typescript"} />
+
+## Typed Configuration
+
+<CodeBlock code={"export interface AppConfig {\n  port: number;\n  database: { uri: string };\n  jwt: { secret: string; expiresIn: number };\n}\n\nexport default (): AppConfig => ({\n  port: parseInt(process.env.PORT ?? \"3000\", 10),\n  database: {\n    uri: process.env.MONGO_URI ?? \"mongodb://localhost:27017/nestapp\",\n  },\n  jwt: {\n    secret: process.env.JWT_SECRET ?? \"\",\n    expiresIn: parseInt(process.env.JWT_EXPIRES ?? \"3600\", 10),\n  },\n});"} lang={"typescript"} title={"src/config/configuration.ts"} />
+
+<CodeBlock code={"ConfigModule.forRoot({\n  load: [configuration], // typed config\n  isGlobal: true,\n})"} lang={"typescript"} />
+
+## Environment Validation (Joi)
+
+<CodeBlock code={"import * as Joi from \"joi\";\n\nConfigModule.forRoot({\n  validationSchema: Joi.object({\n    PORT: Joi.number().default(3000),\n    MONGO_URI: Joi.string().required(),\n    JWT_SECRET: Joi.string().required(),\n    NODE_ENV: Joi.string()\n      .valid(\"development\", \"production\", \"test\")\n      .default(\"development\"),\n  }),\n  validationOptions: {\n    allowUnknown: true, // অন্য keys বাদ যাবে না\n    abortEarly: false,\n  },\n})"} lang={"typescript"} />
+
+<Tip tone={"success"} title={"বিখ্যাত অভ্যাস"} text={"`.env` git-এ commit করবেন না — `.env.example` রাখুন। Joi validation দিয়ে launch-এই ভুল env ধরা পড়ে।"} />

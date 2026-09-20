@@ -1,0 +1,34 @@
+---
+title: "Tailwind CSS-এর সুবিধা"
+label: "সুবিধা"
+order: 7
+level: "Beginner"
+description: "Tailwind CSS ব্যবহারের প্রধান সুবিধাসমূহ — দ্রুত ডেভেলপমেন্ট, consistency, performance।"
+---
+
+<InParagraph text={"Tailwind CSS ব্যবহারের অনেক সুবিধা আছে। চলুন প্রধান সুবিধাগুলো দেখি।"} />
+
+## ১. দ্রুত ডেভেলপমেন্ট
+
+<InParagraph text={"utility class দিয়ে HTML-তেই সরাসরি স্টাইল করায় development speed অনেক বাড়ে। CSS ফাইলে যাওয়ার দরকার নেই।"} />
+
+## ২. Design Consistency
+
+<InParagraph text={"Tailwind-এর built-in spacing, color, font scale ব্যবহার করায় পুরো অ্যাপ্লিকেশন জুড়ে consistent design থাকে।"} />
+
+## ৩. Responsive সহজ
+
+<CodeBlock code={"<!-- মোবাইলে: 1 column, md: 2 columns, lg: 3 columns -->\n<div class=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4\">\n  <div>Card 1</div>\n  <div>Card 2</div>\n  <div>Card 3</div>\n</div>"} lang={"html"} title={"Responsive utility classes"} />
+
+## ৪. Dark Mode
+
+<CodeBlock code={"<!-- Light mode: white bg, dark text -->\n<!-- Dark mode: dark bg, light text -->\n<div class=\"bg-white dark:bg-gray-900 text-black dark:text-white\">\n  Dark mode ready!\n</div>"} lang={"html"} title={"Dark mode support"} />
+
+## ৫. Performance
+
+- JIT engine শুধু ব্যবহৃত CSS generate করে
+- Unused CSS elimination (PurgeCSS built-in)
+- Production CSS file ১০KB এরও কম হতে পারে
+- No runtime JavaScript overhead
+
+<Tip tone={"success"} title={"সবচেয়ে বড় সুবিধা"} text={"Tailwind-এর সবচেয়ে বড় সুবিধা হলো **Developer Experience**। দ্রুত UI তৈরি, সহজ debugging, এবং consistency — এগুলোই Tailwind-কে বিশেষ করে তোলে।"} />

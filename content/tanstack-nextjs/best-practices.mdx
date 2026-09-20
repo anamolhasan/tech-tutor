@@ -1,0 +1,37 @@
+---
+title: "Best Practices — Checklist"
+label: "Best Practices"
+order: 40
+level: "Intermediate"
+description: "Query/mutation/UI-র best practices-এর final checklist — বাংলায়।"
+---
+
+## Query practices
+
+- একই query key factory ব্যবহার করুন (এক জিনিস, এক জায়গা)
+- `staleTime` বিষয়ভিত্তিক — ড্যাশবোর্ড ৩০s-১ম, user-নির্দিষ্ট ৩০০s
+- ডেটা যে কোথায় — exposition hide করুন (hooks)
+- `initialData` বনাম `placeholderData` — SMEs/UX আলাদা
+- সব query-র error recovery আছে কিনা নিশ্চিত
+
+## Mutation practices
+
+- Optimistic শুধু reversible, quick feedback দরকার হয়
+- সবসময় `onError`-এ user-কে বলুন কী ভুল হয়েছে
+- Mutation-এ `onSuccess`-এ UI বন্ধ করে দেবেন না — state-ও
+- এক mutation এক দায়িত্ব (create/edit/delete আলাদা)
+
+## Form/Table practices
+
+- ทุก form field-এ label + error text + disabled state
+- Select/Combobox-এ `Controller` — RHF best practice
+- Table column-এ raw format, cell-এ display logic
+- Loading skeleton গোটা পেজের নয় — অংশে অংশে
+
+## Type practices
+
+- Server-derived type থেকে zod `z.infer`
+- client ও server shared `types/product.ts`
+- `as const` query key-তে tabular freeze
+
+<Tip tone={"success"} title={"একটি নিয়ম"} text={"Checklist-গুলো পড়ে না; **আপনাদের code-এ বলবে** — review-এ শুধু এই ৪টি প্রশ্ন সবসময় জিজ্ঞেস করুন: key ঠিক? invalidate ঠিক? loading/error আছে? type ভুল পাস হয়নি?"} />

@@ -1,0 +1,30 @@
+---
+title: "Environment Variables"
+label: "Environment Variables"
+order: 19
+level: "Intermediate"
+description: "NEXT_PUBLIC_ prefix, .env.local, server/client variables — Next.js-এ env ভেরিয়েবল বাংলায়।"
+---
+
+<InParagraph text={"**Environment variables** হলো sensitive config (API key, database URL) যা code-এর বাইরে রাখা হয়। Next.js-এ `.env` ফাইল দিয়ে এটা works।"} />
+
+## NEXT_PUBLIC_ prefix
+
+<InParagraph text={"**শুধু `NEXT_PUBLIC_` prefix-যুক্ত** ভেরিয়েবলই browser (client bundle)এ যায়। বাকি সব server-এই থাকে।"} />
+
+<CodeBlock code={"# Server-only (client-এ হবে না)\nDATABASE_URL=postgres://user:pass@localhost:5432/db\nAPI_SECRET_KEY=supersecretkey\n\n# Client-safe (NEXT_PUBLIC_)\nNEXT_PUBLIC_API_URL=https://api.example.com"} lang={"bash"} title={".env.local"} />
+
+## ব্যবহার
+
+<CodeBlock code={"export async function getUsers() {\n  // শুধু server-এ\n  const res = await fetch(`${process.env.DATABASE_URL}/users`);\n  return res.json();\n}"} lang={"ts"} title={"app/lib/db.ts (server)"} />
+
+<CodeBlock code={"// client-ও ব্যবহার করতে পারে\nexport const apiUrl = process.env.NEXT_PUBLIC_API_URL;"} lang={"ts"} title={"app/ui/config.ts (client)"} />
+
+## env ফাইলগুলো
+
+- `.env` — সব environment-এর জন্য common
+- `.env.local` — local development (git-এ আসে না)
+- `.env.development` — `next dev`-এর সময়
+- `.env.production` — `next start`-এর সময়
+
+<Tip tone={"warning"} title={"Secret কখনও expose করবেন না"} text={"API key-কে `NEXT_PUBLIC_` prefix দিলে তা browser-এ চলে যাবে — কখনও secret-এ prefix দেবেন না। Server-এ secret রাখতে `import 'server-only'` ব্যবহার করতে পারেন।"} />

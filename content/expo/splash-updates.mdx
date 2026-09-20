@@ -1,0 +1,19 @@
+---
+title: "Splash screen নিয়ন্ত্রণ ও expo-updates"
+label: "Splash & Updates"
+order: 34
+level: "Advanced"
+description: "launch hide timing ও OTA update-এর প্রস্তুতি।"
+---
+
+<InParagraph text={"Asset (font/image) লোড শেষ না হওয়া পর্যন্ত splash দেখান — **`expo-splash-screen`**:"} />
+
+<CodeBlock code={"import * as SplashScreen from \"expo-splash-screen\";\nimport { useFonts } from \"expo-font\";\n\nSplashScreen.preventAutoHideAsync();\n\nexport default function RootLayout() {\n  const [fontsLoaded] = useFonts(FontMap);\n  if (fontsLoaded) {\n    SplashScreen.hideAsync();\n  }\n  return <Stack />;\n}"} lang={"tsx"} />
+
+<InParagraph text={"Android adaptive icon — `android.adaptiveIcon.foregroundImage` (safe-zone-এর ভিতরে) + backgroundColor।"} />
+
+<InParagraph text={"**OTA update** — `expo-updates` দিয়ে JS আপডেট ইনস্টল ছাড়াই:"} />
+
+<CodeBlock code={"npx expo install expo-updates\nnpx eas update --channel production --message \"bugfix\""} lang={"bash"} title={"terminal"} />
+
+<Tip tone={"warning"} title={"runtime version"} text={"Native binary বদলে গেলে OTA update হবে না (runtime version mismatch) — native পরিবর্তন হলে store build দরকার। splash-এ crash এড়াতে `_layout.tsx`-এ try/catch।"} />

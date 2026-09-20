@@ -1,0 +1,20 @@
+---
+title: "Optimistic Update — onQueryStarted"
+label: "Optimistic Update"
+order: 25
+level: "Advanced"
+description: "প্যাচ-ভিত্তিক optimistic UI, rollback ও invalidate — বাংলায়।"
+---
+
+<InParagraph text={"RTK Query-তে optimistische update-এর স্থান **mutation-এর `onQueryStarted`**-এ। server-এর জবাবের আগেই আমরা local cache-টা update - করি, আর `queryFulfilled` এ রেসস করুন।"} />
+
+<CodeBlock code={"deleteProduct: builder.mutation<void, string>({\n  query: (id) => ({ url: \"products/\" + id, method: \"DELETE\" }),\n\n  async onQueryStarted(id, { dispatch, queryFulfilled }) {\n    // 1) UI-তে আগেই remove\n    const patchResult = dispatch(\n      ordersApi.util.updateQueryData(\n        \"getProducts\",      // endpoint\n        undefined,          // arg\n        (draft) => {\n          const idx = draft.findIndex((p) => p.id === id);\n          if (idx >= 0) draft.splice(idx, 1);\n        },\n      ),\n    );\n\n    try {\n      await queryFulfilled;\n      // 2) server নিশ্চিত → tags-ও invalidate (সার্ভার-সত্যে মিলে)\n      dispatch(ordersApi.util.invalidateTags([\"Product\"]));\n    } catch {\n      // 3) ব্যর্থ → আগের cache ফিরিয়ে (rollback)\n      patchResult.undo();\n    }\n  },\n}),"} lang={"ts"} title={"Optimistic delete (updateQueryData)"} />
+
+## updateQueryData কী
+
+- `util.updateQueryData(endpoint, args, updater)` — cache-এ draft-based patch
+- Returned `patchResult` — `.undo()` rollback
+- Queries-মাউন্ট থাকলে instant UI, background refetch হয়নি
+- কোনো অবশ্য refetch-এর নিশ্চয়তা না থাকলে mutation-সফলতা-পর্যন্ত cache-জাত স্থিতি — তাই queryFulfilled-এ আমরা নিজে invalidate করি
+
+<Tip tone={"warning"} title={"কখন নয়"} text={"Optimistic শুধু reversible & good-feedback scenarios-এ। Create-তে সার্ভার থেকে id আসে — সাধারণত normalize-নিশ্চিত না হলে optimistic skip করুন। Delete/toggle-এর জন্য দারুণ।"} />

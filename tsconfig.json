@@ -1,0 +1,20 @@
+{
+  "extends": "@tech-tutor/typescript-config/base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "types": ["node"],
+    "noEmit": true
+  },
+  "include": [],
+  "exclude": [
+    "node_modules",
+    "content",
+    "tools",
+    "apps",
+    "packages",
+    "dist",
+    ".next",
+    ".turbo"
+  ]
+}

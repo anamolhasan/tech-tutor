@@ -1,0 +1,22 @@
+---
+title: "Mutation: Create Order"
+label: "Mutation — Create"
+order: 19
+level: "Intermediate"
+description: "useCreateOrderMutation — trigger, unwrap ও clearCart — বাংলায়।"
+---
+
+<CodeBlock code={"\"use client\";\n\nimport { useAppSelector } from \"@/hooks/use-app-selector\";\nimport { useCreateOrderMutation } from \"@/features/orders/ordersService\";\nimport { clearCart } from \"@/features/cart/cartSlice\";\nimport { useAppDispatch } from \"@/hooks/use-app-dispatch\";\n\nexport function CheckoutButton() {\n  const dispatch = useAppDispatch();\n  const items = useAppSelector((state) => state.cart.items);\n  // hook auto-generated for builder.mutation\n  const [createOrder, { isLoading, isError, error }] = useCreateOrderMutation();\n\n  async function handleCheckout() {\n    // wrap in try/catch — trigger returns Promise\n    const result = await createOrder({ items }).unwrap();\n    // .unwrap() → success = result, error = throw\n    dispatch(clearCart());\n  }\n\n  return (\n    <Button\n      onClick={handleCheckout}\n      disabled={isLoading || items.length === 0}\n    >\n      {isLoading ? \"অর্ডার করছি…\" : \"Checkout\"}\n    </Button>\n  );\n}"} lang={"ts"} title={"src/features/cart/checkout-button.tsx"} />
+
+## mutation trigger কী
+
+- `[trigger, result]` array-ভিত্তিক — trigger কল করলে request হয়
+- `result.isLoading / isError / error / isSuccess / data`
+- Second call same arg → **dedupe** হয়; আলাদা arg → new
+- `unwrap()` → success-এ value, failure-এ throw — await-able
+
+## ম্যানুয়াল validate
+
+<CodeBlock code={"if (items.length === 0) {\n  toast.error(\"Cart খালি\");\n  return;\n}"} lang={"ts"} title={"empty cart guard"} />
+
+<Tip tone={"info"} title={"unwrap বা onSuccess"} text={"দুই পদ্ধতি — `await trigger().unwrap()` (ফর্ম/async code-এ ভালো) অথবা `trigger()`-এর result-এ `onSuccess/onError` callback। এই কোর্সে unwrap-ই প্রাথমিক — কারণ এতে failure-ও আপনার code-এ ফিরে আসে।"} />

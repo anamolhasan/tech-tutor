@@ -1,0 +1,41 @@
+---
+title: "GitHub Pages — ফ্রি ওয়েবসাইট হোস্ট"
+label: "Pages & Deployment"
+order: 12
+level: "Intermediate"
+description: "GitHub Pages দিয়ে static site ও docs হোস্ট — বাংলায়।"
+---
+
+## GitHub Pages কী?
+
+<InParagraph text={"GitHub Pages হলো **ফ্রি static hosting** — আপনার repository থেকে HTML/CSS/JS সাইট (এবং Jekyll docs) প্রকাশ করা যায়।"} />
+
+## Pages চালু করা
+
+- repo → Settings → Pages
+- Source: **Deploy from a branch**
+- Branch: `main` folder: `/ (root)`
+- Save — কয়েক মিনিটে আপনার সাইট live
+
+## URL
+
+<CodeBlock code={"https://anamolhasan.github.io/\nhttps://anamolhasan.github.io/my-project/\nmy-project.github.io  (organizations/users-এই রূপ)"} lang={"text"} />
+
+## Custom domain
+
+- Settings → Pages → Custom domain
+- DNS-এ CNAME — `www.yourdomain.com` → `youruser.github.io`
+- HTTPS স্বয়ংক্রিয়ভাবে (প্রভাবে আসতে কয়েক মিনিট সময় নেয়)
+
+## Static site framework (Astro/Next static)
+
+<CodeBlock code={"on:\n  push:\n    branches: [main]\njobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: npm ci\n      - run: npm run build\n      - uses: actions/upload-pages-artifact@v3\n        with:\n          path: ./dist\n  deploy:\n    needs: build\n    runs-on: ubuntu-latest\n    permissions:\n      pages: write\n      id-token: write\n    steps:\n      - uses: actions/deploy-pages@v4"} lang={"yaml"} title={"Pages deploy via Actions"} />
+
+## Limit সম্পর্কে জেনে রাখুন
+
+- Static site সাইট — server code চলে না
+- Site বাউন্ড: 1 GB
+- প্রতি মাসে কিছু soft limit
+- Public repo-তে free
+
+<Tip tone={"info"} title={"কখন ব্যবহার"} text={"ডকুমেন্টেশন, landing page, portfolio, open-source project site — সবই ফ্রি-তে হোস্ট সম্ভব। CSS/HTML ভালো বুঝলে এই tool দারুণ।"} />

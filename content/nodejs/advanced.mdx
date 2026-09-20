@@ -1,0 +1,29 @@
+---
+title: "Advanced Node.js"
+label: "Advanced Node.js"
+order: 17
+level: "Advanced"
+description: "Worker Threads, child_process, Buffers, process lifecycle — advanced Node.js concepts বাংলায়।"
+---
+
+## Worker Threads
+
+<InParagraph text={"**Worker Threads** দিয়ে CPU-intensive কাজ parallel-ভাবে করা যায়। এতে main thread block হয় না।"} />
+
+<CodeBlock code={"const { Worker, isMainThread, parentPort } = require(\"node:worker_threads\");\n\nif (isMainThread) {\n  // Main thread\n  const worker = new Worker(__filename);\n\n  worker.on(\"message\", (result) => {\n    console.log(\"Result:\", result);\n  });\n\n  worker.postMessage(1000000000);\n} else {\n  // Worker thread\n  parentPort.on(\"message\", (n) => {\n    let sum = 0;\n    for (let i = 0; i < n; i++) sum += i;\n    parentPort.postMessage(sum);\n  });\n}"} lang={"javascript"} title={"worker.js"} />
+
+## child_process
+
+<CodeBlock code={"const { exec, spawn } = require(\"node:child_process\");\n\n// exec — command run করে\nexec(\"ls -la\", (error, stdout, stderr) => {\n  console.log(\"Files:\", stdout);\n});\n\n// spawn — stream output\nconst ls = spawn(\"ls\", [\"-la\"]);\nls.stdout.on(\"data\", (data) => {\n  console.log(\"Output:\", data.toString());\n});"} lang={"javascript"} />
+
+## Buffer
+
+<InParagraph text={"**Buffer** হলো binary data-কে represent করার উপায়। File I/O, network operations-এ binary data handle করতে Buffer দরকার হয়।"} />
+
+<CodeBlock code={"// Buffer create\nconst buf1 = Buffer.from(\"Hello\");\nconst buf2 = Buffer.alloc(10); // 10 bytes zero-filled\nconst buf3 = Buffer.allocUnsafe(10); // uninitialized\n\n// string → buffer → string\nconst encoded = Buffer.from(\"বাংলা টেক্সট\");\nconsole.log(encoded.toString()); // \"বাংলা টেক্সট\"\nconsole.log(encoded.toString(\"base64\")); // base64 encoded\n\n// Buffer operations\nconsole.log(buf1.length); // 5\nconsole.log(buf1.toString(\"utf8\")); // \"Hello\""} lang={"javascript"} />
+
+## Process Lifecycle
+
+<CodeBlock code={"// process events\nprocess.on(\"exit\", (code) => {\n  console.log(\"Process exited with code:\", code);\n});\n\nprocess.on(\"unhandledRejection\", (reason, promise) => {\n  console.error(\"Unhandled Rejection:\", reason);\n});\n\nprocess.on(\"uncaughtException\", (error) => {\n  console.error(\"Uncaught Exception:\", error);\n  process.exit(1);\n});\n\n// graceful shutdown\nprocess.on(\"SIGTERM\", () => {\n  console.log(\"SIGTERM received. Shutting down...\");\n  server.close(() => {\n    db.close();\n    process.exit(0);\n  });\n});"} lang={"javascript"} />
+
+<Tip tone={"success"} title={"সংক্ষেপ"} text={"CPU-heavy কাজে Worker Threads, external command-এ child_process, binary data-তে Buffer — এগুলো advanced Node.js-এর মূল হাতিয়ার।"} />

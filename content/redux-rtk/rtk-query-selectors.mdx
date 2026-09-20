@@ -1,0 +1,19 @@
+---
+title: "RTK Query Selectors — selectFromResult"
+label: "Query Selectors"
+order: 24
+level: "Advanced"
+description: "selectFromResult, transformResponse, selectors-এর derivation — বাংলায়।"
+---
+
+<CodeBlock code={"\"use client\";\n\nimport { useGetOrdersQuery, useGetProductsQuery } from \"@/features/orders/ordersService\";\n\nexport function OrderCountBadge() {\n  const { count } = useGetOrdersQuery(undefined, {\n    // পুরো data-র বদলে শুধু count বদলানো হলে re-render\n    selectFromResult: (result) => ({\n      count: result.data?.length ?? 0,\n    }),\n  });\n\n  return <Badge>{count}টি অর্ডার</Badge>;\n}"} lang={"tsx"} title={"SelectFromResult — re-render limit"} />
+
+## transformResponse
+
+<CodeBlock code={"getProducts: builder.query<Product[], void>({\n  query: () => \"products\",\n  transformResponse: (raw: APIEnvelope) => {\n    // { items: [...], total } → সব Product[]\n    return raw.items;\n  },\n}),"} lang={"ts"} title={"সার্ভার shape→client shape"} />
+
+## Derived selectors
+
+<CodeBlock code={"// একটি selector: cartItem-product details\nexport const useCartWithDetails = () => {\n  const items = useAppSelector(selectCartItems);\n  const { data: products } = useGetProductsQuery();\n\n  return items.map((item) => {\n    const product = products?.find((p) => p.id === item.productId);\n    return { ...item, product };\n  });\n};"} lang={"ts"} title={"cache-থেকে cart-সাথে মিলানো"} />
+
+<Tip tone={"info"} title={"select-এ সংযম"} text={"`selectFromResult`-এ শুধু সত্যিই দরকারি অংশ select করুন — বড় data object select করলে অপ্রয়োজনীয় re-render হয়। যা যা UI-তে পড়ে, শুধু তা-ই select করুন।"} />

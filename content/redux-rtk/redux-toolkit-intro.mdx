@@ -1,0 +1,30 @@
+---
+title: "Redux Toolkit — আধুনিক Redux"
+label: "Redux Toolkit"
+order: 3
+level: "Beginner"
+description: "Classic Redux-এর সমস্যা, Redux Toolkit কী সহজ করে — বাংলায়।"
+---
+
+<InParagraph text={"**Redux Toolkit (RTK)** হলো Redux-এর official, battle-tested utility — যা classic Redux-এর অনেক boilerplate (constants, actions, reducers আলাদা আলাদা file) দূর করে। RTK-র দুটি প্রধান অংশ:"} />
+
+- **`createSlice`** — Reducers + action creators একীভূত
+- **`configureStore`** — store + middleware setup সহজ
+- **`createAsyncThunk`** — async actions
+- **`createSelector`** — memoized selectors
+- **`createApi` (RTK Query)** — server data fetch/cache
+
+## Classic vs Toolkit
+
+| বিষয় | Classic Redux | Redux Toolkit |
+| --- | --- | --- |
+| Setup | types, action creators, reducers আলাদা | এক `createSlice`-এ সব |
+| Immutability | হাতে spread/...Obj লেখা | `immer`-ভিত্তিক write-এ mutate করলেও new state |
+| Store | `createStore` + manual middleware | `configureStore` সব default |
+| Recommendation | — | Official, সর্বদা আগে RTK |
+
+## Immer magic
+
+<CodeBlock code={"// RTK: আপনি সরাসরি লিখতে পারেন —\n// Immer পটভূমিতে করে new state\naddToCart: (state, action) => {\n  const item = state.items.find((i) => i.id === action.payload.id);\n  if (item) {\n    item.qty += 1;           // মনে মনে mutate\n  } else {\n    state.items.push({\n      id: action.payload.id,\n      qty: 1,\n    });\n  }\n},"} lang={"ts"} title={"slice reducer-এ mutate-vector"} />
+
+<Tip tone={"success"} title={"সম্পূর্ণ অ্যাপ RTK দিয়ে"} text={"এই কোর্সে আমরা পুরো app **Redux Toolkit** দিয়েই লিখব — store, cart slice, এবং server data-র জন্য **RTK Query**। এগুলোই RTK-এর official stack।"} />

@@ -1,0 +1,31 @@
+---
+title: "CSS Grid"
+label: "Grid"
+order: 11
+level: "Beginner"
+description: "Grid container, grid-template-columns, gap, areas — দুই-মাত্রিক লেআউটের আধুনিক বাংলা গাইড।"
+---
+
+<InParagraph text={"**CSS Grid** দুই-মাত্রিক লেআউট ব্যবস্থা — একসাথে সারি ও স্তম্ভ নিয়ন্ত্রণ করা যায়। ফটো গ্যালারি, ড্যাশবোর্ড, জটিল পেজ লেআউটে grid অমূল্য।"} />
+
+## সাধারণ গ্রিড
+
+<CodeBlock code={".gallery {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap: 16px;\n}"} lang={"css"} />
+
+<InParagraph text={"`repeat(3, 1fr)` মানে তিনটি সমান কলাম, `1fr` হলো এক অংশ জায়গা।"} />
+
+## স্প্যান (span)
+
+<CodeBlock code={".feature {\n  grid-column: span 2;\n}\n.sidebar {\n  grid-row: span 2;\n}"} lang={"css"} />
+
+## গ্রিড এলাকা (areas)
+
+<CodeBlock code={".layout {\n  display: grid;\n  grid-template-areas:\n    \"header header\"\n    \"sidebar main\"\n    \"footer footer\";\n}\n\n.header  { grid-area: header; }\n.sidebar { grid-area: sidebar; }\n.main    { grid-area: main; }\n.footer  { grid-area: footer; }"} lang={"css"} />
+
+## অটো-ফিট ও মিনম্যাক্স
+
+<CodeBlock code={".cards {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));\n}"} lang={"css"} />
+
+<InParagraph text={"স্ক্রিন যত বড়, যত কার্ড বসবে — media query ছাড়াই responsive লেআউট।"} />
+
+<Tip tone={"info"} title={"flexbox vs grid"} text={"সহজ নিয়ম: এক-মাত্রিক লেআউটে **flexbox**, দুই-মাত্রিক লেআউটে **grid**। অনেক ক্ষেত্রে দুটি একসাথেও ব্যবহার হয় — ভেতরে flex, বাইরে grid।"} />

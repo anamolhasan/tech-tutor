@@ -1,0 +1,36 @@
+---
+title: "Middleware (pre/post hooks)"
+label: "Middleware"
+order: 11
+level: "Intermediate"
+description: "Mongoose middleware: save/find/update/delete-এর আগে ও পরে custom logic চালানো — বাংলায়।"
+---
+
+## Middleware কী?
+
+<InParagraph text={"Mongoose **middleware** (hooks) হলো নির্দিষ্ট অপারেশনের আগে (`pre`) বা পরে (`post`) চলা function — যেমন password hash, updated timestamp, logging, cascade delete।"} />
+
+## pre('save')
+
+<CodeBlock code={"import bcrypt from \"bcryptjs\";\n\nconst userSchema = new mongoose.Schema({\n  email: { type: String, required: true },\n  password: { type: String, required: true },\n});\n\nuserSchema.pre(\"save\", async function (next) {\n  // শুধু password change হলে hash করব — বারবার নয়\n  if (!this.isModified(\"password\")) return next();\n\n  this.password = await bcrypt.hash(this.password, 10);\n  next();\n});\n\n// login-এ তুলনা করার জন্য সংক্ষিপ্ত helper method\nuserSchema.methods.comparePassword = function (candidate) {\n  return bcrypt.compare(candidate, this.password);\n};"} lang={"js"} title={"Password hash (pre save)"} />
+
+## post('findOneAndUpdate')
+
+<CodeBlock code={"postSchema.post(\"findOneAndUpdate\", async function () {\n  // this = query (update)\n  const doc = this._update;\n  if (doc && doc.$set && doc.$set.published === true) {\n    await Stats.updateOne(\n      { name: \"posts\" },\n      { $inc: { publishedCount: 1 } },\n      { upsert: true }\n    );\n  }\n});"} lang={"js"} title={"Update-এর পরের hook"} />
+
+## Delete-এর cleanup
+
+<CodeBlock code={"// User মুছে গেলে তার সব post-ও মুছে ফেলি\nuserSchema.pre(\"deleteOne\", { document: true }, async function () {\n  const userId = this._id;\n  await Post.deleteMany({ author: userId });\n});\n\n// findByIdAndDelete দিলেও hook চলে —\n// কারণ ভেতরে deleteOne query হয়\nawait User.findByIdAndDelete(userId);"} lang={"js"} title={"Cascade delete"} />
+
+## Common hooks
+
+| Hook | কখন চলে |
+| --- | --- |
+| `pre/post('save')` | Document save-এর আগে/পরে |
+| `pre/post('validate')` | Validation-এর আগে/পরে |
+| `pre/post('find')` | find/findOne query-র আগে/পরে |
+| `pre/post('findOneAndUpdate')` | update query-র আগে/পরে |
+| `pre/post('deleteOne')` | delete deleteMany-এর আগে/পরে |
+| `pre/post('aggregate')` | Aggregation pipeline-এর আগে/পরে |
+
+<Tip tone={"info"} title={"Arrow function ব্যবহার করবেন না"} text={"Hook-এ `function` keyword ব্যবহার করুন — তাতে `this`-এর ভেতরে document বা query পাবেন। **Arrow function** ব্যবহার করলে `this` কাজ করবে না।"} />

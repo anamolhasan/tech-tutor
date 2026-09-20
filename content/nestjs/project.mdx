@@ -1,0 +1,35 @@
+---
+title: "Real-world NestJS Project"
+label: "Project"
+order: 20
+level: "Advanced"
+description: "পূর্ণ Blog API — modules, auth, relations, guards, swagger সহ project বাংলায়।"
+---
+
+<InParagraph text={"চলুন একটি **Blog API** project বানাই — যা একটি realistic NestJS application-এর সব layers দেখাবে।"} />
+
+## Setup & Generate
+
+<CodeBlock code={"nest new blog-api\ncd blog-api\nnpm i @nestjs/mongoose mongoose @nestjs/config bcryptjs @nestjs/jwt class-validator class-transformer\nnpm i -D @types/bcryptjs\n\nnest g module auth\nnest g module users\nnest g module posts\nnest g module posts\nnest g resource posts --no-spec  # controller+service+module+DTO\nnest g controller auth --no-spec\nnest g service auth --no-spec\nnest g service users --no-spec"} lang={"bash"} />
+
+## Post Schema
+
+<CodeBlock code={"import { Prop, Schema, SchemaFactory } from \"@nestjs/mongoose\";\nimport { Types } from \"mongoose\";\n\n@Schema({ timestamps: true })\nexport class Post {\n  @Prop({ required: true, trim: true })\n  title: string;\n\n  @Prop({ required: true })\n  content: string;\n\n  @Prop({ type: Types.ObjectId, ref: \"User\", required: true })\n  author: Types.ObjectId;\n}\n\nexport const PostSchema = SchemaFactory.createForClass(Post);"} lang={"typescript"} title={"src/posts/schemas/post.schema.ts"} />
+
+## Post DTO (Create)
+
+<CodeBlock code={"import { ApiProperty } from \"@nestjs/swagger\";\nimport { IsString, MinLength } from \"class-validator\";\n\nexport class CreatePostDto {\n  @ApiProperty({ example: \"My first post\" })\n  @IsString()\n  @MinLength(3)\n  title: string;\n\n  @ApiProperty({ example: \"Content here...\" })\n  @IsString()\n  @MinLength(10)\n  content: string;\n}"} lang={"typescript"} title={"src/posts/dto/create-post.dto.ts"} />
+
+## Post Service
+
+<CodeBlock code={"import { Injectable, NotFoundException } from \"@nestjs/common\";\nimport { InjectModel } from \"@nestjs/mongoose\";\nimport { Model } from \"mongoose\";\nimport { Post } from \"./schemas/post.schema\";\nimport { CreatePostDto } from \"./dto/create-post.dto\";\nimport { UpdatePostDto } from \"./dto/update-post.dto\";\n\n@Injectable()\nexport class PostsService {\n  constructor(@InjectModel(Post.name) private postModel: Model<Post>) {}\n\n  async create(dto: CreatePostDto, authorId: string) {\n    const post = await this.postModel.create({ ...dto, author: authorId });\n    return post.populate(\"author\", \"name email\");\n  }\n\n  async findAll() {\n    return this.postModel.find().populate(\"author\", \"name email\").sort(\"-createdAt\");\n  }\n\n  async findOne(id: string) {\n    const post = await this.postModel.findById(id).populate(\"author\", \"name\");\n    if (!post) throw new NotFoundException(\"Post পাওয়া যায়নি\");\n    return post;\n  }\n\n  async update(id: string, authorId: string, dto: UpdatePostDto) {\n    const post = await this.postModel.findOneAndUpdate(\n      { _id: id, author: authorId }, // owner only\n      dto,\n      { new: true },\n    );\n    if (!post) throw new NotFoundException(\"Post খুঁজে পাওয়া যায়নি বা অনুমতি নেই\");\n    return post;\n  }\n\n  async remove(id: string, authorId: string) {\n    const post = await this.postModel.findOneAndDelete({ _id: id, author: authorId });\n    if (!post) throw new NotFoundException(\"Post খুঁজে পাওয়া যায়নি\");\n  }\n}"} lang={"typescript"} title={"src/posts/posts.service.ts"} />
+
+## Post Controller (protected)
+
+<CodeBlock code={"import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from \"@nestjs/common\";\nimport { ApiBearerAuth, ApiTags } from \"@nestjs/swagger\";\nimport { JwtAuthGuard } from \"../common/guards/jwt-auth.guard\";\nimport { PostsService } from \"./posts.service\";\n\n@ApiTags(\"posts\")\n@Controller(\"posts\")\nexport class PostsController {\n  constructor(private readonly postsService: PostsService) {}\n\n  @Get()\n  findAll() {\n    return this.postsService.findAll();\n  }\n\n  @Get(\":id\")\n  findOne(@Param(\"id\") id: string) {\n    return this.postsService.findOne(id);\n  }\n\n  @Post()\n  @UseGuards(JwtAuthGuard) // author দরকার → protected\n  @ApiBearerAuth()\n  create(@Body() dto: CreatePostDto, @Req() req: any) {\n    return this.postsService.create(dto, req.user.sub);\n  }\n\n  @Put(\":id\")\n  @UseGuards(JwtAuthGuard)\n  update(@Param(\"id\") id: string, @Body() dto: UpdatePostDto, @Req() req) {\n    return this.postsService.update(id, req.user.sub, dto);\n  }\n\n  @Delete(\":id\")\n  @UseGuards(JwtAuthGuard)\n  remove(@Param(\"id\") id: string, @Req() req) {\n    return this.postsService.remove(id, req.user.sub);\n  }\n}"} lang={"typescript"} title={"src/posts/posts.controller.ts"} />
+
+## Test Flow
+
+<CodeBlock code={"npm run start:dev\n\n# 1. register/login → token\nPOST /api/v1/auth/login\nJSON: { email, password }\n→ { access_token }\n\n# 2. create post (Authorized)\nPOST /api/v1/posts\nAuthorization: Bearer <token>\nJSON: { \"title\": \"হ্যালো\", \"content\": \"বিস্তারিত...\" }\n\n# 3. list\nGET /api/v1/posts\n\n# 4. swagger docs\nGET /api → OpenAPI UI\n"} lang={"bash"} />
+
+<Tip tone={"success"} title={"আরও প্রসারিত"} text={"Tags (categories), comments, likes, pagination, refresh token — আস্তে আস্তে যোগ করুন। প্রতিটি feature user-ভিত্তিক authorization মনে রাখুন।"} />

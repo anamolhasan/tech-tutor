@@ -1,0 +1,34 @@
+---
+title: "Update Operators ($set, $inc, $push…)"
+label: "Update Operators"
+order: 17
+level: "Intermediate"
+description: "MongoDB update operator-গুলোর ব্যবহার: $set, $inc, $push, $pull, $addToSet, upsert — বাংলায়।"
+---
+
+## Operator-গুলো
+
+| Operator | কাজ |
+| --- | --- |
+| `$set` | field-এর value বসান |
+| `$unset` | field মুছে ফেলুন |
+| `$inc` | সংখ্যা বাড়ান/কমান |
+| `$mul` | গুণ করুন |
+| `$push` | array-তে value যোগ করুন |
+| `$pull` | array থেকে নির্দিষ্ট value সরান |
+| `$addToSet` | array-তে যুক্ত করুন (ডুপ্লিকেট ছাড়া) |
+| `$min` / `$max` | ছোট/বড় value রাখুন |
+
+## Numeric operators
+
+<CodeBlock code={"// title ঠিক করুন, views ১ বাড়ান, pending field-টা সরান\nawait Post.updateOne(\n  { _id: postId },\n  {\n    $set: { title: \"আপডেটেড টাইটেল\" },\n    $inc: { views: 1 },\n    $unset: { pending: \"\" },\n  }\n);\n\n// পূর্বের value দেখে update: $inc atomic — race-safe\nawait Account.updateOne(\n  { _id: accId },\n  { $inc: { balance: -100 } }\n);"} lang={"js"} title={"$set, $inc, $unset"} />
+
+## Array operators
+
+<CodeBlock code={"// comment যোগ\nawait Post.updateOne(\n  { _id: postId },\n  { $push: { comments: commentId } }\n);\n\n// নির্দিষ্ট comment সরান\nawait Post.updateOne(\n  { _id: postId },\n  { $pull: { comments: commentId } }\n);\n\n// duplicate ছাড়া tag যোগ\nawait Post.updateOne(\n  { _id: postId },\n  { $addToSet: { tags: \"mongoose\" } }\n);\n\n// $push-এ position সহ — সামনে বসান\nawait Post.updateOne(\n  { _id: postId },\n  { $push: { comments: { $each: [newCommentId], $position: 0 } } }\n);"} lang={"js"} title={"$push, $pull, $addToSet"} />
+
+## upsert
+
+<CodeBlock code={"// মতো filter-এর document না থাকলে নতুন document তৈরি হয়\nawait LoginAttempt.updateOne(\n  { userId, date: today },\n  { $inc: { count: 1 } },\n  { upsert: true }\n);"} lang={"js"} title={"নেই থাকলে insert"} />
+
+<Tip tone={"info"} title={"update operators + findOneAndUpdate"} text={"`findOneAndUpdate`-এর সাথে operator ছাড়া (যেমন `{ title: \"...\" }`) সরাসরি value বসালে পুরো document replace হয়ে যেতে পারে। সবসময় `$set` ইত্যাদি operator ব্যবহার করুন — `options.overwrite` পুরো প্রতিস্থাপনের জন্য দরকার।"} />

@@ -1,0 +1,35 @@
+---
+title: "Environment Variables ও Configuration"
+label: "Environment"
+order: 10
+level: "Intermediate"
+description: "process.env, .env file, dotenv — Node.js-এ environment variables ম্যানেজমেন্ট বাংলায়।"
+---
+
+<InParagraph text={"**Environment variables** হলো external configuration data — database URL, API keys, port number ইত্যাদি। এগুলো code-এ hardcode না করে `.env` ফাইলে রাখা হয়।"} />
+
+## process.env
+
+<InParagraph text={"`process.env` Node.js-এর built-in object যেখানে সব environment variables থাকে।"} />
+
+<CodeBlock code={"// built-in variables\nconsole.log(process.env.NODE_ENV); // \"development\"\nconsole.log(process.env.PWD);      // বর্তমান directory\nconsole.log(process.pid);          // process ID\n\n// custom variable set করা\nprocess.env.PORT = \"3000\";\nconsole.log(process.env.PORT); // \"3000\""} lang={"javascript"} />
+
+## .env File ও dotenv
+
+<InParagraph text={"**dotenv** package দিয়ে `.env` ফাইল থেকে environment variables স্বয়ংক্রিয়ভাবে `process.env`-তে লোড করা যায়।"} />
+
+<CodeBlock code={"npm install dotenv"} lang={"bash"} />
+
+<CodeBlock code={"PORT=3000\nDATABASE_URL=mongodb://localhost:27017/mydb\nJWT_SECRET=my_super_secret_key\nNODE_ENV=development"} lang={"env"} title={".env"} />
+
+<CodeBlock code={"require(\"dotenv\").config();\n\nconst port = process.env.PORT || 3000;\nconst dbUrl = process.env.DATABASE_URL;\n\nconsole.log(\"Port:\", port);\nconsole.log(\"DB:\", dbUrl);"} lang={"javascript"} title={"index.js"} />
+
+## .env.example
+
+<InParagraph text={"`.env` ফাইল version control-এ commit করবেন না। তাই `.env.example` ফাইল রাখুন যাতে অন্যরা জানতে পারে কোন variables দরকার।"} />
+
+<CodeBlock code={"PORT=3000\nDATABASE_URL=mongodb://localhost:27017/mydb\nJWT_SECRET=your_secret_here\nNODE_ENV=development"} lang={"env"} title={".env.example"} />
+
+<CodeBlock code={"node_modules\n.env\n.env.local"} lang={"gitignore"} title={".gitignore"} />
+
+<Tip tone={"warning"} title={"নিরাপত্তা"} text={"API keys ও secrets সবসময় `.env` ফাইলে রাখুন, কখনো code-এ hardcode করবেন না। `.env` ফাইলকে অবশ্যই `.gitignore`-এ যোগ করুন।"} />

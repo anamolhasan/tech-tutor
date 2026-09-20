@@ -1,0 +1,48 @@
+---
+title: "README ও Markdown — প্রজেক্টের মুখ"
+label: "Readme & Markdown"
+order: 5
+level: "Beginner"
+description: "ভালো README লিখা ও Markdown-এর মৌলিক — বাংলায়।"
+---
+
+## README কেন গুরুত্বপূর্ণ?
+
+<InParagraph text={"Repository-তে প্রথম যে জিনিস visitors দেখে তা-ই README। এটি সিদ্ধান্ত নেয় — মানুষ project ব্যবহার, contribute নাকি এড়িয়ে যাবে।"} />
+
+## ভালো README-এর কাঠামো
+
+- **প্রজেক্টের নাম ও একটি লাইন** — কী এটি
+- **Screenshot / demo** — এক চোখে বোঝা যায়
+- **Installation** — কীভাবে setup করবেন
+- **Usage** — কীভাবে চলবে
+- **Features** — bullets
+- **Tech stack** — badge
+- **Contribution** — কীভাবে সাহায্য করবেন
+- **License**
+
+## Markdown-এর মৌলিক
+
+<CodeBlock code={"# Blog App\n\nআধুনিক blog — Astro ও Tailwind CSS-এ নির্মিত।\n\n## Features\n- ডার্ক মোড\n- RSS ফিড\n- দ্রুত লোডিং\n\n## ইনস্টলেশন\nnpm install\nnpm run dev\n\n## License\nMIT"} lang={"markdown"} title={"উদাহরণ README.md"} />
+
+## দরকারি Markdown syntax
+
+| Syntax | ফলাফল |
+| --- | --- |
+| # Heading | বড় শিরোনাম |
+| **bold** | বোল্ড |
+| [link](url) | হাইপারলিংক |
+| `code` | ইনলাইন কোড |
+| - item | বুলেট লিস্ট |
+| > quote | উদ্ধৃতি |
+| \| col \| col \| | টেবিল |
+
+## README-তে ছবি যোগ
+
+<CodeBlock code={"![Demo](https://github.com/user/repo/raw/main/screenshot.png)"} lang={"markdown"} />
+
+## Profile README
+
+<InParagraph text={"username-এর মতো নামে repository (যেমন `anamolhasan`) বানিয়ে সেখানে README লিখলে — আপনার GitHub profile-এর উপরে সেই text দেখা যাবে।"} />
+
+<Tip tone={"info"} title={"নিয়ম"} text={"README আগে নিজে পড়ুন — আপনি নিজে বোঝেন তো? জানা ব্যস্ততা নয়, সরল ভাষায় লিখুন।"} />

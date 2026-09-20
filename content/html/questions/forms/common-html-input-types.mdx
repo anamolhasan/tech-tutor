@@ -1,0 +1,21 @@
+---
+question: "What are common HTML input types?"
+order: 3
+description: "সবচেয়ে ব্যবহৃত input types এবং কখন কোনটি ব্যবহার করবেন।"
+---
+
+<InParagraph text={"`<input>` element-এর `type` attribute ঠিক করে ব্যবহারকারী কী ধরনের data দেবে। সবচেয়ে সাধারণ কিছু type নিচে দেওয়া হলো:"} />
+
+- `text` — সাধারণ এক লাইনের লেখা
+- `password` — গোপন পাসওয়ার্ড (চোখে দেখা যায় না)
+- `email` — ইমেইল ঠিকানা, বিল্ট-ইন validation সহ
+- `number` — সংখ্যা
+- `date` — তারিখ পিক করা
+- `checkbox` — একাধিক পছন্দ
+- `radio` — একটি পছন্দের বৃত্ত
+- `file` — ফাইল আপলোড
+- `submit` — ফর্ম জমা দেওয়ার বাটন
+
+<CodeBlock code={"<input type=\"email\" placeholder=\"you@example.com\" />\n<input type=\"password\" placeholder=\"পাসওয়ার্ড\" />\n<input type=\"date\" />\n<input type=\"checkbox\" id=\"agree\" /> <label for=\"agree\">সম্মত</label>"} lang={"html"} title={"উদাহরণ"} />
+
+<Tip tone={"success"} title={"মনে রাখুন"} text={"সঠিক `type` দিলে ব্রাউজার নিজেই ভুল input ধরতে (validation) সাহায্য করে — যেমন `email`-এ ভুল ফরম্যাটে type-check করা হয়।"} />

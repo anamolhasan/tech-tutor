@@ -1,0 +1,15 @@
+---
+question: "What is the difference between <section> and <article>?"
+order: 4
+description: "section এবং article — কখন কোনটিতে কনটেন্ট রাখবেন।"
+---
+
+<InParagraph text={"`<section>` আর `<article>` দুটোই HTML5-এর semantic element, কিন্তু ব্যবহার ভিন্ন। মূল পার্থক্য হলো **কনটেন্টটি আত্মনির্ভর কিনা**।"} />
+
+<InParagraph text={"**`<article>`** এমন কনটেন্টের জন্য যা একা থাকলোও সম্পূর্ণ বোঝা যায় — যেমন একটি blog post, একটি নিউজ, একটি product card। ব্যবহারকারী যদি শুধু সেটির data অন্য কোথাও নিয়ে যায়, তবুও অর্থহীন হয়ে যায় না।"} />
+
+<InParagraph text={"**`<section>`** হলো একটি থিম্যাটিক grouping — একই বিষয়ের সম্পর্কিত কনটেন্ট এক জায়গায়। যেমন একটি গাইডের \"ভূমিকা\" অংশ, বা একটি রিপোর্টের \"ফলাফল\" অংশ। section-এর সাধারণত নিজস্ব heading থাকে।"} />
+
+<CodeBlock code={"<section>\n  <h2>আজকের খবর</h2>\n  <article>\n    <h3>টেকনোলজি সেক্টরে নতুন চাকরি</h3>\n    <p>একটি স্বাধীন খবর...</p>\n  </article>\n  <article>\n    <h3>শিক্ষার ডিজিটাল রূপান্তর</h3>\n    <p>আরেকটি স্বাধীন খবর...</p>\n  </article>\n</section>"} lang={"html"} title={"উদাহরণ"} />
+
+<Tip tone={"warning"} title={"মনে রাখুন"} text={"নিয়ম কঠিন নয় — ভেবে দেখুন কনটেন্টটি অন্য পেজে/ফিডে আলাদা থাকলেও অর্থ রাখে কিনা; রাখলে `article`, নইলে `section`।"} />

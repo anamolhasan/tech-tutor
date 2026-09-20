@@ -1,0 +1,23 @@
+---
+title: "Fetch Detail — useGetProductByIdQuery"
+label: "Fetch Detail"
+order: 18
+level: "Intermediate"
+description: "Parameter-সহ query, skip option, derived loading — বাংলায়।"
+---
+
+<CodeBlock code={"\"use client\";\n\nimport { useGetProductQuery } from \"@/features/orders/ordersService\";\n\nexport function ProductDetail({ id }: { id: string | null }) {\n  // id === null → hook disabled (skip)\n  const { data, isLoading, isError } = useGetProductQuery(\n    id ?? \"\",\n    { skip: id === null },\n  );\n\n  if (isLoading) return <ProductDetailSkeleton />;\n  if (isError) return <ErrorMessage title=\"Product পাওয়া যায়নি\" />;\n\n  return (\n    <article>\n      <h2>{data?.name}</h2>\n      <p className=\"text-muted-foreground\">{data?.description}</p>\n      <span className=\"font-semibold\">{data?.price} টাকা</span>\n    </article>\n  );\n}"} lang={"tsx"} title={"src/components/products/product-detail.tsx"} />
+
+## Important options
+
+| Option | কাজ |
+| --- | --- |
+| `skip` | condition-এ fetch এড়িয়ে যায় (ওই arg null-able) |
+| `refetchOnFocus` | window focus-এ refetch |
+| `refetchOnReconnect` | নেটওয়ার্ক এলে refetch |
+| `pollingInterval` | periodic refetch (ms) |
+| `selectFromResult` | cache-থেকে নির্দিষ্ট অংশ pick |
+
+<CodeBlock code={"// RTK Query-র arg থেকে URL-এ mapping\n// (id: string) => \"products/\" + id\n// query: (id) => \"products/\" + id"} lang={"ts"} title={"styles-এ relation"} />
+
+<Tip tone={"warning"} title={"একই id পুনরায় fetch হয় না"} text={"মনে রাখুন — একই `id`-সহ hook একাধিক component-এ use করলে **একটাই fetch**, সবাই একই cache পায়। আর fetch শেষ হলে কোনো component unmount না করলে refetch হয় না — সেটাই cache-র সুবিধা।"} />

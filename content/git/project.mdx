@@ -1,0 +1,32 @@
+---
+title: "পূর্ণাঙ্গ প্রজেক্ট: blog repo Git-এ"
+label: "Project"
+order: 20
+level: "Advanced"
+description: "একটি বাস্তব blog প্রজেক্ট Git দিয়ে পরিচালনা — বাংলায় step by step।"
+---
+
+## প্রকল্প: blog-app (Git full flow)
+
+<InParagraph text={"নিচের ধাপগুলো অনুসরণ করুন — Git-এর সব প্রধান কাজের প্রায়োগিক প্রদর্শন।"} />
+
+<CodeBlock code={"mkdir blog-app && cd blog-app\ngit init\ngit config --local user.name \"Anamul Hasan\"\necho \"# Blog App\" > README.md\necho \"node_modules/\" > .gitignore\ngit add .\ngit commit -m \"init: project setup with gitignore\""} lang={"bash"} title={"1. শুরু"} />
+
+<CodeBlock code={"git switch -c feature/post-listing\n# ... posts api লিখলেন ...\ngit add src/\ngit commit -m \"feat: post listing endpoint\""} lang={"bash"} title={"2. ফিচার branch"} />
+
+<CodeBlock code={"git rebase -i HEAD~3\n# সবশেষে ৩টি commit → ১টি:\n# pick 1a2b3c feat: post listing endpoint\n# squash xyz ...\ngit commit --amend -m \"feat: post listing\""} lang={"bash"} title={"3. একটি টিপ — squash commit"} />
+
+<CodeBlock code={"git switch main\ngit merge --no-ff feature/post-listing -m \"feat: post listing\"\ngit log --oneline --graph"} lang={"bash"} title={"4. merge — main-এ আনা"} />
+
+<CodeBlock code={"git tag -a v1.0.0 -m \"First blog release\"\ngit log --oneline --graph --all"} lang={"bash"} title={"5. release & tag"} />
+
+## রাতে বারবার প্রশ্ন
+
+- ভুল branch-এ কাজ? → stash → সঠিক branch-এ pop
+- ভুল commit-en fazla কাজ? → reset/amend
+- push reject? → pull --rebase → push
+- version খুঁজছি? → git tag -l
+
+<CodeBlock code={"git switch -c feature/comments\n# যতটা খুশি experiment — শেষে:\ngit switch main\ngit branch -d feature/comments"} lang={"bash"} title={"আরও প্র্যাকটিস"} />
+
+<Tip tone={"success"} title={"মাইলসন"} text={"প্রতিটি অধ্যায়ের কমান্ড নিজে চালিয়ে দেখুন। Git শেখার সবচেয়ে ভালো উপায় হলো নিজের প্রজেক্টে ব্যাপক পরীক্ষা করা — ভুল করলে reflog-এ আছে recovery।"} />

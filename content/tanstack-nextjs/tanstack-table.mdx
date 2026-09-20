@@ -1,0 +1,19 @@
+---
+title: "TanStack Table — Headless Power"
+label: "TanStack Table"
+order: 23
+level: "Intermediate"
+description: "useReactTable-এর মূল ধারণা — data, columns, row model — বাংলায়।"
+---
+
+<InParagraph text={"**TanStack Table** হলো headless table library — এটি নিজে কোনো UI দেয় না, বরং state/logic দেয়; মার্কআপ আপনি করেন। ফলে আপনার styling-এর সম্পূর্ণ নিয়ন্ত্রণ থাকে (যেমন shadcn-এর table)।"} />
+
+## useReactTable basics
+
+<CodeBlock code={"\"use client\";\n\nimport { useReactTable, flexRender,\n  getCoreRowModel } from \"@tanstack/react-table\";\n\nimport {\n  Table, TableBody, TableCell,\n  TableHead, TableHeader, TableRow,\n} from \"@/components/ui/table\";\n\ninterface ProductTableProps {\n  data: Product[];\n  columns: ColumnDef<Product>[];\n}\n\nexport function ProductTable({ data, columns }: ProductTableProps) {\n  const table = useReactTable({\n    data,\n    columns,\n    getCoreRowModel: getCoreRowModel(),\n  });\n\n  return (\n    <Table>\n      <TableHeader>\n        {table.getHeaderGroups().map((headerGroup) => (\n          <TableRow key={headerGroup.id}>\n            {headerGroup.headers.map((header) => (\n              <TableHead key={header.id}>\n                {header.isPlaceholder\n                  ? null\n                  : flexRender(\n                      header.column.columnDef.header,\n                      header.getContext()\n                    )}\n              </TableHead>\n            ))}\n          </TableRow>\n        ))}\n      </TableHeader>\n      <TableBody>\n        {table.getRowModel().rows.map((row) => (\n          <TableRow key={row.id}>\n            {row.getVisibleCells().map((cell) => (\n              <TableCell key={cell.id}>\n                {flexRender(\n                  cell.column.columnDef.cell,\n                  cell.getContext()\n                )}\n              </TableCell>\n            ))}\n          </TableRow>\n        ))}\n      </TableBody>\n    </Table>\n  );\n}"} lang={"tsx"} title={"product-table.tsx (core)"} />
+
+## flexRender কেন
+
+<InParagraph text={"**flexRender** TanStack-এর render helper — column-এ লেখা header/cell (string, function বা component) যাই হোক, এটিকে সঠিক context-সহ render করে। بدون এটি অনেক constructor detail হাতে করতেন।"} />
+
+<Tip tone={"success"} title={"Table generic"} text={"`ProductTable` এখানে generic-না-বানানো keep করলাম (কেবল Product)। দরকার হলে `<T>` generic বানাতে পারেন — কিন্তু প্রথমে concrete ভালো, complexity পিছনে।"} />

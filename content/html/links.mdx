@@ -1,0 +1,34 @@
+---
+title: "HTML Links (লিংক)"
+label: "HTML Links"
+order: 8
+level: "Beginner"
+description: "HTML hyperlink, absolute ও relative URL, target অ্যাট্রিবিউট এবং পেজের ভেতরের লিংক — বাংলা টিউটোরিয়াল।"
+---
+
+<InParagraph text={"লিংক তৈরি করতে `<a>` (anchor) ট্যাগ ব্যবহার করা হয়। `<a>` ট্যাগের **`href`** অ্যাট্রিবিউটে কোথায় যেতে হবে তা দেওয়া হয়।"} />
+
+## উদাহরণ
+
+<CodeBlock code={"<a href=\"https://example.com\">Example ওয়েবসাইট</a>"} lang={"html"} />
+
+<InParagraph text={"লিংকের মাঝের টেক্সটই ব্যবহারকারী দেখতে পায় এবং সেখানে ক্লিক করলে নির্দিষ্ট URL-এ চলে যায়।"} />
+
+## Absolute ও Relative URL
+
+- **Absolute URL** — পূর্ণ ঠিকানা, যেমন `https://example.com/about`
+- **Relative URL** — বর্তমান অ্যাড্রেসের সাথে সম্পর্কিত ঠিকানা, যেমন `about-us.html`
+
+## target অ্যাট্রিবিউট
+
+<InParagraph text={"লিংকটি কোথায় খুলবে তা `target` দিয়ে নিয়ন্ত্রণ করা যায় — `_self` (একই ট্যাবে) এবং `_blank` (নতুন ট্যাবে)।"} />
+
+<CodeBlock code={"<a href=\"https://example.com\" target=\"_blank\">নতুন ট্যাবে খুলবে</a>"} lang={"html"} />
+
+## পেজের ভেতরের অংশে যাওয়া
+
+<InParagraph text={"`id` দেওয়া এলিমেন্টে `#id` দিয়ে লিংক করলে পেজের সেই অংশে সরাসরি যায়।"} />
+
+<CodeBlock code={"<a href=\"#contact\">কন্টাক্ট সেকশনে যান</a>\n\n<!-- নিচে কোথাও -->\n<section id=\"contact\">...</section>"} lang={"html"} />
+
+<Tip tone={"info"} title={"লিংকটি কীসের, টেক্সটেই বলুন"} text={"`“এখানে ক্লিক করুন”` না লিখে বরং `“ডাউনলোড পেজ”` — অর্থাৎ লিংকের বিষয়বস্তু টেক্সটে রাখুন। এটি accessibility ও SEO-এর জন্য ভালো।"} />

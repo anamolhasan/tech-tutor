@@ -1,0 +1,47 @@
+---
+title: "GitHub Flow — প্রতিদিনের দলপদ্ধতি"
+label: "GitHub Flow"
+order: 6
+level: "Intermediate"
+description: "GitHub Flow কী ও তার ধাপগুলো — বাংলায়।"
+---
+
+## GitHub Flow কী?
+
+<InParagraph text={"একটি সরল branch-সম্পর্কিত কাজের নিয়ম: **main সবসময় deploy-ready**, প্রতিটি কাজ feature branch-এ, PR দিয়ে merge।"} />
+
+## ৫টি ধাপ
+
+- 1. main থেকে নতুন branch বানান: `git switch -c feature/login`
+- 2. নিয়মিত commit করুন — ছোট ছোট
+- 3. Push করুন ও PR খুলুন
+- 4. আলোচনা + review + পরীক্ষা করুন
+- 5. Merge করুন ও deploy করুন
+
+## কোন নাম দেবেন branch-কে?
+
+- `feature/...` — নতুন ফিচার
+- `fix/...` — বাগ ফিক্স
+- `chore/...` — রক্ষণাবেক্ষণ
+- `docs/...` — ডকুমেন্টেশন
+
+## PR ডিসক্রিপশন টেমপ্লেট
+
+<CodeBlock code={"## পরিবর্তন\n- login ফর্ম ও API যোগ\n\n## Screenshot\n![...](...)\n\n## Test\n- [ ] local-এ pass\n- [ ] lint pass"} lang={"markdown"} title={"PR body"} />
+
+## Merge বাটন তিনটা
+
+| Merge টাইপ | কী করে |
+| --- | --- |
+| Create a merge commit | সব commit রাখে + merge commit |
+| Squash and merge | এক commit-এ গুড়িয়ে দেয় |
+| Rebase and merge | linear history |
+
+## GitHub Flow-এর সুবিধা
+
+- সরল — শুরুতেই অভ্যস্ত হন
+- main সবসময় deploy-যোগ্য
+- PR = built-in review
+- আলাদা release cycle লাগে না
+
+<Tip tone={"success"} title={"অভ্যাস"} text={"প্রতিটি কাজ আলাদা branch + আলাদা PR — এমনকি ছোট ফিক্সও। এতে ইতিহাস পরিষ্কার আর rollback সহজ।"} />

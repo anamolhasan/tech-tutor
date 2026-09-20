@@ -1,0 +1,19 @@
+---
+title: "Mutation: Update ও Delete (Admin)"
+label: "Mutation CRUD"
+order: 20
+level: "Intermediate"
+description: "Product-এর update/delete mutation ও tag-based refresh — বাংলায়।"
+---
+
+<CodeBlock code={"\"use client\";\n\nimport {\n  useDeleteProductMutation,\n  useUpdateProductMutation,\n} from \"@/features/products/productsService\";\n\nexport function ProductActions({ product }: { product: Product }) {\n  const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();\n  const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();\n\n  function toggleStatus() {\n    updateProduct({\n      id: product.id,\n      body: { status: product.status === \"active\" ? \"inactive\" : \"active\" },\n    });\n  }\n\n  function handleDelete() {\n    // disabled-loading-সহ confirm প্যাটার্ন\n    AlertDialog.confirm({\n      title: \"Delete product?\",\n      onConfirm: () => deleteProduct(product.id),\n    });\n  }\n\n  return (\n    <div className=\"flex gap-2\">\n      <Button variant=\"outline\" onClick={toggleStatus} disabled={isUpdating}>\n        আপনার status খারিজ\n      </Button>\n      <Button variant=\"destructive\" onClick={handleDelete} disabled={isDeleting}>\n        Delete\n      </Button>\n    </div>\n  );\n}"} lang={"tsx"} title={"admin/product-actions.tsx"} />
+
+## invalidation দিয়ে auto-refresh
+
+<InParagraph text={"আমাদের আগের **tags** setup-এ update/delete → `invalidatesTags` → সংশ্লিষ্ট সব query (list + detail) auto-refetch। তাই `useGetProductsQuery`-থেকে আর কোনো manual call দরকার হয় না।"} />
+
+## partially এ update
+
+<CodeBlock code={"updateProduct({\n  id: product.id,\n  body: { stock: 0 },\n  // onSuccess/onError hook-up এখানে\n});"} lang={"ts"} title={"optimistic option (দেখা যাবে) "} />
+
+<Tip tone={"success"} title={"এক mutation-এ সব"} text={"Mutations সবসময় **server-সত্য**-ভিত্তিক — invalidate করে client cache re-fetch। সার্ভার প্রত্যাখ্যান করলেও UI ভুল নয় — refetch হয়ে ঠিক হয়ে যাবে।"} />

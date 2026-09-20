@@ -1,0 +1,34 @@
+---
+title: "Real Project: Todo App"
+label: "Todo Project"
+order: 22
+level: "Advanced"
+description: "useState, useReducer, custom hook, filtering ও localStorage দিয়ে সম্পূর্ণ Todo app — বাংলায়।"
+---
+
+## প্রজেক্ট ডিজাইন
+
+- Add / remove / toggle todo
+- Status filter — All, Active, Completed
+- localStorage-এ পার্সিস্ট
+- Derived list-এ useMemo
+
+## Reducer + custom hook
+
+<CodeBlock code={"import { useEffect, useReducer } from \"react\";\n\nconst initialState = { todos: [], filter: \"all\" };\n\nfunction reducer(state, action) {\n  switch (action.type) {\n    case \"ADD\": {\n      const todo = { id: crypto.randomUUID(), text: action.text, done: false };\n      return { ...state, todos: [...state.todos, todo] };\n    }\n    case \"TOGGLE\": {\n      return {\n        ...state,\n        todos: state.todos.map((t) =>\n          t.id === action.id ? { ...t, done: !t.done } : t\n        ),\n      };\n    }\n    case \"REMOVE\": {\n      return { ...state, todos: state.todos.filter((t) => t.id !== action.id) };\n    }\n    case \"FILTER\": {\n      return { ...state, filter: action.filter };\n    }\n    default:\n      return state;\n  }\n}\n\nconst STORAGE_KEY = \"todos\";\n\nfunction useTodos() {\n  const [state, dispatch] = useReducer(reducer, initialState, () => {\n    const stored = localStorage.getItem(STORAGE_KEY);\n    return stored ? JSON.parse(stored) : initialState;\n  });\n\n  useEffect(() => {\n    localStorage.setItem(STORAGE_KEY, JSON.stringify(state.todos));\n  }, [state.todos]);\n\n  return { state, dispatch };\n}"} lang={"jsx"} title={"useTodos — সব logic"} />
+
+## App component
+
+<CodeBlock code={"import { useMemo, useState } from \"react\";\nimport { useTodos } from \"./useTodos\";\n\nfunction TodoApp() {\n  const { state, dispatch } = useTodos();\n  const [text, setText] = useState(\"\");\n\n  // derived — filter অনুযায়ী list\n  const visibleTodos = useMemo(() => {\n    if (state.filter === \"active\") {\n      return state.todos.filter((t) => !t.done);\n    }\n    if (state.filter === \"completed\") {\n      return state.todos.filter((t) => t.done);\n    }\n    return state.todos;\n  }, [state.todos, state.filter]);\n\n  const addTodo = (e) => {\n    e.preventDefault();\n    if (!text.trim()) return;\n    dispatch({ type: \"ADD\", text: text.trim() });\n    setText(\"\");\n  };\n\n  return (\n    <div className=\"todo-app\">\n      <h1>Todo List</h1>\n\n      <form onSubmit={addTodo}>\n        <input\n          value={text}\n          onChange={(e) => setText(e.target.value)}\n          placeholder=\"নতুন কাজ…\"\n        />\n        <button type=\"submit\">Add</button>\n      </form>\n\n      <div className=\"filters\">\n        {[\"all\", \"active\", \"completed\"].map((f) => (\n          <button\n            key={f}\n            className={state.filter === f ? \"active\" : \"\"}\n            onClick={() => dispatch({ type: \"FILTER\", filter: f })}\n          >\n            {f}\n          </button>\n        ))}\n      </div>\n\n      <ul>\n        {visibleTodos.map((todo) => (\n          <li key={todo.id}>\n            <input\n              type=\"checkbox\"\n              checked={todo.done}\n              onChange={() => dispatch({ type: \"TOGGLE\", id: todo.id })}\n            />\n            <span className={todo.done ? \"done\" : \"\"}>{todo.text}</span>\n            <button onClick={() => dispatch({ type: \"REMOVE\", id: todo.id })}>✕</button>\n          </li>\n        ))}\n      </ul>\n\n      <p>{visibleTodos.length}টি কাজ</p>\n    </div>\n  );\n}\n\nexport default TodoApp;"} lang={"jsx"} title={"TodoApp"} />
+
+## সারসংক্ষেপ
+
+| চ্যালেঞ্জ | React সমাধান |
+| --- | --- |
+| জটিল state logic | `useReducer` |
+| localStorage-এ save | custom hook + useEffect |
+| derived list | `useMemo` |
+| forms | controlled input + FormData |
+| UI ভাগ করা | Component ও props |
+
+<Tip tone={"success"} title={"পরবর্তী ধাপ"} text={"এখন Next.js-এ একই app বানিয়ে Server Components, Streaming ও Server Actions-এর সাথে মিলিয়ে নিন — পরের ডকুমেন্টেশন।"} />

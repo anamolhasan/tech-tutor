@@ -1,0 +1,35 @@
+---
+title: "Volumes ও Data Persistence"
+label: "Volumes"
+order: 8
+level: "Intermediate"
+description: "Container মুছলেও ডেটা না হারানোর উপায় — named volume, bind mount, tmpfs — বাংলায়।"
+---
+
+<InParagraph text={"Container-এর file system **ephemeral** — container মুছলে ডেটা যায়। ডাটাবেস, আপলোড, config — এসব ধরে রাখতে লাগে **volumes**। Docker-এ তিন ধরনের storage আছে:"} />
+
+## তিন ধরনের storage
+
+| ধরন | কোথায় থাকে | ব্যবহার |
+| --- | --- | --- |
+| **Named volume** | Docker-managed area | ডেটা যেটা container-এর সাথে যেন না যায় |
+| **Bind mount** | host-এর যেকোনো folder | dev-এ live-reload, config নিয়ন্ত্রণ |
+| **tmpfs** | মেমোরি | অস্থায়ী sensitive ডেটা |
+
+## Named volume
+
+<CodeBlock code={"docker volume create mongo-data\n\ndocker run -d \\\n  --name mongodb \\\n  -v mongo-data:/data/db \\\n  -p 27017:27017 \\\n  mongo:7\n\n# container মুছে ফেললেও ডেটা থাকে!\ndocker rm mongodb\ndocker run -d --name mongodb -v mongo-data:/data/db mongo:7"} lang={"bash"} title={"MongoDB ডেটা ধরে রাখা"} />
+
+## Bind mount
+
+<CodeBlock code={"# host-এর ./src → container-এর /app/src\ndocker run -v \"$(pwd)/src:/app/src\" my-app\n\n# Windows PowerShell-এ\ndocker run -v \"${PWD}/src:/app/src\" my-app"} lang={"bash"} title={"Host folder যুক্ত করা"} />
+
+## Volume কমান্ড
+
+<CodeBlock code={"docker volume ls\ndocker volume inspect mongo-data\ndocker volume rm mongo-data\ndocker volume prune        # অব্যবহৃত সব মুছা"} lang={"bash"} title={"Manage volumes"} />
+
+## Docker Compose-এ volume
+
+<CodeBlock code={"services:\n  db:\n    image: mongo:7\n    volumes:\n      - mongo-data:/data/db\n\nvolumes:\n  mongo-data:"} lang={"yaml"} title={"compose.yml"} />
+
+<Tip tone={"warning"} title={"ঐক্যবদ্ধতা"} text={"একই attribute নাম ও path একই compose file-এ **একবারই** declare হয় — `volumes:` সেকশন top-level-এ একবার। ব্যাকআপ নিতে চাইলে container-এর ভেতরে থাকা volume-কে host বাইরে copy করুন: `docker cp` বা `docker run --rm -v vol:/vol alpine tar` ব্যবহার করা যায়।"} />

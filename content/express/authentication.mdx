@@ -1,0 +1,33 @@
+---
+title: "Express Authentication (JWT)"
+label: "Authentication"
+order: 15
+level: "Advanced"
+description: "bcrypt, JWT, login/register, protected routes, middleware — Express auth বাংলায়।"
+---
+
+<InParagraph text={"**Authentication** login-এর মাধ্যমে user verify করা। সবচেয়ে জনপ্রিয় পদ্ধতি **JWT (JSON Web Token)** + **bcrypt** (password hash)।"} />
+
+## অপরিহার্য Packages
+
+<CodeBlock code={"npm install bcryptjs jsonwebtoken"} lang={"bash"} />
+
+<CodeBlock code={"JWT_SECRET=your_super_secret_key\nJWT_EXPIRES=1d"} lang={"env"} title={".env"} />
+
+## Register Route
+
+<CodeBlock code={"const bcrypt = require(\"bcryptjs\");\nconst jwt = require(\"jsonwebtoken\");\nconst User = require(\"../models/User\");\n\n// Register\nconst register = async (req, res, next) => {\n  const { name, email, password } = req.body;\n\n  try {\n    const existing = await User.findOne({ email });\n    if (existing) {\n      return res.status(409).json({ error: \"এই email ইতিমধ্যে আছে\" });\n    }\n\n    const hashed = await bcrypt.hash(password, 10);\n\n    const user = await User.create({\n      name,\n      email,\n      password: hashed,\n    });\n\n    res.status(201).json({\n      message: \"Registration সফল\",\n      user: { id: user._id, name: user.name, email: user.email },\n    });\n  } catch (err) { next(err); }\n};\n\n// Login\nconst login = async (req, res, next) => {\n  const { email, password } = req.body;\n\n  try {\n    const user = await User.findOne({ email });\n    if (!user) {\n      return res.status(401).json({ error: \"Email বা password ভুল\" });\n    }\n\n    const isMatch = await bcrypt.compare(password, user.password);\n    if (!isMatch) {\n      return res.status(401).json({ error: \"Email বা password ভুল\" });\n    }\n\n    const token = jwt.sign(\n      { id: user._id, email: user.email },\n      process.env.JWT_SECRET,\n      { expiresIn: process.env.JWT_EXPIRES }\n    );\n\n    res.json({\n      token,\n      user: { id: user._id, name: user.name, email: user.email },\n    });\n  } catch (err) { next(err); }\n};\n\nmodule.exports = { register, login };"} lang={"javascript"} title={"controllers/authController.js"} />
+
+## Auth Middleware
+
+<CodeBlock code={"const jwt = require(\"jsonwebtoken\");\nconst User = require(\"../models/User\");\n\nconst protect = async (req, res, next) => {\n  let token;\n\n  // Authorization: Bearer <token>\n  if (req.headers.authorization?.startsWith(\"Bearer\")) {\n    token = req.headers.authorization.split(\" \")[1];\n  }\n\n  if (!token) {\n    return res.status(401).json({ error: \"Login প্রয়োজন\" });\n  }\n\n  try {\n    const decoded = jwt.verify(token, process.env.JWT_SECRET);\n    const user = await User.findById(decoded.id).select(\"-password\");\n\n    if (!user) {\n      return res.status(401).json({ error: \"User পাওয়া যায়নি\" });\n    }\n\n    req.user = user;\n    next();\n  } catch (err) {\n    return res.status(401).json({ error: \"Token invalid/expired\" });\n  }\n};\n\n// Role-based authorization\nconst authorize = (...roles) => (req, res, next) => {\n  if (!roles.includes(req.user.role)) {\n    return res.status(403).json({ error: \"অনুমতি নেই\" });\n  }\n  next();\n};\n\nmodule.exports = { protect, authorize };"} lang={"javascript"} title={"middleware/auth.js"} />
+
+## Protected Route
+
+<CodeBlock code={"const { protect } = require(\"../middleware/auth\");\n\n// protected\napp.get(\"/api/profile\", protect, (req, res) => {\n  res.json({ user: req.user });\n});\n\n// only student\napp.post(\"/api/assignment\", protect, authorize(\"student\"), (req, res) => {\n  res.json({ message: \"Assignment submitted\" });\n});"} lang={"javascript"} />
+
+## Client ব্যবহার
+
+<CodeBlock code={"// login → token\nconst loginRes = await fetch(\"/api/auth/login\", {\n  method: \"POST\",\n  headers: { \"Content-Type\": \"application/json\" },\n  body: JSON.stringify({ email, password }),\n});\nconst { token } = await loginRes.json();\n\n// protected API call\nconst data = await fetch(\"/api/profile\", {\n  headers: {\n    Authorization: \"Bearer \" + token,\n  },\n}).then((r) => r.json());"} lang={"javascript"} title={"Fetch example (client side)"} />
+
+<Tip tone={"warning"} title={"গুরুত্বপূর্ণ"} text={"password কখনো plain-এ store করবেন না — সবসময় bcrypt hash। JWT secret strong রাখুন (.env) এবং expiry দিন।"} />

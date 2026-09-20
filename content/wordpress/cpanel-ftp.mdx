@@ -1,0 +1,43 @@
+---
+title: "cPanel ও FTP কী"
+label: "cPanel ও FTP"
+order: 19
+level: "Beginner"
+description: "cPanel-এর ধারণা, এর main tools, এবং FTP/SFTP-এর মাধ্যমে কীভাবে WordPress-এ file manage করা যায়।"
+---
+
+## cPanel কী?
+
+<InParagraph text={"**cPanel** হলো hosting-এর **control panel** — সহজ graphical interface দিয়ে server-এর অনেক কিছু manage করা যায়। বেশিরভাগ shared hosting-এ cPanel থাকে।"} />
+
+## cPanel-এর প্রধান tools
+
+| Tool | কাজ |
+| --- | --- |
+| File Manager | ব্রাউজার দিয়ে folder/file manage |
+| MySQL Databases | Website-এর database তৈরি/manage |
+| Domains | Domain ও subdomain manage |
+| Email Accounts | মেল তৈরি/manage |
+| Backup | Full backup নেওয়া/restore |
+| Softaculous / installer | এক ক্লিকে WordPress install |
+
+## FTP কী?
+
+<InParagraph text={"**FTP (File Transfer Protocol)** হলো network-এ file আদান-প্রদানের প্রোটোকল — এর মাধ্যমে server-এ file upload বা download করা যায়। আধুনিক ও নিরাপদ সংস্করণ হলো **SFTP** (SSH-এ encrypted)।"} />
+
+## FTP Client
+
+- **FileZilla** — সবচেয়ে জনপ্রিয় free FTP client
+- **WinSCP** — Windows-এ জনপ্রিয়
+- Host-এর File Manager — browser-based
+
+<CodeBlock code={"Hostname   → ftp.mysite.com বা server IP\nUsername   → cPanel-এ তৈরি FTP account\nPassword   → FTP account-এর password\nPort       → 21 (FTP) / 22 (SFTP)"} lang={"text"} title={"FTP login এর জন্য যা লাগে"} />
+
+## WordPress-এ FTP কখন কাজে লাগে
+
+- Plugin/Theme file manually upload
+- **wp-config.php**-এর ক্ষতি হলে ঠিক করা
+- Server error-এ site-তে access করতে
+- Large media batch upload
+
+<Tip tone={"warning"} title={"নিরাপদ সংযোগ"} text={"যখনই সম্ভব **SFTP** ব্যবহার করুন — password ও data plain FTP-তে encrypt হয় না।"} />

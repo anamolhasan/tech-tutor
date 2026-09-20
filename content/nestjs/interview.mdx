@@ -1,0 +1,54 @@
+---
+title: "NestJS Interview Questions"
+label: "Interview"
+order: 21
+level: "Advanced"
+description: "নেস্টজেএস interview-এর গুরুত্বপূর্ণ প্রশ্ন ও উত্তর — বাংলায়।"
+---
+
+## 1. NestJS কী? Express থেকে আলাদা কী?
+
+<InParagraph text={"NestJS একটি enterprise-grade Node.js framework — TypeScript-first, modular, DI-ভিত্তিক। Express-এর চেয়ে opinionated structure, built-in DI, modules, guards, pipes দেওয়া হয়।"} />
+
+## 2. Dependency Injection কী ভাবে কাজ করে?
+
+<InParagraph text={"Provider যেকোনো @Injectable() class। Module-এর providers তালিকায় থাকলে NestJS instance তৈরি করে constructor injection-এ প্রদান করে। Scope (singleton/request/transient) নিয়ন্ত্রণ করা যায়।"} />
+
+## 3. Guards vs Interceptors vs Middleware?
+
+| Layer | কাজ | Order |
+| --- | --- | --- |
+| Middleware | raw request transform, logging | সবার আগে |
+| Guards | CanActivate — auth/authorization | Middleware পরে |
+| Interceptors | response transform, logging, caching | Guards পরে |
+| Pipes | input validate/transform | Route-এ |
+
+## 4. Singleton vs Request scope?
+
+<InParagraph text={"Singleton — পুরো app-এর জন্য এক instance (default)। Request — প্রতিটি request-এ নতুন instance (user-specific state)। Transient — প্রতিটি injection-এ নতুন।"} />
+
+## 5. DTO কেন দরকার?
+
+<InParagraph text={"DTO (Data Transfer Object) — body-র shape define করে। class-validator দিয়ে validate + whitelist + transformable হয়। Pattern-হীন `any` ব্যবহার এড়ায়।"} />
+
+## 6. ValidationPipe কী করে?
+
+<InParagraph text={"DTO class উদাহরণ validate করে। `whitelist: true` — অপরিচিত properties বাদ। `transform: true` — runtime-এ type convert। Invalid হলে 400 exception।"} />
+
+## 7. Module-এ imports/exports কী?
+
+<InParagraph text={"imports — স্থানীয় module-এর dependency। exports — providers/মডিউল অন্য module-এ ব্যবহারের জন্য public করে। A module B export করলে, A import করলে B-এর কিছু পাবেন।"} />
+
+## 8. @Injectable() vs @Controller()?
+
+<InParagraph text={"@Controller — routes/services-মিল, request handling. @Injectable — providers, business logic/injection target। Controller-ও technically injectable, কিন্তু ভূমিকা আলাদা।"} />
+
+## 9. Microservices-এ transport কী?
+
+<InParagraph text={"Service-এর মধ্যকার message passing-এর medium — TCP, Redis, NATS, gRPC, Kafka, RabbitMQ। `@MessagePattern` handler, `ClientProxy.send` client call।"} />
+
+## 10. NestJS project maintainable রাখবেন কীভাবে?
+
+<InParagraph text={"Feature modules (users, auth — আলাদা), DTOপ্রতি operation, controller thin / service thick, guard-based auth, global validation/exception, Swagger docs, unit + e2e testing, config env।"} />
+
+<Tip tone={"info"} title={"সেরা প্রস্তুতি"} text={"NestJS-এ একটি পূর্ণ CRUD + auth + swagger project নিজে বানান — interview-এ বাস্তব structure নিয়ে confident থাকবেন।"} />

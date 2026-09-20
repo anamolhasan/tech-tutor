@@ -1,0 +1,39 @@
+---
+title: "Utility Classes কী এবং কীভাবে পড়তে হয়"
+label: "Utility Classes"
+order: 16
+level: "Beginner"
+description: "Tailwind utility class naming convention, prefix system এবং class reading strategy — বাংলায়।"
+---
+
+<InParagraph text={"Tailwind-এ প্রতিটি utility class একটি CSS property-কে represent করে। এদের naming convention বোঝা গুরুত্বপূর্ণ।"} />
+
+## Class Naming Pattern
+
+<InParagraph text={"Tailwind class-গুলো সাধারণত এই pattern অনুসরণ করে:"} />
+
+<CodeBlock code={"prefix:property-name\n\nউদাহরণ:\nbg-blue-500     → background color: blue, shade 500\ntext-lg         → font-size: large\np-4             → padding: 1rem (16px)\nrounded-lg      → border-radius: large\nshadow-md       → box-shadow: medium"} lang={"text"} />
+
+## Utility Categories
+
+| ক্যাটাগরি | উদাহরণ | কাজ |
+| --- | --- | --- |
+| Spacing | p-4, m-2, gap-4 | Padding, margin, gap |
+| Colors | bg-blue-500, text-red-600 | Background, text color |
+| Typography | text-lg, font-bold | Font size, weight |
+| Layout | flex, grid, block | Display, layout |
+| Sizing | w-full, h-8 | Width, height |
+| Border | rounded-lg, border | Border radius, border |
+| Shadow | shadow-md | Box shadow |
+
+## Class কীভাবে পড়বেন
+
+<CodeBlock code={"rounded-lg bg-blue-600 px-4 py-2 text-white\n  │            │          │      │      │\n  │            │          │      │      └── text color: white\n  │            │          │      └── padding-y: 8px\n  │            │          └── padding-x: 16px\n  │            └── background: blue-600\n  └── border-radius: large"} lang={"text"} />
+
+## Arbitrary Values
+
+<InParagraph text={"Tailwind-এ নির্দিষ্ট মান দিতে চাইলে bracket syntax ব্যবহার করুন।"} />
+
+<CodeBlock code={"<!-- Custom values -->\n<div class=\"w-[300px] h-[200px] bg-[#1da1f2]\">\n  Custom size and color\n</div>\n\n<!-- Custom font size -->\n<p class=\"text-[18px]\">Custom font size</p>"} lang={"html"} />
+
+<Tip tone={"info"} title={"Tailwind Docs সবচেয়ে ভালো সাথী"} text={"প্রতিটি utility class-এর documentation পড়ুন [tailwindcss.com](https://tailwindcss.com/docs)। সেখানে সব class-এর তালিকা ও উদাহরণ পাবেন।"} />

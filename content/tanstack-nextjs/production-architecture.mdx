@@ -1,0 +1,36 @@
+---
+title: "Production Architecture"
+label: "Production"
+order: 37
+level: "Advanced"
+description: "SSR/CSR সিদ্ধান্ত, নিরাপত্তা, rate limiting, env, testing — বাংলায়।"
+---
+
+<InParagraph text={"প্রজেক্ট বড় হলে — ডেব-ব্রেকিং ডিজাইন সিদ্ধান্ত নিতে হয়। নিচে production-স্তরের check-list ও তর্ক।"} />
+
+## SSR vs CSR ডেটা
+
+| ডেটা | SSR (RSC) | CSR (TanStack) |
+| --- | --- | --- |
+| গোটা-page প্রাথমিক list | দারুণ SEO/initial paint | skeleton পরে |
+| ইন্টারেক্টিভ dashboard filter/search | প্রতিটি filter-এ fetch HTML | ✓ tanstack cache+invalidate |
+| user-নির্দিষ্ট ডেটা | Cookies/auth-সহ | token-সহ client fetch |
+
+<CodeBlock code={"// server component (page)\nconst initial = await listProductsFromDb({ page: 1, pageSize: 10 });\n\n// client component (dashboard) — initialData seed\nexport default function ProductsPage() {\n  return <ProductsDashboard initialData={initial} />;\n}\n\n// useProducts में initialData\nfunction useProducts(params: ProductQueryParams, initialData?: ListResponse<Product>) {\n  return useQuery({\n    queryKey: productKeys.list(params),\n    queryFn: () => listProducts(params),\n    initialData,\n  });\n}"} lang={"tsx"} title={"hybrid — SSR প্রাথমিক, client refine"} />
+
+## নিরাপত্তা বিষয়
+
+- **সার্ভার-সাইড validation** — client validation সহজ bypass হয়; সবসময় schema-সহ re-validate
+- **Auth** — API route-এ session/token check
+- **Rate limit** — brute force থেকে বাঁচাতে
+- **environment variables** — `NEXT_PUBLIC_API_URL` শুধু public; secret `.env.local`-এ
+- **id/slug** — বিশ্বাস করবেন না, validate করুন
+
+## Deploy sort-out
+
+- `npm run build` clean — `npx tsc --noEmit` আলাদা check script
+- Envs production-এ (.env.production)
+- DB migration
+- অবজার্ভেবিলিটি — error tracking (Sentry)
+
+<Tip tone={"warning"} title={"premature optimization নয়"} text={"SSR+CSR hybrid দরকার হয় যখন এটা measurable। শুরুতে plain CSR-ই ঠিক থাকবে — তারপর performance budget মাপুন, তারপর migrate। ডিফল্ট **সহজ** আর **সঠিক**।"} />

@@ -1,0 +1,17 @@
+---
+title: "Safe Area — notch, home indicator ও insets"
+label: "Safe Area"
+order: 13
+level: "Intermediate"
+description: "আধুনিক ফোনের safe area handle করা — useSafeAreaInsets — বাংলায়।"
+---
+
+<InParagraph text={"ফোনে notch, dynamic island, rounded corner — সেসব logo ধাক্কা না খেয়ে content সাজাতে **safe area**। আধুনিক convention-এ **`react-native-safe-area-context`**-এর **`useSafeAreaInsets`**:"} />
+
+<CodeBlock code={"import { useSafeAreaInsets } from \"react-native-safe-area-context\";\n\nexport default function Home() {\n  const insets = useSafeAreaInsets();\n  return (\n    <View\n      style={{\n        paddingTop: insets.top,\n        paddingBottom: insets.bottom,\n      }}\n    />\n  );\n}"} lang={"tsx"} title={"app/(tabs)/index.tsx"} />
+
+- `insets.top` — status bar / notch
+- `insets.bottom` — home indicator
+- `insets.left` / `right` — landscape notch
+
+<Tip tone={"warning"} title={"React Native-এর SafeAreaView সাবধান"} text={"built-in `SafeAreaView` (`react-native` থেকে) শুধু **top** handle করে; edge-to-edge Android-এ সমস্যা। Expo ও expo-router project-এ ইতিমধ্যে `react-native-safe-area-context` থাকে।"} />

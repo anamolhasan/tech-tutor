@@ -1,0 +1,39 @@
+---
+title: "Express Performance Optimization"
+label: "Performance"
+order: 18
+level: "Advanced"
+description: "gzip, caching, N+1 query fix, clustering, monitoring — Express-এ performance বাংলায়।"
+---
+
+<InParagraph text={"API slow হলে user experience খারাপ হয়। নিচের টেকনিক দিয়ে Express app দ্রুত করা যায়।"} />
+
+## 1. Compression
+
+<CodeBlock code={"npm install compression"} lang={"bash"} />
+
+<CodeBlock code={"const compression = require(\"compression\");\napp.use(compression()); // gzip — response size কমানো"} lang={"javascript"} />
+
+## 2. Response Caching
+
+<CodeBlock code={"// static caching headers\napp.use(\n  express.static(\"public\", {\n    maxAge: \"1d\",\n    immutable: true, // content changes না\n  })\n);\n\n// API caching (private) — client-side redirect\napp.get(\"/api/me\", (req, res) => {\n  res.set(\"Cache-Control\", \"private, max-age=60\");\n  res.json({ user: req.user });\n});"} lang={"javascript"} />
+
+## 3. N+1 Query Problem
+
+<CodeBlock code={"// ❌ N+1 — প্রতিটি post প্রতিটি author query (slow)\nconst posts = await Post.find();\nfor (const post of posts) {\n  post.author = await User.findById(post.authorId); // N queries\n}\n\n// ✅ populate/join — এক query-তেই\nconst posts = await Post.find().populate(\"author\", \"name email\");"} lang={"javascript"} />
+
+## 4. Database Indexing
+
+<CodeBlock code={"const userSchema = new mongoose.Schema({\n  email: { type: String, unique: true }, // auto index\n  name: String,\n  postsCount: { type: Number, default: 0 },\n});\n\n// custom index\nuserSchema.index({ name: \"text\" });           // text search\nuserSchema.index({ createdAt: -1 });          // sort dependent"} lang={"javascript"} title={"User Model"} />
+
+## 5. Cluster Mode
+
+<CodeBlock code={"# PM2 দিয়ে cluster — সব CPU core ব্যবহার\npm2 start index.js -i max\npm2 status"} lang={"bash"} />
+
+## Performance Tests
+
+<CodeBlock code={"npm install autocannon"} lang={"bash"} />
+
+<CodeBlock code={"# test 20s, 100 concurrent\nnpx autocannon -c 100 -d 20 http://localhost:5000/api/users\n\n# Output দেখায়: requests/sec, latency, errors"} lang={"bash"} />
+
+<Tip tone={"success"} title={"বড় step-by-step"} text={"প্রথমে test করুন (baseline), তারপর optimize (compression → cache → query fix), আবার test — সম্বেখ সেরা ফলাফল দেখুন।"} />

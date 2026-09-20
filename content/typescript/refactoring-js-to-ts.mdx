@@ -1,0 +1,36 @@
+---
+title: "JavaScript থেকে TypeScript-এ রূপান্তর"
+label: "JS → TypeScript"
+order: 26
+level: "Intermediate"
+description: "allowJs, checkJs দিয়ে শুরু, ধাপে ধাপে migration, any সমাধান এবং কাজের কৌশল — বাংলায়।"
+---
+
+<InParagraph text={"পুরোনো JavaScript প্রজেক্টকে TypeScript-এ নিতে **একদিনে সব** করা লাগে না — ধীরে ধীরে migration-এর অনেক উপায় আছে।"} />
+
+## allowJs দিয়ে শুরু
+
+<CodeBlock code={"{\n  \"compilerOptions\": {\n    \"allowJs\": true,\n    \"checkJs\": false,\n    \"noEmit\": true\n  }\n}"} lang={"json"} title={"tsconfig.json"} />
+
+<InParagraph text={"`allowJs` দিলে `.js` ফাইলও compile হবে — TS-এ মিশে থাকতে পারবে। `checkJs` চালু করলে শুধু ভুল ধরা পড়বে, বাধা দেবে না।"} />
+
+## ধাপে ধাপে রূপান্তর
+
+1. আগে `allowJs: true` ও `checkJs: true` চালু করুন — JavaScript-এই টাইপ সমস্যা দেখুন
+1. নতুন ফাইল `.ts` নামে লেখা শুরু করুন
+1. একেক module-কে `.js` → `.ts` rename করুন এবং `@ts-check` চালু করুন
+1. সবচেয়ে গুরুত্বপূর্ণ ফাংশন/API ফাইলগুলো আগে কভার করুন
+1. `any`-গুলো ধীরে ধীরে সঠিক টাইপে বদলান
+1. শেষে `noImplicitAny` চালু করুন
+
+## সহজ রূপান্তর
+
+<CodeBlock code={"// .js\nfunction total(items) {\n  return items.reduce((sum, item) => sum + item.price, 0);\n}\n\n// .ts\ninterface CartItem {\n  name: string;\n  price: number;\n}\n\nfunction total(items: CartItem[]): number {\n  return items.reduce((sum, item) => sum + item.price, 0);\n}"} lang={"typescript"} />
+
+## any ঠিক করা
+
+<CodeBlock code={"// আগে\nlet data: any = fetchData();\n\n// পরে — union জানা গেলে\ntype Data = { id: number } | { error: string };\nlet data: Data = fetchData();\n\nif (\"error\" in data) {\n  console.log(data.error);\n} else {\n  console.log(data.id);\n}"} lang={"typescript"} />
+
+<CodeBlock code={"// উদাহরণ: data আসে থার্ড-পার্টি লাইব্রেরি থেকে\ninterface ApiUser {\n  id: number;\n  name: string;\n}\n\nconst user = (await api.get(\"/users/1\")) as ApiUser;"} lang={"typescript"} />
+
+<Tip tone={"success"} title={"Automated সাহায্য"} text={"TypeScript-এর `tsc --allowJs --checkJs` আর [ts-migrate](https://github.com/airbnb/ts-migrate)-এর মতো টুলগুলো rewrite-এ সময় বাঁচাতে পারে — তবে প্রতিটি টাইপ নিজে যাচাই করা ভালো।"} />

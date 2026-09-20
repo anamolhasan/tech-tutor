@@ -1,0 +1,25 @@
+---
+title: "Reusable Components — Refactor"
+label: "Reusable Components"
+order: 36
+level: "Advanced"
+description: "Generic DataTable, useProducts hook generalization ও component API design — বাংলায়।"
+---
+
+<InParagraph text={"আমাদের Table যতটা generic করা যাবে ততবেশি reusable। **DataTable<T>** বানালে ভবিষ্যতে customer/order-এর জন্যও কাজ হয়।"} />
+
+<CodeBlock code={"\"use client\";\n\nimport { useReactTable, flexRender, getCoreRowModel } from \"@tanstack/react-table\";\n\nimport { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from \"@/components/ui/table\";\n\ninterface DataTableProps<T> {\n  data: T[];\n  columns: ColumnDef<T>[];\n  emptyMessage?: string;\n}\n\nexport function DataTable<T>({ data, columns, emptyMessage = \"ডেটা নেই\" }: DataTableProps<T>) {\n  const table = useReactTable({\n    data,\n    columns,\n    getCoreRowModel: getCoreRowModel(),\n  });\n\n  if (data.length === 0) {\n    return <EmptyState message={emptyMessage} />;\n  }\n\n  return (\n    <Table>\n      <TableHeader>\n        {table.getHeaderGroups().map((headerGroup) => (\n          <TableRow key={headerGroup.id}>\n            {headerGroup.headers.map((header) => (\n              <TableHead key={header.id}>\n                {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}\n              </TableHead>\n            ))}\n          </TableRow>\n        ))}\n      </TableHeader>\n      <TableBody>\n        {table.getRowModel().rows.map((row) => (\n          <TableRow key={row.id}>\n            {row.getVisibleCells().map((cell) => (\n              <TableCell key={cell.id}>\n                {flexRender(cell.column.columnDef.cell, cell.getContext())}\n              </TableCell>\n            ))}\n          </TableRow>\n        ))}\n      </TableBody>\n    </Table>\n  );\n}"} lang={"tsx"} title={"generic data-table.tsx"} />
+
+## কখন generic করবেন
+
+| কখন generic | কখন concrete |
+| --- | --- |
+| একাধিক entity-তে একই pattern (Customer, Order) | শুধু Product-ই দরকার |
+| মন্তব্য: `ColumnDef<T>[]` design-এ column types match | বৃথা abstraction এড়ান |
+| আপনি column factory লিখতে চান | সরল ও স্পষ্ট code |
+
+## hook reuse
+
+<CodeBlock code={"function createListHook<TItem>(\n  key: string,\n  fetcher: (params: QueryParams) => Promise<ListResponse<TItem>>,\n) {\n  return (keys: QueryParams) => {\n    const listKey = [key, \"list\", keys] as const;\n    return useQuery({\n      queryKey: listKey,\n      queryFn: () => fetcher(keys),\n      placeholderData: keepPreviousData,\n    });\n  };\n}\n\nexport const useProducts = createListHook(\n  \"products\",\n  listProducts as Fetcher<Product>,\n);\n\nexport const useOrders = createListHook(\n  \"orders\",\n  listOrders as Fetcher<Order>,\n);"} lang={"ts"} title={"config-চালিত hooks"} />
+
+<Tip tone={"success"} title={"অতিরিক্ত abstraction সাবধান"} text={"Reusable components-এর সুবর্ণ নিয়ম — **তিনবার duplicate হওয়ার আগে generalize করবেন না।** এখানে Pattern-টা সাধারণ, তাই DataTable ও hook factory justified — কিন্তু সব কোড generic করবেন না।"} />

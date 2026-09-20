@@ -1,0 +1,36 @@
+---
+title: "CSS Responsive Design"
+label: "Responsive Design"
+order: 12
+level: "Intermediate"
+description: "Media query, breakpoint, fluid unit, mobile-first — সব ডিভাইসে সুন্দর দেখায় এমন রেসপনসিভ ডিজাইন বাংলায়।"
+---
+
+<InParagraph text={"**Responsive design** মানে একই ওয়েবপেজ মোবাইল, ট্যাবলেট ও ডেস্কটপ — সব স্ক্রিনে সুন্দর ও ব্যবহারযোগ্য থাকবে।"} />
+
+## Media Query
+
+<CodeBlock code={"/* মোবাইল: default */\n\n@media (min-width: 640px) {\n  /* ট্যাবলেটের জন্য */\n}\n\n@media (min-width: 1024px) {\n  /* ডেস্কটপের জন্য */\n}"} lang={"css"} />
+
+## Mobile-first পদ্ধতি
+
+<InParagraph text={"সবচেয়ে ছোট স্ক্রিনের স্টাইল প্রথমে লিখি, তারপর `min-width` দিয়ে বড় স্ক্রিনের জন্য ঠিক করি। এতে ভিত্তি সহজ ও পরিচ্ছন্ন থাকে।"} />
+
+## Fluid ইউনিট
+
+| ইউনিট | কাজ |
+| --- | --- |
+| % | প্যারেন্টের % |
+| vw / vh | ভিউপোর্টের প্রস্থ/উচ্চতা |
+| rem | রুট ফন্ট সাইজের গুণিতক |
+| clamp() | নূন্যতম থেকে সর্বোচ্চ মান |
+
+<CodeBlock code={".hero-title {\n  font-size: clamp(1.5rem, 4vw, 3rem);\n}"} lang={"css"} />
+
+## Responsive লেআউট
+
+<CodeBlock code={".container {\n  max-width: 1200px;\n  margin-inline: auto;\n  padding-inline: 1rem;\n}\n\n.dashboard {\n  display: grid;\n  grid-template-columns: 1fr;\n}\n\n@media (min-width: 900px) {\n  .dashboard {\n    grid-template-columns: 260px 1fr;\n  }\n}"} lang={"css"} />
+
+<Tip tone={"success"} title={"ছবিও responsive করুন"} text={"`img { max-width: 100%; height: auto; }` দিলে ছবি কনটেইনার ছাড়িয়ে যায় না এবং অনুপাত ঠিক থাকে।"} />
+
+<Tip tone={"warning"} title={"পরীক্ষা করুন অনেক স্ক্রিনে"} text={"DevTools-এর device toolbar দিয়ে মোবাইল সাইজগুলো পরীক্ষা করুন এবং বিভিন্ন টেক্সট মাপ দেখুন — আলাদা ডিভাইসে সমস্যা আলাদা হয়।"} />

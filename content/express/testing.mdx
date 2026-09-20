@@ -1,0 +1,33 @@
+---
+title: "Express Testing (Jest + Supertest)"
+label: "Testing"
+order: 19
+level: "Advanced"
+description: "Unit test, API test, jest-super, test setup — Express app testing বাংলায়।"
+---
+
+<InParagraph text={"**Testing** কোড সঠিকভাবে কাজ করছে কিনা যাচাই করা। Express-এ **Jest** (test runner) + **Supertest** (HTTP test) সবচেয়ে জনপ্রিয়।"} />
+
+## Install
+
+<CodeBlock code={"npm install --save-dev jest supertest"} lang={"bash"} />
+
+<CodeBlock code={"{\n  \"scripts\": {\n    \"test\": \"jest --detectOpenHandles\"\n  },\n  \"jest\": {\n    \"testEnvironment\": \"node\",\n    \"testMatch\": [\"**/__tests__/**/*.test.js\"]\n  }\n}"} lang={"json"} title={"package.json"} />
+
+## Separate App Export
+
+<CodeBlock code={"const express = require(\"express\");\nconst app = express();\n\napp.use(express.json());\napp.use(\"/api/users\", require(\"./routes/users\"));\n\nmodule.exports = app; // listen এখানে নেই!"} lang={"javascript"} title={"app.js"} />
+
+<CodeBlock code={"const app = require(\"./app\");\nconst connectDB = require(\"./config/db\");\n\nconnectDB();\napp.listen(process.env.PORT || 5000);"} lang={"javascript"} title={"server.js"} />
+
+## API Test
+
+<CodeBlock code={"const request = require(\"supertest\");\nconst app = require(\"../app\");\n\ndescribe(\"Users API\", () => {\n  test(\"GET /api/users → 200 ও array\", async () => {\n    const res = await request(app).get(\"/api/users\");\n    expect(res.statusCode).toBe(200);\n    expect(Array.isArray(res.body)).toBe(true);\n  });\n\n  test(\"POST /api/users → validation error\", async () => {\n    const res = await request(app)\n      .post(\"/api/users\")\n      .send({ name: \"\" }); // invalid\n\n    expect(res.statusCode).toBe(400);\n  });\n\n  test(\"POST /api/users → 201\", async () => {\n    const res = await request(app)\n      .post(\"/api/users\")\n      .send({ name: \"রহিম\", email: \"r@test.com\" });\n\n    expect(res.statusCode).toBe(201);\n    expect(res.body).toHaveProperty(\"_id\");\n  });\n});"} lang={"javascript"} title={"__tests__/users.test.js"} />
+
+## Unit Test (Middleware)
+
+<CodeBlock code={"const { protect } = require(\"../middleware/auth\");\n\ndescribe(\"Auth middleware\", () => {\n  test(\"token না থাকলে 401\", () => {\n    const req = { headers: {} };\n    const res = { status: jest.fn().mockReturnThis(), \n                  json: jest.fn() };\n    const next = jest.fn();\n\n    protect(req, res, next);\n\n    expect(res.status).toHaveBeenCalledWith(401);\n    expect(next).not.toHaveBeenCalled();\n  });\n});"} lang={"javascript"} title={"test auth middleware"} />
+
+<CodeBlock code={"npm test\n\n# ✓ should pass — PASS/FAIL summary দেখাবে"} lang={"bash"} />
+
+<Tip tone={"info"} title={"Testing Types"} text={"Unit test (এক ফাংশন), Integration test (API), E2E (full flow)। Express-এর জন্য Jest+Supertest যথেষ্ট শুরুতে।"} />

@@ -1,0 +1,27 @@
+---
+title: "NestJS Interceptors"
+label: "Interceptors"
+order: 8
+level: "Advanced"
+description: "@NestInterceptor, logging, transform, caching — request/response-এর মাঝে logic বাংলায়।"
+---
+
+<InParagraph text={"**Interceptor** request/response-এর মাঝে custom logic চালায় — logging, transform, caching, timeout ইত্যাদি। এটি Observable (RxJS) ব্যবহার করে।"} />
+
+## Logging Interceptor
+
+<CodeBlock code={"import {\n  CallHandler,\n  ExecutionContext,\n  Injectable,\n  NestInterceptor,\n} from \"@nestjs/common\";\nimport { Observable } from \"rxjs\";\nimport { tap } from \"rxjs/operators\";\n\n@Injectable()\nexport class LoggingInterceptor implements NestInterceptor {\n  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {\n    const request = context.switchToHttp().getRequest();\n    const start = Date.now();\n\n    console.log(\"➡️\", request.method, request.url);\n\n    return next.handle().pipe(\n      tap(() =>\n        console.log(\"⬅️\", request.method, request.url, Date.now() - start + \"ms\"),\n      ),\n    );\n  }\n}"} lang={"typescript"} title={"src/common/logging.interceptor.ts"} />
+
+## Response Transform
+
+<CodeBlock code={"import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from \"@nestjs/common\";\nimport { Observable } from \"rxjs\";\nimport { map } from \"rxjs/operators\";\n\nexport interface Response<T> {\n  success: boolean;\n  data: T;\n}\n\n@Injectable()\nexport class TransformInterceptor<T> implements NestInterceptor<T, Response<T>> {\n  intercept(context: ExecutionContext, next: CallHandler): Observable<Response<T>> {\n    return next.handle().pipe(\n      map((data) => ({\n        success: true,\n        data,\n      })),\n    );\n  }\n}\n\n// সব response:\n// { success: true, data: ... }"} lang={"typescript"} title={"src/common/transform.interceptor.ts"} />
+
+## Timeout Interceptor
+
+<CodeBlock code={"import { Injectable, NestInterceptor, RequestTimeoutException } from \"@nestjs/common\";\nimport { Observable, TimeoutError, throwError } from \"rxjs\";\nimport { catchError, timeout } from \"rxjs/operators\";\n\n@Injectable()\nexport class TimeoutInterceptor implements NestInterceptor {\n  intercept(context, next): Observable<any> {\n    return next.handle().pipe(\n      timeout(10000), // 10s পর request timeout\n      catchError((err) => {\n        if (err instanceof TimeoutError) {\n          return throwError(() => new RequestTimeoutException());\n        }\n        return throwError(() => err);\n      }),\n    );\n  }\n}"} lang={"typescript"} />
+
+## Apply Interceptor
+
+<CodeBlock code={"import { UseInterceptors, Post, Controller } from \"@nestjs/common\";\nimport { LoggingInterceptor } from \"../common/logging.interceptor\";\n\n// controller-লেভেল\n@UseInterceptors(LoggingInterceptor)\n@Controller(\"users\")\nexport class UsersController {}\n\n// method-লেভেল\n@Post()\n@UseInterceptors(new LoggingInterceptor())\ncreate() {}\n\n// global\napp.useGlobalInterceptors(new TransformInterceptor());"} lang={"typescript"} />
+
+<Tip tone={"info"} title={"Order of execution"} text={"Guard → Interceptor (before) → Pipe → Controller → Interceptor (after/transform)। তাই logging interceptor সবচেয়ে early দেখতে পারেন।"} />

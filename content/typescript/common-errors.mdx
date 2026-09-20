@@ -1,0 +1,38 @@
+---
+title: "সাধারণ TypeScript Error ও সমাধান"
+label: "Common Errors"
+order: 27
+level: "Intermediate"
+description: "object is possibly undefined, not assignable, Cannot find module, union call-ভুল — common TS errors ও fix বাংলায়।"
+---
+
+<InParagraph text={"প্রতিদিনের কাজে সবচেয়ে বেশি যেসব TypeScript error দেখা যায়, ঝটপট সেগুলোর সমাধান — এক নজরে।"} />
+
+## object is possibly 'undefined'
+
+<CodeBlock code={"type User = { name: string };\n\nfunction show(user: User | undefined): void {\n  // console.log(user.name);       // ❌ user ঠিকানা নয়\n  if (user) {\n    console.log(user.name);        // ✅ narrowing\n  }\n  console.log(user?.name);         // অথবা optional chaining\n}"} lang={"typescript"} />
+
+## is not assignable to type
+
+<CodeBlock code={"type Status = \"pending\" | \"active\";\n\nconst raw: string = localStorage.getItem(\"status\") ?? \"\";\n// const s: Status = raw;      // ❌ string broader\n\nconst s: Status = raw === \"pending\" || raw === \"active\" ? raw : \"pending\";"} lang={"typescript"} />
+
+## Property does not exist
+
+<CodeBlock code={"interface User {\n  id: number;\n  name: string;\n}\n\nconst user: User = { id: 1, name: \"রহিম\" };\n// user.email                // ❌ property নেই\n// interface-এ email?: string যোগ করুন"} lang={"typescript"} />
+
+## Cannot find module
+
+<CodeBlock code={"// @types না থাকলে error দেখায়\n// npm install -D @types/express\n\n// অথবা নিজে module declar করুন\n// declare module \"my-lib\";"} lang={"typescript"} />
+
+## Is not callable / union-এ access
+
+<CodeBlock code={"type A = { name: string; action: () => void };\ntype B = { name: string; action: number };\n\nfunction run(item: A | B): void {\n  if (typeof item.action === \"function\") {\n    item.action();      // ✅ narrowing পরে\n  }\n}"} lang={"typescript"} />
+
+## Error message পড়ার কৌশল
+
+- error-এর প্রথম লাইন = ঠিকানা (ফাইল:লাইন)
+- `Type X is not assignable to Y` — কোথায় কোন টাইপ লাগবে দেখুন
+- `×`  অথবা hover-এ একাধিক overload দেখালে signature মিলিয়ে দেখুন
+- union-এ চলে গেলে প্রথমে narrowing করুন
+
+<Tip tone={"warning"} title={"error ভয় দেখাবে না"} text={"TypeScript error মানে কোডের সমস্যা — প্রায়ই টাইপ বরং সঠিক ধরন প্রকাশ করছে। ধীরে পড়ুন: ফাইল, type, প্রত্যাশিত — তিনটেই message-এ থাকে।"} />

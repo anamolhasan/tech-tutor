@@ -1,0 +1,17 @@
+---
+title: "Multiple & Self JOIN — জটিল relation"
+label: "Joins Advanced"
+order: 14
+level: "Advanced"
+description: "৩+ table join ও same table-এর সাথে self join।"
+---
+
+<CodeBlock code={"SELECT u.name,\n       p.name AS product,\n       oi.qty,\n       oi.price\nFROM order_items oi\nJOIN orders o   ON o.id = oi.order_id\nJOIN users u    ON u.id = o.user_id\nJOIN products p ON p.id = oi.product_id\nWHERE o.status = 'paid'\nORDER BY o.created_at DESC;"} lang={"sql"} title={"three-way join"} />
+
+<CodeBlock code={"SELECT e.name AS employee,\n       m.name AS manager\nFROM employees e\nJOIN employees m ON m.id = e.manager_id;"} lang={"sql"} title={"self join — colleague relation"} />
+
+- প্রতিটি `ON` clause নিজে নিজে সবচেয়ে সুনির্দিষ্ট কী
+- JOIN-এর ক্রম matter — planner optimize করে, তবু readable রাখুন
+- দুই পাশে index থাকলে join দ্রুত (টপিক ২৪)
+
+<Tip tone={"warning"} title={"যা সবচেয়ে ভুল হয়"} text={"JOIN-এ WHERE-এ filter দিলেও join-এর object প্রিসিজয় — WHERE-এ `o.status='paid'` left-join-কে de-facto inner বানায়। চাইলে condition `ON`-এ রাখুন।"} />

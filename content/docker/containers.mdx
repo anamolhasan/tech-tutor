@@ -1,0 +1,42 @@
+---
+title: "Docker Containers"
+label: "Containers"
+order: 6
+level: "Beginner"
+description: "Container lifecycle, run/start/stop/exec/log/rm, port mapping ও flag-গুলো — বাংলায়।"
+---
+
+<InParagraph text={"**Container** হলো image-এর চলমান instance। image যেমন blueprint, container তেমন সেই blueprint থেকে বানানো actual ঘর — যেখানে অ্যাপ নিজস্ব environment-এ ছুটছে।"} />
+
+## Container lifecycle
+
+<CodeBlock code={"Created → Running → Paused\n              │          │\n              │          └→ Exited (stopped)\n              └→ Exited ──→ start → Running"} lang={"text"} title={"State machine"} />
+
+<InParagraph text={"একটি container `docker start` দিয়ে stop-এর পরও আবার চালানো যায়; `docker rm` দিলেই তবে মুছে যায়।"} />
+
+## প্রয়োজনীয় কমান্ড
+
+<CodeBlock code={"docker run --name web -d -p 8080:80 nginx   # অনেক flag-সহ run\ndocker ps                                   # চলমান list\ndocker ps -a                                # সব list\ndocker stop web                             # graceful stop\ndocker start web                            # আবার চালানো\ndocker restart web                          # restart\ndocker exec -it web bash                    # ভেতরে শেলসহ ঢোঁকা\ndocker logs web                             # logs দেখা\ndocker rm web                               # মুছে ফেলা"} lang={"bash"} title={"Container basics"} />
+
+## Port mapping (-p)
+
+<InParagraph text={"Container-এর নিজস্ব network-এ port থাকে (যেমন nginx-এর 80)। বাইরে থেকে access পেতে host-এর port-এর সাথে map করতে হয়:"} />
+
+<CodeBlock code={"# host:container\ndocker run -d -p 8080:80 nginx\n# এখন http://localhost:8080 -এ nginx দেখা যাবে"} lang={"bash"} title={"Port publish"} />
+
+## Detached ও interactiv mode
+
+| Flag | মানে |
+| --- | --- |
+| `-d` | background-এ চালায় (detached) |
+| `-it` | interactive terminal (bash-এ ঢোঁকা) |
+| `-p 8080:80` | port map |
+| `-e K=V` | environment variable |
+| `--name web` | নাম দেওয়া |
+| `--rm` | container বন্ধ হলে auto-মুছে |
+
+## exec দিয়ে ভেতরে দেখা
+
+<CodeBlock code={"# চলমান container-এর ভেতরে শেল\ndocker exec -it web sh\n\n# ভেতর থেকে কমান্ড (যেমন প্রসেস দেখা)\ndocker exec web ps aux\n\n# environment variable দেখা\ndocker exec web env"} lang={"bash"} title={"Debug container"} />
+
+<Tip tone={"warning"} title={"Container অস্থায়ী"} text={"Container-এর ভেতরের file system মূলত **ephemeral** — container মুছে গেলে ডেটা হারায়। ডেটা ধরে রাখতে পরে দেখব **volumes**।"} />

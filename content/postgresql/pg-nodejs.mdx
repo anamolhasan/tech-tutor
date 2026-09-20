@@ -1,0 +1,20 @@
+---
+title: "node-postgres (pg) — Node.js থেকে query"
+label: "Node + PostgreSQL"
+order: 32
+level: "Intermediate"
+description: "Node/Express-এ pg Pool — parameterized query দিয়ে নিরাপদ।"
+---
+
+<CodeBlock code={"npm install pg"} lang={"bash"} title={"terminal"} />
+
+<CodeBlock code={"import { Pool } from \"pg\";\n\nexport const pool = new Pool({\n  host: process.env.PGHOST ?? \"localhost\",\n  port: 5432,\n  database: process.env.PGDATABASE ?? \"techshop\",\n  user: process.env.PGUSER ?? \"app_user\",\n  password: process.env.PGPASSWORD ?? \"secret\",\n});"} lang={"ts"} title={"db.ts"} />
+
+<CodeBlock code={"import { pool } from \"./db\";\n\nexport async function findProduct(id: number) {\n  const res = await pool.query(\n    \"SELECT id, name, price FROM products WHERE id = $1\",\n    [id]\n  );\n  return res.rows[0];\n}"} lang={"ts"} />
+
+- `Pool` — multiple connections, request-ভিত্তিক checkout
+- `$1`-placeholders + values array — **SQL injection নিরাপদ**
+- `db.query`-র আগে `await`, error catch
+- dotenv / env vars — credentials repository-তে নয়
+
+<Tip tone={"warning"} title={"string interpolation বারণ"} text={"`SELECT ... WHERE id = ' + id` — injection রাস্তা খোলা। সব query-তে `$n` parameter।"} />

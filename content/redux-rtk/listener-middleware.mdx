@@ -1,0 +1,21 @@
+---
+title: "createListenerMiddleware — Side Effects"
+label: "Listener Middleware"
+order: 29
+level: "Advanced"
+description: "অর্ডার সফল হলে toast, cart-এর rehydrate ইত্যাদি — বাংলায়।"
+---
+
+<CodeBlock code={"import {\n  createListenerMiddleware,\n  addListener,\n} from \"@reduxjs/toolkit\";\n\nimport { ordersApi } from \"@/features/orders/ordersService\";\nimport { toast } from \"sonner\";\n\nexport const listenerMiddleware = createListenerMiddleware();\nexport type AppStartListening = TypedStartListening<RootState, AppDispatch>;\nexport const startAppListening =\n  listenerMiddleware.startListening as AppStartListening;\n\n// অর্ডার সফল হলে toast\nstartAppListening({\n  matcher: ordersApi.endpoints.createOrder.matchFulfilled,\n  effect: async (action, listenerApi) => {\n    toast.success(\"অর্ডারটির জন্য ধন্যবাদ!\");\n    listenerApi.dispatch(clearCart());\n  },\n});\n\n// অর্ডার ব্যর্থ হলে message\nstartAppListening({\n  matcher: ordersApi.endpoints.createOrder.matchRejected,\n  effect: async (action, listenerApi) => {\n    toast.error(\"অর্ডার করা যায়নি — আবার চেষ্টা করুন\");\n  },\n});"} lang={"ts"} title={"src/app/listener.ts"} />
+
+## store-এ লাগান
+
+<CodeBlock code={"middleware: (getDefaultMiddleware) =>\n  getDefaultMiddleware()\n    .prepend(listenerMiddleware.middleware)\n    .concat(ordersApi.middleware),"} lang={"ts"} title={"listener → middleware"} />
+
+## কেন createListenerMiddleware
+
+- `onSuccess`-ভিত্তিক side effect component-বহির্ভূত হয়েছে
+- mutation-এর বিজ্ঞপ্তি ঘরে-ঘরে (another component-ও reaction)
+- polling/idle-এর side-effects সহজ
+
+<Tip tone={"info"} title={"effect-এ async"} text={"listener `effect: async` — onClick close থেকেও যথাযথভাবে user reaction দেখাতে। TOAST-এর মতো side-effect এই middleware-এ clean।"} />

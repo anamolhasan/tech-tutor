@@ -1,0 +1,31 @@
+---
+title: "Conditional Types (শর্তাধীন টাইপ)"
+label: "Conditional Types"
+order: 18
+level: "Advanced"
+description: "T extends U ? X : Y, infer keyword ও distributive behavior — Dynamic টাইপ রচনার প্রথম পাঠ।"
+---
+
+<InParagraph text={"**Conditional type** হলো টাইপ-স্তরের শর্ত — একটি টাইপ অন্য টাইপকে প্রসারিত করে (extends) কিনা দেখে নতুন টাইপ বানায়।"} />
+
+## মৌলিক গঠন
+
+<CodeBlock code={"// T extends U ? X : Y\ntype Wrapper<T> = T extends string ? \"string-type\" : \"other-type\";\n\ntype A = Wrapper<string>;     // \"string-type\"\ntype B = Wrapper<number>;     // \"other-type\"\n\n// Custom utility — নিজের IsArray\ntype IsArray<T> = T extends unknown[] ? true : false;\n\ntype C = IsArray<string[]>;   // true\ntype D = IsArray<string>;     // false"} lang={"typescript"} />
+
+## Distributive Behavior
+
+<InParagraph text={"Conditional টাইপ union-এর প্রতিটি member-এ আলাদাভাবে প্রযোজ্য হয় — এর ফল union মিলিত থাকে। এতে **Exclude**-এর নিজস্ব তুলনা লেখা যায়।"} />
+
+<CodeBlock code={"type ToArray<T> = T extends unknown ? T[] : never;\n\n// union distributive হয় — প্রতিটি member আলাদা\ntype Result = ToArray<string | number>;\n// → string[] | number[]  (হয় string[], না হয় number[])"} lang={"typescript"} />
+
+## infer Keyword
+
+<InParagraph text={"`infer` দিয়ে conditional-এর মধ্যে থেকে TypeScript-কে **আউটপুট টাইপ নিজেই বের করতে** বলি — যেমন ফাংশনের return type বের করা।"} />
+
+<CodeBlock code={"type Unwrap<T> = T extends Promise<infer U> ? U : T;\n\ntype A = Unwrap<Promise<string>>;   // string\ntype B = Unwrap<number>;            // number\n\n// ফাংশনের return type বের করা\ntype Return<T> = T extends (...args: any[]) => infer R ? R : never;\n\nconst g = () => \"হ্যালো\";\ntype RT = Return<typeof g>;    // string"} lang={"typescript"} />
+
+## Real-world প্রয়োগ
+
+<CodeBlock code={"type GetData<T> = T extends { data: infer D } ? D : never;\n\ninterface ProductResponse {\n  data: Product[];\n  total: number;\n}\n\ninterface Product {\n  id: number;\n  title: string;\n}\n\ntype ProductData = GetData<ProductResponse>;   // Product[]"} lang={"typescript"} />
+
+<Tip tone={"info"} title={"ধাপে ধাপে চিন্তা"} text={"Conditional type লেখার সময় ছোট ছোট টাইপে ভাগ করে test করুন — সাহসী জটিল টাইপের আগে প্রতিটি ধাপ নিশ্চিত করুন। `infer` জাগানো টাইপ বাছাইয়ের শক্তিশালী হাতিয়ার।"} />

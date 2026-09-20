@@ -1,0 +1,19 @@
+---
+title: "Dark Theme Project"
+label: "Dark Theme Project"
+order: 30
+level: "Intermediate"
+description: "Tailwind দিয়ে complete dark theme ও toggle functionality তৈরি — বাস্তব প্রজেক্ট।"
+---
+
+<InParagraph text={"চলুন একটি complete dark theme toggle project তৈরি করি।"} />
+
+## Dark Theme Card
+
+<CodeBlock code={"<!DOCTYPE html>\n<html lang=\"bn\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <title>Dark Theme</title>\n  <script src=\"https://cdn.tailwindcss.com\"></script>\n</head>\n<body class=\"min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors\">\n  <div class=\"mx-auto max-w-md p-8\">\n    <div class=\"rounded-xl bg-white dark:bg-gray-800 p-6 shadow-lg\">\n      <h2 class=\"text-xl font-bold text-gray-900 dark:text-white\">\n        Dark Theme Card\n      </h2>\n      <p class=\"mt-2 text-gray-600 dark:text-gray-300\">\n        এই কার্ড dark mode সমর্থন করে।\n      </p>\n      <button\n        id=\"toggle\"\n        class=\"mt-4 rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 transition-colors\"\n      >\n        Toggle Dark Mode\n      </button>\n    </div>\n  </div>\n\n  <script>\n    document.getElementById(\"toggle\").addEventListener(\"click\", () => {\n      document.documentElement.classList.toggle(\"dark\");\n    });\n  </script>\n</body>\n</html>"} lang={"html"} />
+
+## JavaScript Toggle Logic
+
+<CodeBlock code={"// Dark mode toggle\nfunction toggleDarkMode() {\n  document.documentElement.classList.toggle(\"dark\");\n\n  // Save preference\n  const isDark = document.documentElement.classList.contains(\"dark\");\n  localStorage.setItem(\"darkMode\", isDark);\n}\n\n// Load saved preference\nif (localStorage.getItem(\"darkMode\") === \"true\") {\n  document.documentElement.classList.add(\"dark\");\n}"} lang={"javascript"} />
+
+<Tip tone={"success"} title={"localStorage ব্যবহার"} text={"ব্যবহারকারীর preference save করতে `localStorage` ব্যবহার করুন। এতে পরবরী বার পেজ খুললেও dark mode preference থাকবে।"} />

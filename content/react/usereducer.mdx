@@ -1,0 +1,19 @@
+---
+title: "useReducer — জটিল State"
+label: "useReducer"
+order: 14
+level: "Intermediate"
+description: "Reducer function, action object, dispatch — জটিল state logic-এর জন্য — বাংলায়।"
+---
+
+## Reducer কী?
+
+<InParagraph text={"**`useReducer`** জটিল state logic-এর জন্য — যেমন একাধিক update rule, বা জটিল object state। Reducer হলো pure function: `(state, action) => newState`।"} />
+
+<CodeBlock code={"import { useReducer } from \"react\";\n\nconst initialState = { count: 0, step: 1 };\n\nfunction reducer(state, action) {\n  switch (action.type) {\n    case \"increment\":\n      return { ...state, count: state.count + state.step };\n    case \"decrement\":\n      return { ...state, count: state.count - state.step };\n    case \"setStep\":\n      return { ...state, step: action.step };\n    case \"reset\":\n      return initialState;\n    default:\n      return state;\n  }\n}\n\nfunction Counter() {\n  const [state, dispatch] = useReducer(reducer, initialState);\n\n  return (\n    <div>\n      <p>{state.count}</p>\n      <button onClick={() => dispatch({ type: \"increment\" })}>+</button>\n      <button onClick={() => dispatch({ type: \"decrement\" })}>−</button>\n      <button onClick={() => dispatch({ type: \"reset\" })}>Reset</button>\n      <input\n        type=\"number\"\n        value={state.step}\n        onChange={(e) => dispatch({ type: \"setStep\", step: +e.target.value })}\n      />\n    </div>\n  );\n}"} lang={"jsx"} title={"Counter reducer"} />
+
+## Action object
+
+<CodeBlock code={"dispatch({ type: \"todos/add\", payload: { id, text } });\ndispatch({ type: \"todos/toggle\", payload: id });\ndispatch({ type: \"todos/remove\", payload: id });"} lang={"jsx"} title={"Typed action"} />
+
+<Tip tone={"info"} title={"useState নাকি useReducer?"} text={"সাধারণ কয়েকটি update → `useState`। **একাধিক interrelated field**, **history/undo** দরকার, বা logic দীর্ঘ → `useReducer`। লক্ষ্য জটিল logic-কে component-এর বাইরে পরিষ্কার ছাড়া।"} />

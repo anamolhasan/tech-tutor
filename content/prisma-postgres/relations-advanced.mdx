@@ -1,0 +1,15 @@
+---
+title: "মতভাবে relation — explicit N:M, self-relation"
+label: "Relations Advanced"
+order: 22
+level: "Advanced"
+description: "bridge table নিজের হাতে ও নিজের সাথে relation।"
+---
+
+<CodeBlock code={"model Order {\n  id       Int         @id @default(autoincrement())\n  cells    OrderItem[]\n}\n\nmodel Product {\n  id       Int         @id @default(autoincrement())\n  lines    OrderItem[]\n}\n\nmodel OrderItem {\n  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)\n  orderId   Int\n  product   Product @relation(fields: [productId], references: [id])\n  productId Int\n  qty       Int\n  price     Decimal @db.Decimal(10, 2)\n\n  @@id([orderId, productId])\n}"} lang={"prisma"} title={"explicit N:M — OrderItem bridge"} />
+
+<InParagraph text={"Implicit N:M-Prisma bridge-এ অতিরিক্ত column (qty!) রাখা যায় না — এজন্য bridge model সাহায্য।"} />
+
+<CodeBlock code={"model Employee {\n  id        Int        @id @default(autoincrement())\n  name      String\n  manager   Employee?  @relation(\"ReportsTo\", fields: [managerId], references: [id])\n  managerId Int?\n  reports   Employee[] @relation(\"ReportsTo\")\n}"} lang={"prisma"} title={"self-relation — employee/manager"} />
+
+<Tip tone={"warning"} title={"@relation name"} text={"একই model-এর মধ্যে ২+ relation থাকলে `@relation('Name')`-এ আলাদা নাম বাধ্যতামূলক।"} />

@@ -1,0 +1,15 @@
+---
+title: "count, aggregate, groupBy"
+label: "Aggregation"
+order: 17
+level: "Intermediate"
+description: "পরিসংখ্যান client-API-তেই — ড্যাশবোর্ড বানানো।"
+---
+
+<CodeBlock code={"const total = await prisma.product.count({\n  where: { active: true },\n});\n\nconst stats = await prisma.order.aggregate({\n  where: { status: \"paid\" },\n  _count: true,\n  _sum: { total: true },\n  _avg: { total: true },\n  _max: { created_at: true },\n});"} lang={"ts"} />
+
+<CodeBlock code={"const byCategory = await prisma.product.groupBy({\n  by: [\"categoryId\"],\n  _sum: { price: true },\n  _count: true,\n  orderBy: { _count: { categoryId: \"desc\" } },\n});"} lang={"ts"} title={"groupBy — category-wise"} />
+
+<InParagraph text={"`groupBy`-এ `by` বাধ্যতামূলক — তারপর `_sum`/`_avg` ইত্যাদি। `orderBy`/`having` ঘুরে-ফিরে যায় post-aggregation।"} />
+
+<Tip tone={"info"} title={"HAVING-equivalent"} text={"Prisma-তে `groupBy`-এর `having: { _sum: { total: { gte: ... } } }` — SQL HAVING-এর সাথে মেলে।"} />

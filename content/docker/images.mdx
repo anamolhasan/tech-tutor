@@ -1,0 +1,37 @@
+---
+title: "Docker Images"
+label: "Images"
+order: 5
+level: "Beginner"
+description: "Image কী, Image layers, Docker Hub, pull/push/tag — বাংলায় সম্পূর্ণ গাইড।"
+---
+
+<InParagraph text={"**Image** হলো container তৈরির blueprint — একটি read-only template যাতে OS-এর কিছু অংশ, runtime, কোড, library ও config থাকে। Image থেকে container তৈরি হয় যতবার খুশি।"} />
+
+## Image কী?
+
+<InParagraph text={"Image-কে ভাবা যায় একটি **recipe** হিসেবে — এর ভেতরে থাকে application চালানোর জন্য যা যা দরকার। Image নিজে চলে না; চালাতে হয় container হিসেবে।"} />
+
+## Image layers
+
+<InParagraph text={"Image তৈরি হয় একাধিক **layer** দিয়ে। প্রতিটি instruction (যেমন `RUN`, `COPY`) একটি নতুন layer যোগ করে। Layer-গুলো **cache** হয় — অর্থাৎ আগের build-এর layer অপরিবর্তিত থাকলে পরে আবার সেটা skip করা হয়, ফলে build তাড়াতাড়ি হয়।"} />
+
+<CodeBlock code={"app-image\n ├─ layer: FROM node:20-slim   (base)\n ├─ layer: COPY package*.json  (dependency files)\n ├─ layer: RUN npm ci          (node_modules)\n ├─ layer: COPY . .            (app code)\n └─ layer: CMD [\"npm\",\"start\"] (command config)"} lang={"text"} title={"Layer-based image"} />
+
+## Image নাম ও tag
+
+<InParagraph text={"Image-এর নাম সাধারণত `repository:tag` আকারের হয়। tag না দিলে ধরা হয় `latest`।"} />
+
+<CodeBlock code={"docker image ls                    # list images\ndocker pull node:20-alpine          # tag নির্দিষ্ট করে pull\ndocker pull node                    # latest (আসলে node:latest)\ndocker image rm node:20-alpine      # image মুছা\ndocker rmi d16c0b3a3f2a             # image ID দিয়েও মুছা যায়"} lang={"bash"} title={"Working with images"} />
+
+## Tag করা ও push করা
+
+<InParagraph text={"নিজের image-কে Docker Hub-এ publish করতে চাইলে সঠিক নামে tag করে push করতে হয়:"} />
+
+<CodeBlock code={"docker tag my-app yourusername/my-app:v1\ndocker login\ndocker push yourusername/my-app:v1"} lang={"bash"} title={"Push to Docker Hub"} />
+
+## Docker Hub ও Registry
+
+<InParagraph text={"**Docker Hub** হলো default public registry — অফিসিয়াল images (node, mongo, postgres, redis, nginx…) সবই সেখানে আছে। এছাড়া **GitHub Container Registry (GHCR)** বা **AWS ECR**-এর মতো private registry-ও ব্যবহার করা যায়।"} />
+
+<Tip tone={"info"} title={"অফিসিয়াল images বাছুন"} text={"প্রোডাকশনে অফিসিয়াল images (`node:*`, `mongo:*`) ব্যবহার করুন — এগুলো maintained ও নিরাপদ। **কখনো** random anonymous-এর image trust করবেন না।"} />

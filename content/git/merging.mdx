@@ -1,0 +1,42 @@
+---
+title: "Merge — branch-এর কাজ একত্র করা"
+label: "Merging"
+order: 8
+level: "Intermediate"
+description: "git merge, fast-forward, three-way merge — বাংলায়।"
+---
+
+## Merge কী?
+
+<InParagraph text={"Merge হলো একটি branch-এর পরিবর্তনগুলোকে অন্য branch-এ **আনার** প্রক্রিয়া। সাধারণত কাজ শেষ হলে `feature` থেকে `main`-এ merge করা হয়।"} />
+
+<CodeBlock code={"git switch main\ngit merge feature/contact-page"} lang={"bash"} title={"Merge basic"} />
+
+## Fast-forward merge
+
+<InParagraph text={"যদি `main` branch feature শাখা ছাড়ার পরে কোনো নতুন commit না পায়, তখন Git pointer সরাসরি এগিয়ে নিয়ে যায় — একে **fast-forward** বলে। নতুন merge commit হয় না।"} />
+
+<CodeBlock code={"main ●──●──●\nfeature      └──●──●\nmerge → main ●──●──●──●──●   (শুধু pointer সরে যায়)"} lang={"bash"} />
+
+## Three-way merge (merge commit)
+
+<InParagraph text={"যদি মূল branch-ও এগিয়ে গিয়ে থাকে, তখন Git দুটি branch-এর **কমন ancestor** থেকে দুটি পরিবর্তন আলাদাভাবে দেখে একটি **merge commit** তৈরি করে।"} />
+
+<CodeBlock code={"main ●──●──A──C\nfeature      └──B\nmerge → ●──●──A──C──M\n                  └──B"} lang={"bash"} />
+
+## Merge conflict হলে
+
+<InParagraph text={"যদি দুটি শাখায় **একই ফাইলের একই লাইনে** ভিন্ন পরিবর্তন হয়, Git নিজে সিদ্ধান্ত নিতে পারে না — তখন **conflict** দেখা দেয়। সমাধান নিয়ে পরবর্তী অধ্যায়ে বিস্তারিত।"} />
+
+## Merge-এর আগে যা পরীক্ষা করবেন
+
+- বর্তমান branch-এ কোনো unstaged পরিবর্তন নেই?
+- বিলম্বিত stash? (`git stash list`)
+- টার্গেট branch-এ নতুন commit আছে?
+- আগে final যোগাযোগ করুন — টিমের নিয়ম অনুযায়ী
+
+## Merge দিয়ে না commit করা
+
+<CodeBlock code={"git merge --no-ff feature/x   # সবসময় merge commit\ngit merge --ff-only feature/x  # fast-forward না হলে fail"} lang={"bash"} />
+
+<Tip tone={"warning"} title={"কখন merge, কখন rebase"} text={"branch-এর ইতিহাস **preserve** করতে চাইলে merge; ইতিহাস **linear ও পরিচ্ছন্ন** রাখতে চাইলে rebase। public branch-এ কখনো rebase করবেন না।"} />

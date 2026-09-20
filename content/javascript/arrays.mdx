@@ -1,0 +1,35 @@
+---
+title: "JavaScript Arrays (অ্যারে)"
+label: "Arrays"
+order: 9
+level: "Beginner"
+description: "Array তৈরি, read, push, pop, forEach, map, filter, find — JavaScript অ্যারের সম্পূর্ণ বাংলা গাইড।"
+---
+
+<InParagraph text={"**Array** হলো একাধিক মান ধরে রাখার একটি ধারক — যেমন এক ঝুড়ি ফলের নাম।"} />
+
+## Array তৈরি ও পড়া
+
+<CodeBlock code={"const fruits = [\"আম\", \"কলা\", \"কমলা\", \"লিচু\"];\n\nconsole.log(fruits[0]); // \"আম\"   (সূচক ০ থেকে)\nconsole.log(fruits.length); // 4"} lang={"javascript"} />
+
+## যোগ ও বাদ
+
+<CodeBlock code={"const numbers = [1, 2, 3];\n\nnumbers.push(4);    // শেষে যোগ → [1, 2, 3, 4]\nnumbers.pop();      // শেষের বাদ → [1, 2, 3]\nnumbers.unshift(0); // শুরুতে যোগ → [0, 1, 2, 3]\nnumbers.shift();    // শুরুর বাদ → [1, 2, 3]"} lang={"javascript"} />
+
+## লুপ ও forEach
+
+<CodeBlock code={"const scores = [70, 85, 90];\n\nscores.forEach((score) => {\n  console.log(score * 2);\n});"} lang={"javascript"} />
+
+## map, filter, find
+
+<CodeBlock code={"const prices = [100, 250, 300, 150];\n\nconst withVat = prices.map(p => p * 1.15);\n\nconst onSale = prices.filter(p => p < 250);\n\nconst found = prices.find(p => p === 300);\n\nconsole.log(withVat); // [115, 287.5, 345, 172.5]\nconsole.log(onSale);  // [100, 150]\nconsole.log(found);   // 300"} lang={"javascript"} />
+
+| মেথড | কাজ |
+| --- | --- |
+| map() | নতুন array বানায় (রূপান্তর) |
+| filter() | শর্ত মেনে বেছে নেয় |
+| find() | প্রথম মিলে যাওয়া মান |
+| reduce() | সব মান মিলিয়ে এক ফলাফল |
+| includes() | আছে কি না — true/false |
+
+<Tip tone={"success"} title={"সাবলীল পদ্ধতি"} text={"`map`, `filter`, `reduce` ব্যবহারে লুপ কমে, কোড readable হয়। এগুলো functional প্রোগ্রামিং-এর মূল অস্ত্র।"} />

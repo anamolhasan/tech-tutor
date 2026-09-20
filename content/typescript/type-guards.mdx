@@ -1,0 +1,27 @@
+---
+title: "Type Guard (টাইপ গার্ড)"
+label: "Type Guards"
+order: 11
+level: "Intermediate"
+description: "User-defined type guard — নিজের function দিয়ে টাইপ সরু করা, `is` operator ও কাস্টম গার্ড — বাংলায়।"
+---
+
+<InParagraph text={"**Type guard** হলো এমন একটি অভিব্যক্তি যা টাইপ constraining করে। আগের অধ্যায়ের `typeof`, `in`, `instanceof` — সবই built-in guard। চাইলে নিজের **custom guard**-ও বানানো যায়।"} />
+
+## User-defined Type Guard
+
+<InParagraph text={"একটি ফাংশনের return type-এ `value is Type` লিখলে TypeScript বোঝে — ফাংশন `true` ফিরলে টাইপ সেই নির্দিষ্ট টাইপে সরু হয়ে যাবে।"} />
+
+<CodeBlock code={"type Fish = { name: string; swim: () => void };\ntype Bird = { name: string; fly: () => void };\n\nfunction isFish(pet: Fish | Bird): pet is Fish {\n  return (pet as Fish).swim !== undefined;\n}\n\nconst pets: (Fish | Bird)[] = [\n  { name: \"কই\", swim: () => console.log(\"সাঁতার\") },\n  { name: \"টিয়া\", fly: () => console.log(\"উড়া\") },\n];\n\nconst fishes = pets.filter(isFish);   // টাইপ: Fish[]"} lang={"typescript"} />
+
+## কার্যকরী ব্যবহার
+
+<CodeBlock code={"function feed(pet: Fish | Bird): void {\n  if (isFish(pet)) {\n    pet.swim();    // pet: Fish\n  } else {\n    pet.fly();     // pet: Bird\n  }\n}\n\n// Array filtering-এও টাইপ বজায় থাকে guard-এর কারণে\nconst names = fishes.map((fish) => fish.name);   // string[]"} lang={"typescript"} />
+
+## Discriminated Union guard
+
+<InParagraph text={"`kind` ট্যাগ-ভিত্তিক union-এ প্রতিটি member আলাদা হলে, একটি ছোট guard function দিয়ে পুরো টাইপ নিরাপদ করা যায়।"} />
+
+<CodeBlock code={"type Video = { type: \"video\"; duration: number };\ntype Article = { type: \"article\"; wordCount: number };\n\nconst isVideo = (item: Video | Article): item is Video =>\n  item.type === \"video\";\n\nfunction preview(item: Video | Article): string {\n  return isVideo(item)\n    ? item.duration + \" সেকেন্ড\"\n    : item.wordCount + \" শব্দ\";\n}"} lang={"typescript"} />
+
+<Tip tone={"warning"} title={"গার্ডের সততা"} text={"guard function-টির ভেতরের বাস্তব পরীক্ষা অবশ্যই return-type-এর সাথে মিলতে হবে — নাহলে runtime ও compile-time দুই জায়গাতেই বিভ্রান্তি তৈরি হবে।"} />

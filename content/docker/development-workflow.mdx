@@ -1,0 +1,31 @@
+---
+title: "Docker দিয়ে Development Workflow"
+label: "Development Workflow"
+order: 17
+level: "Intermediate"
+description: "Hot reload, bind mount, multi-container dev environment ও debug — বাংলায়।"
+---
+
+<InParagraph text={"ডেভেলপমেন্টে সবচেয়ে বড় সুবিধা — code বদলালে container-এ সাথে সাথে দেখা। এটি হয় **bind mount** + dev server-এর মাধ্যমে।"} />
+
+## Dev compose — hot reload
+
+<CodeBlock code={"services:\n  api:\n    build: .\n    command: npm run dev          # nodemon / nest start --watch\n    volumes:\n      - ./src:/app/src            # host code → container\n      - /app/node_modules         # container-এর নিজ নতুন install সংরক্ষণ\n    environment:\n      - NODE_ENV=development\n    ports:\n      - \"3000:3000\""} lang={"yaml"} title={"docker-compose.dev.yml"} />
+
+<CodeBlock code={"docker compose -f docker-compose.dev.yml up"} lang={"bash"} title={"Run dev"} />
+
+## Production vs dev compose
+
+- Dev-এ bind mount + dev server; prod-এ compiled code + start
+- Dev-এ সমস্ত logs (`logs -f`); prod-এ logging driver/aggregation
+- Compose file আলাদা রাখুন (`compose.dev.yml`, `compose.prod.yml`)
+
+## Debugging workflow
+
+<CodeBlock code={"docker compose ps\ndocker compose logs -f api          # শেষ logs\ndocker compose exec api sh          # ভেতরে ঢোঁকা\ndocker exec api env                 # variables check\ndocker exec api node -e \"console.log(process.env.DATABASE_URL)\"\ndocker inspect api                  # network/port/details"} lang={"bash"} title={"Diagnose helper"} />
+
+## Database seeding ও tools
+
+<CodeBlock code={"services:\n  mongo:\n    image: mongo:7\n\n  seed:\n    build: ./seed          # ছোট script\n    depends_on:\n      - mongo\n    environment:\n      - MONGODB_URI=mongodb://mongo:27017/blog\n    restart: \"no\"          # একবার চালিয়ে থামে"} lang={"yaml"} title={"Seed container"} />
+
+<Tip tone={"success"} title={"ডেবাগ involve"} text={"VS Code-এ Docker extension-র সাহায্যে container-এর সাথে ব্রেকপয়েন্ট কাজ করা যায়। আরেকটি জনপ্রিয় কৌশল — app-টিকে `--inspect` flag-এ চালিয়ে DevTools দিয়ে attach।"} />

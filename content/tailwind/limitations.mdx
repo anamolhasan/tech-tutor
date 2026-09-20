@@ -1,0 +1,29 @@
+---
+title: "Tailwind CSS-এর সীমাবদ্ধতা"
+label: "সীমাবদ্ধতা"
+order: 8
+level: "Beginner"
+description: "Tailwind CSS-এর সীমাবদ্ধতা ও চ্যালেঞ্জ — কোন ক্ষেত্রে Tailwind উপযুক্ত নাও হতে পারে।"
+---
+
+<InParagraph text={"Tailwind CSS অনেক শক্তিশালী, তবে এর কিছু সীমাবদ্ধতা আছে যা জানা গুরুত্বপূর্ণ।"} />
+
+## HTML Bloat
+
+<InParagraph text={"utility class HTML-তে অনেক বাড়ে — class attribute লম্বা হয়ে যায়। এটি প্রথমে অদ্ভুত লাগতে পারে।"} />
+
+<CodeBlock code={"<!-- class attribute লম্বা হয়ে যাচ্ছে -->\n<button class=\"rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-blue-500 dark:hover:bg-blue-600\">\n  Button\n</button>"} lang={"html"} />
+
+## Learning Curve
+
+<InParagraph text={"প্রথমবারে utility class গুলো মনে রাখা কঠিন লাগতে পারে। তবে একবার অভ্যস্ত হলে সবকিছু সহজ হয়ে যায়।"} />
+
+## Pre-built UI নেই
+
+<InParagraph text={"Bootstrap-এর মতো ready-made modal, navbar, carousel ইত্যাদি Tailwind-এ নেই। নিজেই তৈরি করতে হয় (অথবা Headless UI, DaisyUI ব্যবহার করতে পারেন)।"} />
+
+## SEO Considerations
+
+<InParagraph text={"লম্বা class attribute যদি অনেক বেশি হয়, তাহলে HTML file size বাড়তে পারে। তবে modern bundlers এটি সমস্যা কম করে।"} />
+
+<Tip tone={"warning"} title={"Tailwind সবসময় সেরা নাও হতে পারে"} text={"যদি আপনার দরকার হয় pre-built components, অথবা CSS class-মুক্ত HTML — তাহলে অন্য framework বেশি উপযুক্ত হতে পারে। প্রজেক্টের চাহিদা অনুযায়ী সিদ্ধান্ত নিন।"} />

@@ -1,0 +1,43 @@
+---
+title: "Dashboard ও Admin কী"
+label: "Dashboard ও Admin"
+order: 4
+level: "Beginner"
+description: "WordPress-এর Dashboard, Admin area, wp-admin-এ login ও main menu-গুলোর একটি সহজ পরিচিতি।"
+---
+
+## Dashboard কী?
+
+<InParagraph text={"**Dashboard** হলো WordPress-এর **control room** — যেখান থেকে পুরো website manage করা হয়। এখান থেকে post লেখা, page edit, media আপলোড, theme-পরিবর্তন, plugin-install — সবকিছু করা যায়।"} />
+
+<CodeBlock code={"Dashboard (Admin area)\n├── Posts       → লেখা create/edit/delete\n├── Pages       → static page manage\n├── Media       → ছবি/ভিডিও library\n├── Appearance  → Themes, Widgets, Menus\n├── Plugins     → plugin install/enable/disable\n├── Users       → user ও role manage\n├── Settings    → site title, URL, timezone ইত্যাদি"} lang={"text"} title={"Dashboard-এ কী কী থাকে"} />
+
+## Admin কী?
+
+<InParagraph text={"**Admin** মানে site-এর **প্রশাসক** — যে user-এর সর্বোচ্চ ক্ষমতা। Admin-ই WordPress install করে, theme/plugin install করে, অন্য user তৈরি করে, site-এর সবকিছু নিয়ন্ত্রণ করে। এক কথায় Admin = site-এর **owner/manager**।"} />
+
+## কীভাবে Dashboard-এ ঢুকবেন
+
+<InParagraph text={"সাধারণত URL-এর শেষে `/wp-admin` বা `/wp-login.php` যোগ করলেই login page পাওয়া যায় —"} />
+
+<CodeBlock code={"https://mysite.com/wp-admin\nhttps://mysite.com/wp-login.php"} lang={"text"} />
+
+- Username / email আর password দিয়ে login
+- Login করলে প্রথমে **Dashboard (Home)** page-এ আসা
+- বাঁ পাশের sidebar menu দিয়ে সব জায়গায় যাওয়া
+
+## Dashboard-এর প্রধান Menu
+
+| Menu | কাজ কী |
+| --- | --- |
+| Posts | Blog post লেখা ও manage |
+| Media | সব ছবি/ভিডিও library |
+| Pages | Static page manage |
+| Comments | দর্শকদের মন্তব্য approve/spam |
+| Appearance | Theme, customize, widgets, menus |
+| Plugins | Plugin install ও activate |
+| Users | User তৈরি ও role দেওয়া |
+| Tools | Import/export, site health |
+| Settings | General settings, permalink ইত্যাদি |
+
+<Tip tone={"warning"} title={"নিরাপত্তা"} text={"`wp-admin`-এর URL সব জায়গায় দেখা যায় — তাই সবসময় **strong password** ও two-factor authentication ব্যবহার করুন।"} />

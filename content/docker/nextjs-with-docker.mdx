@@ -1,0 +1,32 @@
+---
+title: "Next.js অ্যাপ Docker-এ"
+label: "Next.js + Docker"
+order: 13
+level: "Advanced"
+description: "Next.js standalone output দিয়ে ছোট ও দ্রুত production image — multi-stage build — বাংলায়।"
+---
+
+<InParagraph text={"Next.js-কে Docker-এ চালাতে **`output: \"standalone\"`** ব্যবহার করা ভালো — এটি সব প্রয়োজনীয় runtime file একটি ছোট folder-এ রাখে; ফলে image অনেক হালকা হয়।"} />
+
+## next.config.ts-এ standalone
+
+<CodeBlock code={"import type { NextConfig } from \"next\";\n\nconst nextConfig: NextConfig = {\n  output: \"standalone\",\n};\n\nexport default nextConfig;"} lang={"ts"} title={"next.config"} />
+
+## Multi-stage Dockerfile
+
+<CodeBlock code={"# Stage 1: build\nFROM node:20-alpine AS builder\nWORKDIR /app\n\nCOPY package*.json ./\nRUN npm ci\n\nCOPY . .\nRUN npm run build\n\n# Stage 2: runtime\nFROM node:20-alpine AS runner\nWORKDIR /app\n\nENV NODE_ENV=production\n\n# standalone output file-গুলোই প্রয়োজন\nCOPY --from=builder /app/.next/standalone ./\nCOPY --from=builder /app/.next/static ./.next/static\nCOPY --from=builder /app/public ./public\n\nEXPOSE 3000\nUSER node\n\nCMD [\"node\", \"server.js\"]"} lang={"dockerfile"} title={"Dockerfile"} />
+
+## Build ও verify
+
+<CodeBlock code={"docker build -t my-next-app .\n\ndocker run -d -p 3000:3000 \\\n  -e DATABASE_URL=mongodb://... \\\n  --name next-app \\\n  my-next-app\n\n# homepage check\ncurl -I http://localhost:3000"} lang={"bash"} title={"Run steps"} />
+
+## with Docker-এর বিশেষ ভুল
+
+- `.next` ও `node_modules`-কে `.dockerignore`-এ রাখুন
+- `output: standalone` ছাড়া সব file কপি করলে image ভারী হয়
+- প্রতি পরিবর্তনে cache ভাঙা আটকাতে `COPY package*.json` আলাদা ধাপে দিন
+- Dev mode-এ live reload চাইলে bind mount + `npm run dev` ব্যবহার করুন
+
+<CodeBlock code={"node_modules\n.next\n.git\n.env\n.env.*\nDockerfile\n.dockerignore"} lang={"text"} title={".dockerignore"} />
+
+<Tip tone={"success"} title={"Trailing advice"} text={"Static export (SSG-only) হলে image-এ এই ছোট force standalone দরকার নয় — `next export` output-কে nginx-এর মতো web server-এ serve করুন। ...না হলে সেটাও সম্ভব।"} />

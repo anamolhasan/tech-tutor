@@ -1,0 +1,17 @@
+---
+title: "TechShop — সম্পূর্ণ schema (শিক্ষার project)"
+label: "TechShop Schema"
+order: 35
+level: "Intermediate"
+description: "আমাদের পুরো ডিজাইন এক নজরে — users ⟫ orders ⟫ items।"
+---
+
+<CodeBlock code={"CREATE TABLE categories (\n  id    bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name  text NOT NULL UNIQUE\n);\n\nCREATE TABLE users (\n  id    bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email text NOT NULL UNIQUE,\n  name  text NOT NULL,\n  role  text NOT NULL DEFAULT 'customer'\n);\n\nCREATE TABLE products (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  category_id bigint REFERENCES categories(id),\n  name        text NOT NULL,\n  price       numeric(10,2) NOT NULL,\n  qty         integer NOT NULL DEFAULT 0,\n  spec        jsonb\n);\n\nCREATE TABLE orders (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    bigint NOT NULL REFERENCES users(id),\n  total      numeric(10,2) NOT NULL DEFAULT 0,\n  status     text NOT NULL DEFAULT 'pending',\n  created_at timestamptz DEFAULT now()\n);\n\nCREATE TABLE order_items (\n  order_id   bigint NOT NULL REFERENCES orders(id),\n  product_id bigint NOT NULL REFERENCES products(id),\n  qty        integer NOT NULL,\n  price      numeric(10,2) NOT NULL,\n  PRIMARY KEY (order_id, product_id)\n);"} lang={"sql"} />
+
+<InParagraph text={"এই schema-তে `order_items` bridge table — order-এর সঙ্গে product-এর **many-to-many**। `orders.user_id` — user-এর সাথে **one-to-many**।"} />
+
+- প্রতিটি নন-empty relational column-এ FK + NOT NULL
+- money হিসাব `numeric`
+- `price` order_items-এ copy — product-এর দাম বদলালেও ইতিহাস ঠিক থাকে
+
+<Tip tone={"info"} title={"index এখনই"} text={"যেকোনো dropdown/FK-তে index: `users(id)` auto, `orders(user_id)` — যেটা JOIN-এ ভারী, এখনই `CREATE INDEX` দিন।"} />

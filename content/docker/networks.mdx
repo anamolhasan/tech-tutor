@@ -1,0 +1,36 @@
+---
+title: "Docker Networks"
+label: "Networks"
+order: 9
+level: "Intermediate"
+description: "Bridge, host, none network, container-to-container communication ও DNS — বাংলায়।"
+---
+
+<InParagraph text={"Container-গুলো ডিফল্টে একে অপরকে দেখতে পায় না। **Docker network** দিয়ে container-গুলো কথা বলতে পারে — নাম দিয়ে, IP চিন্তা না করে।"} />
+
+## Network driver
+
+| Driver | কাজ |
+| --- | --- |
+| `bridge` | ডিফল্ট — container-এর মাঝে isolated communication |
+| `host` | container host-এর সাথে network শেয়ার — port mapping লাগে না |
+| `none` | কোনো network নেই (fully isolated) |
+| `overlay` | Swarm/Kubernetes-এ different hosts |
+
+## Custom bridge network
+
+<InParagraph text={"Default bridge-এ container-কে IP দিয়ে কথা বলতে হয় (IP বদলায়)। **Custom network**-এ container-এর **নাম দিয়ে** DNS resolve হয় — এটাই best practice।"} />
+
+<CodeBlock code={"docker network create app-net\n\ndocker run -d --name mongodb --network app-net mongo:7\ndocker run -d --name api --network app-net -p 4000:4000 my-api\n\n# api container-এর ভেতরে থেকে:\ndocker exec api ping mongodb   # নাম দিয়েই resolve"} lang={"bash"} title={"Create + connect"} />
+
+## Compose-এ network
+
+<CodeBlock code={"services:\n  api:\n    build: .\n    ports:\n      - \"4000:4000\"\n  mongo:\n    image: mongo:7\n\n# compose নিজে default network বানায়;\n# দুটি service নাম দিয়ে একে অপরকে দেখতে পায়"} lang={"yaml"} title={"compose.yml"} />
+
+## Port publish
+
+<InParagraph text={"Only shared network means container-গুলো host বাইরে থেকে access যোগ্য নয়। বাহির থেকে access দিতে `-p host:container` লাগে। **যোগাযোগ**: network container↔container, port publish host→container।"} />
+
+<CodeBlock code={"docker network ls\ndocker network inspect app-net\ndocker network connect app-net mongodb\ndocker network disconnect app-net mongodb\ndocker network rm app-net"} lang={"bash"} title={"Network কমান্ড"} />
+
+<Tip tone={"success"} title={"নাম দিয়েই connect"} text={"Compose-এ `MONGO_URI=mongodb://mongodb:27017/db` লিখতে পারেন — `mongodb` হলো service নাম, যা network-এ DNS-এর মতো কাজ করে। IP ব্যবহার করার দরকার নেই।"} />

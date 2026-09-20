@@ -1,0 +1,33 @@
+---
+title: "MongoDB, PostgreSQL ও Redis Docker-এ"
+label: "Databases + Docker"
+order: 16
+level: "Intermediate"
+description: "অফিসিয়াল DB images, volume-সহ persistent setup, healthcheck — বাংলায়।"
+---
+
+<InParagraph text={"ডাটাবেস লোকালি install করার বদলে Docker-এ চালানো এখন সাধারণ অভ্যাস — সুবিধা: version switching সহজ, পরিষ্কার remove, production-এ অনুরূপ environment।"} />
+
+## MongoDB
+
+<CodeBlock code={"services:\n  mongodb:\n    image: mongo:7\n    restart: unless-stopped\n    ports:\n      - \"27017:27017\"\n    environment:\n      - MONGO_INITDB_ROOT_USERNAME=admin\n      - MONGO_INITDB_ROOT_PASSWORD=secret\n    volumes:\n      - mongo-data:/data/db\n\nvolumes:\n  mongo-data:"} lang={"yaml"} title={"compose.yml (mongo)"} />
+
+<CodeBlock code={"const URI = process.env.MONGODB_URI\n  // container-এ: mongodb://admin:secret@mongodb:27017/blog?authSource=admin\n\nawait mongoose.connect(URI, {\n  serverSelectionTimeoutMS: 5000,\n});"} lang={"js"} title={"Mongoose connection (inside app)"} />
+
+## PostgreSQL
+
+<CodeBlock code={"services:\n  postgres:\n    image: postgres:16-alpine\n    restart: unless-stopped\n    ports:\n      - \"5432:5432\"\n    environment:\n      - POSTGRES_USER=app\n      - POSTGRES_PASSWORD=pass\n      - POSTGRES_DB=mydb\n    volumes:\n      - pg-data:/var/lib/postgresql/data\n\nvolumes:\n  pg-data:"} lang={"yaml"} title={"compose.yml (postgres)"} />
+
+<CodeBlock code={"import pg from \"pg\";\n\nconst client = new pg.Client({\n  connectionString: process.env.DATABASE_URL,\n  // postgres://app:pass@postgres:5432/mydb\n});"} lang={"js"} title={"pg connection"} />
+
+## Redis
+
+<CodeBlock code={"services:\n  redis:\n    image: redis:7-alpine\n    restart: unless-stopped\n    ports:\n      - \"6379:6379\"\n    # password দিতে চাইলে:\n    command: [\"redis-server\", \"--requirepass\", \"secret\"]\n    volumes:\n      - redis-data:/data\n\nvolumes:\n  redis-data:"} lang={"yaml"} title={"compose.yml (redis)"} />
+
+<CodeBlock code={"import Redis from \"ioredis\";\n\nconst redis = new Redis({\n  host: process.env.REDIS_HOST || \"redis\",\n  port: Number(process.env.REDIS_PORT) || 6379,\n  password: process.env.REDIS_PASSWORD,\n});"} lang={"js"} title={"ioredis connection"} />
+
+## Healthcheck যোগ করা
+
+<CodeBlock code={"services:\n  postgres:\n    image: postgres:16-alpine\n    healthcheck:\n      test: [\"CMD-SHELL\", \"pg_isready -U app -d mydb\"]\n      interval: 5s\n      timeout: 3s\n      retries: 10"} lang={"yaml"} title={"compose.yml"} />
+
+<Tip tone={"success"} title={"সবসময় volume দিন"} text={"ডাটাবেস container চালানোর সময় **সবসময়** volume mount করুন — নাহলে container remove করলে ডেটা পুরো হারিয়ে যায়। ব্যাকআপও নিন (`docker exec` + `mongodump` / `pg_dump`)।"} />

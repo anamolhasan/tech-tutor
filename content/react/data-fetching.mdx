@@ -1,0 +1,28 @@
+---
+title: "Data Fetching"
+label: "Data Fetching"
+order: 20
+level: "Advanced"
+description: "Client-side fetch pattern, race condition, caching ও TanStack Query — বাংলায়।"
+---
+
+## useEffect + fetch
+
+<CodeBlock code={"function Posts() {\n  const [posts, setPosts] = useState([]);\n  const [status, setStatus] = useState(\"loading\"); // loading | error | ok\n\n  useEffect(() => {\n    let cancelled = false;\n\n    fetch(\"/api/posts\")\n      .then((r) => r.json())\n      .then((data) => {\n        if (!cancelled) {\n          setPosts(data);\n          setStatus(\"ok\");\n        }\n      })\n      .catch(() => {\n        if (!cancelled) setStatus(\"error\");\n      });\n\n    return () => {\n      cancelled = true;\n    };\n  }, []);\n\n  if (status === \"loading\") return <p>Loading…</p>;\n  if (status === \"error\") return <p>ভুল হয়েছে</p>;\n  return posts.map((p) => <Post key={p.id} post={p} />);\n}"} lang={"jsx"} title={"Basic fetch"} />
+
+## সাধারণ সমস্যা
+
+- একই URL বারবার fetch — **cache** দরকার
+- Loading/error UI রাখা নিজেকে করতে হয়
+- একাধিক component-এ একই ডেটা — duplication
+- Update-এর পরে cache invalidation জটিল
+
+## TanStack Query
+
+<CodeBlock code={"import { useQuery } from \"@tanstack/react-query\";\n\nfunction Posts() {\n  const { data, isLoading, isError } = useQuery({\n    queryKey: [\"posts\"],\n    queryFn: () => fetch(\"/api/posts\").then((r) => r.json()),\n  });\n\n  if (isLoading) return <p>Loading…</p>;\n  if (isError) return <p>ভুল হয়েছে</p>;\n  return data.map((p) => <Post key={p.id} post={p} />);\n}\n\n// Cache invalidation\nconst queryClient = useQueryClient();\nqueryClient.invalidateQueries({ queryKey: [\"posts\"] });"} lang={"jsx"} title={"useQuery"} />
+
+## React 19 — use()
+
+<CodeBlock code={"import { use } from \"react\";\n\nfunction Posts({ postsPromise }) {\n  // promise resolved না হওয়া পর্যন্ত — Suspense fallback\n  const posts = use(postsPromise);\n\n  return posts.map((p) => <Post key={p.id} post={p} />);\n}\n\n// parent-এ\n<Suspense fallback={<p>Loading…</p>}>\n  <Posts postsPromise={fetchPosts()} />\n</Suspense>"} lang={"jsx"} title={"use(promise)"} />
+
+<Tip tone={"success"} title={"কখন কী ব্যবহার"} text={"সহজ একবারের fetch → custom hook। জটিল caching/revalidation → **TanStack Query**। Server-rendered (Next.js) → একই query library বা `use()` + Suspense।"} />

@@ -1,0 +1,33 @@
+---
+title: "React কেন ব্যবহার করব?"
+label: "কেন React?"
+order: 2
+level: "Beginner"
+description: "React-এর মূল সুবিধা — component reusability, Virtual DOM, declarative style, vast ecosystem — বাংলায়।"
+---
+
+## প্রধান কারণ
+
+- **Component-based** — UI-কে ছোট ছোট reusable টুকরায় ভাগ করা সহজ
+- **Declarative** — কী দেখাতে চান বলুন, কীভাবে করবেন React নিজে ঠিক করে
+- **Fast updates** — Virtual DOM দিয়ে শুধু প্রয়োজনীয় অংশ আপডেট
+- **Huge ecosystem** — React Query, Router, Testing Library সহ অনেক কিছু
+- **React Native** — একই জ্ঞান দিয়ে mobile app
+- **Jobs** — বর্তমানে সবচেয়ে চাহিদার ফ্রন্টএন্ড skills-এর একটি
+
+## Declarative vs Imperative
+
+<CodeBlock code={"// 'কীভাবে' করবেন বলতে হয় — ভারী ও দুর্বোধ্য\nconst btn = document.getElementById(\"like\");\nlet count = 0;\nbtn.addEventListener(\"click\", () => {\n  count++;\n  btn.textContent = \"Liked \" + count;\n});"} lang={"js"} title={"Imperative (DOM ম্যানিপুলেশন)"} />
+
+<CodeBlock code={"// 'কী' দেখতে চান শুধু বলেন\nconst [count, setCount] = useState(0);\n\n<button onClick={() => setCount(count + 1)}>\n  Liked {count}\n</button>"} lang={"jsx"} title={"Declarative (React)"} />
+
+## React vs অন্য library
+
+| বিষয় | React | Vue | Angular |
+| --- | --- | --- | --- |
+| ধরন | Library | Library | Full framework |
+| নতুনদের জন্য | মোটামুটি সহজ | সহজ | কঠিন |
+| State | Hooks (useState…) | Composition API | RxJS + services |
+| Routing | React Router (third-party) | Vue Router | Built-in |
+
+<Tip tone={"warning"} title={"library vs framework"} text={"React নিজে শুধু **UI rendering** করে — routing, form, HTTP সব আলাদা library নিতে হয়। Next.js সেই gaps পূরণ করে (পরের ডকুমেন্টেশন দেখুন)।"} />

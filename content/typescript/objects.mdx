@@ -1,0 +1,39 @@
+---
+title: "TypeScript Objects (অবজেক্ট)"
+label: "Objects"
+order: 6
+level: "Beginner"
+description: "Object type annotation, optional ও readonly property, index signature, nested object এবং excess property checking — বাংলায়।"
+---
+
+<InParagraph text={"JavaScript-এ object সর্বত্র। TypeScript-এ object-এর **গঠন** টাইপ দিয়ে বাঁধা যায় — কোন প্রপার্টি আছে, কী ধরনের মান নেবে — সবই ঠিক করার আগে।"} />
+
+## Object Type Annotation
+
+<CodeBlock code={"const user: { name: string; age: number } = {\n  name: \"রহিম\",\n  age: 28,\n};\n\n// user.name = 999;    // ❌ string প্রত্যাশিত\n// user.city = \"ঢাকা\"; // ❌ প্রপার্টি নেই"} lang={"typescript"} />
+
+## Optional Properties
+
+<CodeBlock code={"const profile: { name: string; email?: string } = {\n  name: \"রহিম\",\n  // email দেওয়া বাধ্যতামূলক নয়\n};\n\nif (profile.email) {\n  console.log(profile.email.toUpperCase());\n}"} lang={"typescript"} />
+
+## readonly Properties
+
+<CodeBlock code={"const settings: {\n  theme: \"light\" | \"dark\";\n  readonly version: number;\n} = {\n  theme: \"dark\",\n  version: 1,\n};\n\nsettings.theme = \"light\";   // ✅\n// settings.version = 2;    // ❌ readonly"} lang={"typescript"} />
+
+## Index Signature
+
+<InParagraph text={"প্রপার্টির নাম আগে থেকে জানা নেই, তবে ধরন জানা — এমন জায়গায় **index signature** ব্যবহার হয় (যেমন dictionary/map)।"} />
+
+<CodeBlock code={"const scores: { [player: string]: number } = {};\nscores[\"রহিম\"] = 95;\nscores[\"করিম\"] = 80;\n\nconsole.log(scores[\"রহিম\"]);   // 95"} lang={"typescript"} />
+
+## Nested Objects
+
+<CodeBlock code={"const event: {\n  title: string;\n  date: { start: Date; end: Date };\n  location: { city: string; country: string };\n} = {\n  title: \"কনফারেন্স\",\n  date: {\n    start: new Date(\"2026-01-01\"),\n    end: new Date(\"2026-01-02\"),\n  },\n  location: { city: \"ঢাকা\", country: \"বাংলাদেশ\" },\n};\n\nconsole.log(event.location.city);   // ঢাকা"} lang={"typescript"} />
+
+## Excess Property Checking
+
+<InParagraph text={"object literal সরাসরি typed variable-এ দিলে TypeScript **অতিরিক্ত প্রপার্টি** (উল্লেখ নেই এমন) ধরে ফেলে। তবে আগে ভেরিয়েবলে রাখলে এই কড়া চেকটি আসে না।"} />
+
+<CodeBlock code={"type User = { name: string; age: number };\n\n// ❌ object literal-এ extra প্রপার্টি\n// const u1: User = { name: \"রহিম\", age: 28, id: 5 };\n\n// ✅ আগে ভেরিয়েবলে রাখলে শুধু প্রাসঙ্গিক অংশ নেয়\nconst raw = { name: \"রহিম\", age: 28, id: 5 };\nconst u2: User = raw;"} lang={"typescript"} />
+
+<Tip tone={"success"} title={"বড় object-এ alias ব্যবহার করুন"} text={"এক-দুই প্রপার্টির জন্য inline annotation দারুণ। বড় object-এর জন্য পরের অধ্যায়ের **type alias** বা **interface** ব্যবহারে কোড অনেক পরিষ্কার হবে।"} />

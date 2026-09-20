@@ -1,0 +1,74 @@
+---
+title: "Node.js Interview Questions"
+label: "Interview"
+order: 20
+level: "Advanced"
+description: "Node.js interview-এর জন্য গুরুত্বপূর্ণ প্রশ্ন ও উত্তর — বাংলায়।"
+---
+
+## 1. Node.js কী?
+
+<InParagraph text={"Node.js হলো একটি JavaScript runtime environment যা V8 engine-এর উপর নির্মিত। এটি non-blocking I/O ও event-driven model ব্যবহার করে।"} />
+
+## 2. Event Loop কীভাবে কাজ করে?
+
+- **Timers** — setTimeout, setInterval callbacks
+- **Pending I/O** — I/O callbacks
+- **Idle/Prepare** — internal use
+- **Poll** — new I/O events
+- **Check** — setImmediate callbacks
+- **Close** — close callbacks
+
+## 3.阻塞 (Blocking) vs Non-Blocking (Non-blocking)?
+
+| Blocking | Non-Blocking |
+| --- | --- |
+| Thread wait করে | Thread অপেক্ষা করে না |
+| Simple but slow | Complex but fast |
+| readFileSync | readFile (callback/promise) |
+
+## 4. require() ও import-এর পার্থক্য?
+
+| require() | import |
+| --- | --- |
+| CommonJS | ES Modules |
+| Synchronous | Asynchronous |
+| Runtime-ে load | Static analysis possible |
+| module.exports | export/default |
+
+## 5. Middleware কী?
+
+<InParagraph text={"Middleware হলো functions যা request-response cycle-এ execute হয়। প্রতিটি middleware `req`, `res`, `next` parameter নেয়। `next()` call করলে পরবর্তী middleware-তে যায়।"} />
+
+## 6. RESTful API কী?
+
+<InParagraph text={"REST (Representational State Transfer) হলো API design-এর একটি architectural style। এতে resources URL-এ represent করা হয় এবং HTTP methods (GET, POST, PUT, DELETE) ব্যবহার করা হয়।"} />
+
+## 7. JWT কীভাবে কাজ করে?
+
+- User login করে → server JWT token তৈরি করে
+- Token user-কে দেয়
+- User প্রতিটি request-এ token header-এ পাঠায়
+- Server token verify করে এবং user-কে authenticate করে
+
+## 8. Microservices কী?
+
+<InParagraph text={"Microservices হলো application-কে ছোট ছোট independent services-এ ভাগ করার একটি architectural pattern। প্রতিটি service নিজের database ও API রাখে।"} />
+
+## 9. Node.js-তে scale কীভাবে করবেন?
+
+- **Horizontal Scaling** — বেশি servers যোগ করুন (PM2 clustering)
+- **Load Balancer** — NGINX দিয়ে traffic distribute করুন
+- **Caching** — Redis/Memcached ব্যবহার করুন
+- **Database optimization** — Indexing, connection pooling
+- **Microservices** — বড় app ছোট সার্ভিসে ভাগ করুন
+
+## 10. What is the difference between spawn and exec?
+
+| spawn | exec |
+| --- | --- |
+| Stream output | Buffered output |
+| Large data | Small commands |
+| More control | Simpler API |
+
+<Tip tone={"info"} title={"Interview Tip"} text={"শুধু answer মুখস্থ করবেন না — concepts বুঝুন। Practical experience দেখালে interviewer impression পড়বে।"} />

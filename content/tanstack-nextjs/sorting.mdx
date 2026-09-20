@@ -1,0 +1,26 @@
+---
+title: "Sorting — Server-side"
+label: "Sorting"
+order: 22
+level: "Intermediate"
+description: "sortBy/sortOrder state, table header click ও query param — বাংলায়।"
+---
+
+<InParagraph text={"বড় dataset-এ sorting **server-side** (API-তে) করাই ভালো — সব ডেটা client-এ আনা লাগে না। তাই `sortBy` ও `sortOrder` state-এ রাখব।"} />
+
+<CodeBlock code={"const [sortBy, setSortBy] = useState<SortableField>(\"createdAt\");\nconst [sortOrder, setSortOrder] = useState<\"asc\" | \"desc\">(\"desc\");\n\n// params-এ যুক্ত\nconst params: ProductQueryParams = {\n  page,\n  pageSize,\n  search: search || undefined,\n  sortBy,\n  sortOrder,\n};\n\n// কলামে ক্লিকে toggle\nconst toggleSort = (field: SortableField) => {\n  if (sortBy === field) {\n    setSortOrder((o) => (o === \"asc\" ? \"desc\" : \"asc\"));\n  } else {\n    setSortBy(field);\n    setSortOrder(\"asc\");\n  }\n  setPage(1);\n};"} lang={"tsx"} title={"Dashboard-এ sorting state"} />
+
+## Header-এ sort indicator
+
+<CodeBlock code={"// শুধুমাত্র সার্ভার-সেমিট্যান্ট কলামে ক্লিকযোগ্য header\n<button onClick={() => toggleSort(\"price\")} className=\"flex gap-1\">\n  Price\n  {sortBy === \"price\" && (\n    <ArrowUpDown className=\"size-3.5\" />\n  )}\n</button>"} lang={"tsx"} title={"Sortable header"} />
+
+## Client-side vs Server-side sorting
+
+| বিষয় | Client-side | Server-side |
+| --- | --- | --- |
+| ডেটা | পুরো list client-এ | শুধু current page |
+| Performance | ছোট list-এ ভালো | লাখ-লাখ row-এ ভালো |
+| Set up | TanStack Table নিজেই করে | আমরা sort state manage করি |
+| এই project | — নয় | ✓ (server-side) |
+
+<Tip tone={"info"} title={"সর্বদা index?"} text={"সার্ভার-সাইড sorting নির্ভর করে API-র ধারণ ক্ষমতার উপর — ডাটাবেজে sort column-এ index থাকা ভালো। DB-level detail Express/PostgreSQL docs-এ বিস্তারিত।"} />

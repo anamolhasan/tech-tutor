@@ -1,0 +1,29 @@
+---
+title: "Common Mistakes — বাংলায়"
+label: "Common Mistakes"
+order: 39
+level: "Beginner"
+description: "Canvas-এ ১০টি কমন ভুল ও সমাধান — বাংলায়।"
+---
+
+| # | ভুল | সমাধান |
+| --- | --- | --- |
+| 1 | প্রতি render-এ `new QueryClient()` | module-level singleton |
+| 2 | queryKey-তে `undefined`/object-property আমাদের | deterministic key |
+| 3 | mutation-এর ভেতরে `fetch` সরাসরি | option `queryClient`/hooks ব্যবহার |
+| 4 | staleTime না-টানা (0 রাখা) | সচেতন `staleTime` সেট |
+| 5 | আনমাউন্টে refetchOnWindowFocus true | `refetchOnWindowFocus: false` |
+| 6 | cache update-এ `invalidate` নয়, কারসাজি | প্রথমে invalidate/optimistic |
+| 7 | `key` লাগিয়ে edit form reset-না করা | `key={id}` বা `form.reset()` |
+| 8 | server-side validation বাদ | সবসময় zod schema পুনরায় চালান |
+| 9 | `z.coerce` ব্যবহারে `safe` numeric | সেটাই ঠিক — শুধু `Int/String` not assume |
+| 10 | এক dialog-এ merging ভুল pending | `editingProduct`-ভিত্তিক pending select |
+
+## আরও কয়েকটি text-level ভুল
+
+- **Math.abs** — negative stock সিলিন্ডার থেকে bug
+- **key=\{index\}** — list re-render-এ বাগ; পণ্য `id` key দিন
+- **সবসময় `toString()`** — number incoming string-কে মনে
+- **dialogClose vs onOpenChange** — focus trap
+
+<Tip tone={"warning"} title={"সফল — লজ্জা ছিল না"} text={"এগুলো মোটামুটি 'everyone hits at least once' ভুল। কোড করে সেগুলোতে ধরা পড়া ঠিক। প্রতিটির সমাধান উপরের স্নিপেটে অপেক্ষা করছে।"} />

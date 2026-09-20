@@ -1,0 +1,17 @@
+---
+title: "expo-secure-store — token ধরে রাখা ও login gate"
+label: "Secure Store & Auth"
+order: 28
+level: "Intermediate"
+description: "encrypted storage-এ token, আর token অনুযায়ী screen।"
+---
+
+<InParagraph text={"token-এর মতো sensitive data-র জন্য **`expo-secure-store`** — iOS keychain / Android keystore encrypted।"} />
+
+<CodeBlock code={"npx expo install expo-secure-store"} lang={"bash"} title={"terminal"} />
+
+<CodeBlock code={"import * as SecureStore from \"expo-secure-store\";\n\nconst KEY = \"auth.token\";\n\nexport async function saveToken(token) {\n  await SecureStore.setItemAsync(KEY, token);\n}\n\nexport async function getToken() {\n  return SecureStore.getItemAsync(KEY);\n}\n\nexport async function logout() {\n  await SecureStore.deleteItemAsync(KEY);\n}"} lang={"ts"} title={"lib/auth-store.ts"} />
+
+<CodeBlock code={"const [token, setToken] = useState(null);\nconst [ready, setReady] = useState(false);\n\nuseEffect(() => {\n  getToken().then((value) => {\n    setToken(value);\n    setReady(true);\n  });\n}, []);\n\nif (!ready) return <ActivityIndicator />;\nreturn token ? <Home /> : <Login onSuccess={saveToken} />;"} lang={"tsx"} />
+
+<Tip tone={"warning"} title={"size সীমা"} text={"SecureStore-এ value-র সীমা প্রায় **2048 bytes** — বড় profile JSON এখানে নয়, কেবল token/credential। Web-এ SecureStore কাজ করে না।"} />

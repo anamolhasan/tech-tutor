@@ -1,0 +1,35 @@
+---
+title: "Node.js অ্যাপ Docker-এ"
+label: "Node.js + Docker"
+order: 12
+level: "Intermediate"
+description: "Node.js application-এর জন্য Dockerfile, সেরা base image ও development setup — বাংলায়।"
+---
+
+<InParagraph text={"একটি সাধারণ Node.js REST API-কে Docker-এ চালানো শিখি — সঠিক base image, dependency caching ও স্ক্রিপ্টসহ।"} />
+
+## Base image বাছাই
+
+| Image | ব্যবহার |
+| --- | --- |
+| `node:latest` | ডেভেলপমেন্ট — সবকিছু আরও relaxed |
+| `node:20-slim` | production-এর জন্য ভারসাম্য — হালকা ও maintained |
+| `node:20-alpine` | সবচেয়ে ছোট — কিছু native dependency-তে সমস্যা হতে পারে |
+
+## প্রোডাকশন-ready Dockerfile
+
+<CodeBlock code={"FROM node:20-slim\n\nWORKDIR /app\n\n# প্রথমে dependency files — cache-কে কাজে লাগান\nCOPY package*.json ./\nRUN npm ci --omit=dev\n\n# তারপর app code\nCOPY . .\n\nENV NODE_ENV=production\nEXPOSE 3000\n\n# non-root user (সুরক্ষার জন্য)\nUSER node\n\nCMD [\"node\", \"src/server.js\"]"} lang={"dockerfile"} title={"Dockerfile"} />
+
+## npm ci কেন
+
+<InParagraph text={"`npm install` এর বদলে **`npm ci`** ব্যবহার করুন — lockfile (package-lock.json)-এর সাথে হুবহু dependency install করে, দ্রুত ও reproducible। CI/CD ও Docker-এ এটি best practice।"} />
+
+## Build ও run
+
+<CodeBlock code={"docker build -t my-api .\n\ndocker run -d \\\n  -p 3000:3000 \\\n  -e DATABASE_URL=mongodb://127.0.0.1:27017/app \\\n  --name api \\\n  my-api\n\ncurl http://localhost:3000/api/health"} lang={"bash"} title={"Run steps"} />
+
+## Development mode
+
+<CodeBlock code={"# nodemon + bind mount + env staging\ndocker run -d \\\n  -p 3000:3000 \\\n  -v \"${PWD}:/app\" \\\n  -v /app/node_modules \\\n  -e NODE_ENV=development \\\n  --name api-dev \\\n  my-api\n\ndocker logs -f api-dev"} lang={"bash"} title={"Hot reload সহ dev"} />
+
+<Tip tone={"info"} title={"Anonymous volume"} text={"`-v /app/node_modules` লেখলে folder-টি container-এর original node_modules-এ ঢাকা থাকে — host-এ node_modules না থাকলেও ঠিকঠাক চলে (Windows-এ file system পার্থক্যের জন্য দরকারি)।"} />

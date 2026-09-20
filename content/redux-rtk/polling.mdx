@@ -1,0 +1,18 @@
+---
+title: "Polling — Real-time-ish Data"
+label: "Polling"
+order: 23
+level: "Intermediate"
+description: "pollingInterval, Subscribe-এর dynamic toggle — বাংলায়।"
+---
+
+<CodeBlock code={"\"use client\";\n\nimport { useReportsQuery } from \"@/features/reports/reportsService\";\n\nexport function LiveOrders({ enabled }: { enabled: boolean }) {\n  const { data, isFetching } = useOrdersPollingQuery(undefined, {\n    // enabled হলে প্রতি 5 সেকেন্ডে refetch\n    pollingInterval: enabled ? 5000 : 0,  // 0 = off\n  });\n\n  return (\n    <div>\n      <h3>লাইভ অর্ডার</h3>\n      {data?.map((o) => <OrderRow key={o.id} order={o} />)}\n      {isFetching && <span className=\"sr-only\">refreshing…</span>}\n    </div>\n  );\n}"} lang={"tsx"} title={"লাইভ-ঢিলে অর্ডার status"} />
+
+## pollingInterval মান
+
+- `pollingInterval = 5000` → প্রতি ৫ সেকেন্ডে refetch
+- `0` / ছাড়াই → polling বন্ধ
+- component unmount → polling বন্ধ (no cleanup)
+- background-refetch → UI-র উপর কোনো প্রভাব ছাড়া data updated
+
+<Tip tone={"warning"} title={"প্রতি-splash যতটা অদ্ভুত"} text={"Polling server-এ প্রতিটি consumer-এর জন্য request বাড়ায়। অনেক consumer + ছোট interval → server-এ কম্প্রেশন। Better design — WebSocket/SSE (real-time)। Polling শুধু ছোট, justified case-এ ব্যবহার করুন।"} />

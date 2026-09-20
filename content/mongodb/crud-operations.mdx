@@ -1,0 +1,25 @@
+---
+title: "CRUD অপারেশন"
+label: "CRUD"
+order: 8
+level: "Intermediate"
+description: "Mongoose-এ Create, Read, Update, Delete — প্রতিটি অপারেশনের realistic উদাহরণ — বাংলায়।"
+---
+
+## Create
+
+<CodeBlock code={"// একটি document\nconst post = await Post.create({\n  title: \"Mongoose শেখা\",\n  body: \"প্রথম পোস্ট\",\n  author: userId,\n});\n\n// একসাথে অনেকগুলো — insertMany\nawait Post.insertMany([\n  { title: \"Post 2\", body: \"...\" },\n  { title: \"Post 3\", body: \"...\" },\n]);"} lang={"js"} title={"Create"} />
+
+## Read
+
+<CodeBlock code={"const all = await Post.find();                 // সবগুলো\nconst byId = await Post.findById(id);        // ObjectId দিয়ে\nconst one = await Post.findOne({ title: \"...\" }); // প্রথম match\nconst count = await Post.countDocuments();   // মোট সংখ্যা\nconst exists = await User.exists({ email }); // সত্য/মিথ্যা (হালকা)"} lang={"js"} title={"Read"} />
+
+## Update
+
+<CodeBlock code={"// field-গুলো পরিবর্তন\nawait Post.updateOne(\n  { _id: postId },\n  { $set: { title: \"নতুন টাইটেল\", views: 0 } }\n);\n\n// update করে ফেরত সেই document — { new: true }\nconst updated = await Post.findByIdAndUpdate(\n  postId,\n  { $inc: { views: 1 } },\n  { new: true }\n);\n\n// পাওয়া document-টিই update করবে\nawait Post.findOneAndUpdate(\n  { slug: \"mongoose-vs-driver\" },\n  { $set: { published: true } }\n);"} lang={"js"} title={"Update"} />
+
+## Delete
+
+<CodeBlock code={"await Post.deleteOne({ _id: postId });      // একটি মেলে মুছে দেয়\nawait Post.deleteMany({ published: false }); // একাধিক\nawait Post.findByIdAndDelete(postId);        // find + delete"} lang={"js"} title={"Delete"} />
+
+<Tip tone={"warning"} title={"deleteMany() সব document"} text={"`deleteMany({})` কল দিলে collection-এর প্রতিটি document মুছে যায় — production-এ আগে `countDocuments()`/backup দিয়ে confirm করুন।"} />

@@ -1,0 +1,38 @@
+---
+title: "Node.js HTTP Module"
+label: "HTTP"
+order: 8
+level: "Intermediate"
+description: "HTTP server, client, request/response, routing — Node.js-এ web server তৈরির বাংলা গাইড।"
+---
+
+<InParagraph text={"Node.js-এর built-in **http** module দিয়ে আপনি নিজেই HTTP server ও client তৈরি করতে পারবেন। Express.js এই module-এর উপরই তৈরি।"} />
+
+## HTTP Server তৈরি
+
+<CodeBlock code={"const http = require(\"node:http\");\n\nconst server = http.createServer((req, res) => {\n  console.log(req.method, req.url);\n\n  // different routes\n  if (req.url === \"/\") {\n    res.writeHead(200, { \"Content-Type\": \"text/html\" });\n    res.end(\"<h1>হোম পেজ</h1>\");\n  } else if (req.url === \"/api/users\") {\n    res.writeHead(200, { \"Content-Type\": \"application/json\" });\n    res.end(JSON.stringify([\n      { id: 1, name: \"রহিম\" },\n      { id: 2, name: \"করিম\" },\n    ]));\n  } else {\n    res.writeHead(404, { \"Content-Type\": \"text/plain\" });\n    res.end(\"পাওয়া যায়নি\");\n  }\n});\n\nserver.listen(3000, () => {\n  console.log(\"Server http://localhost:3000-এ চালু\");\n});"} lang={"javascript"} title={"server.js"} />
+
+## Request Object (req)
+
+| Property | কাজ |
+| --- | --- |
+| req.method | HTTP method (GET, POST, PUT, DELETE) |
+| req.url | Request URL |
+| req.headers | সব headers |
+| req.params | URL parameters |
+| req.query | Query string parameters |
+
+## Response Object (res)
+
+| Method | কাজ |
+| --- | --- |
+| res.writeHead(status, headers) | Status code ও headers সেট |
+| res.write(data) | Response body লেখা |
+| res.end(data) | Response শেষ করা |
+| res.setHeader(name, value) | Header সেট করা |
+
+## POST Request Handle করা
+
+<CodeBlock code={"const http = require(\"node:http\");\n\nconst server = http.createServer((req, res) => {\n  if (req.method === \"POST\" && req.url === \"/api/users\") {\n    let body = \"\";\n\n    req.on(\"data\", (chunk) => {\n      body += chunk.toString();\n    });\n\n    req.on(\"end\", () => {\n      const user = JSON.parse(body);\n      res.writeHead(201, { \"Content-Type\": \"application/json\" });\n      res.end(JSON.stringify({\n        message: \"User তৈরি হয়েছে\",\n        user: { id: Date.now(), ...user },\n      }));\n    });\n  }\n});\n\nserver.listen(3000);"} lang={"javascript"} title={"server.js"} />
+
+<Tip tone={"info"} title={"মনে রাখুন"} text={"Production-এ সোজাসুজি `http` module ব্যবহার না করে Express.js ব্যবহার করুন — এতে routing, middleware, error handling সহজ হয়।"} />

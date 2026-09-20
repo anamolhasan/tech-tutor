@@ -1,0 +1,35 @@
+---
+title: "RESTful API Design with Express"
+label: "REST API"
+order: 17
+level: "Advanced"
+description: "REST principles, best practices, pagination, filtering, responses — Express API বাংলায়।"
+---
+
+<InParagraph text={"**REST API** মানে HTTP via resources represent করা। Express-এ সঠিকভাবে API design করা শিখে নিন।"} />
+
+## REST Principles
+
+- Resources noun-এ নাম দিন — `/users`, `/posts` (verb নয়)
+- HTTP methods দিয়ে operation বোঝান — GET/POST/PUT/DELETE
+- Nested resources — `/users/:id/posts`
+- Status codes সঠিকভাবে ব্যবহার করুন
+- Versioning — `/api/v1/users`
+
+## Pagination
+
+<CodeBlock code={"router.get(\"/\", async (req, res, next) => {\n  const page = parseInt(req.query.page) || 1;\n  const limit = parseInt(req.query.limit) || 10;\n  const skip = (page - 1) * limit;\n\n  const [total, users] = await Promise.all([\n    User.countDocuments(),\n    User.find().skip(skip).limit(limit),\n  ]);\n\n  res.json({\n    data: users,\n    pagination: {\n      page,\n      limit,\n      total,\n      totalPages: Math.ceil(total / limit),\n      hasNext: page * limit < total,\n    },\n  });\n});"} lang={"javascript"} />
+
+## Filtering & Sorting
+
+<CodeBlock code={"// GET /api/products?category=books&minPrice=100&sort=-price\nrouter.get(\"/\", async (req, res, next) => {\n  const { category, minPrice, maxPrice, sort } = req.query;\n\n  const query = {};\n\n  if (category) query.category = category;\n  if (minPrice || maxPrice) {\n    query.price = {};\n    if (minPrice) query.price.$gte = Number(minPrice);\n    if (maxPrice) query.price.$lte = Number(maxPrice);\n  }\n\n  const sortObj = {};\n  if (sort) {\n    sort.split(\",\").forEach(field => {\n      const key = field.startsWith(\"-\") ? field.slice(1) : field;\n      sortObj[key] = field.startsWith(\"-\") ? -1 : 1;\n    });\n  }\n\n  const products = await Product.find(query).sort(sortObj);\n  res.json({ count: products.length, products });\n});"} lang={"javascript"} />
+
+## Consistent Response Format
+
+<CodeBlock code={"// success response\nconst sendSuccess = (res, data, status = 200) => {\n  res.status(status).json({ success: true, data });\n};\n\nconst sendError = (res, message, status = 400, details) => {\n  res.status(status).json({\n    success: false,\n    message,\n    ...(details && { details }),\n  });\n};\n\nrouter.get(\"/:id\", async (req, res, next) => {\n  const user = await User.findById(req.params.id);\n  if (!user) return sendError(res, \"User পাওয়া যায়নি\", 404);\n  sendSuccess(res, user);\n});"} lang={"javascript"} />
+
+## Versioning
+
+<CodeBlock code={"// Version 1\napp.use(\"/api/v1/users\", userRoutesV1);\n\n// Version 2 (বদল হলে)\napp.use(\"/api/v2/users\", userRoutesV2);\n\n// কিংবা route handler-এ\nconst apiV1 = express.Router();\nconst apiV2 = express.Router();\n\napiV1.get(\"/users\", handlerV1);\napiV2.get(\"/users\", handlerV2);\n\napp.use(\"/v1\", apiV1);\napp.use(\"/v2\", apiV2);"} lang={"javascript"} />
+
+<Tip tone={"info"} title={"API Tools"} text={"API test-এর জন্য **Postman** বা **Bruno** ব্যবহার করুন। Documentation-এর জন্য **Swagger / OpenAPI**।"} />

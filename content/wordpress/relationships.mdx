@@ -1,0 +1,39 @@
+---
+title: "Theme, Plugin, Page, Post, Database-এর সম্পর্ক"
+label: "Relationship"
+order: 21
+level: "Beginner"
+description: "WordPress-এর সব major component কীভাবে একে অপরের সাথে সম্পর্কিত — সহজ diagram ও real-world analogy।"
+---
+
+## পুরো relation এক নজরে
+
+<InParagraph text={"WordPress-এর প্রতিটি অংশ আলাদাভাবে কাজ করেও একসাথে একটি **সুসংহত system** তৈরি করে।"} />
+
+<CodeBlock code={"       ┌────────────── CORE (PHP) ──────────────┐\n       │                                        │\n  [THEME]                                 [PLUGIN]\n design/display                         নতুন feature\n       │                                        │\n       └──────────┬─────────────────────────────┘\n                  │ hooks + template hierarchy\n                  │\n           ┌──────▼──────┐\n           │  PAGES /    │   ← user যেটা দেখে\n           │  POSTS      │\n           └──────┬──────┘\n                  │ read/write\n           ┌──────▼──────┐\n           │   DATABASE  │   ← সব content & settings\n           └─────────────┘"} lang={"text"} title={"Component Relation Diagram"} />
+
+## Theme + Plugin + Content + Database
+
+- **Theme** পেজ-এর look ঠিক করে, কিন্তু content নিজে রাখে না
+- **Plugin** ফিচার যোগ করে, কিন্তু design-এর নিয়ন্ত্রণ নেয় না
+- **Post/Page** হলো content — database-এ সংরক্ষিত
+- **Database** title, body, settings, user, comment সব ধরে
+- **Core** সবাইকে একসাথে coordinated পরিচালনা করে
+
+## Real-world Analogy
+
+<InParagraph text={"WordPress site-কে একটি **restaurant** কলে বলা যেতে পারে:"} />
+
+| WordPress Component | Restaurant Analogy |
+| --- | --- |
+| Core (PHP) | রান্নাঘরের rule ও kitchen management |
+| Theme | দোকানের সাজসজ্জা ও look |
+| Plugin | অতিরিক্ত service (ডেলিভারি, booking) |
+| Post/Page | মেনুতে থাকা dish |
+| Database | রেসিপি/shore inventory বই |
+
+## কীভাবে একটি Post শেষ পর্যন্ত দেখায়
+
+<CodeBlock code={"Admin-এ post লিখে publish\n   ↓\nCore Database (wp_posts)-এ সেভ\n   ↓\nVisitor post URL-এ আসে\n   ↓\nCore single.php (theme) চালায়\n   ↓\nPlugin hooks চালায় (design, analyze, social)\n   ↓\nDashboard-এর content + theme design = visible post"} lang={"text"} title={"Post publish → viewer"} />
+
+<Tip tone={"info"} title={"এক লাইন সারমর্ম"} text={"**Theme দেখায়, Plugin বাড়ায়, Content এনে থাকে, Database মনে রাখে, আর Core সবাইকে চালায়** — এতেই WordPress-এর পুরো relationship।"} />

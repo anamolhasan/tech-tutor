@@ -1,0 +1,17 @@
+---
+title: "SSR & Hydration — prefetch"
+label: "SSR Prefetch"
+order: 33
+level: "Advanced"
+description: "Next.js App Router-এ RTK Query prefetch/hydration — বাংলায়।"
+---
+
+<CodeBlock code={"// app/products/page.tsx (Server Component)\nimport { store } from \"@/app/store\";\nimport { ordersApi } from \"@/features/orders/ordersService\";\n\nexport default async function ProductsPage() {\n  // সার্ভারে data fetch → cache-এ রাখা হয়ে যায়\n  const result = await store.dispatch(\n    ordersApi.endpoints.getProducts.initiate(undefined),\n  );\n\n  // client-এ তা hydration-এ যাবে (SSR)\n  return <ProductsView />;\n}"} lang={"ts"} title={"Server component-এ prefetch"} />
+
+## সতর্কতা: Server store distinct
+
+<InParagraph text={"সার্ভারে প্রতি request-এ **নতুন store** (makeStore) দরকার — shared module-level singleton ভুল হয়ে যেতে পারে, user-দের data মিশে যেতে পারে। এই ক্ষেত্রে `extractRehydrationInfo` বা `HYDRATE` action pattern ব্যবহার করুন।"} />
+
+<CodeBlock code={"// Other options:\n// 1) API-থেকে stable initialize → client-এ ফলটা initial state\n// 2) RTK + next-redux-wrapper (SSR stream)\n// 3) App Router-এ Server Component fetch − TanStack initialData-analog"} lang={"tsx"} title={"Client hydra ধারণা"} />
+
+<Tip tone={"info"} title={"কখন SSR prefetch"} text={"প্রথম paint-এ গুরুত্বপূর্ণ ডেটা (SEO/first load) হলে সার্ভার prefetch দারুণ; ইন্টারেক্টিভ dashboard অ্যাপে client fetch + cache-ই যথেষ্ট। যাচাই করে সিদ্ধান্ত নিন।"} />

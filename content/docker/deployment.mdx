@@ -1,0 +1,31 @@
+---
+title: "Production Deployment"
+label: "Deployment"
+order: 23
+level: "Advanced"
+description: "VPS-এ compose deploy, reverse proxy, TLS, update flow — বাংলায়।"
+---
+
+<InParagraph text={"Docker-এ অ্যাপ deploy করার জনপ্রিয় উপায় — একটি **VPS** (DigitalOcean, Hetzner, AWS EC2, বা Bangladesh-এর hosting) সেটআপ করে সেখানে compose-দিয়ে চালানো।"} />
+
+## Server সেটআপ
+
+<CodeBlock code={"# server-এ Docker install\ncurl -fsSL https://get.docker.com | sh\n\n# systemd-এ enable\nsudo systemctl enable --now docker"} lang={"bash"} title={"Remote server (SSH)"} />
+
+## Compose file uptime
+
+<CodeBlock code={"services:\n  api:\n    image: ghcr.io/myorg/api:1.4.0   # registry থেকে pull\n    restart: unless-stopped\n    env_file:\n      - .env.production\n    depends_on:\n      - mongo\n    ports:\n      - \"3000:3000\"\n\n  mongo:\n    image: mongo:7\n    restart: unless-stopped\n    volumes:\n      - mongo-data:/data/db\n\n  nginx:\n    image: nginx:1.27-alpine\n    restart: unless-stopped\n    ports:\n      - \"80:80\"\n      - \"443:443\"\n    volumes:\n      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro\n    depends_on:\n      - api\n\nvolumes:\n  mongo-data:"} lang={"yaml"} title={"compose.prod.yml (server-এ)"} />
+
+## Reverse proxy (nginx.conf)
+
+<CodeBlock code={"server {\n  listen 80;\n  server_name mydomain.com;\n\n  location / {\n    proxy_pass http://api:3000;\n    proxy_set_header Host $host;\n    proxy_set_header X-Real-IP $remote_addr;\n    proxy_set_header X-Forwarded-Proto $scheme;\n  }\n}"} lang={"nginx"} title={"nginx.conf"} />
+
+## Update flow
+
+<CodeBlock code={"# server-এ\ngit pull                     # config ঠিক রাখতে\ndocker compose -f compose.prod.yml pull\ndocker compose -f compose.prod.yml up -d\ndocker compose -f compose.prod.yml ps"} lang={"bash"} title={"Zero-downtime deploy"} />
+
+## TLS (Let's Encrypt)
+
+<CodeBlock code={"# domain pointed করার পর\nsudo apt install certbot\nsudo certbot --nginx -d mydomain.com\n\n# renew auto\nsudo certbot renew --dry-run"} lang={"bash"} title={"certbot + nginx"} />
+
+<Tip tone={"info"} title={"আলাদা hostে DB?"} text={"বড় production-এ database আলাদা managed service (Atlas, RDS) এ রাখা ভালো — তবে ছোট project-এ container DB-ই ঠিক। নিয়মিত `mongodump`/`pg_dump` ব্যাকআপ নিতে ভুলবেন না।"} />

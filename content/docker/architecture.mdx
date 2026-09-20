@@ -1,0 +1,61 @@
+---
+title: "Docker Architecture"
+label: "Architecture"
+order: 3
+level: "Intermediate"
+description: "Docker Client, Engine, Daemon, Host, Registry, Image, Container এবং সম্পূর্ণ request flow — বাংলায়।"
+---
+
+<InParagraph text={"Docker একটি **client-server architecture** অনুসরণ করে। ব্যবহারকারী কমান্ড দেয় **client**-কে; client রিকোয়েস্ট পাঠায় **daemon**-এ; daemonই image build, container run সহ সব ভারী কাজ করে।"} />
+
+## Docker Architecture — মূল উপাদান
+
+<CodeBlock code={"Developer\n   ↓  (docker build / docker run ...)\nDocker CLI (Client)\n   ↓  (REST API)\nDocker Engine (Daemon + REST API)\n   ↓\nImage (pull/build)\n   ↓\nContainer (run)"} lang={"text"} title={"সম্পূর্ণ flow"} />
+
+## Docker Client কী?
+
+<InParagraph text={"**Docker Client** হলো `docker` কমান্ড। আপনি যা-যা টার্মিনালে লিখেন — `docker run`, `docker build`, `docker ps` — সব electrify client থেকে daemon-এ **REST API** দিয়ে যায়। Client শুধু কমান্ড পাঠায়; কাজ করে daemon।"} />
+
+## Docker Engine কী?
+
+<InParagraph text={"**Docker Engine** হলো সম্পূর্ণ Docker platform — এর ভেতরে **Docker Daemon**, **REST API** এবং **CLI** থাকে। ইঞ্জিনই container build, run ও manage করে। অর্থাৎ 'Docker' বলতে সাধারণত এই engine-ই বোঝায়।"} />
+
+## Docker Daemon কী?
+
+<InParagraph text={"**Docker Daemon** (`dockerd`) হলো background service যা images, containers, networks, volumes-এর মতো সবকিছু পরিচালনা করে। এটি client-দের REST API-এর মাধ্যমে request গ্রহণ করে।"} />
+
+## Docker Host কী?
+
+<InParagraph text={"**Docker Host** হলো সেই machine (laptop, server) যেখানে Docker Engine ইনস্টল আছে এবং container-গুলো চলে। Host OS-এর kernel container-গুলোর সাথে শেয়ার হয়।"} />
+
+## Docker Registry কী?
+
+<InParagraph text={"**Docker Registry** হলো image-এর কেন্দ্রীয় repository। **Docker Hub** হলো default (public) registry; নিজস্ব private registry (GHCR, ECR)-ও ব্যবহার করা যায়। `docker pull` image ডাউনলোড ও `docker push` আপলোড করে।"} />
+
+## Docker Image ও Docker Container
+
+<InParagraph text={"**Image** হলো একটি immutable template — container তৈরির 'recipe'। **Container** হলো সেই image-এর চলমান instance (process)। 객체: class ↔ object, ঠিক তেমন: image ↔ container।"} />
+
+## সম্পূর্ণ Flow — ধাপে ধাপে
+
+1. Developer টার্মিনালে `docker build` বা `docker run` লেখেন (Client)
+1. Client REST API দিয়ে Request পাঠায় Engine-এ
+1. Daemon প্রয়োজনে Registry থেকে base image pull করে
+1. Daemon image তৈরি করে (build হলে) বা ধরে রাখে
+1. Daemon সেই image থেকে container তৈরি করে চালু করে
+1. Container নিজস্ব isolated environment-এ process চালায়
+1. Output/logs client-এ ফিরে আসে — Developer দেখতে পান
+
+## উপাদানের সারসংক্ষেপ
+
+| উপাদান | ভূমিকা |
+| --- | --- |
+| Docker Client | `docker` কমান্ড — request পাঠায় |
+| Docker Engine | সম্পূর্ণ platform (daemon + API + CLI) |
+| Docker Daemon | Background service — core orchestration |
+| Docker Host | যে machine-এ container চলে |
+| Docker Registry | Image সংরক্ষণের repository |
+| Docker Image | Only-read template |
+| Docker Container | Image-এর চলমান instance |
+
+<Tip tone={"warning"} title={"Client ও daemon আলাদা হোস্টে"} text={"Client এবং daemon একই machine-এ থাকা জরুরি না। আপনার laptop-এর `docker` CLI দিয়ে remote server-এর daemon-কে manage করতে পারেন — এভাবেই remote container management হয়।"} />

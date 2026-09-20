@@ -1,0 +1,23 @@
+---
+title: "expo-location ও react-native-maps"
+label: "Location & Maps"
+order: 24
+level: "Advanced"
+description: "টাস্ক-এ location attach করা ও map view-এ দেখানো।"
+---
+
+<CodeBlock code={"npx expo install expo-location"} lang={"bash"} title={"terminal"} />
+
+<CodeBlock code={"import * as Location from \"expo-location\";\n\nasync function getCurrentPlace() {\n  const { status } = await Location.requestForegroundPermissionsAsync();\n  if (status !== \"granted\") return null;\n  const pos = await Location.getCurrentPositionAsync({});\n  const coord = { lat: pos.coords.latitude, lng: pos.coords.longitude };\n  const places = await Location.reverseGeocodeAsync(coord);\n  return places[0]?.city ?? places[0]?.name ?? \"নিজের স্থান\";\n}"} lang={"ts"} />
+
+<InParagraph text={"মানচিত্র দেখাতে চাইলে `react-native-maps`:"} />
+
+<CodeBlock code={"npx expo install react-native-maps"} lang={"bash"} title={"terminal"} />
+
+<CodeBlock code={"import MapView, { Marker } from \"react-native-maps\";\n\n<MapView\n  style={{ flex: 1 }}\n  initialRegion={{\n    latitude: task.lat,\n    longitude: task.lng,\n    latitudeDelta: 0.01,\n    longitudeDelta: 0.01,\n  }}\n>\n  <Marker coordinate={{ latitude: task.lat, longitude: task.lng }} />\n</MapView>"} lang={"tsx"} />
+
+- foreground permission এই সেটআপেই app config-এ auto-add হয়
+- background location — বিশেষ permission, সাবধানে
+- `reverseGeocodeAsync` — lat/lng → city/name
+
+<Tip tone={"info"} title={"map-এর API key"} text={"expo-go-এ react-native-maps gratis চলে; standalone build-এ (Android/iOS) নিজের Google Maps API key দরকার — `app.config`-এ দিন।"} />

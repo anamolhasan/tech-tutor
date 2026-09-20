@@ -1,0 +1,29 @@
+---
+title: "Complete Project — সব snippet"
+label: "Complete Project"
+order: 38
+level: "Advanced"
+description: "পুরো Project-এর সংক্ষিপ্ত tour — folder structure, প্রতিটি file-এর কাজ — বাংলায়।"
+---
+
+<InParagraph text={"একবারে-একবার পুরো প্রজেক্ট দেখে নেওয়া যাক — কোথায় কী থাকে। প্রতিটি folder/file-এর ভূমিকা এক নজরে:"} />
+
+<CodeBlock code={"src/\n├─ app/\n│  ├─ layout.tsx            # Providers wrap\n│  ├─ page.tsx              # landing\n│  └─ products/\n│     └─ page.tsx           # dashboard (client)\n├─ components/\n│  ├─ ui/                   # shadcn (button, table, dialog …)\n│  └─ products/\n│     ├─ product-filters.tsx\n│     ├─ product-list.tsx\n│     ├─ product-columns.tsx\n│     ├─ product-table.tsx\n│     ├─ product-form.tsx\n│     ├─ create-edit-dialog.tsx\n│     └─ delete-alert-dialog.tsx\n├─ lib/\n│  ├─ axios.ts              # instance + interceptors\n│  ├─ query-client.ts       # QueryClient+ defaults\n│  ├─ query-keys.ts         # productKeys hierarchy\n│  ├─ products-api.ts       # API functions + types\n│  ├─ validators/\n│  │  └─ product-schema.ts  # zod\n│  └─ hooks/\n│     ├─ use-debounce.ts\n│     ├─ use-products.ts\n│     └─ use-product-mutations.ts\n└─ types/\n   └─ product.ts            # shared types\n"} lang={"text"} title={"final folder structure"} />
+
+## শুরু থেকে শেষ: ক্রম
+
+1. `types/product.ts` — model + API shapes
+1. `lib/validators/product-schema.ts` — zod
+1. `lib/query-client.ts` + `lib/axios.ts` — setup
+1. `lib/query-keys.ts` + `lib/hooks/*` — query layer
+1. `components/products/*` — UI
+1. `app/products/page.tsx` — composition
+
+## সম্ভাব্য টুইট
+
+- `useProducts`-এ `enabled` flag (focus/search এড়ায় আলতো fetch)
+- server-side `initialData` seed (SSR)
+- URL searchParams sync (shareable filters)
+- row selection (bulk delete)
+
+<Tip tone={"success"} title={"আর এটাই basis"} text={"এটা সাদা 'reference implementation'। এ-কাঠামোতে আরো feature (bulk, export, drag-sort) যোগ করা যায় — প্রতিটি *_এখানেই* TanStack pattern-ই অনুসরণ করে।"} />

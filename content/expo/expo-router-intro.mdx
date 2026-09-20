@@ -1,0 +1,24 @@
+---
+title: "Expo Router — File-based Navigation"
+label: "Expo Router Intro"
+order: 8
+level: "Beginner"
+description: "app/ ফোল্ডারই route — file-based routing-এর মৌলিক ধারণা বাংলায়।"
+---
+
+<InParagraph text={"**Expo Router** file-based navigation — `app/` ফোল্ডারের প্রতিটি `.tsx` file একটি route।"} />
+
+<CodeBlock code={"import { Text, View } from \"react-native\";\n\nexport default function Home() {\n  return (\n    <View>\n      <Text>TaskTrack — আজকের কাজ</Text>\n    </View>\n  );\n}"} lang={"tsx"} title={"app/index.tsx"} />
+
+| File | URL |
+| --- | --- |
+| app/index.tsx | / |
+| app/tasks.tsx | /tasks |
+| app/tasks/new.tsx | /tasks/new |
+| app/task/[id].tsx | /task/123 |
+
+<InParagraph text={"file system-ই URL। **Link** component দিয়ে navigate করা যায়:"} />
+
+<CodeBlock code={"import { Link } from \"expo-router\";\nimport { View } from \"react-native\";\n\nexport default function Home() {\n  return (\n    <View>\n      <Link href=\"/tasks\">সব টাস্ক দেখুন</Link>\n    </View>\n  );\n}"} lang={"tsx"} title={"app/index.tsx"} />
+
+<Tip tone={"info"} title={"একই URL, সব জায়গায়"} text={"expo-router-এ **deep link** (`tasktrack://...`) আর web URL একই route — একটা সিস্টেমই navigation handle করে।"} />

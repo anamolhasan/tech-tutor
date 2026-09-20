@@ -1,0 +1,49 @@
+---
+title: "PR তৈরি, review ও merge"
+label: "Pull Requests"
+order: 7
+level: "Intermediate"
+description: "কীভাবে PR তৈরি ও একসাথে review কাজ — বাংলায়।"
+---
+
+## Pull Request (PR) কী?
+
+<InParagraph text={"PR হলো একটি branch-কে মূল branch-এ merge করার **আনুষ্ঠানিক আবেদন** — সাথে এতে কী কী থাকবে, কেন, এবং review-এর জায়গা।"} />
+
+## PR তৈরি
+
+<CodeBlock code={"git switch -c feature/login\n# কাজ...\ngit push -u origin feature/login"} lang={"bash"} />
+
+<InParagraph text={"তারপর GitHub-এ push-এর লিংক থেকে **Compare & pull request** বাটনে ক্লিক করুন।"} />
+
+## PR-এর গুরুত্বপূর্ণ অংশ
+
+- **Base** — কোথায় merge হবে (main)
+- **Compare** — আপনার branch
+- **Title** — পরিষ্কার ও বর্ণনামূলক
+- **Description** — কী, কেন, কীভাবে পরীক্ষিত
+- **Reviewers** — কারা review করবে
+- **Labels / Milestone**
+- **Tests / Checks** — CI ফলাফল
+
+## Review-এর সময় কী দেখেন
+
+- কোড কি অর্থপূর্ণ ও সহজে পড়া যায়?
+- edge case (খালি input, error) সামলানো হয়েছে?
+- test/চালু অবস্থা ভালো?
+- নাম, comment, style সামঞ্জস্য?
+- draw সমাধান লুকানো কোনো gate?
+
+## Review comment-এ উত্তর দেওয়া
+
+<CodeBlock code={"# Review-এর পর নতুন commit দিয়ে ফিক্স:\ngit add .\ngit commit -m \"fix: address review comment\"\ngit push origin feature/login"} lang={"bash"} />
+
+## Merge করার আগে
+
+<CodeBlock code={"git pull origin main                # নিশ্চিত করুন latest\ngit push origin feature/login      # সব check পাস\n# GitHub-এ Merge button → ধরনের পছন্দ"} lang={"bash"} />
+
+## Merge-এর পর রুটিন
+
+<CodeBlock code={"git switch main\ngit pull origin main\ngit branch -d feature/login     # local clean\ngit push origin --delete feature/login   # remote clean"} lang={"bash"} />
+
+<Tip tone={"info"} title={"মনে রাখুন"} text={"PR হলো সংলাপ, নয় নিয়ন্ত্রণ। ছোট PR (২০০-৩০০ লাইন) বেশি গ্রহণযোগ্য Bug হয় less, review হয় smoother।"} />

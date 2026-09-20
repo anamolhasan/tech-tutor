@@ -1,0 +1,30 @@
+---
+title: "Multi-stage Builds"
+label: "Multi-stage Builds"
+order: 19
+level: "Advanced"
+description: "বড় build-এর জন্য আলাদা stage, ছোট runtime — multi-stage pattern ব্যাখ্যা ও উদাহরণ — বাংলায়।"
+---
+
+<InParagraph text={"**Multi-stage build** মানে একই Dockerfile-এ একাধিক `FROM` — প্রতিটি stage আলাদা environment। আগের stage-এর শুধু দরকারি artifact পরের stage-এ নিয়ে আসা হয়, বাকিটা ফেলে দেওয়া হয়।"} />
+
+## কেন দরকার
+
+- **ছোট image** — build tools আর runtime stage-এ থাকে না
+- **নিরাপদ** — source code/কী surface কমে
+- **আলাদা config** — prod/dev আলাদা stage
+- **টেকসই builder** — `--target` দিয়ে একটি stage বেছে বেশি
+
+## আদর্শ Example — TypeScript API
+
+<CodeBlock code={"# STAGE 1 —— build\nFROM node:20-alpine AS builder\nWORKDIR /app\n\nCOPY package*.json ./\nRUN npm ci\n\nCOPY tsconfig.json ./\nCOPY src ./src\n\nRUN npm run build\n# → dist/ তৈরি\n\n# STAGE 2 —— production dependencies\nFROM node:20-alpine AS prod-deps\nWORKDIR /app\nCOPY package*.json ./\nRUN npm ci --omit=dev\n\n# STAGE 3 —— runtime\nFROM node:20-alpine\nWORKDIR /app\n\nENV NODE_ENV=production\n\nCOPY --from=prod-deps /app/node_modules ./node_modules\nCOPY --from=builder /app/dist ./dist\n\nUSER node\nEXPOSE 3000\n\nCMD [\"node\", \"dist/server.js\"]"} lang={"dockerfile"} title={"Dockerfile"} />
+
+## Build cache-কে কাজে লাগানো
+
+<InParagraph text={"প্রতিটি stage আলাদাভাবে cache হয়। সবচেয়ে স্থিতিশীল file (package.json) আগে কপি ও install করুন — কোড বদলালে dependency layer re-run হয় না।"} />
+
+## Stage-এর মধ্যে file চয়ন
+
+<CodeBlock code={"# builder stage থেকে শুধু dist\nCOPY --from=builder /app/dist ./dist\n\n# static assetsও\nCOPY --from=builder /app/public ./public"} lang={"dockerfile"} title={"COPY --from"} />
+
+<Tip tone={"warning"} title={"नहीं বিল্ড করলে না"} text={"Files যেগুলো runtime-এ দরকার না — যেমন source, tests, build tools — সেগুলো **runtime stage-এ কপি করবেন না**। তাতে image ভারী হয় এবং attack surface বাড়ে।"} />

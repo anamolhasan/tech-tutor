@@ -1,0 +1,38 @@
+---
+title: "Node.js Streams"
+label: "Streams"
+order: 7
+level: "Intermediate"
+description: "Readable, Writable, Transform, Pipe — বড় ডেটা efficient ভাবে প্রসেস করার বাংলা গাইড।"
+---
+
+<InParagraph text={"**Stream** হলো data-কে chunk-এ ভাগ করে process করার পদ্ধতি। এটি memory-efficient — বড় ফাইল বা real-time data handle করার জন্য আদর্শ।"} />
+
+## Stream-এর চারটি প্রকার
+
+| Type | কাজ | উদাহরণ |
+| --- | --- | --- |
+| Readable | ডেটা পড়া | fs.createReadStream, http.incoming |
+| Writable | ডেটা লেখা | fs.createWriteStream, http.outgoing |
+| Duplex | পড়া ও লেখা দুটোই | TCP socket |
+| Transform | ডেটা রূপান্তর করে দেয় | zlib (gzip), crypto |
+
+## Readable Stream
+
+<CodeBlock code={"const fs = require(\"node:fs\");\n\nconst readStream = fs.createReadStream(\"large-file.txt\", {\n  encoding: \"utf8\",\n  highWaterMark: 1024, // 1KB chunk size\n});\n\nreadStream.on(\"data\", (chunk) => {\n  console.log(\"পাওয়া হয়েছে:\", chunk.length, \"characters\");\n});\n\nreadStream.on(\"end\", () => {\n  console.log(\"পড়া শেষ!\");\n});\n\nreadStream.on(\"error\", (err) => {\n  console.error(\"ত্রুটি:\", err.message);\n});"} lang={"javascript"} />
+
+## Writable Stream
+
+<CodeBlock code={"const fs = require(\"node:fs\");\n\nconst writeStream = fs.createWriteStream(\"output.txt\");\n\nwriteStream.write(\"প্রথম লাইন\\n\");\nwriteStream.write(\"দ্বিতীয় লাইন\\n\");\nwriteStream.write(\"তৃতীয় লাইন\\n\");\nwriteStream.end(\"শেষ লাইন\\n\");\n\nwriteStream.on(\"finish\", () => {\n  console.log(\"লেখা সম্পন্ন!\");\n});"} lang={"javascript"} />
+
+## Pipe — Stream সংযোগ
+
+<InParagraph text={"`.pipe()` দিয়ে readable stream-কে writable stream-এর সাথে সংযুক্ত করা যায়। এটি chunks-কে auto-manage করে।"} />
+
+<CodeBlock code={"const fs = require(\"node:fs\");\n\nconst readStream = fs.createReadStream(\"source.txt\");\nconst writeStream = fs.createWriteStream(\"destination.txt\");\n\nreadStream.pipe(writeStream);\n\nwriteStream.on(\"finish\", () => {\n  console.log(\"ফাইল কপি সম্পন্ন!\");\n});"} lang={"javascript"} title={"ফাইল copy (stream দিয়ে)"} />
+
+## Transform Stream
+
+<CodeBlock code={"const { Transform } = require(\"node:stream\");\n\nconst upperCase = new Transform({\n  transform(chunk, encoding, callback) {\n    this.push(chunk.toString().toUpperCase());\n    callback();\n  },\n});\n\nconst { stdin, stdout } = process;\nstdin.pipe(upperCase).pipe(stdout);"} lang={"javascript"} />
+
+<Tip tone={"success"} title={"কখন Stream ব্যবহার করবেন"} text={"বড় ফাইল (100MB+), real-time data, বা large file processing-এ stream ব্যবহার করুন। ছোট ফাইলের জন্য readFile/writeFile সাধারণত যথেষ্ট।"} />

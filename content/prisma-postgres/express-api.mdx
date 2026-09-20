@@ -1,0 +1,15 @@
+---
+title: "Express + Prisma — TechShop API"
+label: "Express API"
+order: 26
+level: "Intermediate"
+description: "আগের pg-এ লেখা API এখন Prisma-তে — ইনপুট validate।"
+---
+
+<CodeBlock code={"import express from \"express\";\nimport { PrismaClient } from \"@prisma/client\";\n\nconst app = express();\napp.use(express.json());\nconst prisma = new PrismaClient();\n\napp.get(\"/api/products\", async (_req, res) => {\n  const products = await prisma.product.findMany({\n    select: { id: true, name: true, price: true, qty: true },\n  });\n  res.json({ products });\n});\n\napp.post(\"/api/products\", async (req, res) => {\n  const { name, price, qty } = req.body;\n  const product = await prisma.product.create({\n    data: { name, price, qty },\n  });\n  res.status(201).json(product);\n});\n\napp.listen(4000);"} lang={"ts"} title={"src/index.ts"} />
+
+- input validate — zod (নিচে)
+- `select` — জটিল payload নয়
+- prisma-এর `dataset` — ক্ষেত্র নিয়ন্ত্রণ
+
+<Tip tone={"warning"} title={"validation বাধ্যতামূলক"} text={"`req.body` সরাসরি create-এ দেবেন না — attacker input। zod-দিয়ে validate + parse আগে।"} />

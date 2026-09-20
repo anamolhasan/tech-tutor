@@ -1,0 +1,35 @@
+---
+title: "Styling (Tailwind / CSS)"
+label: "Styling"
+order: 18
+level: "Beginner"
+description: "Next.js-এ Tailwind CSS ও CSS Modules দিয়ে styling — আধুনিক approach বাংলায়।"
+---
+
+<InParagraph text={"`create-next-app` করলেই **Tailwind CSS** ready। App Router-এ styling-এর چندটি পদ্ধতি আছে।"} />
+
+## Global CSS
+
+<CodeBlock code={"@import \"tailwindcss\";"} lang={"css"} title={"app/globals.css"} />
+
+<InParagraph text={"`globals.css` `app/layout.tsx`-এ import করা হয় এবং পুরো অ্যাপে প্রযোজ্য হয়।"} />
+
+## Tailwind Class ব্যবহার
+
+<CodeBlock code={"export default function Page() {\n  return (\n    <main className=\"flex min-h-screen flex-col items-center justify-center\">\n      <h1 className=\"text-4xl font-bold text-blue-600 dark:text-blue-400\">\n        Hello Next.js\n      </h1>\n    </main>\n  );\n}"} lang={"tsx"} title={"app/page.tsx"} />
+
+## CSS Modules
+
+<InParagraph text={"`*.module.css` দিয়ে component-scoped CSS করা যায় — class name conflict হয় না।"} />
+
+<CodeBlock code={".card {\n  padding: 1.5rem;\n  border-radius: 0.75rem;\n  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);\n}"} lang={"css"} title={"app/ui/card.module.css"} />
+
+<CodeBlock code={"import styles from \"./card.module.css\";\n\nexport default function Card({\n  children,\n}: {\n  children: React.ReactNode;\n}) {\n  return <div className={styles.card}>{children}</div>;\n}"} lang={"tsx"} title={"app/ui/card.tsx"} />
+
+## className Merging
+
+<InParagraph text={"শর্তসাপেক্ষ class যোগ করতে **`clsx`** বা **`tailwind-merge`**-এর মতো library ব্যবহার হয়।"} />
+
+<CodeBlock code={"import { clsx } from \"clsx\";\n\nexport default function Button({\n  variant = \"primary\",\n}: {\n  variant?: \"primary\" | \"ghost\";\n}) {\n  return (\n    <button\n      className={clsx(\n        \"rounded-lg px-4 py-2 font-medium\",\n        variant === \"primary\" && \"bg-blue-600 text-white\",\n        variant === \"ghost\" && \"border border-blue-600 text-blue-600\"\n      )}\n    >\n      Button\n    </button>\n  );\n}"} lang={"tsx"} title={"app/ui/button.tsx"} />
+
+<Tip tone={"success"} title={"Tailwind হল default"} text={"এই প্রজেক্ট (Tech Tutor) নিজেও Next.js + Tailwind দিয়ে তৈরি — Tailwind documentation-এ শেখা utility classes এখানেই দেখতে পাবেন।"} />

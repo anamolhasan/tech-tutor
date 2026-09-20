@@ -1,0 +1,29 @@
+---
+title: "Dynamic Routes"
+label: "Dynamic Routes"
+order: 9
+level: "Intermediate"
+description: "[slug], [...slug], [[...slug]] — dynamic segment, catch-all ও generateStaticParams বাংলায়।"
+---
+
+<InParagraph text={"**Dynamic routes** দিয়ে data থেকে একটি page একাধিক URL-এ render করা যায় — যেমন `/blog/one`, `/blog/two`।"} />
+
+## Single Segment [slug]
+
+<CodeBlock code={"export default async function Page({\n  params,\n}: {\n  params: Promise<{ slug: string }>;\n}) {\n  const { slug } = await params;\n  const post = await getPost(slug);\n\n  return (\n    <article>\n      <h1>{post.title}</h1>\n      <p>{post.content}</p>\n    </article>\n  );\n}"} lang={"tsx"} title={"app/blog/[slug]/page.tsx"} />
+
+## Catch-all [...slug]
+
+<CodeBlock code={"export default async function Page({\n  params,\n}: {\n  params: Promise<{ slug: string[] }>;\n}) {\n  const { slug } = await params;\n  // slug: [\"getting-started\"] বা [\"getting-started\", \"installation\"]\n\n  return <h1>Docs: {slug.join(\" / \")}</h1>;\n}"} lang={"tsx"} title={"app/docs/[...slug]/page.tsx"} />
+
+## Optional Catch-all [[...slug]]
+
+<InParagraph text={"`[[...slug]]` দিলে segment-এর সাথে route **রুট লেভেলেও** (`/docs`) কাজ করে — segment ছাড়াও।"} />
+
+## Static Params (SSG)
+
+<InParagraph text={"`generateStaticParams` দিলে **build সময়ে** কোন কোন slug-এর জন্য page তৈরি হবে তা বলে দেওয়া যায় — ফলে faster load।"} />
+
+<CodeBlock code={"export function generateStaticParams() {\n  return [\n    { slug: \"first-post\" },\n    { slug: \"second-post\" },\n    { slug: \"third-post\" },\n  ];\n}\n\nexport default async function Page({\n  params,\n}: {\n  params: Promise<{ slug: string }>;\n}) {\n  const { slug } = await params;\n  return <h1>{slug}</h1>;\n}"} lang={"tsx"} title={"app/blog/[slug]/page.tsx"} />
+
+<Tip tone={"success"} title={"Dynamic Segments"} text={"`[segment]` = single param, `[...segment]` = catch-all, `[[...segment]]` = optional catch-all। CMS বা blog-এ ডায়নামিক route সবচেয়ে গুরুত্বপূর্ণ।"} />

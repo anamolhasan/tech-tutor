@@ -1,0 +1,23 @@
+---
+title: "StyleSheet ও Flexbox — layout গোছানো"
+label: "Styling & Flexbox"
+order: 12
+level: "Beginner"
+description: "RN-এ styling-এর ধরন ও flexbox-এর মূল নিয়ম — বাংলায়।"
+---
+
+<InParagraph text={"RN-এ style দেওয়া হয় **object** দিয়ে, সাধারণত `StyleSheet.create`-এ। web-এর মতো `className` নেই।"} />
+
+<CodeBlock code={"import { View, Text, StyleSheet } from \"react-native\";\n\nconst styles = StyleSheet.create({\n  row: { flexDirection: \"row\", alignItems: \"center\", gap: 12 },\n  card: { padding: 16, borderRadius: 12, backgroundColor: \"#f8fafc\" },\n});\n\nexport default function TaskRow() {\n  return (\n    <View style={[styles.card, styles.row]}>\n      <Text style={{ flex: 1 }}>দুধ কিনতে হবে</Text>\n      <Text>✔️</Text>\n    </View>\n  );\n}"} lang={"tsx"} title={"components/TaskRow.tsx"} />
+
+- `flexDirection` — row / column (default column)
+- `justifyContent` / `alignItems` — axis alignment
+- `flex: 1` — child বসন্ত available space নেয়
+- `gap` — items-এর মাঝের ব্যবধান
+- `borderRadius`, `padding`, `margin` — সচরাচর সব আছে
+
+<InParagraph text={"**Array style** — `[a, b]` — একাধিক style apply হয়, শেষেরটা priority:"} />
+
+<CodeBlock code={"<View style={[styles.card, isDone && styles.done]} />"} lang={"tsx"} />
+
+<Tip tone={"info"} title={"flex: 1"} text={"`flex: 1` মানে child উপলব্ধ space-এর সমপরিমাণ নিতে — screen height শেষ না হওয়া পর্যন্ত দখল করে। না বুঝে layout বিজোড় লাগার অন্যতম কারণ।"} />

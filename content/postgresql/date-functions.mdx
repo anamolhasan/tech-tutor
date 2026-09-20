@@ -1,0 +1,15 @@
+---
+title: "timestamp-এ কাজ — now, age, date_trunc, EXTRACT"
+label: "Date Functions"
+order: 18
+level: "Intermediate"
+description: "তারিখ/সময় পর্যন্ত — interval, truncation, extraction।"
+---
+
+<CodeBlock code={"SELECT now()                                    AS now,\n       created_at                              AS ordered_at,\n       AGE(created_at)                         AS age,\n       created_at::date                        AS day,\n       EXTRACT(YEAR FROM created_at)           AS year\nFROM orders\nORDER BY created_at DESC\nLIMIT 3;"} lang={"sql"} />
+
+<CodeBlock code={"SELECT COUNT(*) AS orders_last_7d\nFROM orders\nWHERE created_at >= now() - INTERVAL '7 days';"} lang={"sql"} title={"শেষ ৭ দিন"} />
+
+<CodeBlock code={"SELECT date_trunc('day', created_at) AS day,\n       COUNT(*)                            AS orders\nFROM orders\nGROUP BY day\nORDER BY day;"} lang={"sql"} title={"date_trunc — প্রতিদিনের aggreg"} />
+
+<Tip tone={"info"} title={"timestamptz ব্যবহার করুন"} text={"`timestamptz` সময়-zone-aware — storage সবসময় UTC, display হলে zone অনুযায়ী। `timestamp` (zones ছাড়া)-এ অ্যাপ-স্তরে zone mgmt কঠিন।"} />

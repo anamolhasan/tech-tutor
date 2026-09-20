@@ -1,0 +1,31 @@
+---
+title: "Real-world Project: Dashboard with API"
+label: "Project: Dashboard"
+order: 27
+level: "Advanced"
+description: "Next.js দিয়ে admin dashboard — Route Handlers, data fetching, loading states বাংলায়।"
+---
+
+<InParagraph text={"এখন একটি **dashboard** তৈরি করি — যেখানে Route Handler (API), data fetching ও loading state সংযুক্ত।"} />
+
+## Project Structure
+
+<CodeBlock code={"app/\n├── layout.tsx\n├── dashboard/\n│   ├── layout.tsx      → sidebar + header\n│   ├── page.tsx        → stats overview (data fetch)\n│   ├── loading.tsx     → skeleton\n│   └── error.tsx       → error UI\n└── api/\n    ├── stats/\n    │   └── route.ts    → GET statistics\n    └── users/\n        └── route.ts    → GET/POST users"} lang={"text"} title={"app/ structure"} />
+
+## 1. API: Stats Route Handler
+
+<CodeBlock code={"export async function GET() {\n  // database থেকে stats\n  const stats = {\n    users: 12345,\n    revenue: 45678,\n    orders: 890,\n  };\n\n  return Response.json(stats);\n}"} lang={"ts"} title={"app/api/stats/route.ts"} />
+
+## 2. Dashboard Page
+
+<CodeBlock code={"import { headers } from \"next/headers\";\n\nexport default async function DashboardPage() {\n  const host = headers().get(\"host\");\n  const baseUrl = `http${host?.startsWith(\"localhost\") ? \"\" : \"s\"}://${host}`;\n  const res = await fetch(`${baseUrl}/api/stats`);\n  const stats = await res.json();\n\n  return (\n    <main className=\"p-6\">\n      <h1 className=\"text-2xl font-bold\">Dashboard</h1>\n      <div className=\"mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3\">\n        <div className=\"rounded-xl bg-white p-6 shadow\">\n          <p className=\"text-sm text-gray-500\">Total Users</p>\n          <p className=\"mt-1 text-2xl font-bold\">{stats.users}</p>\n        </div>\n        <div className=\"rounded-xl bg-white p-6 shadow\">\n          <p className=\"text-sm text-gray-500\">Revenue</p>\n          <p className=\"mt-1 text-2xl font-bold\">${stats.revenue}</p>\n        </div>\n        <div className=\"rounded-xl bg-white p-6 shadow\">\n          <p className=\"text-sm text-gray-500\">Orders</p>\n          <p className=\"mt-1 text-2xl font-bold\">{stats.orders}</p>\n        </div>\n      </div>\n    </main>\n  );\n}"} lang={"tsx"} title={"app/dashboard/page.tsx"} />
+
+## 3. Loading Skeleton
+
+<CodeBlock code={"export default function Loading() {\n  return (\n    <main className=\"p-6\">\n      <div className=\"h-8 w-48 animate-pulse rounded bg-gray-200\" />\n      <div className=\"mt-6 grid grid-cols-3 gap-4\">\n        <div className=\"h-24 animate-pulse rounded-xl bg-gray-200\" />\n        <div className=\"h-24 animate-pulse rounded-xl bg-gray-200\" />\n        <div className=\"h-24 animate-pulse rounded-xl bg-gray-200\" />\n      </div>\n    </main>\n  );\n}"} lang={"tsx"} title={"app/dashboard/loading.tsx"} />
+
+## 4. Error UI
+
+<CodeBlock code={"\"use client\";\n\nexport default function ErrorPage({\n  error,\n  unstable_retry,\n}: {\n  error: Error & { digest?: string };\n  unstable_retry: () => void;\n}) {\n  return (\n    <div className=\"p-6\">\n      <h2 className=\"text-xl font-semibold text-red-600\">\n        ড্যাশবোর্ড লোড করা যায়নি\n      </h2>\n      <button\n        onClick={() => unstable_retry()}\n        className=\"mt-4 rounded-lg bg-blue-600 px-4 py-2 text-white\"\n      >\n        আবার চেষ্টা করুন\n      </button>\n    </div>\n  );\n}"} lang={"tsx"} title={"app/dashboard/error.tsx"} />
+
+<Tip tone={"success"} title={"এখন নিজের Project তৈরি করুন"} text={"প্রতিটি অধ্যায়ের practice করে নিজের মতো dashboard, portfolio, e-commerce বানান — তারপর deployment। অভিনন্দন, আপনি Next.js-এর মূল ধারণাগুলো আয়ত্ত করেছেন!"} />

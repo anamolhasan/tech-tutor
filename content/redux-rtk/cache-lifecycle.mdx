@@ -1,0 +1,20 @@
+---
+title: "Cache-Lifecycle — KeepUnusedDataFor"
+label: "Cache Lifecycle"
+order: 22
+level: "Intermediate"
+description: "Cache-এ ডেটা কতক্ষণ থাকে, keepUnusedDataFor ও refetchOnMount — বাংলায়।"
+---
+
+<InParagraph text={"RTK Query-র cache সার্ভার data-কে কীভাবে আয়ু দেয় তা বোঝা — অপরিহার্য। এটি টুকরা করে: **একই key-র fetch একবার**, unsubscribe হলে পরে keep/discard।"} />
+
+| Option | ডিফল্ট | অর্থ |
+| --- | --- | --- |
+| `keepUnusedDataFor` | 60s | unsubscribe-এর পর cache কতক্ষণ রাখা হবে |
+| `refetchOnMountOrArgChange` | false | mount-এ কতক্ষণের মধ্যে cache থাকলে refetch না |
+| `refetchOnFocus` | false | window focus-এ refetch |
+| `refetchOnReconnect` | false | network পুনরায়-লে refetch |
+
+<CodeBlock code={"createApi({\n  baseQuery,\n  refetchOnFocus: true,\n  refetchOnReconnect: true,\n  keepUnusedDataFor: 120,   // global: 2 মিনিট\n\n  endpoints: (builder) => ({\n    getProduct: builder.query<Product, string>({\n      query: (id) => \"products/\" + id,\n      keepUnusedDataFor: 300,  // override\n    }),\n  }),\n});"} lang={"ts"} title={"global ও per-endpoint"} />
+
+<Tip tone={"info"} title={"ডেটা freshness নিয়ম"} text={"ড্যাশবোর্ডের মতো fresh data দরকার হলে `refetchOnFocus: true` + ছোট `keepUnusedDataFor`। স্থিতিশীল reference (settings ইত্যাদি) — বড় keep + refetch বন্ধ। সিদ্ধান্ত আপনার UX অনুযায়ী।"} />

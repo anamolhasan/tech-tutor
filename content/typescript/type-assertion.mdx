@@ -1,0 +1,40 @@
+---
+title: "Type Assertion (টাইপ অ্যাসারশন)"
+label: "Type Assertion"
+order: 16
+level: "Intermediate"
+description: "as, angle bracket, non-null assertion (!), satisfies এবং কখন assertion এড়িয়ে চলা ভালো — বাংলায়।"
+---
+
+<InParagraph text={"**Type assertion** দিয়ে আমরা TypeScript-কে বলি — *এই মান সম্পর্কে আমাদের ধারণা তোমার চেয়ে ভালো, সরাসরি এটা নাও*। এটি runtime-এ কিছু বদলায় না, শুধু compile-time-এ টাইপ বদলায়।"} />
+
+## as সিনট্যাক্স
+
+<CodeBlock code={"const input = document.getElementById(\"search\") as HTMLInputElement;\n\ninput.value = \"টেক্সট সার্চ\";   // এখন value টাইপ-নিরাপদ\n\n// JSON থেকে আনা data\nconst raw: unknown = '{\"name\":\"রহিম\"}';\nconst parsed = JSON.parse(raw as string);"} lang={"typescript"} />
+
+## Angle Bracket সিনট্যাক্স
+
+<InParagraph text={"আগেকার পদ্ধতিতে `<>` দিয়েও assertion লেখা যায়। তবে `.tsx` (React/TSX) ফাইলে এটি JSX-এর সাথে বিভ্রান্ত হয় — তাই `as`-ই প্রস্তাবিত।"} />
+
+<CodeBlock code={"// শুধু .ts ফাইলে\nconst total = <number>someValue;\n\n// .tsx-এ একই কাজ\nconst total2 = someValue as number;"} lang={"typescript"} />
+
+## Non-null Assertion (!)
+
+<InParagraph text={"নিশ্চিত যে মান `null`/`undefined` নয়, সেটা বলতে `!` ব্যবহার হয় — এটি assertion-এর একটি দ্রুত রূপ।"} />
+
+<CodeBlock code={"const container = document.querySelector(\"#app\");\ncontainer!.innerHTML = \"<p>লোড হয়েছে</p>\";\n\nfunction findName(list: string[], key: string): string | undefined {\n  return list.find((item) => item === key);\n}\n\nconst found = findName([\"রহিম\", \"করিম\"], \"রহিম\")!;\nconsole.log(found.toUpperCase());\n"} lang={"typescript"} />
+
+## satisfies কীওয়ার্ড
+
+<InParagraph text={"`satisfies` মানে — **টাইপটি মেন চলছে তো?** — কিন্তু টাইপ বদলায় না। constraining-এর সাথে exact narrowing-এর সুবিধা দুটোই মেলে।"} />
+
+<CodeBlock code={"type Config = { ratio: number | string };\n\nconst config = {\n  ratio: 0.5,\n} satisfies Config;\n\n// ratio-এর টাইপ: number (ন্যারো) — string-এ রূপান্তর হয়নি\nconst double = config.ratio * 2;   // ✅ number"} lang={"typescript"} />
+
+## কখন assertion risk?
+
+- টাইপ বিভ্রান্ত হলে assertion চায় না — আগে ঠিক টাইপ দাও
+- runtime-এ মান সম্পূর্ণ আলাদা হলে assertion মিথ্যা হবে
+- `as any` এরপর `as Type` — double assertion হল বুঝে নাও বিশ্বাসের ঘাটতি আছে
+- বাস্তবে structure যাচাই করতে generic + type guard ভালো
+
+<Tip tone={"warning"} title={"সতর্কতা"} text={"Assertion compile-time-এ টাইপ ভুল ঢেকে রাখে, runtime-এ করে না। API ডেটার মতো অজানা মানে অযথা assertion-এর বদলে **narrowing** বা **type guard** ব্যবহার করুন।"} />

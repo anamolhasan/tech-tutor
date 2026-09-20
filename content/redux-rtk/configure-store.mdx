@@ -1,0 +1,18 @@
+---
+title: "configureStore — Store Setup"
+label: "configureStore"
+order: 6
+level: "Beginner"
+description: "configureStore-এ reducers ও middleware-এ combining — বাংলায়।"
+---
+
+<CodeBlock code={"\"use client\";\n\nimport { configureStore } from \"@reduxjs/toolkit\";\nimport cartReducer from \"@/features/cart/cartSlice\";\nimport { ordersApi } from \"@/features/orders/ordersService\";\n\nexport const store = configureStore({\n  reducer: {\n    cart: cartReducer,\n    // RTK Query-এর নিজস্ব slice\n    [ordersApi.reducerPath]: ordersApi.reducer,\n  },\n  middleware: (getDefaultMiddleware) =>\n    getDefaultMiddleware().concat(ordersApi.middleware),\n});\n\n// Types\nexport type RootState = ReturnType<typeof store.getState>;\nexport type AppDispatch = typeof store.dispatch;"} lang={"ts"} title={"src/app/store.ts"} />
+
+## প্রতিটি জিনিস কী করে
+
+- **reducer** object → store-এ একসাথে মাউন্ট
+- **`[ordersApi.reducerPath]`** → RTK Query-র cache slice store-এ বসে
+- **middleware concat** → RTK Query-র এর নিজস্ব subscription/logic চলে
+- **RootState / AppDispatch** → typed helpers — সম্পূর্ণ অ্যাপে ব্যবহৃত
+
+<Tip tone={"info"} title={"reducerPath"} text={"ডিফল্ট `reducerPath: \"api\"` — concat করার সময় `[productsApi.reducerPath]` লেখা বেশি নিরাপদ, কারণ নাম বদলালে store-auto আপডেট থাকে। `createApi`-তে এটি কাস্টমাইজও করা যায়।"} />

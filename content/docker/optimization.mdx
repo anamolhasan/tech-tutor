@@ -1,0 +1,37 @@
+---
+title: "Image Size ও Build Optimization"
+label: "Optimization"
+order: 21
+level: "Advanced"
+description: "ছোট image, layer caching, .dockerignore, BuildKit — দ্রুত ও হালকা build — বাংলায়।"
+---
+
+<InParagraph text={"প্রোডাকশন dock-এ image যত ছোট, deploy তত দ্রুত, ঠিক তেমন security তত ভালো। optimization-এর মূল কৌশলগুলো জানি।"} />
+
+## ১. .dockerignore
+
+<CodeBlock code={"node_modules\n.next\ndist\n.git\n.env\n.env.*\n*.log\nDockerfile\n.dockerignore\nREADME.md"} lang={"text"} title={".dockerignore"} />
+
+## ২. Layer ordering ও caching
+
+<CodeBlock code={"# ভুল — কোড আগে → প্রতি build-এ install আবার\nCOPY . .\nRUN npm ci\n\n# সঠিক — dependency স্থিতিশীল, পরে code\nCOPY package*.json ./\nRUN npm ci\nCOPY . ."} lang={"dockerfile"} title={"সঠিক order"} />
+
+## ৩. হালকা base image
+
+<CodeBlock code={"FROM node:20-alpine          # ~50MB\n# vs node:20 (800MB+), node:20-slim (~250MB)\n# distroless: শুধু runtime"} lang={"dockerfile"} title={"Slim/alpine"} />
+
+## ৪. Multi-stage + production deps
+
+<CodeBlock code={"# builder\nFROM node:20-alpine AS builder\n...\nRUN npm ci && npm run build\n\n# runtime — devDependencies ছাড়া\nFROM node:20-alpine\nCOPY --from=builder /app/node_modules ./node_modules\nCOPY --from=builder /app/dist ./dist"} lang={"dockerfile"} title={"প্রোডাকশন deps আলাদা"} />
+
+## ৫. BuildKit ও আরও
+
+<CodeBlock code={"# BuildKit default (Docker 23+) — parallel stage, mount cache\nDOCKER_BUILDKIT=1 docker build -t my-api .\n\n# registry cache — uniform across machines\ndocker build --cache-from type=registry,ref=my-api:cache ."} lang={"bash"} title={"BuildKit flags"} />
+
+<CodeBlock code={"RUN --mount=type=cache,target=/root/.npm \\\n    npm ci --omit=dev"} lang={"dockerfile"} title={"cache mount (npm)"} />
+
+## Size যাচাই
+
+<CodeBlock code={"docker image ls\ndocker history my-api\ndocker system df"} lang={"bash"} title={"Inspect"} />
+
+<Tip tone={"info"} title={"লক্ষ্য"} text={"Node/Express API-এর production image 100-150MB-এর নিচে রাখা যায় (slim/base) — distroless-এ আরও কম। মাঝে ছোট ছোটWin আসলে okay, কিন্তু ভারী না।"} />

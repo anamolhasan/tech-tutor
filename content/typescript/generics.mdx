@@ -1,0 +1,37 @@
+---
+title: "Generics (জেনেরিক)"
+label: "Generics"
+order: 13
+level: "Intermediate"
+description: "Generic function, type parameter, multiple types, constraints (extends), generic interface ও default parameter — বাংলায়।"
+---
+
+<InParagraph text={"**Generics** দিয়ে এমন ফাংশন/টাইপ বানানো যায় যা টাইপটি ব্যবহারকারী অনুযায়ী ঠিক করে নেয় — একটি কোড, অনেক টাইপের জন্য নিরাপদ।"} />
+
+## Generic Function
+
+<CodeBlock code={"// T হলো type parameter — call-এর সময় টাইপ ঠিক হয়\nfunction identity<T>(value: T): T {\n  return value;\n}\n\nconst a = identity(\"রহিম\");   // T = string\nconst b = identity(42);       // T = number\n\n// বা স্পষ্টভাবে নির্ধারণ\nconst c = identity<boolean>(true);"} lang={"typescript"} />
+
+## Array এবং .map দিয়ে
+
+<CodeBlock code={"function firstElement<T>(arr: T[]): T | undefined {\n  return arr[0];\n}\n\nconst first = firstElement([10, 20, 30]);    // number | undefined\nconst hello = firstElement([\"নমস্কার\"]);     // string | undefined"} lang={"typescript"} />
+
+## Multiple Types
+
+<CodeBlock code={"function merge<A, B>(first: A, second: B): A & B {\n  return { ...first, ...second };\n}\n\nconst merged = merge({ name: \"রহিম\" }, { age: 28 });\n// টাইপ: { name: string } & { age: number }"} lang={"typescript"} />
+
+## Constraints (extends)
+
+<InParagraph text={"`extends` দিয়ে বাধা দেওয়া যায় parameter টির নির্দিষ্ট গুণ থাকতে হবে — ফলে `.length` ইত্যাদি ব্যবহার নিরাপদ হয়।"} />
+
+<CodeBlock code={"interface HasLength {\n  length: number;\n}\n\nfunction longest<A extends HasLength, B extends HasLength>(\n  x: A,\n  y: B,\n): A {\n  return x.length >= y.length ? x : y;\n}\n\nconsole.log(longest(\"বাংলাদেশ\", \"ভারত\"));    // \"বাংলাদেশ\""} lang={"typescript"} />
+
+## Generic Interface ও Type
+
+<CodeBlock code={"interface ApiResponse<T> {\n  data: T;\n  status: number;\n}\n\ntype User = { name: string; id: number };\n\nconst response: ApiResponse<User> = {\n  status: 200,\n  data: { name: \"রহিম\", id: 1 },\n};\n\n// টাইপের ভেতরেও generic\ntype TList<T> = { items: T[]; count: number };"} lang={"typescript"} />
+
+## Default Type Parameter
+
+<CodeBlock code={"function createStore<T = string>() {\n  return { values: [] as T[] };\n}\n\nconst store = createStore();          // T = string (default)\nconst numStore = createStore<number>();  // T = number"} lang={"typescript"} />
+
+<Tip tone={"success"} title={"কখন generics?"} text={"যখন একটি ফাংশন/কম্পোনেন্ট বিভিন্ন টাইপের সাথে একভাবে কাজ করবে, তখন generics ইনপুট-আউটপুট সম্পর্ক ধরে রাখে — `any`-এর থেকে অনেক নিরাপদ।"} />

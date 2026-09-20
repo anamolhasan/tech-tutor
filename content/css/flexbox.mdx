@@ -1,0 +1,32 @@
+---
+title: "CSS Flexbox"
+label: "Flexbox"
+order: 10
+level: "Beginner"
+description: "Flex container, flex-direction, justify-content, align-items, gap দিয়ে এক-মাত্রিক লেআউট — বাংলা গাইড।"
+---
+
+<InParagraph text={"**Flexbox** হলো এক-মাত্রিক লেআউট ব্যবস্থা — সারি (row) বা স্তম্ভ (column) — দিয়ে element সাজানোর আধুনিক ও সহজ পদ্ধতি।"} />
+
+## Flex container
+
+<CodeBlock code={".nav {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  gap: 16px;\n}"} lang={"css"} />
+
+- `flex-direction` — row / column
+- `justify-content` — মূল অক্ষে বিন্যাস
+- `align-items` — বিপরীত অক্ষে বিন্যাস
+- `gap` — সদস্যদের মাঝের ফাঁক
+
+## কম্বিনেশন
+
+<CodeBlock code={".column {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}"} lang={"css"} />
+
+## flex-item নিয়ন্ত্রণ
+
+<CodeBlock code={".grow  { flex: 1; }        /* বাড়তি জায়গা নাও */\n.center { flex: 0 0 auto; }  /* নিজের সাইজে থাকবে */"} lang={"css"} />
+
+## সাধারণ প্যাটার্ন: কার্ডস
+
+<CodeBlock code={".cards {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 16px;\n}\n\n.card {\n  flex: 1 1 240px;\n}"} lang={"css"} />
+
+<Tip tone={"success"} title={"এক-মাত্রিক লেআউটে flexbox"} text={"যখন শুধু এক দিকে সাজাতে হয় (ডান-বাম বা উপরে-নিচে) — flexbox সবচেয়ে সহজ। দুই দিক একসাথে দরকার হলে next অধ্যায়ের **grid** ব্যবহার করুন।"} />

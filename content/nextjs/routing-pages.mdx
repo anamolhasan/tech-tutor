@@ -1,0 +1,35 @@
+---
+title: "Routing ও Pages"
+label: "Routing ও Pages"
+order: 5
+level: "Beginner"
+description: "app/ ফোল্ডারে page তৈরি, nested routes এবং params/searchParams ব্যবহার — বাংলা গাইড।"
+---
+
+<InParagraph text={"Next.js App Router-এ একটি **page** হলো সেই UI যা একটি নির্দিষ্ট route-এ রেন্ডার হয়। `app` ফোল্ডারের ভেতরে `page.tsx` ফাইল তৈরি করলেই route তৈরি।"} />
+
+## প্রথম Page
+
+<CodeBlock code={"export default function Page() {\n  return <h1>Hello, Next.js!</h1>;\n}"} lang={"tsx"} title={"app/page.tsx"} />
+
+<InParagraph text={"এটি `/` route-এ render হবে। `app/about/page.tsx` তৈরি করলে `/about` route হবে।"} />
+
+## Nested Routes
+
+<CodeBlock code={"export default async function BlogPostPage({\n  params,\n}: {\n  params: Promise<{ slug: string }>;\n}) {\n  const { slug } = await params;\n\n  return <h1>Blog post: {slug}</h1>;\n}"} lang={"tsx"} title={"app/blog/[slug]/page.tsx"} />
+
+<InParagraph text={"বর্গাকার bracket `[slug]` দিয়ে **dynamic route** তৈরি হয়। `/blog/my-first-post` ভিজিট করলে `slug` হবে `my-first-post`।"} />
+
+<Tip tone={"info"} title={"params হলো Promise"} text={"Next.js 15+ এ `params` ও `searchParams` উভয়ই **Promise**। তাই ব্যবহারের আগে `await` করতে হবে।"} />
+
+## Search Params
+
+<CodeBlock code={"export default async function ProductsPage({\n  searchParams,\n}: {\n  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;\n}) {\n  const query = (await searchParams).q;\n\n  return <h1>Search results for: {query}</h1>;\n}"} lang={"tsx"} title={"app/products/page.tsx"} />
+
+## Route Props Helpers
+
+<InParagraph text={"`page.tsx` ও `layout.tsx`-এ `params` টাইপ লেখার জন্য Next.js global helper type দেয়:"} />
+
+<CodeBlock code={"export default async function Page(props: PageProps<'/blog/[slug]'>) {\n  const { slug } = await props.params;\n  return <h1>Blog post: {slug}</h1>;\n}"} lang={"tsx"} title={"app/blog/[slug]/page.tsx"} />
+
+<Tip tone={"success"} title={"Dynamic Routes"} text={"`[...slug]` দিয়ে catch-all, `[[...slug]]` দিয়ে optional catch-all হয়। পরবর্তী অধ্যায়ে বিস্তারিত।"} />

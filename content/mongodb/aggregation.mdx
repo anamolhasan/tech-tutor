@@ -1,0 +1,36 @@
+---
+title: "Aggregation Pipeline"
+label: "Aggregation"
+order: 13
+level: "Advanced"
+description: "$match, $group, $project, $sort দিয়ে ডেটা প্রসেসিং ও report তৈরি — বাংলায়।"
+---
+
+## Aggregation কী?
+
+<InParagraph text={"**Aggregation pipeline** হলো ধাপে ধাপে ডেটা processes করার সিস্টেম। প্রতিটি stage আগের stage-এর output-এ কাজ করে — যেমন grouping, summing, joining, reshape।"} />
+
+## Basic pipeline
+
+<CodeBlock code={"const result = await Order.aggregate([\n  // stage 1: শুধু paid order\n  { $match: { status: \"paid\", createdAt: { $gte: startOfMonth } } },\n\n  // stage 2: category ধরে জমা\n  {\n    $group: {\n      _id: \"$items.category\",\n      totalOrders: { $sum: 1 },\n      revenue: { $sum: \"$total\" },\n    },\n  },\n\n  // stage 3: নাম cleaner\n  { $project: { category: \"$_id\", totalOrders: 1, revenue: 1, _id: 0 } },\n\n  // stage 4: revenue অনুযায়ী সাজানো\n  { $sort: { revenue: -1 } },\n\n  // stage 5: top ৫\n  { $limit: 5 },\n]);"} lang={"js"} title={"Category ধরে বিক্রয়"} />
+
+## $lookup — aggregation-এ populate
+
+<CodeBlock code={"const ordersWithCustomer = await Order.aggregate([\n  {\n    $lookup: {\n      from: \"users\",\n      localField: \"customer\",\n      foreignField: \"_id\",\n      as: \"customer\",\n    },\n  },\n  { $unwind: { path: \"$customer\", preserveNullAndEmptyArrays: true } },\n  { $project: { total: 1, \"customer.name\": 1, \"customer.email\": 1 } },\n]);"} lang={"js"} title={"$lookup join"} />
+
+## Common stages
+
+| Stage | কাজ |
+| --- | --- |
+| `$match` | Filter (find-এর মতো) |
+| `$group` | Grouping + accumulation ($sum, $avg, $count) |
+| `$project` | Field নির্বাচন/reshape |
+| `$sort` | কোনো field ধরে সাজান |
+| `$limit` / `$skip` | পেজিনেশন |
+| `$lookup` | অন্য collection-এর সাথে join |
+| `$unwind` | Array-কে আলাদা document |
+| `$count` | মোট সংখ্যা |
+
+<CodeBlock code={"const stats = await Rating.aggregate([\n  { $match: { product: productId } },\n  {\n    $group: {\n      _id: null,\n      totalReviews: { $sum: 1 },\n      avgRating: { $avg: \"$score\" },\n    },\n  },\n]);"} lang={"js"} title={"Count + average"} />
+
+<Tip tone={"info"} title={"Aggregate vs Query"} text={"সাধারণ filter/sort-এর জন্য `find()` যথেষ্ট। **grouping, sum, join, complex report** লাগলে aggregation pipeline — কারণ এটি ডেটাবেসের ভেতরেই ঘটে, ডেটা সার্ভারে আনতে হয় না।"} />

@@ -1,0 +1,19 @@
+---
+title: "orderBy, take/skip, cursor"
+label: "Sort & Pagination"
+order: 13
+level: "Intermediate"
+description: "তালিকা সাজানো ও page-by-page — বড় dataset-এ cursor।"
+---
+
+<CodeBlock code={"const page = 2;\nconst perPage = 10;\n\nconst products = await prisma.product.findMany({\n  orderBy: [{ price: \"desc\" }, { name: \"asc\" }],\n  skip: (page - 1) * perPage,\n  take: perPage,\n});"} lang={"ts"} title={"sort + skip/take"} />
+
+<InParagraph text={"**cursor pagination** — অনেক operator-কে skip/offset-এর চেয়ে efficient (যথেষ্ট rows scan না হয়) আদর্শ:"} />
+
+<CodeBlock code={"const products = await prisma.product.findMany({\n  where: { active: true },\n  orderBy: { id: \"asc\" },\n  cursor: { id: lastSeenId },\n  take: 10,\n  skip: 1, // cursor-row পুনরায় না\n});"} lang={"ts"} />
+
+- `orderBy` array — একাধিক column priority
+- `skip` বড় offset-এ ধীর — cursor-এ বদলান
+- count + findMany — total page জানতে
+
+<Tip tone={"info"} title={"stable order"} text={"pagination-যদি data বদলায়, stable secondary (id)-সহ order দিন — না হলে offset-এ duplicate লাফিয়ে যেতে পারে।"} />

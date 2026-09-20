@@ -1,0 +1,25 @@
+---
+title: "Query Keys — Cache-র ঠিকানা"
+label: "Query Keys"
+order: 10
+level: "Intermediate"
+description: "Hierarchical query keys, invalidation ও কীভাবে key-এ params রাখা হয় — বাংলায়।"
+---
+
+<InParagraph text={"TanStack Query প্রতিটি query-কে তার **queryKey** দিয়ে চেনে। একই key = একই cache entry। key-এ **params** (page, search, filter) রাখা হলে সেগুলো আলাদা আলাদা cache হয়ে থাকে।"} />
+
+## Hierarchical keys কেন
+
+<CodeBlock code={"export const productKeys = {\n  all: [\"products\"] as const,\n\n  // list-এর সব variant\n  lists: () => [...productKeys.all, \"list\"] as const,\n\n  // নির্দিষ্ট list (params সহ)\n  list: (params: ProductQueryParams) =>\n    [...productKeys.lists(), params] as const,\n\n  // detail-এর সব\n  details: () => [...productKeys.all, \"detail\"] as const,\n\n  // নির্দিষ্ট detail\n  detail: (id: string) => [...productKeys.details(), id] as const,\n};"} lang={"ts"} title={"src/lib/query-keys.ts"} />
+
+## এভাবে প্যারেন্ট ইনভালিডেশন
+
+<InParagraph text={"এই hierarchy-র সুবিধা — উপরের key ইনভালিড করলে নিচের সব cache আবার চালু হয়:"} />
+
+<CodeBlock code={"// সব products query invalid\nqueryClient.invalidateQueries({ queryKey: productKeys.all });\n\n// শুধু list queries\nqueryClient.invalidateQueries({ queryKey: productKeys.lists() });\n\n// শুধু একটা detail\nqueryClient.invalidateQueries({ queryKey: productKeys.detail(\"p1\") });"} lang={"ts"} title={"Invalidation pattern"} />
+
+## key-এ object থাকলে
+
+<InParagraph text={"params object key-এ থাকলে **deterministic** হতে হবে — property order বদলালেও যেন same key হয়। সাধারণত object-টাই ঠিকঠাক work করে, কিন্তু ফাংশন-ধরনের ভ্যালু ever key-তে দেবেন না।"} />
+
+<Tip tone={"info"} title={"key ফাংশন নয়"} text={"Query keys **সিরিয়ালাইজেবল** হতে হবে — string, number, boolean, null, array, plain object। `undefined` বাদ দিন বা null দিন, কারণ key-এ `undefined` বাদ পড়ে যায়।"} />

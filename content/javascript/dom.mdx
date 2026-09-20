@@ -1,0 +1,29 @@
+---
+title: "DOM Manipulation"
+label: "DOM"
+order: 11
+level: "Intermediate"
+description: "DOM কী, element খোঁজা, content বদলানো, class toggle, style — ডকুমেন্ট নিয়ে কাজ করার বাংলা গাইড।"
+---
+
+<InParagraph text={"**DOM** (Document Object Model) হলো HTML ডকুমেন্টের JavaScript-দৃশ্য representation। এটির মাধ্যমে JS পেজের content, structure ও style নিয়ন্ত্রণ করে।"} />
+
+## Element খোঁজা
+
+<CodeBlock code={"document.getElementById(\"header\");\ndocument.querySelector(\".card\");\ndocument.querySelectorAll(\"div.card\");"} lang={"javascript"} />
+
+## content বদলানো
+
+<CodeBlock code={"<p id=\"status\">লোড হচ্ছে...</p>\n\n<script>\n  const status = document.getElementById(\"status\");\n  status.textContent = \"সম্পন্ন!\";\n  status.innerHTML = \"<strong>সফল</strong>\";\n</script>"} lang={"html"} />
+
+<Tip tone={"warning"} title={"textContent নাকি innerHTML?"} text={"শুধু টেক্সট বদলাতে `textContent` ব্যবহার করুন। `innerHTML` দিয়ে ব্যবহারকারীর ইনপুট ঢোকালে **XSS** ঝুঁকি তৈরি হয়।"} />
+
+## class ও style
+
+<CodeBlock code={"const box = document.querySelector(\".box\");\n\nbox.classList.add(\"active\");\nbox.classList.remove(\"hidden\");\nbox.classList.toggle(\"dark\");\nbox.style.color = \"green\";"} lang={"javascript"} />
+
+## নতুন element তৈরি
+
+<CodeBlock code={"const li = document.createElement(\"li\");\nli.textContent = \"বাংলা শিখছি\";\ndocument.querySelector(\"ul\").appendChild(li);"} lang={"javascript"} />
+
+<Tip tone={"success"} title={"নিরাপদ সিলেক্ট"} text={"`querySelector` দিয়ে একটাই, `querySelectorAll` দিয়ে সব element পাওয়া যায় এবং এটি NodeList-এ (লুপ করা যায়) আসে।"} />

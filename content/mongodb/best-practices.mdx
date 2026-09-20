@@ -1,0 +1,45 @@
+---
+title: "Mongoose Best Practices"
+label: "Best Practices"
+order: 21
+level: "Advanced"
+description: "প্রোডাকশন-ready Mongoose: connection reuse, lean(), naming, N+1 এড়ানো, security — বাংলায়।"
+---
+
+## ১. Connection manage করুন
+
+<InParagraph text={"প্রতিটি request/function-এ নতুন connection খুলবেন না। একটা connection pool সারাজীবন activate রাখুন — serverless-এ global cache করুন (Next.js অধ্যায়টা দেখুন)।"} />
+
+## ২. lean() ব্যবহার
+
+<CodeBlock code={"// শুধু read/render করলে document method দরকার হয় না\nconst users = await User.find().lean();\n\n// মাঝে document method (save, virtual) দরকার হলে lean NOT\nconst user = await User.findById(id);\nuser.name = \"নতুন\"; // document-এ modify\nawait user.save();"} lang={"js"} title={"read-এ lean"} />
+
+## ৩. N+1 এড়ান
+
+- লুপে `find()` → বদলে `parallel`/`Promise.all` বা এক query-তে `$in`
+- Reference-গুলো populate একবারে
+- `select()` দিয়ে অযথা field-না
+- Page-wise `limit/skip` — limitless নয়
+
+## ৪. Naming নিয়ম
+
+| নিয়ম | উদাহরণ |
+| --- | --- |
+| Model name — Singular, PascalCase | `User`, `BlogPost` |
+| Collection — plural (default) | `users`, `blogposts` |
+| Field — camelCase | `firstName`, `createdAt` |
+| Schema কনভেনশন | `timestamps: true` |
+
+## ৫. Security
+
+- `.env`-এ secrets — `NEXT_PUBLIC_` দিয়ে client-এ পাঠাবেন না
+- `findByIdAndUpdate`-এ `runValidators: true`
+- Query injection ঠেকাতে input validate করুন — user-controlled raw query object-কে সরাসরি filter হিসেবে ব্যবহার করবেন না
+- Password/email-এ **index + bcrypt hash**
+- API limit-এ `$lookup`/aggregation-সহ complex query-র ট্র্যাক
+
+## ৬. Mongoose + TypeScript
+
+<CodeBlock code={"import { Schema, model, models, type Model } from \"mongoose\";\n\ninterface IUser {\n  name: string;\n  email: string;\n  age?: number;\n}\n\nconst userSchema = new Schema<IUser>({\n  name: { type: String, required: true },\n  email: { type: String, required: true, unique: true },\n  age: Number,\n});\n\n// hot reload গার্ড\nconst User: Model<IUser> =\n  models.User || model<IUser>(\"User\", userSchema);\n\nexport default User;"} lang={"ts"} title={"Typed model (v8)"} />
+
+<Tip tone={"success"} title={"আরেকটি গুরুত্বপূর্ণ"} text={"Error message ও UI-তে Bangla ব্যবহার করতে পারেন, কিন্তু **field/mongoose naming বাংলা না** — MongoDB ও JS-এর সাথে সামঞ্জস্যপূর্ণ ASCII name রাখুন। এতে aggregate/$project-সহ সব জায়গায় কম সমস্যা হয়।"} />

@@ -1,0 +1,37 @@
+---
+title: "Axios Setup — Instance ও Interceptors"
+label: "Axios Setup"
+order: 5
+level: "Intermediate"
+description: "Axios instance, baseURL, timeout, request/response interceptors এবং env variables — বাংলায়।"
+---
+
+<InParagraph text={"**Axios** হলো promise-based HTTP client। সরাসরি `fetch`-এর চেয়ে Axios-এ interceptor, timeout, এবং বিল্ট-ইন error handling সহজ। আমরা একটি **একক instance** তৈরি করব — পুরো project একই config ব্যবহার করবে।"} />
+
+## fetch vs axios
+
+| বিষয় | fetch | axios |
+| --- | --- | --- |
+| JSON | `res.json()` ম্যানুয়াল | স্বয়ংক্রিয় `res.data` |
+| Timeout | AbortController জটিল | `timeout` option |
+| Interceptors | নেই | request/response middleware |
+| Error handling | HTTP error-এও resolve করে | status ছাড়া reject করে |
+| লাইব্রেরি আকার | built-in | ছোট dependency |
+
+## Axios instance
+
+<CodeBlock code={"import axios from \"axios\";\n\n// একটাই instance সারা project\nexport const api = axios.create({\n  baseURL: process.env.NEXT_PUBLIC_API_URL ?? \"/api\",\n  timeout: 10_000,\n  headers: { \"Content-Type\": \"application/json\" },\n});"} lang={"ts"} title={"src/lib/axios.ts"} />
+
+<InParagraph text={"`NEXT_PUBLIC_API_URL` `.env.local`-এ দিন। Next.js-এ `NEXT_PUBLIC_` prefix-যুক্ত variable client-side-এ প্রকাশ পায়।"} />
+
+<CodeBlock code={"# লোকাল ডেভে route handlers-কে calls → base \"/api\" ধরেই থাকে\n# রিয়েল REST API থাকলে:\nNEXT_PUBLIC_API_URL=https://api.example.com"} lang={"text"} title={".env.local"} />
+
+## Request interceptor — token
+
+<CodeBlock code={"api.interceptors.request.use((config) => {\n  const token = localStorage.getItem(\"token\"); // বা cookie থেকে\n  if (token) {\n    config.headers.Authorization = `Bearer ${token}`;\n  }\n  return config;\n});"} lang={"ts"} title={"axios.ts (agenda)"} />
+
+## Response error handling
+
+<CodeBlock code={"api.interceptors.response.use(\n  (response) => response,\n  (error) => {\n    // সার্ভার থেকে error message বের করি\n    const message =\n      error.response?.data?.message ??\n      error.message ??\n      \"অজানা সমস্যা হয়েছে\";\n\n    return Promise.reject(new Error(message));\n  }\n);"} lang={"ts"} title={"Error normalization"} />
+
+<Tip tone={"warning"} title={"localStorage-এ token সাবধান"} text={"Authentication-এর detail এই কোর্সের বাইরে, তবে জেনে রাখুন — production-এ token সাধারণত **HttpOnly cookie**-তে থাকে, আমাদের মতো `localStorage`-এ নয়। বাস্তব project-এ auth middleware ব্যবহার করুন।"} />

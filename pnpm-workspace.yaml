@@ -1,0 +1,17 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+
+catalogs:
+  eslint9:
+    eslint: ^9.39.5
+  next15:
+    next: ^15.3.6
+  react19:
+    "@types/react": ^19.1.16
+    "@types/react-dom": ^19.1.9
+    react: ^19.1.0
+    react-dom: ^19.1.0
+  typescript5:
+    "@types/node": ^20.19.0
+    typescript: ^5.9.3

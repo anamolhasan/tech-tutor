@@ -1,0 +1,19 @@
+---
+title: "schema.prisma — datasource ও generator"
+label: "Schema Basics"
+order: 4
+level: "Beginner"
+description: "Prisma-র heart — ফাইলের প্রথম দুটি অংশ।"
+---
+
+<CodeBlock code={"generator client {\n  provider = \"prisma-client-js\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}"} lang={"prisma"} title={"prisma/schema.prisma"} />
+
+| Block | কাজ |
+| --- | --- |
+| generator client | type-safe client generate হয় |
+| datasource db | ডাটাবেস connection — প্রোভাইডার ও URL |
+| env(...) | .env-এর value টানার syntax |
+
+<InParagraph text={"ডিফল্ট `schema.prisma`-কে পরে model দিয়ে পূর্ণ করবো — Prisma filter/write API নিজে বোঝে, আমরা শুধু model-এর তালিকা লিখি।"} />
+
+<Tip tone={"info"} title={"provider"} text={"provider-এ `postgresql` — Prisma অন্য DB (mysql, sqlite, mongodb)-ও সমর্থন করে, তবে আমরা PostgreSQL-এ focus।"} />

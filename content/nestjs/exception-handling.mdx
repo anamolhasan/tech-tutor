@@ -1,0 +1,27 @@
+---
+title: "NestJS Exception Handling"
+label: "Exception Handling"
+order: 9
+level: "Intermediate"
+description: "Built-in exceptions, custom exception, exception filter — Error handling বাংলায়।"
+---
+
+<InParagraph text={"NestJS built-in exceptions দেয় (NotFoundException, BadRequestException ইত্যাদি) এবং **Exception Filter** দিয়ে সম্পূর্ণ control করা যায়।"} />
+
+## Built-in Exceptions
+
+<CodeBlock code={"import {\n  BadRequestException,\n  NotFoundException,\n  UnauthorizedException,\n  ForbiddenException,\n  ConflictException,\n  HttpException,\n  HttpStatus,\n} from \"@nestjs/common\";\n\n@Get(\":id\")\nfindOne(id: number) {\n  if (!this.userExists(id)) {\n    throw new NotFoundException(\"User পাওয়া যায়নি\");\n  }\n}\n\ncreate(data) {\n  if (data.emailExists) {\n    throw new ConflictException(\"This email already exists\");\n  }\n  throw new HttpException(\n    { success: false, message: \"Custom message\" },\n    HttpStatus.BAD_REQUEST,\n  );\n}"} lang={"typescript"} />
+
+## Custom Exception
+
+<CodeBlock code={"import { HttpException, HttpStatus } from \"@nestjs/common\";\n\nexport class AppException extends HttpException {\n  constructor(message: string, status: HttpStatus) {\n    super(\n      { success: false, message, timestamp: new Date().toISOString() },\n      status,\n    );\n  }\n}\n\n// ব্যবহার\nthrow new AppException(\"Payment failed\", HttpStatus.PAYMENT_REQUIRED);"} lang={"typescript"} title={"src/common/exceptions/app.exception.ts"} />
+
+## Exception Filter
+
+<CodeBlock code={"import {\n  ArgumentsHost,\n  Catch,\n  ExceptionFilter,\n  HttpException,\n  HttpStatus,\n} from \"@nestjs/common\";\nimport { Request, Response } from \"express\";\n\n@Catch()\nexport class AllExceptionsFilter implements ExceptionFilter {\n  catch(exception: unknown, host: ArgumentsHost) {\n    const ctx = host.switchToHttp();\n    const response = ctx.getResponse<Response>();\n    const request = ctx.getRequest<Request>();\n\n    const status =\n      exception instanceof HttpException\n        ? exception.getStatus()\n        : HttpStatus.INTERNAL_SERVER_ERROR;\n\n    const message =\n      exception instanceof HttpException\n        ? (exception.getResponse() as any).message ?? exception.message\n        : \"Internal Server Error\";\n\n    response.status(status).json({\n      success: false,\n      statusCode: status,\n      message,\n      path: request.url,\n      timestamp: new Date().toISOString(),\n    });\n  }\n}"} lang={"typescript"} title={"src/common/all-exceptions.filter.ts"} />
+
+## Filter Apply
+
+<CodeBlock code={"// controller level\n@UseFilters(new AllExceptionsFilter())\nexport class UsersController {}\n\n// global (main.ts)\nimport { AllExceptionsFilter } from \"./common/all-exceptions.filter\";\nconst app = await NestFactory.create(AppModule);\napp.useGlobalFilters(new AllExceptionsFilter());"} lang={"typescript"} />
+
+<Tip tone={"success"} title={"Best Practice"} text={"Global exception filter দিয়ে consistent error format রাখুন — frontend-এ parse করা সহজ হয়। বিশেষ log-এর জন্য `@Catch(PrismaClientExceptionFilter)` আলাদা filter ব্যবহার করুন।"} />

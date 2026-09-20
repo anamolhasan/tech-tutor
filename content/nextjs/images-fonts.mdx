@@ -1,0 +1,32 @@
+---
+title: "Images ও Fonts Optimization"
+label: "Images ও Fonts"
+order: 17
+level: "Intermediate"
+description: "next/image ও next/font দিয়ে image ও font optimization — বাংলা গাইড।"
+---
+
+<InParagraph text={"Next.js-এ **`next/image`** ও **`next/font`** দিয়ে ছবি ও font স্বয়ংক্রিয়ভাবে optimize হয় — এতে performance অনেক বাড়ে।"} />
+
+## next/image
+
+<InParagraph text={"`<Image>` component চিত্রকে WebP/AVIF-তে convert, lazy-load ও আকার অনুযায়ী resize করে।"} />
+
+<CodeBlock code={"import Image from \"next/image\";\n\nexport default function Page() {\n  return (\n    <Image\n      src=\"/profile.png\"\n      alt=\"Profile picture\"\n      width={500}\n      height={500}\n      priority={false}\n    />\n  );\n}"} lang={"tsx"} title={"app/page.tsx"} />
+
+- **WebP/AVIF** — automatic format conversion
+- **Lazy loading** — viewport-এর কাছে এলে load হয়
+- **Responsive sizes** — ডিভাইস অনুযায়ী size
+- **CSP/remote patterns** — external image-এর config
+
+## next/font
+
+<InParagraph text={"`next/font` font-কে **self-host** করে — বাইরের network request ছাড়া fast load। এমনকি Google Fonts-ও build-এর সময় bundle-এ আনা হয়।"} />
+
+<CodeBlock code={"import { Inter } from \"next/font/google\";\n\nconst inter = Inter({ subsets: [\"latin\"] });\n\nexport default function RootLayout({\n  children,\n}: {\n  children: React.ReactNode;\n}) {\n  return (\n    <html lang=\"bn\">\n      <body className={inter.className}>{children}</body>\n    </html>\n  );\n}"} lang={"tsx"} title={"app/layout.tsx"} />
+
+## Local Font
+
+<CodeBlock code={"import localFont from \"next/font/local\";\n\nconst myFont = localFont({\n  src: \"./fonts/my-font.woff2\",\n});\n\nexport default function Layout({ children }: { children: React.ReactNode }) {\n  return <html className={myFont.className}>{children}</html>;\n}"} lang={"tsx"} title={"app/layout.tsx"} />
+
+<Tip tone={"success"} title={"Layout Shift prevention"} text={"FakeImage ও next/font দুইটিই **layout shift (CLS) কমায়** — font-এর space আগেই reserve থাকে। এগুলো Core Web Vitals-এ ভালো score এনে দেয়।"} />

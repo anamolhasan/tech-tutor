@@ -1,0 +1,23 @@
+---
+title: "Backup — pg_dump, pg_restore"
+label: "Backup & Restore"
+order: 31
+level: "Advanced"
+description: "database-র ছবি তোলা ও ফেরত আনা — safety net।"
+---
+
+<CodeBlock code={"pg_dump -U postgres -F c techshop -f techshop.dump"} lang={"bash"} title={"dump"} />
+
+<CodeBlock code={"createdb -U postgres techshop_new\npg_restore -U postgres -d techshop_new techshop.dump"} lang={"bash"} title={"restore"} />
+
+| Option | কাজ |
+| --- | --- |
+| -F c | custom format (compressed, flexible) |
+| --schema-only | ভাঙা (data ছাড়া) |
+| --data-only | শুধু data |
+| -t products | শুধু নির্দিষ্ট table |
+| --no-owner | owner mismatch এড়ানো |
+
+<InParagraph text={"সঞ্চয়স্থান pg_dump plain SQL দিয়েও (psql-এ restore)। **continuous** safety-এর জন্য — WAL archiving / PITR (advanced)।"} />
+
+<Tip tone={"warning"} title={"আর্টিফ্যাক্ট পরীক্ষা"} text={"Backup-এর মূল্য তখনই — restore **দিয়ে** যাচাই করলে। শেষ ৩ মাস আগের backup-এ কি restore করতে পারবেন — পরীক্ষা করে রাখুন।"} />

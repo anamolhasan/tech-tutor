@@ -1,0 +1,36 @@
+---
+title: "JavaScript Variables (ভেরিয়েবল)"
+label: "Variables"
+order: 3
+level: "Beginner"
+description: "var, let, const — JavaScript-এ ডেটা রাখার ঘর। কোনটি কখন ব্যবহার করবেন — সম্পূর্ণ বাংলা গাইড।"
+---
+
+<InParagraph text={"**ভেরিয়েবল** হলো ডেটা রাখার একটি নামকৃত জায়গা। JavaScript-এ `var`, `let`, `const` — তিনটি উপায়ে ভেরিয়েবল ঘোষণা করা যায়।"} />
+
+## const
+
+<CodeBlock code={"const pi = 3.1416;\n// pi = 3; // ❌ ত্রুটি! const বদলানো যায় না"} lang={"javascript"} />
+
+<InParagraph text={"যে মান পরিবর্তন হবে না, সেখানে `const`। ডিফল্ট হয়ে ওঠে এটাই।"} />
+
+## let
+
+<CodeBlock code={"let score = 0;\nscore = 10; // ✅ পরিবর্তনযোগ্য"} lang={"javascript"} />
+
+<InParagraph text={"যে মান পরিবর্তন হবে, সেখানে `let`।"} />
+
+## var
+
+<InParagraph text={"পুরোনো পদ্ধতি `var`। এটি function-scoped এবং অপ্রত্যাশিত আচরণ আছে — আধুনিক কোডে ব্যবহার এড়িয়ে চলুন।"} />
+
+## নামকরণের নিয়ম
+
+- অক্ষর, `_`, `$` দিয়ে শুরু (“সংখ্যা” প্রথমে নয়)
+- `camelCase` অনুসরণ করুন — যেমন `userName`
+- অর্থপূর্ণ নাম দিন
+- সংরক্ষিত শব্দ (যেমন `class`) ব্যবহার করবেন না
+
+<CodeBlock code={"const fullName = \"আনামুল হাসান\";\nconst isActive = true;\nconst userAge = 28;"} lang={"javascript"} />
+
+<Tip tone={"success"} title={"নিয়ম মনে রাখুন"} text={"ডিফল্ট `const`; মান বদলাতে হলে `let`; `var` প্রায় ব্যবহারই করবেন না।"} />

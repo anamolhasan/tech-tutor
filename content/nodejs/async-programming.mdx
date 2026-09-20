@@ -1,0 +1,37 @@
+---
+title: "Async Programming — Callback, Promise, async/await"
+label: "Async Programming"
+order: 9
+level: "Intermediate"
+description: "Callback, Promise, async/await, error handling — Node.js-এ asynchronous programming বাংলায়।"
+---
+
+<InParagraph text={"Node.js **non-blocking** — অর্থাৎ file read, database query, API call এসব async কাজ। এগুলো handle করতে callbacks, Promises, ও async/await ব্যবহার হয়।"} />
+
+## Callback
+
+<InParagraph text={"Callback হলো একটি function যা অন্য একটি function-কে argument হিসেবে দেওয়া হয় এবং কাজ শেষে call করা হয়।"} />
+
+<CodeBlock code={"const fs = require(\"node:fs\");\n\n// Callback style\nfs.readFile(\"data.txt\", \"utf8\", (err, data) => {\n  if (err) {\n    console.error(\"ত্রুটি:\", err);\n    return;\n  }\n  console.log(data);\n});"} lang={"javascript"} />
+
+## Callback Hell
+
+<CodeBlock code={"// ❌ Callback Hell — পড়া কঠিন\ngetUser(id, (user) => {\n  getOrders(user.id, (orders) => {\n    getOrderDetails(orders[0].id, (details) => {\n      getShipping(details.id, (shipping) => {\n        console.log(shipping);\n      });\n    });\n  });\n});"} lang={"javascript"} />
+
+## Promise
+
+<InParagraph text={"Promise হলো async কাজের **ভবিষ্যৎ ফলাফল**-এর প্রতিনিধিত্ব। এটি তিনটি state-এ থাকতে পারে: pending, fulfilled, rejected।"} />
+
+<CodeBlock code={"const getUser = (id) => {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      if (id > 0) {\n        resolve({ id, name: \"রহিম\" });\n      } else {\n        reject(new Error(\"Invalid ID\"));\n      }\n    }, 1000);\n  });\n};\n\ngetUser(1)\n  .then((user) => console.log(\"ব্যবহারকারী:\", user.name))\n  .catch((err) => console.error(err.message))\n  .finally(() => console.log(\"সম্পন্ন\"));"} lang={"javascript"} />
+
+## async/await
+
+<InParagraph text={"**async/await** হলো Promise-এর সবচেয়ে পরিষ্কার syntax। `async` function সবসময় Promise return করে, আর `await` দিয়ে Promise resolve হওয়া পর্যন্ত অপেক্ষা করা যায়।"} />
+
+<CodeBlock code={"async function getUserData(id) {\n  try {\n    const user = await getUser(id);\n    const orders = await getOrders(user.id);\n    const details = await getOrderDetails(orders[0].id);\n    return details;\n  } catch (error) {\n    console.error(\"ত্রুটি:\", error.message);\n    throw error;\n  }\n}\n\n// ব্যবহার\nconst data = await getUserData(1);\nconsole.log(data);"} lang={"javascript"} />
+
+## Promise.all, Promise.race
+
+<CodeBlock code={"// সব Promise একসাথে run\nconst [users, posts] = await Promise.all([\n  fetchUsers(),\n  fetchPosts(),\n]);\n\n// যেটি আগে শেষ হয়\nconst fastest = await Promise.race([\n  fetchFromCDN1(),\n  fetchFromCDN2(),\n]);\n\n// সব resolved/rejected হলে\nconst results = await Promise.allSettled([\n  fetchUsers(),\n  fetchPosts(),\n]);"} lang={"javascript"} />
+
+<Tip tone={"success"} title={"সেরা অভ্যাস"} text={"সবসময় `try/catch` দিয়ে async error handle করুন। `Promise.all` ব্যবহার করার সময় একটি reject হলে সব fail হবে — `Promise.allSettled` বিকল্প হিসেবে ব্যবহার করুন।"} />

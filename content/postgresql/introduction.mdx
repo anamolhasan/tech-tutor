@@ -1,0 +1,27 @@
+---
+title: "PostgreSQL কী ও কেন — Relational Database"
+label: "Postgres Intro"
+order: 1
+level: "Beginner"
+description: "PostgreSQL-এর পরিচিতি — বৈশিষ্ট্য, কখন প্রযোজ্য — বাংলায়।"
+---
+
+<InParagraph text={"**PostgreSQL** (Postgres) হলো একটি **open-source relational database** — ৩৫+ বছরের উন্নয়নে পরিণত, নির্ভরযোগ্য ও বিনামূল্যে। ACID transactions, complex queries, extensibility — সব আধুনিক ফিচার native।"} />
+
+## কেন PostgreSQL
+
+- **ACID** — transactions-এ সব-or-নথিং; financial data-র জন্য জরুরি
+- **JOIN** — একাধিক table-এর data relation ও aggregation native SQL
+- **Extensions** — PostGIS (GIS), uuid, full-text search
+- **JSONB** — relational + document দুটিই
+- **Row-level security**, views, triggers, window functions
+- Mature tooling — pgAdmin, Prisma, DBeaver, cloud (Neon, Supabase)
+
+## কোন project-এ প্রযোজ্য
+
+- Relational data — user, order, product-এর মতো সম্পর্কযুক্ত সত্তা
+- Data integrity জরুরি — banking, e-commerce, inventory
+- Reporting / analytics — aggregation ও CTE দিয়ে
+- Web app main database — Node/Express/NestJS/Next.js-এর সাথে
+
+<Tip tone={"info"} title={"এই course-এ"} text={"মূলত **TechShop** — একটি e-commerce database — তৈরি করে SQL শিখব: schema design থেকে joins, aggregation, indexes, transactions, Node.js + Prisma integration পর্যন্ত।"} />

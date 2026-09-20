@@ -1,0 +1,29 @@
+---
+title: "NestJS + MongoDB (Mongoose)"
+label: "Database"
+order: 11
+level: "Advanced"
+description: "@nestjs/mongoose, Schema, Model, repository pattern, CRUD service — বাংলায়।"
+---
+
+<InParagraph text={"NestJS-এর জন্য অফিসিয়াল **@nestjs/mongoose** wrapper আছে। এখানে Schema + Model দিয়ে database পরিষ্কারভাবে manage করা যায়।"} />
+
+## Setup
+
+<CodeBlock code={"npm i @nestjs/mongoose mongoose\nnpm i -D @types/mongoose"} lang={"bash"} />
+
+<CodeBlock code={"import { Module } from \"@nestjs/common\";\nimport { MongooseModule } from \"@nestjs/mongoose\";\n\n@Module({\n  imports: [\n    MongooseModule.forRoot(\"mongodb://localhost:27017/nestapp\"),\n    // বা env থেকে\n    // MongooseModule.forRoot(process.env.MONGO_URI),\n  ],\n})\nexport class AppModule {}"} lang={"typescript"} title={"src/app.module.ts"} />
+
+## Schema Definition
+
+<CodeBlock code={"import { Prop, Schema, SchemaFactory } from \"@nestjs/mongoose\";\nimport { HydratedDocument } from \"mongoose\";\n\nexport type UserDocument = HydratedDocument<User>;\n\n@Schema({ timestamps: true })\nexport class User {\n  @Prop({ required: true, trim: true })\n  name: string;\n\n  @Prop({ required: true, unique: true, lowercase: true })\n  email: string;\n\n  @Prop({ required: true, select: false }) // find-এ exclude\n  password: string;\n\n  @Prop({ default: \"user\" })\n  role: string;\n}\n\nexport const UserSchema = SchemaFactory.createForClass(User);"} lang={"typescript"} title={"src/users/schemas/user.schema.ts"} />
+
+## Module & Inject Model
+
+<CodeBlock code={"import { Module } from \"@nestjs/common\";\nimport { MongooseModule } from \"@nestjs/mongoose\";\nimport { UsersService } from \"./users.service\";\nimport { UsersController } from \"./users.controller\";\nimport { User, UserSchema } from \"./schemas/user.schema\";\n\n@Module({\n  imports: [\n    MongooseModule.forFeature([\n      { name: User.name, schema: UserSchema },\n    ]),\n  ],\n  controllers: [UsersController],\n  providers: [UsersService],\n  exports: [UsersService],\n})\nexport class UsersModule {}"} lang={"typescript"} title={"src/users/users.module.ts"} />
+
+## Service (Repository pattern)
+
+<CodeBlock code={"import { Injectable, NotFoundException } from \"@nestjs/common\";\nimport { InjectModel } from \"@nestjs/mongoose\";\nimport { Model } from \"mongoose\";\nimport { User, UserDocument } from \"./schemas/user.schema\";\nimport { CreateUserDto } from \"./dto/create-user.dto\";\n\n@Injectable()\nexport class UsersService {\n  constructor(\n    @InjectModel(User.name) private userModel: Model<UserDocument>,\n  ) {}\n\n  async create(dto: CreateUserDto): Promise<User> {\n    const created = new this.userModel(dto);\n    return created.save();\n  }\n\n  async findAll(): Promise<User[]> {\n    return this.userModel.find().exec();\n  }\n\n  async findOne(id: string): Promise<User> {\n    const user = await this.userModel.findById(id).exec();\n    if (!user) throw new NotFoundException(\"User পাওয়া যায়নি\");\n    return user;\n  }\n\n  async update(id: string, dto: Partial<CreateUserDto>): Promise<User> {\n    const updated = await this.userModel\n      .findByIdAndUpdate(id, dto, { new: true })\n      .exec();\n    if (!updated) throw new NotFoundException(\"User পাওয়া যায়নি\");\n    return updated;\n  }\n\n  async remove(id: string): Promise<void> {\n    const deleted = await this.userModel.findByIdAndDelete(id).exec();\n    if (!deleted) throw new NotFoundException(\"User পাওয়া যায়নি\");\n  }\n}"} lang={"typescript"} title={"src/users/users.service.ts"} />
+
+<Tip tone={"success"} title={"DB Choice"} text={"PostgreSQL চাইলে **TypeORM** বা **Prisma** ব্যবহার করুন — NestJS-এ সবই প্রথম-class support পায়।"} />

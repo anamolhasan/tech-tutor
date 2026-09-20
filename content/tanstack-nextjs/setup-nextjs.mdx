@@ -1,0 +1,31 @@
+---
+title: "Setup Next.js Project"
+label: "Setup Next.js"
+order: 4
+level: "Beginner"
+description: "create-next-app দিয়ে project তৈরি, প্রয়োজনীয় dependencies ও shadcn/ui install — বাংলায়।"
+---
+
+<InParagraph text={"প্রথম ধাপ — Next.js project তৈরি করা এবং আমাদের stack-এর تمام packages install করা।"} />
+
+## create-next-app
+
+<CodeBlock code={"npx create-next-app@latest product-dashboard \\\n  --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\"\n\ncd product-dashboard"} lang={"bash"} title={"Project create"} />
+
+## ইনস্টল করা dependencies
+
+<CodeBlock code={"npm install axios \\\n  @tanstack/react-query \\\n  @tanstack/react-query-devtools \\\n  @tanstack/react-table \\\n  react-hook-form \\\n  @hookform/resolvers \\\n  zod"} lang={"bash"} title={"Install packages"} />
+
+<InParagraph text={"- **axios** — HTTP requests\n- **@tanstack/react-query** — server state\n- **@tanstack/react-query-devtools** — ডিবাগ টুল\n- **@tanstack/react-table** — headless table\n- **react-hook-form** + **@hookform/resolvers** — form ও Zod integration\n- **zod** — validation"} />
+
+## shadcn/ui setup
+
+<CodeBlock code={"npx shadcn@latest init\n\n# আমরা যে components ব্যবহার করব\nnpx shadcn@latest add button input textarea label select \\\n  dialog alert-dialog table badge skeleton sonner"} lang={"bash"} title={"Init + add components"} />
+
+## সেটআপ verify
+
+<CodeBlock code={"npm run dev"} lang={"bash"} title={"Run"} />
+
+<InParagraph text={"`http://localhost:3000`-এ project খুলবে। এখন থেকে প্রতিটি অধ্যায়ে এই project-তেই কোড যোগ করব।"} />
+
+<Tip tone={"success"} title={"Version নোট"} text={"এই কোর্স **Next.js 15+/16 (App Router), React 19, TanStack Query v5, TanStack Table v8, React Hook Form v7, Zod 4** নিয়ে লেখা। ভিন্ন major version হলে API-র সামান্য পার্থক্য হতে পারে।"} />

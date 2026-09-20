@@ -1,0 +1,25 @@
+---
+title: "Model & field types — শক্তিশালী scalars"
+label: "Models"
+order: 5
+level: "Beginner"
+description: "table-এর সারি = model — Prisma-র scalars data type।"
+---
+
+<CodeBlock code={"model Product {\n  id          Int      @id @default(autoincrement())\n  name        String   @unique\n  description String?\n  price       Decimal  @default(0)\n  qty         Int      @default(0)\n  active      Boolean  @default(true)\n  spec        Json?\n  createdAt   DateTime @default(now())\n  updatedAt   DateTime @updatedAt\n}"} lang={"prisma"} title={"Product model"} />
+
+| Scalar | SQL |
+| --- | --- |
+| String | text / varchar |
+| Int | integer (4-byte) |
+| BigInt | bigint |
+| Decimal | numeric — money-এর জন্য |
+| Boolean | boolean |
+| DateTime / Date | timestamp |
+| Json | jsonb (PostgreSQL) |
+
+- `?` — nullable; ছাড়লে NOT NULL
+- @default, @unique, @id — attribute
+- `@updatedAt` — নিজে-নিজে update-তে বদলায়
+
+<Tip tone={"warning"} title={"money-তে Decimal"} text={"প্রাইস `Float` না — float round হয়। `Decimal` → Postgres numeric, ও `Decimal.js` টাইপ client-এ।"} />

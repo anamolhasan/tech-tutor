@@ -1,0 +1,25 @@
+---
+title: "Forms ও Input"
+label: "Forms"
+order: 9
+level: "Intermediate"
+description: "Controlled input, FormData, select/checkbox এবং React 19-এর form actions — বাংলায়।"
+---
+
+## Controlled input
+
+<CodeBlock code={"import { useState } from \"react\";\n\nfunction NameForm() {\n  const [name, setName] = useState(\"\");\n\n  const handleSubmit = (e) => {\n    e.preventDefault();\n    console.log(\"Submitted:\", name);\n  };\n\n  return (\n    <form onSubmit={handleSubmit}>\n      <input\n        value={name} // value → state\n        onChange={(e) => setName(e.target.value)} // state আপডেট\n        placeholder=\"নাম\"\n      />\n      <button type=\"submit\">Save</button>\n    </form>\n  );\n}"} lang={"jsx"} title={"Controlled component"} />
+
+## FormData — uncontrolled
+
+<CodeBlock code={"function SearchForm() {\n  const handleSubmit = (e) => {\n    e.preventDefault();\n    const formData = new FormData(e.target);\n    console.log(formData.get(\"query\")); // input-এর name থেকে\n  };\n\n  return (\n    <form onSubmit={handleSubmit}>\n      <input type=\"text\" name=\"query\" defaultValue=\"\" />\n      <button>Search</button>\n    </form>\n  );\n}"} lang={"jsx"} title={"FormData থেকে পড়া"} />
+
+## React 19 — form action
+
+<CodeBlock code={"import { useActionState } from \"react\";\n\nasync function submitMessage(prevState, formData) {\n  await saveMessage(formData.get(\"message\"));\n  return { ok: true, message: \"Saved!\" };\n}\n\nfunction MessageForm() {\n  const [state, action, pending] = useActionState(submitMessage, null);\n\n  return (\n    <form action={action}>\n      <textarea name=\"message\" required />\n      <button disabled={pending}>\n        {pending ? \"সাবমিট হচ্ছে…\" : \"Submit\"}\n      </button>\n      {state?.message && <p>{state.message}</p>}\n    </form>\n  );\n}"} lang={"jsx"} title={"Action + useActionState"} />
+
+## Select ও Checkbox
+
+<CodeBlock code={"const [city, setCity] = useState(\"dhaka\");\nconst [agree, setAgree] = useState(false);\n\n<select value={city} onChange={(e) => setCity(e.target.value)}>\n  <option value=\"dhaka\">ঢাকা</option>\n  <option value=\"ctg\">চট্টগ্রাম</option>\n</select>\n\n<label>\n  <input\n    type=\"checkbox\"\n    checked={agree}\n    onChange={(e) => setAgree(e.target.checked)}\n  />\n  আমি সম্মত\n</label>"} lang={"jsx"} title={"Select/checkbox controlled"} />
+
+<Tip tone={"success"} title={"Controlled vs Uncontrolled"} text={"সব field-কে state-তে রাখা (**controlled**) বেশি নিয়ন্ত্রণ দেয়, কিন্তু প্রতিটি keystroke-এ re-render হয়। অনেক field থাকলে **FormData/action** ও **defaultValue** হালকা — অবস্থা অনুযায়ী বাছুন।"} />

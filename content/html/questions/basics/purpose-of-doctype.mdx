@@ -1,0 +1,13 @@
+---
+question: "What is the purpose of <!DOCTYPE html>?"
+order: 4
+description: "<!DOCTYPE html> কেন লিখতে হয় এবং এটি কী কাজ করে।"
+---
+
+<InParagraph text={"`<!DOCTYPE html>` হলো একটি ঘোষণা (declaration) যা HTML document-এর **প্রথম লাইনে** বসে। এটি ব্রাউজারকে বলে দেয়: \"এই পেজটি আধুনিক HTML5 স্ট্যান্ডার্ড অনুযায়ী রেন্ডার করো।\""} />
+
+<InParagraph text={"যদি `<!DOCTYPE html>` না থাকে, তখন পুরোনো ব্রাউজারগুলো পেজটি **quirks mode**-এ চালায় — অর্থাৎ পুরোনো, অমিল রেন্ডারিং নিয়ম অনুযায়ী। এতে একই পেজ ভিন্ন ব্রাউজারে ভিন্নভাবে দেখাতে পারে।"} />
+
+<InParagraph text={"সুতরাং প্রতিটি HTML document-এর শুরুতেই `<!DOCTYPE html>` রাখা একটি অত্যন্ত ভালো অভ্যাস — এটি আধুনিক, সঠিক ও সামঞ্জস্যপূর্ণ রেন্ডারিং নিশ্চিত করে।"} />
+
+<Tip tone={"warning"} title={"সতর্কতা"} text={"DOCTYPE একটি tag নয়, তাই এর ভেতরে কোনো কনটেন্ট থাকে না এবং একে বন্ধ করা যায় না — এটি একটি standalone declaration।"} />

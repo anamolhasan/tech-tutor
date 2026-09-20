@@ -1,0 +1,18 @@
+---
+title: "Folder Structure — Redux Pattern"
+label: "Folder Structure"
+order: 5
+level: "Beginner"
+description: "Redux-সম্পর্কিত ফাইলগুলোর কীভাবে organizing করা হয় — বাংলায়।"
+---
+
+<CodeBlock code={"src/\n├─ app/\n│  ├─ layout.tsx            # ReduxProvider wrap\n│  ├─ page.tsx              # storefront (client)\n│  └─ cart/page.tsx         # cart page (client)\n├─ components/\n│  ├─ ui/                   # shadcn (button, card …)\n│  ├─ products/\n│  │  ├─ product-card.tsx\n│  │  ├─ product-grid.tsx\n│  │  └─ product-filters.tsx\n│  └─ cart/\n│     └─ cart-drawer.tsx\n├─ features/\n│  ├─ cart/\n│  │  ├─ cartSlice.ts       # createSlice\n│  │  └─ cartSelectors.ts   # memoized selectors\n│  └─ orders/\n│     └─ ordersService.ts   # RTK Query API\n├─ hooks/\n│  ├─ use-app-dispatch.ts\n│  └─ use-app-selector.ts\n└─ types/\n   └─ index.ts              # Product, CartItem, Order\n"} lang={"text"} title={"Recommended layout (features pattern)"} />
+
+## Product vs feature folders
+
+| Pattern | কবে |
+| --- | --- |
+| **Feature-first** (বড় app) | প্রতিটি feature-এর নিজস্ব slice+selector+component |
+| **File-type-first** (ছোট app) | সব slices/features আলাদা folder |
+
+<Tip tone={"warning"} title={"Single store, slice-ভাগ"} text={"প্রতিটি screen-এর জন্য আলাদা store বানাবেন না — Redux-এ **একটি store**, তার ভেতরে multiple slices এই correct pattern। আলাদা store করলে state-ঐক্য ভেঙে যায়, জটিলতা বাড়ে।"} />

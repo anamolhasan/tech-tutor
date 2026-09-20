@@ -1,0 +1,27 @@
+---
+title: "NestJS Middleware"
+label: "Middleware"
+order: 10
+level: "Intermediate"
+description: "Custom middleware, functional middleware, DI, apply — NestJS middleware বাংলায়।"
+---
+
+<InParagraph text={"**Middleware** route handler-এর আগে execute হয় — logging, CORS, body parsing ইত্যাদি। NestJS-এ prototype (class) বা functional দুইভাবেই লেখা যায়।"} />
+
+## Custom Middleware
+
+<CodeBlock code={"import { Injectable, NestMiddleware } from \"@nestjs/common\";\nimport { Request, Response, NextFunction } from \"express\";\n\n@Injectable()\nexport class LoggerMiddleware implements NestMiddleware {\n  use(req: Request, res: Response, next: NextFunction) {\n    console.log(\"Request...\", req.method, req.originalUrl);\n    next();\n  }\n}"} lang={"typescript"} title={"src/common/logger.middleware.ts"} />
+
+## Module-এ Middleware Register
+
+<CodeBlock code={"import { Module, NestModule, MiddlewareConsumer } from \"@nestjs/common\";\nimport { LoggerMiddleware } from \"./common/logger.middleware\";\n\n@Module({\n  imports: [],\n  controllers: [],\n  providers: [],\n})\nexport class AppModule implements NestModule {\n  configure(consumer: MiddlewareConsumer) {\n    consumer\n      .apply(LoggerMiddleware)\n      .forRoutes(\"users\"); // শুধু /users routes\n\n    // সব route-এ চাইলে\n    consumer.apply(LoggerMiddleware).forRoutes(\"*\");\n\n    // method restriction\n    consumer.apply(LoggerMiddleware).forRoutes({\n      path: \"users\",\n      method: RequestMethod.POST,\n    });\n  }\n}"} lang={"typescript"} title={"src/app.module.ts"} />
+
+## Functional Middleware
+
+<CodeBlock code={"import { Request, Response, NextFunction } from \"express\";\nimport { randomUUID } from \"node:crypto\";\n\nexport function requestIdMiddleware(\n  req: Request,\n  res: Response,\n  next: NextFunction,\n) {\n  req.headers[\"x-request-id\"] = randomUUID();\n  next();\n}\n\n// register — class না, function\nconsumer.apply(requestIdMiddleware).forRoutes(\"*\");"} lang={"typescript"} title={"src/common/request-id.middleware.ts"} />
+
+## DI-যুক্ত Middleware
+
+<CodeBlock code={"@Injectable()\nexport class AuthMiddleware implements NestMiddleware {\n  // service inject করা যায়\n  constructor(private readonly tokenService: TokenService) {}\n\n  async use(req: Request, res: Response, next: NextFunction) {\n    const token = req.headers.authorization?.split(\" \")[1];\n    if (token) {\n      req[\"user\"] = await this.tokenService.verify(token);\n    }\n    next();\n  }\n}"} lang={"typescript"} />
+
+<Tip tone={"warning"} title={"Middleware বনাম Guard"} text={"Middleware raw Express-এ কাজ করে — Pipe, Guard পূর্ণ context access পায়। Authentication logic গার্ডে রাখাই ভালো; middleware শুধু সহজ transform/logging-এর জন্য।"} />

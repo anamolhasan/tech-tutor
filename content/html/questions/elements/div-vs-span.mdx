@@ -1,0 +1,13 @@
+---
+question: "What is the difference between <div> and <span>?"
+order: 4
+description: "div এবং span — কখন কোনটি ব্যবহার করবেন।"
+---
+
+<InParagraph text={"`<div>` একটি **block-level** container, আর `<span>` একটি **inline** container। দুটোই কোনো নির্দিষ্ট অর্থ বহন করে না — এরা শুধু কনটেন্টকে গুছিয়ে রাখার (grouping) জন্য ব্যবহৃত হয়।"} />
+
+<InParagraph text={"`<div>` দিয়ে বড় অংশ গুছানো হয় — যেমন একটি section, একটি card, একটি লেআউটের কলাম। অন্যদিকে `<span>` দিয়ে এক লাইনের ভেতরে ছোট অংশ আলাদা করা হয় — যেমন একটি বাক্যের নির্দিষ্ট শব্দের রঙ বদলানো।"} />
+
+<CodeBlock code={"<div class=\"card\">\n  <p>একটি <span class=\"highlight\">গুরুত্বপূর্ণ</span> বাক্য</p>\n</div>"} lang={"html"} title={"উদাহরণ"} />
+
+<Tip tone={"warning"} title={"সতর্কতা"} text={"`<div>` এবং `<span>`-এর নিজস্ব কোনো অর্থ নেই — একে যতটা সম্ভব কম ব্যবহার করা ভালো। যেখানে `<article>` বা `<strong>` প্রাসঙ্গিক, সেখানে সেটিই ব্যবহার করুন।"} />

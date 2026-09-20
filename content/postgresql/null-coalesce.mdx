@@ -1,0 +1,17 @@
+---
+title: "NULL মান — IS NULL, COALESCE, NULLIF"
+label: "NULL & COALESCE"
+order: 10
+level: "Intermediate"
+description: "NULL কী, সঙ্গে আচরণ — এবং fallback value।"
+---
+
+<InParagraph text={"**NULL** মানে value নেই — শূন্য (0) নয়, খালি string নয়। NULL-এর সঙ্গে যেকোনো comparison-এর result **NULL** — তাই `= NULL` কখনও সত্য হয় না।"} />
+
+<CodeBlock code={"-- ভুল: = NULL\nSELECT * FROM products WHERE category = NULL;\n\n-- সঠিক\nSELECT * FROM products WHERE category IS NULL;\nSELECT * FROM products WHERE category IS NOT NULL;"} lang={"sql"} />
+
+<CodeBlock code={"SELECT name,\n       COALESCE(category, 'unassigned') AS category\nFROM products;"} lang={"sql"} title={"COALESCE — fallback"} />
+
+<CodeBlock code={"-- NULLIF(a, b): a=b হলে NULL else a\nSELECT NULLIF(qty, 0); -- division-safe"} lang={"sql"} title={"NULLIF"} />
+
+<Tip tone={"warning"} title={"NULL trap"} text={"`WHERE id IN (…)`-তে NULL id বে-কবজায় — universe define করুন। NULL-friend অপারেটর: `IS NOT DISTINCT FROM`।"} />

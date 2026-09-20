@@ -1,0 +1,21 @@
+---
+title: "State Lifting ও Props শেয়ার"
+label: "Lifting State"
+order: 10
+level: "Intermediate"
+description: "দুটি component-এর মধ্যে এক state ভাগ করা — lifting state up pattern — বাংলায়।"
+---
+
+## কেন lifting
+
+<InParagraph text={"প্রায়ই দুটি sibling component-এর একই ডেটা দরকার হয়। তখন state-টি উপরের **parent**-এ রাখা হয় এবং প্রয়োজন হলে child-এ `props` হিসেবে পাঠানো হয় — এই pattern-কে বলে **lifting state up**।"} />
+
+<CodeBlock code={"function App() {\n  // state parent-এ\n  const [query, setQuery] = useState(\"\");\n\n  return (\n    <div>\n      <SearchBox value={query} onSearch={setQuery} />\n      <Results query={query} />\n    </div>\n  );\n}\n\n// parent → child (value)\n// child → parent (onSearch callback)\nfunction SearchBox({ value, onSearch }) {\n  return (\n    <input\n      value={value}\n      onChange={(e) => onSearch(e.target.value)}\n      placeholder=\"সার্চ…\"\n    />\n  );\n}\n\nfunction Results({ query }) {\n  return <p>Searching for: {query}</p>;\n}"} lang={"jsx"} title={"Lifting উদাহরণ"} />
+
+## Callback props নিয়ম
+
+- Child-কে **value** এবং **event handler** দুটোই দিতে হয়
+- Child নিজে state বানায় না — সব নিয়ন্ত্রণ উপরে
+- এভাবে সত্যের একটিমাত্র উৎস থাকে — **single source of truth**
+
+<Tip tone={"info"} title={"Prop drilling"} text={"structure-এর অনেক গভীরে props পাঠাতে হলে (parent → child → grandchild) **Context** বা Reducer + Context combo ব্যবহার করুন — নইলে লেখা জটিল হয়ে যায়।"} />

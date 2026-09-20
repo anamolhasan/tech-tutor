@@ -1,0 +1,44 @@
+---
+title: "TypeScript Installation ও Setup"
+label: "Installation"
+order: 2
+level: "Beginner"
+description: "Node.js-এ TypeScript install, tsc compiler, tsconfig.json সেটআপ এবং প্রথম TypeScript program — ধাপে ধাপে বাংলায়।"
+---
+
+<InParagraph text={"TypeScript চালাতে প্রথমে লাগে **Node.js**। তারপর একটি কমান্ডেই TypeScript install হয়। চলুন শুরু থেকে দেখি।"} />
+
+## Installation
+
+<InParagraph text={"globally বা project-wise — দুই ভাবেই install করা যায়। প্রজেক্টে চাইলে `-D` (dev dependency) হিসেবে রাখা ভালো, কারণ শুধু develop/compile-এর সময়ই compiler দরকার।"} />
+
+<CodeBlock code={"# Global install (যেকোনো জায়গা থেকে tsc চালানো যায়)\nnpm install -g typescript\n\n# অথবা শুধু একটি প্রজেক্টে\nnpm init -y\nnpm install --save-dev typescript\n\n# pnpm ব্যবহার করলে\npnpm add -D typescript"} lang={"bash"} />
+
+## TypeScript Compiler (tsc)
+
+<InParagraph text={"Install নিশ্চিত করতে `tsc --version` আর প্রথম ফাইল compile করতে `npx tsc` ব্যবহার করুন। `npx` চালালে project-এর local compiler ব্যবহার হয়।"} />
+
+<CodeBlock code={"tsc --version\n\n# একটি ফাইল compile করুন\nnpx tsc hello.ts\n\n# ফাইল বদলানো মাত্র আবার compile (watch mode)\nnpx tsc -w hello.ts"} lang={"bash"} />
+
+## tsconfig.json
+
+<InParagraph text={"`tsconfig.json` হলো TypeScript-এর নিয়মের ফাইল — কোন ফাইল include করবে, কোন target-এ compile করবে, strict কিনা — সবকিছু এখানে। `npx tsc --init` দিলে ডিফল্ট একটি তৈরি হয়ে যায়।"} />
+
+<CodeBlock code={"{\n  \"compilerOptions\": {\n    \"target\": \"ES2022\",\n    \"module\": \"commonjs\",\n    \"outDir\": \"./dist\",\n    \"rootDir\": \"./src\",\n    \"strict\": true,\n    \"esModuleInterop\": true\n  },\n  \"include\": [\"src\"]\n}"} lang={"json"} title={"tsconfig.json"} />
+
+| অপশন | কাজ |
+| --- | --- |
+| target | কোন JS সংস্করণে compile হবে (ES2022, ES5...) |
+| module | কোন module system (commonjs, esnext...) |
+| strict | অনেক কঠোর টাইপ নিয়ম একসাথে সক্রিয় |
+| outDir | output ফাইল কোথায় যাবে |
+| rootDir | source ফাইল কোথায় পড়বে |
+| include | কোন ফাইল/ফোল্ডার compile হবে |
+
+## প্রথম TypeScript Program
+
+<CodeBlock code={"function greet(name: string): string {\n  return \"স্বাগতম, \" + name;\n}\n\nconst message = greet(\"রহিম\");\nconsole.log(message);"} lang={"typescript"} title={"hello.ts"} />
+
+<CodeBlock code={"npx tsc hello.ts   # → hello.js তৈরি হবে\nnode hello.js        # → স্বাগতম, রহিম"} lang={"bash"} />
+
+<Tip tone={"success"} title={"উন্নত অভিজ্ঞতার জন্য"} text={"বড় প্রজেক্টে `tsc -w` watch mode চালু রাখুন — ফাইল save করলেই auto compile হয়। Node.js-এ দ্রুত run করতে `tsx` ব্যবহার করতে পারেন, এটি এক কমান্ডেই TS চালায়।"} />

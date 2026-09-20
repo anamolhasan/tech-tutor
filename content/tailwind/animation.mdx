@@ -1,0 +1,35 @@
+---
+title: "Animation & Transitions"
+label: "Animation"
+order: 26
+level: "Intermediate"
+description: "Tailwind-এ animate, transition, transform — animation utilities বাংলায়।"
+---
+
+<InParagraph text={"Tailwind-এ pre-built animation classes আছে এবং custom animation-ও দেওয়া যায়।"} />
+
+## Built-in Animations
+
+<CodeBlock code={"<div class=\"animate-spin\">Spinner</div>\n<div class=\"animate-pulse\">Pulsing element</div>\n<div class=\"animate-bounce\">Bouncing element</div>\n<div class=\"animate-none\">No animation</div>"} lang={"html"} />
+
+## Transitions
+
+<CodeBlock code={"<!-- সবকিছু transition -->\n<button class=\"bg-blue-500 text-white px-4 py-2 rounded-lg transition-all duration-300 hover:bg-blue-700 hover:scale-105\">\n  Smooth hover\n</button>\n\n<!-- শুধু specific property -->\n<div class=\"transition-colors duration-200 bg-white hover:bg-gray-100\">\n  Color transition\n</div>\n\n<!-- Transform -->\n<div class=\"transition-transform duration-200 hover:scale-110 hover:rotate-3\">\n  Transform on hover\n</div>"} lang={"html"} />
+
+## Transition Properties
+
+| Class | কাজ |
+| --- | --- |
+| transition-none | কোনো transition নেই |
+| transition-all | সব property transition |
+| transition | default properties |
+| transition-colors | শুধু color |
+| transition-opacity | শুধু opacity |
+| transition-shadow | শুধু shadow |
+| transition-transform | শুধু transform |
+
+## Duration
+
+<CodeBlock code={"<div class=\"transition duration-75\">৭৫ms (very fast)</div>\n<div class=\"transition duration-150\">১৫০ms (fast)</div>\n<div class=\"transition duration-300\">৩০০ms (normal)</div>\n<div class=\"transition duration-500\">৫০০ms (slow)</div>\n<div class=\"transition duration-1000\">১০০০ms (very slow)</div>"} lang={"html"} />
+
+<Tip tone={"success"} title={"Performance"} text={"শুধু `transform` ও `opacity` animate করুন — এগুলো GPU-accelerated। `width`, `height`, `margin` animate করলে performance খারাপ হতে পারে।"} />

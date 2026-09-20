@@ -1,0 +1,23 @@
+---
+title: "Fetch List — useGetProductsQuery"
+label: "Fetch List"
+order: 17
+level: "Beginner"
+description: "কম্পোনেন্টে auto-generated hook ব্যবহার — loading/data — বাংলায়।"
+---
+
+<CodeBlock code={"\"use client\";\n\nimport { useGetProductsQuery } from \"@/features/orders/ordersService\";\nimport { ProductCard } from \"./product-card\";\n\nexport function ProductGrid() {\n  // hook auto-created from builder.query\n  const {\n    data,\n    isSuccess,\n    isLoading,\n    isError,\n    refetch,\n  } = useGetProductsQuery();  // void arg\n\n  if (isLoading) {\n    return <div className=\"grid gap-4\">\n      {Array.from({ length: 6 }).map((_, i) => (\n        <ProductCardSkeleton key={i} />\n      ))}\n    </div>;\n  }\n\n  if (isError) {\n    return (\n      <ErrorMessage\n        title=\"Product লোড করা যায়নি\"\n        onRetry={() => refetch()}\n      />\n    );\n  }\n\n  if (isSuccess && data.length === 0) {\n    return <EmptyMessage text=\"কোনো product নেই\" />;\n  }\n\n  return (\n    <div className=\"grid gap-4 sm:grid-cols-2 lg:grid-cols-3\">\n      {data?.map((product) => (\n        <ProductCard key={product.id} product={product} />\n      ))}\n    </div>\n  );\n}"} lang={"tsx"} title={"src/components/products/product-grid.tsx"} />
+
+## Generated hook fields
+
+| Property | অর্থ |
+| --- | --- |
+| `data` | success-এ fetched result |
+| `isLoading` | প্রথমবার fetch (কোনো cache নেই) |
+| `isFetching` | যেকোনো fetch চলা (background সহ) |
+| `isError` | last fetch ব্যর্থ |
+| `error` | error object (serialized) |
+| `isSuccess` | data present |
+| `refetch` | ম্যানুয়ালি আবার fetch |
+
+<Tip tone={"info"} title={"এক hook-এ অনেক component"} text={"একই endpoint+args-সহ **বিভিন্ন component**-এ use করা হলে একটাই fetch হয় — কারণ cache একই key-তে। এই deduplication-ই RTK Query-র core value।"} />

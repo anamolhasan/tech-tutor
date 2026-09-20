@@ -1,0 +1,17 @@
+---
+title: "CREATE TABLE, ALTER TABLE, DROP TABLE"
+label: "Create Table"
+order: 7
+level: "Beginner"
+description: "table তৈরি/বদল/মুছে ফেলা — schema-র জীবনচক্র।"
+---
+
+<CodeBlock code={"CREATE TABLE products (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name        text NOT NULL,\n  price       numeric(10,2) NOT NULL,\n  qty         integer NOT NULL DEFAULT 0,\n  created_at  timestamptz DEFAULT now()\n);"} lang={"sql"} title={"products table"} />
+
+<CodeBlock code={"-- নতুন column\nALTER TABLE products ADD COLUMN category text;\n\n-- column মুছুন\nALTER TABLE products DROP COLUMN category;\n\n-- table মুছুন\nDROP TABLE products;"} lang={"sql"} title={"ALTER + DROP"} />
+
+- `GENERATED ALWAYS AS IDENTITY` — auto-increment id (SERIAL-এর আধুনিক বিকল্প)
+- `DEFAULT` — column-এ নির্দিষ্ট default মান
+- `DROP TABLE`-এ `IF EXISTS` দিয়ে error এড়ানো যায়
+
+<Tip tone={"warning"} title={"DROP সাবধান"} text={"Production-এ DROP/ALTER যায়-ই আসে-ই — `ALTER ... DROP COLUMN` আগে transaction-এ পরীক্ষা করে নিন (টপিক ২৩)।"} />

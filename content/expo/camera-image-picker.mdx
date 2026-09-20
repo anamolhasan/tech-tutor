@@ -1,0 +1,17 @@
+---
+title: "expo-image-picker — গ্যালারি ও camera থেকে ছবি"
+label: "Camera & Picker"
+order: 22
+level: "Intermediate"
+description: "task-এ ছবি attach — permission, pick, capture।"
+---
+
+<CodeBlock code={"npx expo install expo-image-picker"} lang={"bash"} title={"terminal"} />
+
+<CodeBlock code={"import * as ImagePicker from \"expo-image-picker\";\n\nasync function pickImage() {\n  const result = await ImagePicker.launchImageLibraryAsync({\n    mediaTypes: [\"images\"],\n    allowsEditing: true,\n    aspect: [1, 1],\n    quality: 0.7,\n  });\n  if (!result.canceled) {\n    return result.assets[0].uri;\n  }\n}"} lang={"tsx"} />
+
+<InParagraph text={"Camera থেকে নিতে হলে আগে **permission** চাই:"} />
+
+<CodeBlock code={"const cam = await ImagePicker.requestCameraPermissionsAsync();\nif (cam.granted) {\n  await ImagePicker.launchCameraAsync();\n} else {\n  // permission না দিলে ক্ষমা চেয়ে settings-এ পাঠান\n}"} lang={"tsx"} />
+
+<Tip tone={"warning"} title={"uri সাময়িক"} text={"picker-এর uri temporary — দীর্ঘমেয়াদে রাখতে হলে সেটা upload বা document-directory-তে কপি করুন। permission deny করলে fallback UI রাখা জরুরি।"} />

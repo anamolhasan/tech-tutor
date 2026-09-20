@@ -1,0 +1,27 @@
+---
+title: "Decorators (ডেকোরেটর)"
+label: "Decorators"
+order: 23
+level: "Advanced"
+description: "Class/method/property decorator, decorator factory ও tsconfig experimentalDecorators — বাংলায়।"
+---
+
+<InParagraph text={"**Decorator** হলো class ও তার সদস্যের চারপাশের wrap-মত — ক্লাস, মেথড, প্রপার্টি, parameter-এ আচরণ যোগ করে। Angular ও NestJS-এ ব্যাপক ব্যবহৃত।"} />
+
+## tsconfig সেটআপ
+
+<CodeBlock code={"{\n  \"compilerOptions\": {\n    \"experimentalDecorators\": true,\n    \"emitDecoratorMetadata\": true\n  }\n}"} lang={"json"} title={"tsconfig.json"} />
+
+## Class Decorator
+
+<CodeBlock code={"function sealed(constructor: Function): void {\n  Object.freeze(constructor);\n}\n\n@sealed\nclass Example {\n  name = \"রহিম\";\n}\n\n// Example নতুন property-তে সিল (frozen)"} lang={"typescript"} />
+
+## Decorator Factory
+
+<CodeBlock code={"function log(label: string) {\n  // এটি ফ্যাক্টরি — decorator বানায়\n  return function (target: any, key: string, descriptor: PropertyDescriptor) {\n    const original = descriptor.value;\n\n    descriptor.value = function (...args: unknown[]) {\n      console.log(label + \" →\", key, args);\n      return original.apply(this, args);\n    };\n  };\n}\n\nclass Service {\n  @log(\"DB\")\n  save(data: unknown): void {\n    // ...\n  }\n}"} lang={"typescript"} />
+
+## Property ও Parameter Decorator
+
+<CodeBlock code={"function readonly(target: any, key: string): void {\n  Object.defineProperty(target, key, {\n    writable: false,\n  });\n}\n\nfunction mark(target: any, key: string, index: number): void {\n  // parameter decorator — validation metadata রাখা যায়\n}\n\nclass Order {\n  @readonly\n  status = \"pending\";\n\n  placeOrder(@mark amount: number): void {\n    // ...\n  }\n}"} lang={"typescript"} />
+
+<Tip tone={"warning"} title={"সাবধান"} text={"Class decorator এখনও [experimental] না standard — `experimentalDecorators` থাকলে সতর্কভাবে ব্যবহার করুন। বড় প্রজেক্টে Angular/NestJS-এর নিজস্ব সম্প্রসারিত আচরণের সাথে যেন না মিলে যায় এ খেয়াল করুন।"} />

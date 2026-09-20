@@ -1,0 +1,26 @@
+---
+title: "Slice (Local State) vs RTK Query (Server State)"
+label: "Local vs Server"
+order: 28
+level: "Intermediate"
+description: "কে যায় কোথায় — বিভাজন-নির্বাচনের guideline — বাংলায়।"
+---
+
+<InParagraph text={"সবচেয়ে বড় সিদ্ধান্ত — **কোন state কোথায় রাখব**। Redux টীকা দেয় দুটি স্তর: server-fetch data (RTK Query) ও local/UI/fetched-independent state (slice)।"} />
+
+| State-এর ধরন | রাখবেন | উদাহরণ |
+| --- | --- | --- |
+| Server-থেকে আসা data | RTK Query | products, orders, profiles |
+| Server-defined derived | RTK Query selectors | cart total (products-মেলানো) |
+| UI-only জিনিস | local useState | modal open, tab active |
+| Shared client-only state | slice | cart items, theme, language |
+| fetch cache | RTK Query | list/detail, invalidation |
+
+## মূল নিয়ম
+
+- **Server data** কখনো slice-এ copy করবেন না — RTK Query cache-থেকেই পড়ুন
+- **UI transient** (modal open) global store-এ রাখবেন না
+- **Shared mutable** যেটা অনেক component-এ needed → slice
+- Copy-থেকে derived-এই সবসময়
+
+<Tip tone={"warning"} title={"দুটি source of truth বিপদ"} text={"প্রোডাক্ট list যদি একদা slice-এ copy করেন, query refresh-এ দুই জায়গা sync রাখতে হবে — ভয়ংকর। ডিফল্ট নিয়ম: **যা সার্ভার-আগত, RTK Query; বাকিটা slice বা local।**"} />

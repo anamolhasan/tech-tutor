@@ -1,0 +1,21 @@
+---
+title: "Query Optimization — EXPLAIN ANALYZE"
+label: "Performance"
+order: 25
+level: "Advanced"
+description: "ধীর query পড়া ও ঠিক করা — planner-এর জানালা EXP.ANALYZE।"
+---
+
+<CodeBlock code={"EXPLAIN ANALYZE\nSELECT u.name, COUNT(o.id)\nFROM users u\nLEFT JOIN orders o ON o.user_id = u.id\nGROUP BY u.name;"} lang={"sql"} />
+
+<InParagraph text={"Output-এ **Seq Scan → Index Scan**, cost, actual time, rows — সেখানেই ধীর হওয়ার কারণ।"} />
+
+- **Seq Scan** বড় table-এ — index দরকার
+- নিশ্চিত করুন WHERE-এর column index-এ আছে
+- `SELECT *` বাদ; যতটুকু দরকার ঠিক ততটুকু
+- sargable শর্ত — function-এ column wrap (`WHERE price * 2 > x`) index নষ্ট
+- `join`, aggregate, CTE — প্রতিটি `EXPLAIN`-এ দেখুন; `LIMIT` সতর্কভাবে
+
+<CodeBlock code={"-- UPDATE planner stats (বড় বদলের পরে)\nANALYZE products;"} lang={"sql"} />
+
+<Tip tone={"warning"} title={"measure first"} text={"অনুমান নয় — `EXPLAIN (ANALYZE, BUFFERS)` দিয়ে verify। N+1 (loop-এ query) প্রায়ই ORM/app-আর অভিযোগ, database নয়।"} />

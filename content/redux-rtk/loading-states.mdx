@@ -1,0 +1,15 @@
+---
+title: "Loading States — Skeleton ও UI"
+label: "Loading States"
+order: 31
+level: "Beginner"
+description: "Query loading, mutation pending, refetching-এর visual — বাংলায়।"
+---
+
+<CodeBlock code={"\"use client\";\n\nexport function ProductsView() {\n  const {\n    data,\n    isLoading,\n    isFetching,\n    isUninitialized,\n    refetch,\n  } = useGetProductsQuery();\n\n  // loading overlay for background refetch\n  return (\n    <div className=\"relative\">\n      {isLoading || isUninitialized ? (\n        <ProductGridSkeleton />\n      ) : (\n        <ProductGrid products={data ?? []} />\n      )}\n\n      {/* background refetch-এ ছোটো বার */}\n      {isFetching && !isLoading && (\n        <div className=\"absolute right-2 top-2\">\n          <RefreshCw className=\"size-4 animate-spin text-muted-foreground\" />\n        </div>\n      )}\n    </div>\n  );\n}"} lang={"tsx"} title={"কম্বো state একসাথে"} />
+
+## Mutation pending
+
+<CodeBlock code={"const [createOrder, { isLoading }] = useCreateOrderMutation();\n\n<Button disabled={isLoading || items.length === 0}>\n  {isLoading ? \"অর্ডার হচ্ছে…\" : \"চেকআউট\"}\n</Button>"} lang={"tsx"} title={"button disabled"} />
+
+<Tip tone={"info"} title={"optimistic-এ loading-নয়"} text={"optimistic update-এর সময় `isFetching` সত্য কিন্তু UI আগেই বদলেছে — সেখানে বড় loading block দেবেন না; ছোটো subtle indicator-only।"} />

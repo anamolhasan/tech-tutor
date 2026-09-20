@@ -1,0 +1,95 @@
+---
+title: "Node.js Introduction"
+label: "Introduction"
+order: 1
+level: "Beginner"
+description: "Node.js কী, কেন ব্যবহার করা হয়, Runtime Environment, Architecture — বাংলায় পরিচিতি।"
+---
+
+<InParagraph text={"**Node.js** হলো একটি JavaScript runtime environment যা browser-এর বাইরে JavaScript চালাতে দেয়। এটি V8 engine-এর উপর নির্মিত এবং server-side অ্যাপ্লিকেশন তৈরির জন্য ব্যবহৃত হয়।"} />
+
+## Node.js কী?
+
+<InParagraph text={"সহজ কথায়, Node.js হলো JavaScript-কে browser-এর বাইরে চালানোর একটি উপায়। আপনি যদি জানেন JavaScript, তাহলে Node.js দিয়ে আপনি server, API, real-time অ্যাপ — সব তৈরি করতে পারবেন।"} />
+
+## Node.js কেন ব্যবহার করা হয়?
+
+- **Server-side অ্যাপ্লিকেশন** — REST API, GraphQL সার্ভার তৈরি
+- **Real-time অ্যাপ** — Chat, live notifications, গেমিং
+- **File handling** — ফাইল পড়া, লেখা, পরিবর্তন
+- **Microservices** — ছোট ছোট সার্ভিসে ভাগ করে বড় সিস্টেম তৈরি
+- **Full-stack ডেভেলপমেন্ট** — JavaScript দিয়ে front-end ও back-end একসাথে
+- **DevOps টুল** — Build tools, task runners (Webpack, Gulp)
+
+## Node.js কি Programming Language?
+
+<InParagraph text={"**না**, Node.js কোনো programming language নয়। এটি একটি **runtime environment** — অর্থাৎ JavaScript কোড চালানোর একটি প্ল্যাটফর্ম। JavaScript হলো language, Node.js হলো সেটি চালানোর মাধ্যম।"} />
+
+## Node.js কি Framework?
+
+<InParagraph text={"**না**, Node.js frameworkও নয়। Framework হলো Express.js, Koa.js-এর মতো। Node.js হলো runtime — যে runtime-এর উপর framework চলে।"} />
+
+## Node.js Runtime Environment কী?
+
+<InParagraph text={"Node.js runtime environment মানে হলো — JavaScript কোডকে execute করার জন্য প্রয়োজনীয় সব কিছুর সমষ্টি: V8 engine, libuv (event loop), এবং built-in modules (fs, http, path ইত্যাদি)।"} />
+
+## Browser JavaScript vs Node.js
+
+| বৈশিষ্ট্য | Browser JavaScript | Node.js |
+| --- | --- | --- |
+| পরিবেশ | ব্রাউজার (Chrome, Firefox) | সার্ভার / টার্মিনাল |
+| DOM | আছে (document, window) | নেই |
+| File System | নেই (সীমিত) | আছে (fs module) |
+| Network | fetch / XMLHttpRequest | http, net modules |
+| Global object | window | global / globalThis |
+| Module system | import/export (ESM) | require/module.exports ও import/export |
+
+## Node.js কীভাবে কাজ করে?
+
+<InParagraph text={"Node.js **event-driven**, **non-blocking I/O** model ব্যবহার করে। এর মূল উপাদানগুলো হলো:"} />
+
+- **V8 Engine** — Google-এর JavaScript engine, কোডকে machine code-তে রূপান্তর করে
+- **libuv** — Event loop ও non-blocking I/O পরিচালনা করে
+- **Event Loop** — একটি single thread দিয়ে async কাজ সামলায়
+- **Thread Pool** — File I/O, DNS lookup-এর জন্য libuv thread pool ব্যবহার করে
+
+<CodeBlock code={"console.log(\"১. প্রথমে\");\n\nsetTimeout(() => {\n  console.log(\"২. পরে (setTimeout)\");\n}, 0);\n\nPromise.resolve().then(() => {\n  console.log(\"৩. Promise-এর পরে\");\n});\n\nconsole.log(\"৪. শেষে\");"} lang={"javascript"} title={"Event Loop এর সরল উদাহরণ"} />
+
+<InParagraph text={"Output: ১. প্রথমে → ৪. শেষে → ৩. Promise-এর পরে → ২. পরে (setTimeout)। Event loop microtask (Promise) কে macro-task (setTimeout) থেকে আগে চালায়।"} />
+
+## Node.js-এর সুবিধা
+
+- **Fast** — V8 engine দ্রুত execute করে
+- **Scalable** — Non-blocking I/O এ অনেক connections একসাথে সামলায়
+- **JavaScript** — Front-end ও back-end একই ভাষা
+- **Huge ecosystem** — npm দিয়ে লক্ষ লক্ষ packages
+- **Cross-platform** — Windows, macOS, Linux সব কাজ করে
+- **Community** — বিশাল community ও documentation
+
+## Node.js-এর সীমাবদ্ধতা
+
+- **CPU-intensive** — ভারি গণনা (image processing) single thread ব্লক করতে পারে
+- **Callback Hell** — পুরোনো callback প্যাটার্নে কোড জটিল হতে পারে (async/await দিয়ে সমাধান)
+- **Single-threaded** — একই সাথে একটি কাজই করতে পারে (Worker Threads দিয়ে সমাধান)
+
+## Node.js কখন ব্যবহার করবেন?
+
+- API সার্ভার তৈরি করতে হলে
+- Real-time অ্যাপ (chat, notifications) বানাতে হলে
+- Microservices architecture ব্যবহার করতে হলে
+- Quick prototyping করতে হলে
+- Full-stack JavaScript চাইলে
+
+<Tip tone={"warning"} title={"কখন Node.js ব্যবহার করবেন না"} text={"CPU-intensive কাজ (video encoding, ML) হলে Node.js সেরা পছন্দ নাও হতে পারে। সেক্ষেত্রে Python, Go, বা Rust বেছে নিন।"} />
+
+## Node.js Architecture Overview
+
+<InParagraph text={"Node.js-এর architecture মূলত তিনটি অংশে ভাগ করা যায়:"} />
+
+- **V8 Engine** — JavaScript কোডকে bytecode এবং তারপর machine code-তে রূপান্তর করে
+- **libuv** — Cross-platform async I/O, event loop, thread pool পরিচালনা করে
+- **Bindings & C++ Bindings** — libuv ও V8-কে JavaScript API দিয়ে সংযুক্ত করে
+
+<CodeBlock code={"┌─────────────────────────────────────┐\n│           JavaScript Code            │\n├─────────────────────────────────────┤\n│         Node.js Bindings             │\n├──────────────┬──────────────────────┤\n│   V8 Engine  │        libuv         │\n│ (JS → Machine│  ┌───────────────┐   │\n│    Code)     │  │  Event Loop   │   │\n│              │  ├───────────────┤   │\n│              │  │ Thread Pool   │   │\n│              │  │ (File I/O,    │   │\n│              │  │  DNS, etc.)   │   │\n│              │  └───────────────┘   │\n└──────────────┴──────────────────────┘\n│       Operating System (OS)         │\n└─────────────────────────────────────┘"} lang={"text"} title={"Architecture Diagram"} />
+
+<Tip tone={"success"} title={"পরবর্তী ধাপ"} text={"পরবর্তী topic-এ আমরা Node.js installation দেখবো — কীভাবে Node.js ইনস্টল করবেন এবং প্রথম project শুরু করবেন।"} />

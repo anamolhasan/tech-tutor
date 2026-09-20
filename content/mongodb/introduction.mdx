@@ -1,0 +1,36 @@
+---
+title: "Mongoose Introduction"
+label: "Introduction"
+order: 1
+level: "Beginner"
+description: "Mongoose কী, এটি MongoDB-র সাথে কীভাবে কাজ করে এবং কেন Node.js-এর জন্য ODM ব্যবহার করা হয় — বাংলায় পরিচিতি।"
+---
+
+<InParagraph text={"**Mongoose** হলো MongoDB-র জন্য একটি **ODM (Object Document Mapper)** যা Node.js-এ ডেটাবেস নিয়ে কাজ করার উন্নত, organized উপায় দেয়। ডেটাবেসের সাথে সরাসরি raw query লিখার বদলে আপনি JavaScript object ও function ব্যবহার করে ডেটা manage করতে পারেন।"} />
+
+## এই অধ্যায়ে যা যা শিখবেন
+
+- Mongoose কী এবং MongoDB-র সাথে এর সম্পর্ক
+- Schema, Model, Document 개념
+- Mongoose কেন Node.js প্রজেক্টে ব্যবহৃত হয়
+- Native MongoDB driver থেকে এর পার্থক্য
+
+## Mongoose কী?
+
+<InParagraph text={"MongoDB হলো একটি **document database** — ডেটা JSON-এর মতো **document** আকারে **collection**-এ থাকে। আর Mongoose হলো একটি Node.js লাইব্রেরি যা এই document-গুলোকে JavaScript object হিসেবে model করে। এতে আপনি **Schema** দিয়ে ডেটার structure ঠিক করতে পারেন, **validation** যোগ করতে পারেন এবং ডেটাবেস operation-গুলোকে JavaScript function-এর মতো ব্যবহার করতে পারেন।"} />
+
+## MongoDB কী, এক লাইনে
+
+<InParagraph text={"MongoDB একটি **NoSQL** ডেটাবেস যেখানে relation-ভিত্তিক table-এর বদলে flexible document থাকে। প্রতিটি document-এর নিজস্ব field থাকতে পারে — তাই structure পরিবর্তন করা সহজ।"} />
+
+## Mongoose কীভাবে ফিট করে?
+
+| মাত্রা | MongoDB (raw) | Mongoose (ODM) |
+| --- | --- | --- |
+| ডেটা মডেল | Collection/document — কোনো structure নেই | Schema দিয়ে structure ও type নির্ধারণ |
+| Validation | নিজে validate করতে হয় | Built-in ও custom validator |
+| Query | Filter object ও operators | Chainable query builder, populate সহ |
+| Relationship | ম্যানুয়াল্য reference | `ref` + `populate()` এক-ক্লিকে |
+| Middleware | নেই | `pre`/`post` hooks (save, find, delete) |
+
+<Tip tone={"info"} title={"এই অধ্যায়ের ব্যবহার"} text={"এই ডকুমেন্টেশন **Mongoose v8** (Node.js LTS) নিয়ে লেখা। সব উদাহরণ Express ও Next.js-সহ যেকোনো Node প্রজেক্টে applied করা যাবে।"} />

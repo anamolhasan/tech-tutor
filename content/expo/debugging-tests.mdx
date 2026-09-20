@@ -1,0 +1,24 @@
+---
+title: "Debugging ও जेস্ট tests"
+label: "Debugging & Tests"
+order: 32
+level: "Intermediate"
+description: "Metro log, DevTools, jest + testing-library — workflow।"
+---
+
+- **Metro bundler** log — terminal-এ console output
+- **React DevTools** — components, hooks, props
+- Dev Menu — `r` reload, `m` dev menu (device-এ shake)
+- console filter — `Application` prefix-এ নেটিভ log
+
+<InParagraph text={"Unit test — **jest** + **@testing-library/react-native**:"} />
+
+<CodeBlock code={"import { render, fireEvent, screen } from \"@testing-library/react-native\";\nimport TaskItem from \"../components/TaskItem\";\n\ntest(\"toggle calls onToggle with task id\", async () => {\n  const onToggle = jest.fn();\n  const task = { id: \"1\", title: \"দুধ\", done: false };\n\n  render(<TaskItem task={task} onToggle={onToggle} />);\n  fireEvent.press(screen.getByText(\"দুধ\"));\n\n  expect(onToggle).toHaveBeenCalledWith(\"1\");\n});"} lang={"tsx"} title={"__tests__/TaskItem.test.tsx"} />
+
+<CodeBlock code={"npx jest"} lang={"bash"} title={"terminal"} />
+
+<InParagraph text={"AsyncStorage-কে test-এ mock:"} />
+
+<CodeBlock code={"jest.mock(\"@react-native-async-storage/async-storage\", () =>\n  require(\"@react-native-async-storage/async-storage/jest/async-storage-mock\")\n);"} lang={"ts"} />
+
+<Tip tone={"info"} title={"debug-এর শুরুর প্রশ্ন"} text={"সমস্যা হলে প্রথম প্রশ্ন — \"console-এ কী আসছে?\"। Metro log-এ error stack পড়ে ডিবাগ শুরু করুন।"} />

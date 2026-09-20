@@ -1,0 +1,25 @@
+---
+title: "NestJS Testing"
+label: "Testing"
+order: 18
+level: "Advanced"
+description: "Jest setup, unit test, controller/service test, e2e — NestJS testing বাংলায়।"
+---
+
+<InParagraph text={"NestJS CLI দিয়ে test files ready তৈরি হয় — **Jest** (unit) ও **Supertest** (e2e) built-in।"} />
+
+## Unit Test — Service
+
+<CodeBlock code={"import { Test } from \"@nestjs/testing\";\nimport { UsersService } from \"./users.service\";\n\ndescribe(\"UsersService\", () => {\n  let service: UsersService;\n\n  beforeEach(async () => {\n    const moduleRef = await Test.createTestingModule({\n      providers: [UsersService],\n    }).compile();\n\n    service = moduleRef.get<UsersService>(UsersService);\n  });\n\n  it(\"সব users দেয়\", () => {\n    const users = service.findAll();\n    expect(users).toHaveLength(2);\n  });\n\n  it(\"not found-এ exception\", () => {\n    expect(() => service.findOne(999)).toThrow();\n  });\n});"} lang={"typescript"} title={"users.service.spec.ts"} />
+
+## Unit Test — Controller (mock dependencies)
+
+<CodeBlock code={"import { Test } from \"@nestjs/testing\";\nimport { UsersController } from \"./users.controller\";\nimport { UsersService } from \"./users.service\";\n\ndescribe(\"UsersController\", () => {\n  let controller: UsersController;\n  let service: { findAll: jest.Mock };\n\n  beforeEach(async () => {\n    service = {\n      findAll: jest.fn().mockResolvedValue([{ id: 1, name: \"রহিম\" }]),\n    };\n\n    const moduleRef = await Test.createTestingModule({\n      controllers: [UsersController],\n      providers: [{ provide: UsersService, useValue: service }],\n    }).compile();\n\n    controller = moduleRef.get<UsersController>(UsersController);\n  });\n\n  it(\"findAll ডাকা হয়\", async () => {\n    await controller.findAll();\n    expect(service.findAll).toHaveBeenCalled();\n  });\n});"} lang={"typescript"} title={"users.controller.spec.ts"} />
+
+## E2E Test
+
+<CodeBlock code={"import { Test, TestingModule } from \"@nestjs/testing\";\nimport { INestApplication } from \"@nestjs/common\";\nimport * as request from \"supertest\";\nimport { AppModule } from \"../src/app.module\";\n\ndescribe(\"App (e2e)\", () => {\n  let app: INestApplication;\n\n  beforeAll(async () => {\n    const moduleFixture: TestingModule = await Test.createTestingModule({\n      imports: [AppModule],\n    }).compile();\n\n    app = moduleFixture.createNestApplication();\n    await app.init();\n  });\n\n  afterAll(async () => {\n    await app.close();\n  });\n\n  it(\"GET / → Hello\", () => {\n    return request(app.getHttpServer())\n      .get(\"/\")\n      .expect(200)\n      .expect(/Hello World/);\n  });\n\n  it(\"POST /users → validation fails\", () => {\n    return request(app.getHttpServer())\n      .post(\"/users\")\n      .send({ name: \"\" })\n      .expect(400);\n  });\n});"} lang={"typescript"} title={"test/app.e2e-spec.ts"} />
+
+<CodeBlock code={"npm test             # unit tests\nnpm run test:e2e     # end-to-end\nnpm run test:cov     # coverage report"} lang={"bash"} />
+
+<Tip tone={"success"} title={"Testing Principle"} text={"Unit test-এ external dependency (DB, HTTP) mock করুন। E2E-এ পূর্ণ app-এর মধ্য দিয়ে request পাঠান। Coverage 80%+ রাখার চেষ্টা করুন।"} />

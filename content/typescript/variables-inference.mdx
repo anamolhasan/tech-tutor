@@ -1,0 +1,39 @@
+---
+title: "Variables ও Type Inference"
+label: "Variables & Inference"
+order: 4
+level: "Beginner"
+description: "let, const, explicit type, literal type, const assertion এবং কবে TypeScript নিজে থেকে টাইপ বোঝে — সম্পূর্ণ বাংলায়।"
+---
+
+<InParagraph text={"TypeScript-এ ভেরিয়েবল লেখার সময় annotation লাগবেই এমন নয় — কারণ compiler নিজেই মান দেখে টাইপ **বুঝে নিতে পারে**। একেই বলে **Type Inference** (টাইপ অনুমান)।"} />
+
+## let ও const
+
+<CodeBlock code={"let score = 0;           // inferred: number\nscore = 10;              // ✅\n\nconst MAX = 100;         // inferred: 100 (literal)\nconst TAX_RATE = 0.15;   // inferred: 0.15"} lang={"typescript"} />
+
+## Type Inference (স্বয়ংক্রিয় টাইপ)
+
+<InParagraph text={"`let count = 5` লিখলেই TypeScript বুঝে যায় এটি `number`। এখানে annotation লেখার প্রয়োজন নেই — কোড পরিষ্কার থাকে।"} />
+
+<CodeBlock code={"const first = \"রহিম\";    // inferred: string\nlet years = 10;            // inferred: number\nconst active = true;       // inferred: boolean\nconst labels = [\"গরম\", \"ঠান্ডা\"];  // inferred: string[]"} lang={"typescript"} />
+
+## Explicit Types (স্পষ্ট annotation)
+
+<InParagraph text={"কখনো কখনো নিজে টাইপ স্পষ্ট করে দিতে হয় — বিশেষত ফাংশন প্যারামিটার ও API বাউন্ডারিতে।"} />
+
+<CodeBlock code={"let grade: string = \"A+\";\nlet steps: number[] = [1, 2, 3];\nlet options: { dark: boolean; theme: string } = {\n  dark: true,\n  theme: \"blue\",\n};"} lang={"typescript"} />
+
+## Literal Types
+
+<InParagraph text={"সাধারণ টাইপ (string) না দিয়ে **নির্দিষ্ট মান**-ই টাইপ হতে পারে — একে বলে literal type। Union দিয়ে কয়েকটি নির্দিষ্ট মান ধরার অনুমতি দেওয়া যায়।"} />
+
+<CodeBlock code={"let mode: \"light\" | \"dark\";\nmode = \"light\";    // ✅\n// mode = \"blue\";  // ❌ শুধু light অথবা dark\n\nlet httpStatus: 200 | 404 | 500;\nhttpStatus = 404;   // ✅\n// httpStatus = 302;  // ❌"} lang={"typescript"} />
+
+## const Assertion
+
+<InParagraph text={"`as const` দিলে TypeScript মানকে সবচেয়ে সরু literal টাইপে ধরে নেয় — object-এর প্রপার্টিও readonly হয়ে যায়।"} />
+
+<CodeBlock code={"const config = {\n  name: \"server\",\n  port: 3000,\n} as const;\n\n// config.name    // readonly \"server\"\n// config.port = 4000;   // ❌ readonly\n\nconst directions = [\"up\", \"down\", \"left\"] as const;\n// টাইপ: readonly [\"up\", \"down\", \"left\"]"} lang={"typescript"} />
+
+<Tip tone={"success"} title={"কোনটি কোথায়?"} text={"**let** পরিবর্তনযোগ্য মানের, **const** ডিফল্ট। Inference-কে নিজের কাজ করতে দিন — শুধু সেখানে explicit টাইপ লিখুন যেখানে মান বাইরে থেকে আসে (API, configuration, function params)।"} />

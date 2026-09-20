@@ -1,0 +1,49 @@
+---
+title: "Docker Security Best Practices"
+label: "Security"
+order: 20
+level: "Advanced"
+description: "Non-root user, least privilege, secrets, image scanning, hardened base image — বাংলায়।"
+---
+
+<InParagraph text={"Container বিচ্ছিন্ন হলেও যত্ন না নিলে ঝুঁকি থাকে। নিচের practices-গুলো production Docker-এর অপরিহার্য অংশ।"} />
+
+## Non-root user
+
+<CodeBlock code={"FROM node:20-alpine\n\n# অ্যাপ-এর জন্য user তৈরি\nRUN addgroup -S appgroup && adduser -S appuser -G appgroup\n\nWORKDIR /app\nCOPY . .\n\nUSER appuser\n\nCMD [\"node\", \"server.js\"]"} lang={"dockerfile"} title={"Dockerfile"} />
+
+## Least privilege
+
+- `--privileged` flag **কখনোই** ব্যবহার করবেন না
+- শুধু দরকারি capabilities দিন — `docker run --cap-drop=ALL --cap-add=NET_BIND_SERVICE`
+- Host folder নিজের নামে bind mount — প্রভাব সীমিত
+- Unused software image-এ না — attack surface কম
+
+## Secrets ম্যানেজমেন্ট
+
+<CodeBlock code={"services:\n  api:\n    build: .\n    # .env file (git-এ নেই) থেকে load\n    env_file:\n      - .env.production"} lang={"yaml"} title={"compose.yml"} />
+
+<InParagraph text={"না এগুলোর সাথে সম্পৃক্ত: `docker run -e secret=...` override-এর জন্য fine, কিন্তু value টার্মিনাল history-তে পরে যায়। Swarm secrets/file-based env সেরা।"} />
+
+## Image scanning
+
+<CodeBlock code={"# Docker Scout (built-in, Docker Desktop-এ আছে)\ndocker scout quickview my-api\n\n# Trivy (open-source, দ্রুত)\ntrivy image node:20-slim"} lang={"bash"} title={"Scan vulnerable"} />
+
+## Base image hardening
+
+| Choice | বিবেচনা |
+| --- | --- |
+| `node:20-slim` | slim — কম package, maintained |
+| `node:20-alpine` | ছোট, তবে musl-based — কিছু native modules আলাদা |
+| `distroless` (gcr.io) | শুধু runtime — shell নেই, সবচেয়ে নিরাপদ |
+| `static`/`chainguard` | zero-CVE images |
+
+## আরও চেক
+
+- Image tag-এ exact version (`node:20-alpine`) — `latest` নয়
+- `docker history` দিয়ে image-এর পূর্বে অস্বাভাবিক কিছু আছে কিনা দেখুন
+- Run process-এর `USER` নিশ্চিত — `docker top <container>`
+- Registry-এ private image-এ access control
+- Logs/data এনক্রিপশন — TLS (HTTPS) upstream
+
+<Tip tone={"success"} title={"নিয়মিত ভাবে"} text={"Image scan + `npm audit` + OS update — নিয়মিত CI-তে চালান; নতুন CVE release-এর সাথে সাথে fix করতে হবে।"} />

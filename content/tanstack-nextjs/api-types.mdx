@@ -1,0 +1,20 @@
+---
+title: "API Types — TypeScript কোডের বেবা"
+label: "API Types"
+order: 7
+level: "Beginner"
+description: "Product model, input types ও paginated response types — বাংলায়।"
+---
+
+<InParagraph text={"TypeScript-এর আসল শক্তি — API-র সাথে mirror করা types। ধরনের সাথে সবকিছু typed থাকলে refactor-এ মননের চাপ কমে ও autocomplete মেলে।"} />
+
+<CodeBlock code={"export type ProductStatus = \"active\" | \"inactive\";\n\nexport type Product = {\n  id: string;\n  name: string;\n  description: string;\n  price: number;\n  category: string;\n  stock: number;\n  status: ProductStatus;\n  createdAt: string;   // ISO date string\n  updatedAt: string;\n};\n\n// create/update-এ যা পাঠাব\nexport type CreateProductInput = {\n  name: string;\n  description: string;\n  price: number;\n  category: string;\n  stock: number;\n  status: ProductStatus;\n};\n\n// list request-এর query params\nexport type ProductQueryParams = {\n  page?: number;\n  pageSize?: number;\n  search?: string;\n  category?: string;\n  status?: ProductStatus | \"all\";\n  sortBy?: \"name\" | \"price\" | \"stock\" | \"createdAt\";\n  sortOrder?: \"asc\" | \"desc\";\n};\n\n// paginated response\nexport type ProductListResponse = {\n  items: Product[];\n  total: number;\n  page: number;\n  pageSize: number;\n  totalPages: number;\n};"} lang={"ts"} title={"src/types/product.ts"} />
+
+## কেন এই split
+
+- **Product** — সার্ভার যা পাঠায় (id, timestamps সহ)
+- **CreateProductInput** — সার্ভার যা গ্রহণ করে (id ছাড়া)
+- **ProductQueryParams** — list-এর filters/sorting
+- **ProductListResponse** — paginated response shape
+
+<Tip tone={"info"} title={"API types আলাদা রাখুন"} text={"যদি আপনি **OpenAPI/Generated SDK** ব্যবহার করেন, types আসে SDK থেকেই। তবে নিজের হাতে typed client বানালে এই ফাইলটিই 'স্বতঃ' contract — এখানে ভুল হলে compile-time-এই ধরা পড়ে।"} />

@@ -1,0 +1,27 @@
+---
+title: "CI/CD Pipeline-এ Docker"
+label: "CI/CD"
+order: 22
+level: "Advanced"
+description: "GitHub Actions-এ Docker build, test ও registry-তে push — বাংলায়।"
+---
+
+<InParagraph text={"CI/CD-তে Docker-এর সুবিধা দ্বিগুণ: (১) pipeline-র নিজের run-ই container-এ হয়, (২) অ্যাপ-এর image build হয় সবসময় same way। এখন GitHub Actions দিয়ে একটি সম্পূর্ণ flow দেখি।"} />
+
+## Workflow overview
+
+<CodeBlock code={"push → build image → test (container) → push registry → deploy"} lang={"text"} title={"Flow"} />
+
+## GitHub Actions — build ও push
+
+<CodeBlock code={"name: Build & Push\n\non:\n  push:\n    branches: [main]\n\njobs:\n  build:\n    runs-on: ubuntu-latest\n    permissions:\n      contents: read\n      packages: write\n\n    steps:\n      - uses: actions/checkout@v4\n\n      - name: Set up Docker Buildx\n        uses: docker/setup-buildx-action@v3\n\n      - name: Login to GHCR\n        uses: docker/login-action@v3\n        with:\n          registry: ghcr.io\n          username: ${{ github.actor }}\n          password: ${{ secrets.GITHUB_TOKEN }}\n\n      - name: Build and push\n        uses: docker/build-push-action@v5\n        with:\n          context: .\n          push: true\n          tags: |\n            ghcr.io/${{ github.repository }}:${{ github.sha }}\n            ghcr.io/${{ github.repository }}:latest\n          cache-from: type=gha\n          cache-to: type=gha,mode=max"} lang={"yaml"} title={".github/workflows/docker.yml"} />
+
+## Test stage — container-এ test
+
+<CodeBlock code={"  test:\n    runs-on: ubuntu-latest\n    services:\n      mongo:\n        image: mongo:7\n        ports: [\"27017:27017\"]\n\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-node@v4\n        with:\n          node-version: 20\n          cache: npm\n      - run: npm ci\n      - run: npm test\n        env:\n          MONGODB_URI: mongodb://127.0.0.1:27017/test"} lang={"yaml"} title={"Test with services"} />
+
+## Tag version শব্দ
+
+<CodeBlock code={"tags: |\n  ghcr.io/myorg/api:${GITHUB_REF_NAME}\n  ghcr.io/myorg/api:${GITHUB_SHA}\n  ghcr.io/myorg/api:latest"} lang={"yaml"} title={"Semver + SHA tags"} />
+
+<Tip tone={"warning"} title={"Secrets টিপ"} text={"Registry password/host-এ **GitHub Secrets** ব্যবহার করুন — workflow file-এ plaintext secret রাখবেন না। `gh secret set` দিয়ে সেট করুন।"} />

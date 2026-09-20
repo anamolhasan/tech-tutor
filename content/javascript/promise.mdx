@@ -1,0 +1,31 @@
+---
+title: "JavaScript Promise"
+label: "Promise"
+order: 14
+level: "Intermediate"
+description: "Promise কী, resolve, reject, then, catch, finally, Promise.all — asynchronous flow নিয়ন্ত্রণের বাংলা গাইড।"
+---
+
+<InParagraph text={"**Promise** হলো একটি async কাজের *ভবিষ্যত ফলাফল*-এর প্রতিনিধিত্ব — কাজটি এখনো শেষ হয়নি, কিন্তু একদিন হবে (সফল বা ব্যর্থ)।"} />
+
+## Promise-এর অবস্থা
+
+- `pending` — চলছে
+- `fulfilled` (resolved) — সফল
+- `rejected` — ব্যর্থ
+
+## Promise বানানো
+
+<CodeBlock code={"const getResult = new Promise((resolve, reject) => {\n  const success = true;\n\n  setTimeout(() => {\n    if (success) {\n      resolve(\"সফল ডেটা\");\n    } else {\n      reject(\"ভুল হয়েছে\");\n    }\n  }, 1000);\n});\n\ngetResult\n  .then((data) => console.log(\"মিলেছে:\", data))\n  .catch((error) => console.error(\"সমস্যা:\", error))\n  .finally(() => console.log(\"শেষ হলো\"));"} lang={"javascript"} />
+
+## then, catch, finally
+
+<CodeBlock code={"fetchSomething()\n  .then(response => response.json())\n  .then(data => console.log(data))\n  .catch(error => console.warn(error));"} lang={"javascript"} />
+
+## Promise.all ও Promise.allSettled
+
+<CodeBlock code={"const userPromise = loadUser();\nconst postsPromise = loadPosts();\n\n// সব সম্পন্ন হলে\nPromise.all([userPromise, postsPromise])\n  .then(([user, posts]) => {\n    console.log(user, posts);\n  });\n\n// প্রতিটির ফল আলাদাভাবে (ব্যর্থ হলেও)\nPromise.allSettled([userPromise, postsPromise])\n  .then((results) => console.log(results));"} lang={"javascript"} />
+
+<Tip tone={"info"} title={"প্রকৃত ব্যবহার"} text={"`fetch`-এর মতো ব্রাউজার API-গুলো Promise-ভিত্তিক — তাই আপনি নিজে Promise সাধারণত বানাতে হয় না, তবে then/catch/await দিয়ে ব্যবস্থাপনা করতে হয়।"} />
+
+<Tip tone={"success"} title={"পরবর্তী ধাপ"} text={"Promise ব্যবহারের সবচেয়ে পরিষ্কার উপায় হলো `async/await` — পরের অধ্যায়ে নয়, Fetch API-র সাথে দেখুন।"} />

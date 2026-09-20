@@ -1,0 +1,51 @@
+---
+title: "NPM — Node Package Manager"
+label: "NPM"
+order: 4
+level: "Beginner"
+description: "npm packages, scripts, lock file, semver, private packages — সম্পূর্ণ বাংলা গাইড।"
+---
+
+<InParagraph text={"**npm** হলো world-এর সবচেয়ে বড় software registry। এখানে 2 মিলিয়নেরও বেশি packages আছে যেগুলো আপনার project-এ সরাসরি ব্যবহার করা যায়।"} />
+
+## Package Install করা
+
+<CodeBlock code={"# dependencies install\nnpm install express\n\n# version নির্দিষ্ট করে\nnpm install express@4.21.0\n\n# devDependencies install\nnpm install --save-dev nodemon\n\n# নির্দিষ্ট version range\nnpm install lodash@^4.17.0    # 4.17.x (minor updates)\nnpm install lodash@~4.17.0    # 4.17.0-4.17.x (patch updates)"} lang={"bash"} />
+
+## Package Remove করা
+
+<CodeBlock code={"npm uninstall express\nnpm remove lodash"} lang={"bash"} />
+
+## Scripts
+
+<InParagraph text={"`package.json`-এর `scripts` section-এ custom commands define করা যায়। এগুলো `npm run <script-name>` দিয়ে চালানো যায়।"} />
+
+<CodeBlock code={"{\n  \"scripts\": {\n    \"start\": \"node index.js\",\n    \"dev\": \"nodemon index.js\",\n    \"build\": \"tsc\",\n    \"test\": \"jest --coverage\",\n    \"lint\": \"eslint .\",\n    \"format\": \"prettier --write .\"\n  }\n}"} lang={"json"} title={"package.json scripts"} />
+
+<CodeBlock code={"npm run dev       # nodemon index.js চালাবে\nnpm start         # node index.js চালাবে (run ছাড়া)\nnpm test          # test run হবে"} lang={"bash"} />
+
+## package-lock.json
+
+<InParagraph text={"**package-lock.json** সব packages-এর exact version lock করে রাখে। যাতে সব developer-এর একই version ইনস্টল হয়। এটিকে **version control-এ commit করুন**।"} />
+
+## Semantic Versioning (SemVer)
+
+<InParagraph text={"npm packages version `MAJOR.MINOR.PATCH` format-এ থাকে:"} />
+
+| Part | অর্থ | উদাহরণ |
+| --- | --- | --- |
+| MAJOR | Breaking changes | 4.21.0 → 5.0.0 |
+| MINOR | New features (backward compatible) | 4.21.0 → 4.22.0 |
+| PATCH | Bug fixes | 4.21.0 → 4.21.1 |
+
+<CodeBlock code={"^4.21.0  →  4.21.0 থেকে 5.0.0 এর আগে (minor + patch)\n~4.21.0  →  4.21.0 থেকে 4.22.0 এর আগে (patch only)\n4.21.0   →  শুধু 4.21.0"} lang={"text"} />
+
+## npm audit — Security Check
+
+<CodeBlock code={"# vulnerability check\nnpm audit\n\n# auto fix\nnpm audit fix\n\n# force fix (breaking changes হতে পারে)\nnpm audit fix --force"} lang={"bash"} />
+
+## Useful npm Commands
+
+<CodeBlock code={"# outdated packages দেখুন\nnpm outdated\n\n# global packages দেখুন\nnpm list -g --depth=0\n\n# package search\nnpm search express\n\n# package info\nnpm info express\n\n# cache clean\nnpm cache clean --force\n\n# npm login (publish করতে)\nnpm login"} lang={"bash"} />
+
+<Tip tone={"success"} title={"ভালো অভ্যাস"} text={"`node_modules` ও `.env` ফাইলকে `.gitignore`-এ যোগ করুন। `package-lock.json` অবশ্যই version control-এ রাখুন।"} />

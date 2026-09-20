@@ -1,0 +1,13 @@
+---
+question: "What is the alt attribute?"
+order: 3
+description: "alt attribute কেন জরুরি — ছবি না দেখালেও কীভাবে এটি সাহায্য করে।"
+---
+
+<InParagraph text={"`alt` attribute `<img>` element-এ ছবির একটি **বিকল্প বর্ণনা (alternative text)** দেয়। এটি মূলত তখনই দেখা যায় যখন ছবিটি কোনো কারণে দেখানো যায় না।"} />
+
+<InParagraph text={"`alt`-এর তিনটি গুরুত্বপূর্ণ কাজ আছে — (১) ছবি লোড না হলে বা ভেঙে গেলে ব্যবহারকারী জানতে পারে ছবিতে কী ছিল, (২) **screen reader** অন্ধ বা দৃষ্টি সীমিত ব্যবহারকারীদের কাছে ছবির বর্ণনা পড়ে শোনায়, (৩) search engine ছবি বোঝতে পারে, ফলে SEO-ও ভালো হয়।"} />
+
+<CodeBlock code={"<img src=\"dog.jpg\" alt=\"উঠানে খেলছে একটি কুকুর\" />"} lang={"html"} title={"উদাহরণ"} />
+
+<Tip tone={"warning"} title={"সতর্কতা"} text={"সাজসজ্জার (decorative) ছবিতে `alt=\"\"` (খালি) দেওয়া উচিত — তাহলে screen reader সেটি এড়িয়ে যাবে। `alt` বাদ দেওয়া বা ভুল লেখা accessibility সমস্যা তৈরি করে।"} />

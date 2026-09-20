@@ -1,0 +1,30 @@
+---
+title: "React Introduction"
+label: "Introduction"
+order: 1
+level: "Beginner"
+description: "React কী, এটি কীভাবে UI তৈরি করে, Virtual DOM ও component-ভিত্তিক ডেভেলপমেন্ট — বাংলায় পরিচিতি।"
+---
+
+<InParagraph text={"**React** হলো একটি free, open-source **JavaScript library** যা user interface (UI) তৈরি করে। উপাদান — **component** নামে ছোট ছোট টুকরা দিয়ে জটিল UI গড়া হয়। এটি **Meta** (Facebook) তৈরি করেছে, বর্তমানে বিশ্বের সবচেয়ে জনপ্রিয় UI library।"} />
+
+## এই অধ্যায়ে যা যা শিখবেন
+
+- React কী ও এটি কীভাবে কাজ করে
+- Component ও JSX ধারণা
+- State ও props — ডেটা শেয়ার
+- React 19-এর নতুন features
+
+## React কেন?
+
+<InParagraph text={"React-এ ডেটা বদলালে পুরো page reload না করে শুধু necessary অংশ আপডেট হয়। React-এ **Virtual DOM**-এর মাধ্যমে যা পরিবর্তন হয়েছে শুধু সেটাই বাস্তব DOM-এ যুক্ত হয় — ফলে UI দ্রুত ও smooth।"} />
+
+## Component কী?
+
+<InParagraph text={"Component হলো UI-এর একটি **reusable টুকরো** — যেমন একটা Button, একটা Card বা পুরো Navbar। প্রতিটি component হলো একটি JavaScript function যা JSX return করে।"} />
+
+<CodeBlock code={"function Greeting() {\n  return <h1>হ্যালো, বিশ্ব!</h1>;\n}\n\n// ব্যবহার\n<Greeting />\n<Greeting />\n<Greeting />"} lang={"jsx"} title={"প্রথম component"} />
+
+## React 19
+
+<Tip tone={"info"} title={"React 19 অনুসারে"} text={"এই ডকুমেন্টেশন **React 19** নিয়ে লেখা — Actions, `useActionState`, `useOptimistic`, `use()` এবং **React Compiler** সহ সব নতুন features কভার করা হয়েছে। যেখানে দরকার সেখানে version-ও উল্লেখ আছে।"} />

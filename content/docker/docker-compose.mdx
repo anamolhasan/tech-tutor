@@ -1,0 +1,41 @@
+---
+title: "Docker Compose"
+label: "Docker Compose"
+order: 10
+level: "Intermediate"
+description: "এক file-এ একাধিক service — compose.yml, up/down/logs/exec — বাংলায় সম্পূর্ণ গাইড।"
+---
+
+<InParagraph text={"একটি app-এর অনেকগুলো piece (API, database, redis, nginx) দরকার — প্রতিটি আলাদা `docker run` লিখা কঠিন। **Docker Compose** কয়েকটি container-কে একটি `compose.yml` file-এ ঘোষণা করে এক কমান্ডে চালায়।"} />
+
+## compose.yml
+
+<CodeBlock code={"services:\n  api:\n    build: .\n    ports:\n      - \"4000:4000\"\n    environment:\n      - MONGO_URI=mongodb://mongo:27017/blog\n      - PORT=4000\n    depends_on:\n      - mongo\n      - redis\n\n  mongo:\n    image: mongo:7\n    volumes:\n      - mongo-data:/data/db\n\n  redis:\n    image: redis:7-alpine\n\nvolumes:\n  mongo-data:"} lang={"yaml"} title={"compose.yml"} />
+
+## প্রধান কমান্ড
+
+<CodeBlock code={"docker compose up -d          # build + start (background)\ndocker compose up -d --build  # কোড বদলালে rebuild\ndocker compose ps            # service status\ndocker compose logs -f api   # logs follow\ndocker compose exec api sh   # service-এর ভেতরে\ndocker compose down          # stop + remove\ndocker compose down -v      # volumes-ও মুছে (ডেটা যাবে!)"} lang={"bash"} title={"Compose manage"} />
+
+## প্রয়োজনীয় sections
+
+| Key | কাজ |
+| --- | --- |
+| `services:` | প্রতিটি container-defined service |
+| `build:` | local folder থেকে image build |
+| `image:` | ready image ব্যবহার |
+| `ports:` | host:container port mapping |
+| `environment:` | env variables |
+| `volumes:` | mount ও named volumes |
+| `depends_on:` | startup order (shallow) |
+| `env_file:` | `.env` file থেকে load |
+| `container_name:` | เฉพาะ container নাম |
+
+## Build vs Image
+
+<CodeBlock code={"services:\n  # local Dockerfile থেকে build\n  api:\n    build: ./api\n\n  # ready-made official image\n  mongo:\n    image: mongo:7"} lang={"yaml"} title={"দুইভাবে declare"} />
+
+## depends_on-এর সীমা
+
+<InParagraph text={"`depends_on` শুধু **startup order** নিশ্চিত করে — database-এর ভেতর থেকে 'ready' হওয়ার গ্যারান্টি নয়। API প্রয়োজনে connection retry করবে নাহলে database-এর healthcheck ব্যবহার করবে (পরবর্তী lessons-এ দেখব)।"} />
+
+<Tip tone={"info"} title={"Project name"} text={"Compose project-এর নাম ফোল্ডারের নাম থেকে আসে (হতে `-p` flag দিয়ে override)। সেই নামে network ও container prefix হয়।"} />

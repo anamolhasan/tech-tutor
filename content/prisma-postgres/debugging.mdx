@@ -1,0 +1,16 @@
+---
+title: "validate, format, query-log"
+label: "Debugging"
+order: 36
+level: "Intermediate"
+description: "schema ঠিক? client সিঙ্ক? query কী চলছে?"
+---
+
+<CodeBlock code={"npx prisma validate\nnpx prisma format\nnpx prisma generate"} lang={"bash"} />
+
+- `validate` — schema syntax/relation error
+- `format` — নিজে-style; প্রায় error-ও দেখায়
+- `log: ['query']`-এ gen SQL — select/join যাচাই
+- `DEBUG='prisma*'` env — engine verbose
+
+<Tip tone={"warning"} title={"প্রায় ভুল"} text={"Schema বদলে `generate`-না করে client-থেকে run — error-এ বলে, `prisma generate` চালান।"} />

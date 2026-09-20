@@ -1,0 +1,31 @@
+---
+title: "NestJS Pipes & Validation"
+label: "Pipes"
+order: 6
+level: "Intermediate"
+description: "Built-in pipes, ValidationPipe, DTO, class-validator — data transform ও validate বাংলায়।"
+---
+
+<InParagraph text={"**Pipe** incoming data-কে transform/validate করতে ব্যবহৃত হয় — route param-কে number করা, body validate করা ইত্যাদি।"} />
+
+## Built-in Pipes
+
+<CodeBlock code={"import { ParseIntPipe, ParseUUIDPipe, Controller, Get, Param } from \"@nestjs/common\";\n\n@Controller(\"users\")\nexport class UsersController {\n  @Get(\":id\")\n  // :id auto number-এ convert হবে\n  findOne(@Param(\"id\", ParseIntPipe) id: number) {\n    console.log(typeof id); // \"number\"\n    return { id };\n  }\n\n  @Get(\"uuid/:id\")\n  findWithUuid(@Param(\"id\", ParseUUIDPipe) id: string) {\n    return { id };\n  }\n\n  @Get(\"default/:id\")\n  // ceil ডিফল্ট omit করা যায়\n  findDefault(@Param(\"id\", new ParseIntPipe({ errorHttpStatusCode: 404 })) id: number) {\n    return { id };\n  }\n}"} lang={"typescript"} />
+
+## DTO + class-validator (ডেফল্ট পদ্ধতি)
+
+<CodeBlock code={"npm i class-validator class-transformer"} lang={"bash"} />
+
+<CodeBlock code={"import { IsEmail, IsInt, IsString, Min, Max, MinLength } from \"class-validator\";\n\nexport class CreateUserDto {\n  @IsString()\n  @MinLength(2, { message: \"নাম কমপক্ষে 2 অক্ষর\" })\n  name: string;\n\n  @IsEmail()\n  email: string;\n\n  @IsInt()\n  @Min(18)\n  @Max(120)\n  age: number;\n}"} lang={"typescript"} title={"src/users/dto/create-user.dto.ts"} />
+
+## ValidationPipe ব্যবহার
+
+<CodeBlock code={"import { NestFactory } from \"@nestjs/core\";\nimport { ValidationPipe } from \"@nestjs/common\";\nimport { AppModule } from \"./app.module\";\n\nasync function bootstrap() {\n  const app = await NestFactory.create(AppModule);\n\n  // global ValidationPipe — সব DTO auto-validate\n  app.useGlobalPipes(new ValidationPipe({\n    whitelist: true,       // DTO-তে নেই এমন property strip\n    forbidNonWhitelisted: true, // unknown property → 400\n    transform: true,       // type transform\n  }));\n\n  await app.listen(3000);\n}\nbootstrap();"} lang={"typescript"} title={"main.ts — global validation"} />
+
+<CodeBlock code={"import { Body, Controller, Post } from \"@nestjs/common\";\nimport { CreateUserDto } from \"./dto/create-user.dto\";\n\n@Controller(\"users\")\nexport class UsersController {\n  @Post()\n  create(@Body() dto: CreateUserDto) {\n    // dto valid — whitelist applied\n    return dto;\n  }\n}"} lang={"typescript"} title={"controller-এ DTO"} />
+
+## Custom Pipe
+
+<CodeBlock code={"import { PipeTransform, Injectable, BadRequestException } from \"@nestjs/common\";\n\n@Injectable()\nexport class TitleCasePipe implements PipeTransform {\n  transform(value: string): string {\n    if (typeof value !== \"string\") {\n      throw new BadRequestException(\"string দরকার\");\n    }\n    return value\n      .split(\" \")\n      .map((w) => w[0].toUpperCase() + w.slice(1))\n      .join(\" \");\n  }\n}\n\n// ব্যবহার\n@Param(\"name\", TitleCasePipe) name: string"} lang={"typescript"} title={"src/common/pipes/title-case.pipe.ts"} />
+
+<Tip tone={"warning"} title={"Global Pipe setup"} text={"`whitelist: true` মানে DTO-তে না থাকলে property deleted — API predictable থাকে। যত দ্রুত possible validation world-class solver ব্যবহার করুন।"} />

@@ -1,0 +1,19 @@
+---
+title: "Subquery — query-র ভেতরে query"
+label: "Subqueries"
+order: 19
+level: "Advanced"
+description: "scalar, IN, EXISTS — ৩ ধরণের subquery ব্যবহার।"
+---
+
+<CodeBlock code={"SELECT name, price\nFROM products\nWHERE price = (SELECT MAX(price) FROM products);"} lang={"sql"} title={"scalar subquery"} />
+
+<CodeBlock code={"SELECT name\nFROM products\nWHERE id IN (\n  SELECT product_id\n  FROM order_items\n  WHERE qty >= 5\n);"} lang={"sql"} title={"IN (...)"} />
+
+<CodeBlock code={"SELECT u.name\nFROM users u\nWHERE EXISTS (\n  SELECT 1 FROM orders o WHERE o.user_id = u.id\n);"} lang={"sql"} title={"EXISTS — correlated"} />
+
+- `EXISTS` — matching halting; একবার মিললেই থামে
+- correlated subquery — scan প্রতি row-এ চলে; index দরকার
+- কিছু subquery-কে `JOIN`-এ বদলে readable হয়
+
+<Tip tone={"info"} title={"EXISTS vs IN"} text={"মোটামুটিভাবে কিছুটা same, তবে NULL-safe-এর জন্য `EXISTS` ভালো; `IN`-এ NULL surprise আসতে পারে।"} />

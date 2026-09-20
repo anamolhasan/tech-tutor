@@ -1,0 +1,21 @@
+---
+title: "Project Setup — E-commerce Storefront + Cart"
+label: "Project Setup"
+order: 4
+level: "Beginner"
+description: "আমরা কী project বানাব, কাঠামো, এবং package install — বাংলায়।"
+---
+
+<InParagraph text={"এই কোর্সে আমরা একটি **ই-কমার্স Storefront + Shopping Cart** project বানাব। এতে React/Next.js-এর সাথে Redux Toolkit ও RTK Query-র দারুণ সমন্বয় দেখাবে —"} />
+
+- **RTK Query** → products list/detail, orders create (server data, cache)
+- **Redux Toolkit slice** → cart (client-side স্থানীয় state)
+- **Selector + typed hooks** → component-এ data অ্যাক্সেস
+
+<CodeBlock code={"# React / Next 16 project (App Router)\nnpm i @reduxjs/toolkit react-redux\n\n# optional: RTK Query (bundled in @reduxjs/toolkit)\n# আর কিছু লাগে না — createApi/fetchBaseQuery ভেতরেই আছে"} lang={"ts"} title={"Install"} />
+
+## Data models
+
+<CodeBlock code={"type Product = {\n  id: string;\n  name: string;\n  price: number;\n  category: string;\n  stock: number;\n  image?: string;\n};\n\ntype CartItem = {\n  productId: string;\n  qty: number;\n};\n\ntype Order = {\n  id: string;\n  items: { productId: string; qty: number }[];\n  total: number;\n  createdAt: string;\n};"} lang={"ts"} title={"Types"} />
+
+<Tip tone={"info"} title={"এই combination কেন?"} text={"এটি বাস্তব জগতের best practice: **Cart সার্ভার-class state নয়** — এটি session/client-এ থাকে। তাই cart রাখি slice-এ, products/orders রাখি RTK Query-এ। এই split-ই একটি অ্যাপের server-state ও client-state-এর প্রকৃত পার্থক্য তুলে ধরে।"} />

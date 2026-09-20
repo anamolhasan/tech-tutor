@@ -1,0 +1,24 @@
+---
+title: "Redux Architecture — একমুখী Data Flow"
+label: "Architecture"
+order: 2
+level: "Beginner"
+description: "Store, Action, Reducer, Dispatch — চারটি স্তর কীভাবে একসাথে কাজ করে — বাংলায়।"
+---
+
+<InParagraph text={"Redux-এর **একমুখী (unidirectional) data flow** একটি মাত্র দিক অনুসরণ করে: UI → dispatch(action) → reducer → new state → UI আবার render। এ কারণে সমীকরণটা আবার track করা easy।"} />
+
+<CodeBlock code={"UI (click) ──► dispatch({ type: \"cart/add\", payload })\n                    │\n                    ▼\n            reducer(state, action)  ──►  new state\n                    │\n                    ▼\n           store.subscribe / useSelector\n                    │\n                    ▼\n           UI re-render (new state)"} lang={"text"} title={"Redux data flow"} />
+
+## চারটি মূল অংশ
+
+| অংশ | কাজ |
+| --- | --- |
+| **Store** | সম্পূর্ণ app-এর current state-র এক-এক container |
+| **Action** | কী ঘটেছে — একটি `{ type, payload }` object |
+| **Reducer** | একটি pure function — (state, action) → new state |
+| **Dispatch** | action-কে store-এ পাঠানোর function |
+
+<CodeBlock code={"// action\n{ type: \"cart/addItem\", payload: { productId: \"p1\", qty: 2 } }\n\n// reducer (pure)\nfunction cartReducer(state = [], action) {\n  switch (action.type) {\n    case \"cart/addItem\":\n      return addItemLogic(state, action.payload);\n    default:\n      return state;\n  }\n}"} lang={"ts"} title={"উদাহরণ scope"} />
+
+<Tip tone={"info"} title={"Pure reducer"} text={"Reducer **কখনো** state-কে mutate করেন না — সর্বদা নতুন object/array return করেন। অন্যথায় React/Redux-এ পরিবর্তন detect হয় না, আর time-travel debug ভাঙে। Redux Toolkit-এ Immer এই নিয়ম enforce করে।"} />

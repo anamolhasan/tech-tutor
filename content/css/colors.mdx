@@ -1,0 +1,37 @@
+---
+title: "CSS Colors (রং)"
+label: "Colors"
+order: 5
+level: "Beginner"
+description: "CSS-এ রং দেওয়ার সব পদ্ধতি — named color, hex, rgb, hsl, opacity — বাংলা টিউটোরিয়াল।"
+---
+
+<InParagraph text={"CSS-এ টেক্সটের রং `color`, পটভূমির রং `background-color` দিয়ে দেওয়া হয়। রং লেখার একাধিক পদ্ধতি রয়েছে।"} />
+
+## Named colors
+
+<CodeBlock code={"h1 { color: tomato; }\np { background-color: lightblue; }"} lang={"css"} />
+
+<InParagraph text={"প্রায় ১৪০+ পরিচিত নাম (যেমন `red`, `tomato`, `rebeccapurple`) ব্যবহার করা যায়।"} />
+
+## HEX কোড (#RRGGBB)
+
+<CodeBlock code={".brand { color: #16a34a; }   /* সবুজ */\n.sky   { color: #0ea5e9; }   /* নীল */"} lang={"css"} />
+
+<InParagraph text={"HEX-এ ছয়টি অক্ষর থাকে — লাল, সবুজ, নীলের প্রতিটির জন্য দুইটি (০-৯, a-f)। যেমন `#ff0000` মানে লাল।"} />
+
+## RGB ও RGBA
+
+<CodeBlock code={"p { color: rgb(255, 99, 71); }\np { color: rgba(255, 99, 71, 0.5); } /* স্বচ্ছ 50% */"} lang={"css"} />
+
+<InParagraph text={"`rgb(red, green, blue)` — প্রতিটির মান ০ থেকে ২৫৫। `a` (alpha) ০ থেকে ১ পর্যন্ত স্বচ্ছতা নিয়ন্ত্রণ করে।"} />
+
+## HSL
+
+<CodeBlock code={"p { color: hsl(120, 100%, 25%); }\np { color: hsla(120, 100%, 25%, 0.6); }"} lang={"css"} />
+
+- `h` (hue) — রংয়ের অবস্থান 0-360°
+- `s` (saturation) — রংয়ের ঘনত্ব %
+- `l` (lightness) — উজ্জ্বলতা %
+
+<Tip tone={"success"} title={"আধুনিক পদ্ধতি"} text={"ঢাকা-শৈলীর আধুনিক CSS-এ `oklch()` ও `color-mix()` ব্যবহৃত হয় — এগুলো visually সমান রং তৈরি করে। তবে hex ও hsl এখনও সর্বাধিক চলতি।"} />

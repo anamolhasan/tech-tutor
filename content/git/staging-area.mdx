@@ -1,0 +1,52 @@
+---
+title: "Staging Area ও git add-এর শক্তি"
+label: "Staging Area"
+order: 4
+level: "Beginner"
+description: "Staging area কী, ফাইল কীভাবে stage/unstage করা যায় — বাংলায়।"
+---
+
+## Staging Area আসলে কী?
+
+<InParagraph text={"Staging Area (বা Index) হলো commit করার আগের একটি **মধ্যবর্তী জায়গা**। আপনি সিদ্ধান্ত নেন — এই commit-এ কোন কোন পরিবর্তন ঢুকবে। এটি না থাকলে সব পরিবর্তন জোর করে commit হয়ে যেত।"} />
+
+<CodeBlock code={"echo \"update\" >> README.md      # 1. Working Directory\ngit add README.md              # 2. Staging Area\ngit commit -m \"docs: update\"   # 3. Repository"} lang={"bash"} title={"একটি ফাইলের ধাপগুলো"} />
+
+## git add-এর বিভিন্ন রূপ
+
+| কমান্ড | কী করে |
+| --- | --- |
+| git add file.txt | একটি নির্দিষ্ট ফাইল stage |
+| git add . | সব নতুন/পরিবর্তিত ফাইল stage |
+| git add -A | সব ফাইল (delete সহ) stage |
+| git add -u | tracked ফাইলগুলোই stage (নতুন নয়) |
+| git add src/**/*.js | glob pattern দিয়ে stage |
+| git add -p | একটি ফাইলের অংশ-অংশ stage |
+
+## অংশ-অংশ stage করা (-p)
+
+<InParagraph text={"`git add -p` দিয়ে আপনি একটি ফাইলের কিছু hunk (অংশ) stage করতে পারেন — বাকিটা না করে। বড় refactor-এ এটি দারুণ কাজে লাগে, কারণ তখন commit ছোট ও পরিষ্কার রাখা যায়।"} />
+
+<CodeBlock code={"git add -p src/utils.js\n# Stage this hunk [y,n,q,a,d,s,e,?]?"} lang={"bash"} />
+
+## অপশনগুলোর অর্থ
+
+- `y` — এই hunk stage করো
+- `n` — এই hunk stage করবে না
+- `q` — stage করা বন্ধ করো
+- `s` — hunk কে আরও ছোট ভাগে ভাগ করো
+- `e` — manually edit করে stage করো
+
+## ফাইল unstage করা
+
+<CodeBlock code={"git restore --staged README.md   # আধুনিক\ngit reset README.md               # পুরোনো (কাজ একই)"} lang={"bash"} title={"Staging থেকে বের করা"} />
+
+## কী stage হয়েছে তা দেখা
+
+<CodeBlock code={"git diff             # unstaged পরিবর্তন\ngit diff --staged   # staged পরিবর্তন (প্রস্তুত)"} lang={"bash"} />
+
+## ফাইল staging থেকে পুরোপুরি সরানো
+
+<CodeBlock code={"git rm --cached secret.env   # repo থেকে remove, disk-এ থাকবে"} lang={"bash"} />
+
+<Tip tone={"info"} title={"মনে রাখুন"} text={"Staging Area-কে মানসিকভাবে একটি **tray** হিসেবে ভাবুন — আপনি ঠিক করেন কোন ফাইলগুলো এই commit-এ যাবে। একসাথে সব stage না করে, প্রতিটি commit আলাদা আলাদা logical কাজ।"} />

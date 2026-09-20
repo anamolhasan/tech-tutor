@@ -1,0 +1,17 @@
+---
+title: "@expo/vector-icons ও expo-font"
+label: "Icons & Fonts"
+order: 20
+level: "Beginner"
+description: "app-এ icon ও custom font ব্যবহার — দুইয়ের pattern।"
+---
+
+<InParagraph text={"**`@expo/vector-icons`** — Material, Ionicons, FontAwesome ইত্যাদি এক প্যাকেজে। TaskTrack-এ টগল/delete button:"} />
+
+<CodeBlock code={"import { MaterialCommunityIcons } from \"@expo/vector-icons\";\n\n<MaterialCommunityIcons\n  name=\"checkbox-marked-circle-outline\"\n  size={24}\n  color=\"#2563eb\"\n/>\n<MaterialCommunityIcons name=\"trash-can-outline\" size={20} color=\"#ef4444\" />"} lang={"tsx"} />
+
+<InParagraph text={"Custom font-এর pattern — **`expo-font`** + hook:"} />
+
+<CodeBlock code={"import { useFonts } from \"expo-font\";\n\nexport default function App() {\n  const [loaded] = useFonts({\n    \"Inter-Bold\": require(\"../../assets/fonts/Inter-Bold.ttf\"),\n  });\n  if (!loaded) return null;\n  return <Text style={{ fontFamily: \"Inter-Bold\" }}>Bold text</Text>;\n}"} lang={"tsx"} />
+
+<Tip tone={"warning"} title={"ভেক্টর icon আসলে font"} text={"vector icons একটি font-file — `name`-এ icon-এর নাম, `size`/`color` props। Android emulator-এ প্রথম লোডে blank দেখালে reload করুন।"} />

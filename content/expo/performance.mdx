@@ -1,0 +1,21 @@
+---
+title: "Performance — re-render কমিয়ে, list দ্রুত"
+label: "Performance"
+order: 31
+level: "Advanced"
+description: "React Native-এ performance-এর প্রধান bottlenecks ও সমাধান।"
+---
+
+<InParagraph text={"RN-এ প্রধান bottleneck দুইটি — **অপ্রয়োজনীয় re-render** ও **বড় list**।"} />
+
+- `React.memo` — props অপরিবর্তিত থাকলে component skip
+- `useCallback` — handler-এর identity stable
+- FlatList props — `getItemLayout`, `removeClippedSubviews`
+- heavy কাজ — interacton-এর পরে (InteractionManager)
+- ছবি — expo-image caching + priority
+
+<CodeBlock code={"import { memo, Pressable, Text } from \"react-native\";\n\nconst TaskRow = memo(function TaskRow({ task, onToggle }) {\n  return (\n    <Pressable onPress={() => onToggle(task.id)}>\n      <Text>{task.title}</Text>\n    </Pressable>\n  );\n});"} lang={"tsx"} />
+
+<InParagraph text={"List-এর প্রতিটি item-এ **stable key** (`id`) — সাজানো index নয়।"} />
+
+<Tip tone={"warning"} title={"Over-optimize নয়"} text={"প্রোফাইল ছাড়া অনুমান না — DevTools-এ re-render highlight চালু করে দেখুন কোথায় আসল সমস্যা, তারপর optimize করুন।"} />

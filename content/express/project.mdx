@@ -1,0 +1,31 @@
+---
+title: "Real-world Express Project"
+label: "Project"
+order: 21
+level: "Advanced"
+description: "পূর্ণ Task Manager API — auth, CRUD, validation, security সহ সম্পূর্ণ Express project বাংলায়।"
+---
+
+<InParagraph text={"চলুন একটি **Task Manager API** বানাই — যেখানে auth, CRUD, validation, security — সব থাকবে। এটি একটি realistic mini-project।"} />
+
+## Packages
+
+<CodeBlock code={"npm init -y\nnpm install express mongoose bcryptjs jsonwebtoken dotenv cors helmet\nnpm install --save-dev nodemon\n\n# structure create করুন\nmkdir -p src/{config,models,controllers,routes,middleware,validators}"} lang={"bash"} />
+
+## app.js
+
+<CodeBlock code={"require(\"dotenv\").config();\nconst express = require(\"express\");\nconst cors = require(\"cors\");\nconst helmet = require(\"helmet\");\n\nconst app = express();\n\napp.use(helmet());\napp.use(cors());\napp.use(express.json());\n\napp.get(\"/\", (req, res) => res.json({ message: \"Task API\" }));\n\napp.use(\"/api/auth\", require(\"./routes/auth\"));\napp.use(\"/api/tasks\", require(\"./routes/tasks\"));\n\n// 404\napp.use((req, res) => res.status(404).json({ error: \"Not found\" }));\n\n// error handler\napp.use((err, req, res, next) => {\n  console.error(err);\n  res.status(err.status || 500).json({ error: err.message || \"Server error\" });\n});\n\nmodule.exports = app;"} lang={"javascript"} title={"src/app.js"} />
+
+## models/Task.js
+
+<CodeBlock code={"const mongoose = require(\"mongoose\");\n\nconst taskSchema = new mongoose.Schema({\n  title: { type: String, required: true, trim: true, maxlength: 100 },\n  description: { type: String, default: \"\", maxlength: 500 },\n  completed: { type: Boolean, default: false },\n  priority: {\n    type: String,\n    enum: [\"low\", \"medium\", \"high\"],\n    default: \"medium\",\n  },\n  user: { type: mongoose.Schema.Types.ObjectId, ref: \"User\", required: true },\n  createdAt: { type: Date, default: Date.now },\n});\n\nmodule.exports = mongoose.model(\"Task\", taskSchema);"} lang={"javascript"} title={"src/models/Task.js"} />
+
+## routes/tasks.js
+
+<CodeBlock code={"const express = require(\"express\");\nconst router = express.Router();\nconst Task = require(\"../models/Task\");\nconst { protect } = require(\"../middleware/auth\");\nconst { validateTask } = require(\"../validators/taskValidator\");\n\n// সব middleware এই router-এ\nrouter.use(protect);\n\n// GET /api/tasks\nrouter.get(\"/\", async (req, res, next) => {\n  try {\n    const tasks = await Task.find({ user: req.user._id }).sort(\"-createdAt\");\n    res.json(tasks);\n  } catch (err) { next(err); }\n});\n\n// POST /api/tasks\nrouter.post(\"/\", validateTask, async (req, res, next) => {\n  try {\n    const task = await Task.create({ ...req.body, user: req.user._id });\n    res.status(201).json(task);\n  } catch (err) { next(err); }\n});\n\n// PATCH /api/tasks/:id\nrouter.patch(\"/:id\", async (req, res, next) => {\n  try {\n    const task = await Task.findOneAndUpdate(\n      { _id: req.params.id, user: req.user._id }, // own task only\n      req.body,\n      { new: true, runValidators: true }\n    );\n    if (!task) return res.status(404).json({ error: \"Task খুঁজে পাওয়া যায়নি\" });\n    res.json(task);\n  } catch (err) { next(err); }\n});\n\n// DELETE /api/tasks/:id\nrouter.delete(\"/:id\", async (req, res, next) => {\n  try {\n    const task = await Task.findOneAndDelete({\n      _id: req.params.id,\n      user: req.user._id,\n    });\n    if (!task) return res.status(404).json({ error: \"Task খুঁজে পাওয়া যায়নি\" });\n    res.json({ message: \"Task মুছে ফেলা হয়েছে\" });\n  } catch (err) { next(err); }\n});\n\nmodule.exports = router;"} lang={"javascript"} title={"src/routes/tasks.js"} />
+
+## Test Flow
+
+<CodeBlock code={"# 1. run server\nnode src/server.js\n\n# 2. register (Postman/Bruno)\nPOST http://localhost:5000/api/auth/register\n{ \"name\":\"রহিম\", \"email\":\"rahim@test.com\", \"password\":\"123456\" }\n\n# 3. login → token\nPOST http://localhost:5000/api/auth/login\n{ \"email\":\"rahim@test.com\", \"password\":\"123456\" }\n→ { \"token\": \"eyJ...\" }\n\n# 4. create task (auth header)\nPOST http://localhost:5000/api/tasks\nAuthorization: Bearer eyJ...\n{ \"title\":\"Node.js শিখি\", \"priority\":\"high\" }\n\n# 5. get tasks\nGET http://localhost:5000/api/tasks\nAuthorization: Bearer eyJ..."} lang={"bash"} />
+
+<Tip tone={"info"} title={"আরও কাজ"} text={"এই project-এ আরও যোগ করুন: user-এর task-দৈর্ঘ্য প্রম্পট, category/filter, due date, analytics। তারপর GitHub-এ push করে portfolio build করুন।"} />

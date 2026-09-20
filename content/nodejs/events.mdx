@@ -1,0 +1,31 @@
+---
+title: "Node.js Events (EventEmitter)"
+label: "Events"
+order: 6
+level: "Intermediate"
+description: "Event-driven programming, EventEmitter, emit/listen, custom events — Node.js-এর core concept বাংলায়।"
+---
+
+<InParagraph text={"Node.js মূলত **event-driven** architecture-এ কাজ করে। EventEmitter module দিয়ে custom events create ও handle করা যায়। প্রায় সব Node.js module events ব্যবহার করে।"} />
+
+## EventEmitter কী?
+
+<InParagraph text={"**EventEmitter** হলো `events` module-এর একটি class যার মাধ্যমে আপনি event create, emit ও listen করতে পারবেন।"} />
+
+<CodeBlock code={"const EventEmitter = require(\"node:events\");\n\nconst emitter = new EventEmitter();\n\n// event listen করা\nemitter.on(\"greet\", (name) => {\n  console.log(\"Hello, \" + name + \"!\");\n});\n\n// event emit করা\nemitter.emit(\"greet\", \"রহিম\");\nemitter.emit(\"greet\", \"করিম\");"} lang={"javascript"} />
+
+## Custom Event System
+
+<CodeBlock code={"const EventEmitter = require(\"node:events\");\n\nclass OrderSystem extends EventEmitter {}\n\nconst orders = new OrderSystem();\n\n// events listen\norders.on(\"order-placed\", (item) => {\n  console.log(\"✅ অর্ডার গৃহীত:\", item);\n});\n\norders.on(\"order-shipped\", (item) => {\n  console.log(\"🚚 পাঠানো হয়েছে:\", item);\n});\n\norders.on(\"order-delivered\", (item) => {\n  console.log(\"📦 ডেলিভারি সম্পন্ন:\", item);\n});\n\n// events emit\norders.emit(\"order-placed\", \"Laptop\");\norders.emit(\"order-shipped\", \"Laptop\");\norders.emit(\"order-delivered\", \"Laptop\");"} lang={"javascript"} title={"order-system.js"} />
+
+## Once, Remove Listener
+
+<CodeBlock code={"const EventEmitter = require(\"node:events\");\nconst emitter = new EventEmitter();\n\n// once — শুধুমাত্র একবার listen হবে\nemitter.once(\"startup\", () => {\n  console.log(\"Server চালু হয়েছে! (একবারই দেখাবে)\");\n});\n\nemitter.emit(\"startup\"); // দেখাবে\nemitter.emit(\"startup\"); // কিছু দেখাবে না\n\n// listener remove\nconst handler = (data) => console.log(data);\nemitter.on(\"data\", handler);\nemitter.removeListener(\"data\", handler);\nemitter.off(\"data\", handler); // alias"} lang={"javascript"} />
+
+## Error Event
+
+<InParagraph text={"যদি `error` event-এর কোনো listener না থাকে, Node.js process crash হয়ে যাবে। তাই সবসময় error listener রাখুন।"} />
+
+<CodeBlock code={"const emitter = new EventEmitter();\n\n// error listener অবশ্যই রাখুন!\nemitter.on(\"error\", (err) => {\n  console.error(\"Error:\", err.message);\n});\n\nemitter.emit(\"error\", new Error(\"কিছু ভুল হয়েছে\"));"} lang={"javascript"} />
+
+<Tip tone={"warning"} title={"সতর্কতা"} text={"অনেক listener যুক্ত করলে memory leak হতে পারে। `emitter.getMaxListeners()` ও `emitter.setMaxListeners(n)` দিয়ে control করুন।"} />

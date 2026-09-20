@@ -1,0 +1,31 @@
+---
+title: "Express Error Handling"
+label: "Error Handling"
+order: 8
+level: "Intermediate"
+description: "404 handling, error middleware, async errors, custom error class — Express বাংলায়।"
+---
+
+<InParagraph text={"ভালো API-এর জন্য error handling অপরিহার্য। Express-এ error handling-এর নির্দিষ্ট পদ্ধতি আছে।"} />
+
+## 404 Not Found Handler
+
+<CodeBlock code={"const express = require(\"express\");\nconst app = express();\n\n// ... সব routes ...\n\n// সব route-এর পরে 404 handle — এই middleware শেষে রাখতে হবে\napp.use((req, res) => {\n  res.status(404).json({\n    success: false,\n    message: \"এই route পাওয়া যায়নি\",\n    path: req.originalUrl,\n  });\n});"} lang={"javascript"} />
+
+## Error-handling Middleware
+
+<InParagraph text={"Error middleware সাধারণ middleware-এর মতো, তবে **4টি parameter**: `(err, req, res, next)`। 4 argument-এর উপস্থিতিই একে error handler হিসেবে চিনায়।"} />
+
+<CodeBlock code={"// Error handler middleware — শেষে রাখুন\napp.use((err, req, res, next) => {\n  const status = err.status || 500;\n  const message = err.message || \"Internal Server Error\";\n\n  console.error(\"❌\", err);\n\n  res.status(status).json({\n    success: false,\n    message,\n    stack: process.env.NODE_ENV === \"production\" ? undefined : err.stack,\n  });\n});"} lang={"javascript"} />
+
+## Custom Error Class
+
+<CodeBlock code={"class AppError extends Error {\n  constructor(message, status = 500) {\n    super(message);\n    this.status = status;\n    this.name = \"AppError\";\n  }\n}\n\nmodule.exports = AppError;"} lang={"javascript"} title={"utils/AppError.js"} />
+
+## Async Error Handling
+
+<CodeBlock code={"const AppError = require(\"./utils/AppError\");\n\n// ❌ এটা error throw করলেও catch হবে না\napp.get(\"/data\", async (req, res, next) => {\n  const data = await riskyFunction(); // reject হলে crash!\n  res.json(data);\n});\n\n// ✅ async wrapper দিয়ে\nconst asyncHandler = (fn) => (req, res, next) => {\n  Promise.resolve(fn(req, res, next)).catch(next);\n};\n\napp.get(\"/data\", asyncHandler(async (req, res) => {\n  const data = await riskyFunction();\n  res.json(data);\n}));"} lang={"javascript"} />
+
+<CodeBlock code={"app.post(\"/users\", async (req, res, next) => {\n  try {\n    const user = await createUser(req.body);\n    res.status(201).json(user);\n  } catch (error) {\n    next(new AppError(\"User তৈরি করা যায়নি\", 400));\n  }\n});"} lang={"javascript"} title={"try/catch দিয়ে"} />
+
+<Tip tone={"warning"} title={"তক্তা"} text={"Production-এ `stack` trace কখনো client-কে দেখাবেন না — এটি sensitive তথ্য। ডেভেলপমেন্ট-এ শুধু দেখান।"} />

@@ -1,0 +1,17 @@
+---
+title: "TechShop — flagship business queries"
+label: "TechShop Queries"
+order: 36
+level: "Intermediate"
+description: "এই course-এর সব ধারণা — joins, aggregation, window, CTE — আসল প্রশ্নে।"
+---
+
+<CodeBlock code={"SELECT c.name AS category, SUM(oi.qty * oi.price) AS revenue\nFROM order_items oi\nJOIN products p  ON p.id = oi.product_id\nJOIN categories c ON c.id = p.category_id\nGROUP BY c.name\nORDER BY revenue DESC;"} lang={"sql"} title={"১. category-wise revenue"} />
+
+<CodeBlock code={"SELECT name, sold, rank\nFROM (\n  SELECT p.name, SUM(oi.qty) AS sold,\n         RANK() OVER (ORDER BY SUM(oi.qty) DESC) AS rank\n  FROM order_items oi\n  JOIN products p ON p.id = oi.product_id\n  GROUP BY p.name\n) top\nWHERE rank <= 5;"} lang={"sql"} title={"২. top-selling (window)"} />
+
+<CodeBlock code={"WITH spend AS (\n  SELECT u.id, u.name, SUM(o.total) AS total\n  FROM users u JOIN orders o ON o.user_id = u.id\n  GROUP BY u.id, u.name\n)\nSELECT name, total,\n       NTILE(4) OVER (ORDER BY total DESC) AS tier\nFROM spend\nORDER BY total DESC;"} lang={"sql"} title={"৩. CTE: loyal customers"} />
+
+<CodeBlock code={"WITH monthly AS (\n  SELECT date_trunc('month', created_at) AS month,\n         SUM(total) AS revenue\n  FROM orders\n  GROUP BY month\n)\nSELECT month,\n       revenue,\n       revenue - LAG(revenue) OVER (ORDER BY month) AS delta\nFROM monthly\nORDER BY month;"} lang={"sql"} title={"৪. monthly growth (date_trunc + lag)"} />
+
+<Tip tone={"info"} title={"পরীক্ষা-নিরীক্ষা pattern"} text={"প্রথমে **এক-এক করে** প্রতিটি CTE/join চালান — error খুঁজে বের সহজ; তারপর সব একত্রিত করুন।"} />

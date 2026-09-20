@@ -1,0 +1,38 @@
+---
+title: "Next.js Introduction"
+label: "Introduction"
+order: 1
+level: "Beginner"
+description: "Next.js কী, কেন এটি React-এর জনপ্রিয় framework এবং কীভাবে এটি full-stack web application তৈরি করে — বাংলায় পরিচিতি।"
+---
+
+<InParagraph text={"**Next.js** হলো React-এর উপর নির্মিত একটি **production-ready framework**। এটি React দিয়ে full-stack web application তৈরি করতে সাহায্য করে — সার্ভার-সাইড rendering, static site generation, API routes, image optimization সহ অনেক built-in feature নিয়ে আসে।"} />
+
+## এই অধ্যায়ে যা যা শিখবেন
+
+- Next.js কী এবং কেন এটি প্রয়োজন
+- React framework বলতে কী বোঝায়
+- Next.js-এর মূল feature-গুলো
+- App Router কী
+
+## React framework বলতে কী বোঝায়?
+
+<InParagraph text={"React মূলত একটি library — এটি শুধু UI তৈরি করে। তবে একটি complete web application-এর জন্য দরকার routing, data fetching, code splitting, build optimization, SEO-ইত্যাদি — যা React নিজে দেয় না। **Next.js** সেগুলো built-in দিয়ে দেয়।"} />
+
+## Next.js-এর মূল Feature
+
+- **File-based Routing** — ফোল্ডার দিয়ে route তৈরি করুন
+- **Server Components** — ডিফল্ট rendering server-এ
+- **API Routes (Route Handlers)** — একই অ্যাপে backend
+- **Image Optimization** — `next/image` দিয়ে চিত্র অপটিমাইজেশন
+- **Font Optimization** — `next/font` দিয়ে font অপটিমাইজেশন
+- **Metadata & SEO** — easy metadata API
+- **Turbopack** — দ্রুত bundler (default)
+
+## App Router
+
+<InParagraph text={"Next.js-এর **App Router** (v13 থেকে) React 19-এর latest features ব্যবহার করে — Server Components, Suspense, Server Functions। এটি **file-system based router** — অর্থাৎ `app` ফোল্ডারের ভেতরের ফাইল ফোল্ডারই route নির্ধারণ করে।"} />
+
+<CodeBlock code={"app/\n├── layout.tsx      → রুট লেআউট (html, body)\n├── page.tsx        → হোম পেজ (/)\n├── blog/\n│   ├── layout.tsx  → ব্লগের জন্য লেআউট\n│   └── page.tsx    → /blog পেজ\n└── api/\n    └── posts/\n        └── route.ts → /api/posts API"} lang={"text"} title={"মৌলিক App Router গঠন"} />
+
+<Tip tone={"info"} title={"আজকের Next.js"} text={"এই টিউটোরিয়াল **Next.js 16** (App Router) কভার করে। v13 এর আগের পেজস router (`pages` folder) এখনও ব্যবহার করা যায়, তবে নতুন প্রজেক্টে App Routerই সুপারিশ করা হয়।"} />

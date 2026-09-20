@@ -1,0 +1,22 @@
+---
+title: "psql-এ connect ও meta commands"
+label: "Connect psql"
+order: 4
+level: "Beginner"
+description: "terminal থেকে database-এ ঢোকা — অপরিহার্য meta command-গুলো।"
+---
+
+<CodeBlock code={"psql -U postgres -h localhost\n# password চাইবে (install-এ দেওয়া)\n# ইউনিক্স ম্যাকে: psql postgres"} lang={"bash"} title={"terminal"} />
+
+| Command | কাজ |
+| --- | --- |
+| \l | সব database-এর list |
+| \c dbname | database change |
+| \dt | table-এর list |
+| \d table | table-এর structure |
+| \du | roles/users list |
+| \q | exit |
+
+<CodeBlock code={"CREATE DATABASE techshop;\n\\c techshop"} lang={"bash"} title={"প্রথম database"} />
+
+<Tip tone={"info"} title={"meta command আবার শিখবেন না"} text={"`\\?` দিলে সব meta command-এর সাহায্য, আর `\\h` দিলে SQL clauses — psql-এ সাহায্য সবথেকে কাছে।"} />

@@ -1,0 +1,33 @@
+---
+title: "Borders & Border Radius"
+label: "Borders & Radius"
+order: 22
+level: "Beginner"
+description: "Tailwind-এ border, border-width, border-color, border-radius — বর্ডার utilities বাংলায়।"
+---
+
+## Border Width
+
+<CodeBlock code={"<div class=\"border\">1px border (default)</div>\n<div class=\"border-2\">2px border</div>\n<div class=\"border-4\">4px border</div>\n<div class=\"border-t-2\">শুধু top border</div>"} lang={"html"} />
+
+## Border Color
+
+<CodeBlock code={"<div class=\"border border-gray-300\">Default gray border</div>\n<div class=\"border border-red-500\">Red border</div>\n<div class=\"border-2 border-blue-600\">Blue border</div>"} lang={"html"} />
+
+## Border Radius
+
+| Class | মান |
+| --- | --- |
+| rounded-none | 0px |
+| rounded-sm | 2px |
+| rounded | 4px |
+| rounded-md | 6px |
+| rounded-lg | 8px |
+| rounded-xl | 12px |
+| rounded-2xl | 16px |
+| rounded-3xl | 24px |
+| rounded-full | 9999px (circle) |
+
+<CodeBlock code={"<div class=\"rounded-lg border p-4\">Corners rounded</div>\n<div class=\"rounded-full bg-blue-500 w-12 h-12\">Circle</div>\n<div class=\"rounded-t-lg\">শুধু top corners</div>"} lang={"html"} />
+
+<Tip tone={"success"} title={"Card তৈরি"} text={"`rounded-lg bg-white p-6 shadow-md` — এই তিনটি class দিয়েই একটি সুন্দর card তৈরি করা যায়!"} />

@@ -1,0 +1,48 @@
+---
+title: "Merge Conflict সৃষ্টি ও সমাধান"
+label: "Conflicts"
+order: 9
+level: "Advanced"
+description: "Conflict কেন হয়, মার্কার বোঝা এবং steps দিয়ে সমাধান — বাংলায়।"
+---
+
+## Conflict কখন হয়?
+
+<InParagraph text={"দুটি branch একই ফাইলের **একই অংশ** আলাদাভাবে পরিবর্তন করলে Git একটির উপরে অন্যটি লাগাতে না পেরে conflict ঘোষণা করে। এটি ভয়ের কিছু নয় — এটি Git-এর সতর্কতা।"} />
+
+<CodeBlock code={"$ git merge feature/x\nCONFLICT (content): Merge conflict in app.js\nAutomatic merge failed; fix conflicts and then commit the result."} lang={"bash"} />
+
+## Conflict মার্কারগুলো
+
+<CodeBlock code={"<<<<<<< HEAD\nconst title = \"Main branch-এর নাম\";\n=======\nconst title = \"Feature branch-এর নাম\";\n>>>>>>> feature/x"} lang={"javascript"} title={"app.js — conflict অবস্থা"} />
+
+- `<<<<<<< HEAD` — আপনার বর্তমান branch (HEAD) এর অংশ
+- `=======` — দুই পক্ষের সীমারেখা
+- `>>>>>>> feature/x` — যে branch merge করছেন তার অংশ
+
+## সমাধান — ৩টি ধাপ
+
+<CodeBlock code={"# 1. ফাইল edit করে সিদ্ধান্ত নিন\n#    নিচের মতো করে মার্কারগুলো মুছে দিন:\nconst title = \"প্রয়োজনীয় নাম\";   # উভয়ের মিশ্রণ বা যেকোনো একটি\n\n# 2. stage ও commit করুন\ngit add app.js\ngit commit -m \"merge: resolve conflict in app.js\""} lang={"bash"} />
+
+## সমাধানের সময় ব্যবহার্য কৌশল
+
+| কমান্ড | কী দেয় |
+| --- | --- |
+| git --ours file | আপনার branch-এর সংস্করণ |
+| git --theirs file | অন্য branch-এর সংস্করণ |
+| git status | কোন কোন ফাইল conflict-এ আছে |
+| git diff --name-only --diff-filter=U | শুধু conflict ফাইল |
+
+## merge abort — ফিরে যাওয়া
+
+<CodeBlock code={"git merge --abort   # শুরুতে ফিরে যাওয়া (merge বাতিল)\n\n# rebase-এর জন্য:\ngit rebase --abort  # বা --continue"} lang={"bash"} />
+
+## Conflict কমানোর উপায়
+
+- ছোট ও দ্রুত merge নিন — বেশি দিন বাঁচবেন না
+- একই ফাইলে একাধিক ডেভেলপার একসাথে কাজ এড়ান
+- প্রতিটি branch main হতে সতেজ রাখুন (প্রায়ই pull)
+- ফাইল line endings/W ind খেয়াল রাখুন
+- GUI টুল (VS Code) ভিজ্যুয়াল সমাধানে সাহায্য করে
+
+<Tip tone={"success"} title={"আত্মবিশ্বাস"} text={"Conflict সমাধান developer জীবনের দৈনন্দিন বিষয়। প্রথমবার হলে সমস্যা নেই — ধীরে ধীরে মার্কার অনুযায়ী সঠিক অংশ রেখে stage+commit করুন।"} />

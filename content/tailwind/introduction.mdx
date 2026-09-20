@@ -1,0 +1,41 @@
+---
+title: "Tailwind CSS Introduction"
+label: "Introduction"
+order: 1
+level: "Beginner"
+description: "Tailwind CSS কী, কেন এটি জনপ্রিয় এবং utility-first CSS কীভাবে ওয়েব ডেভেলপমেন্টকে পরিবর্তন করেছে — বাংলায় পরিচিতি।"
+---
+
+<InParagraph text={"**Tailwind CSS** হলো একটি **utility-first** CSS framework যা আপনাকে CSS লেখা ছাড়াই HTML-এ সরাসরি utility class ব্যবহার করে সুন্দর UI তৈরি করতে দেয়। এটি বর্তমানে ওয়েব ডেভেলপমেন্ট জগতের অন্যতম জনপ্রিয় CSS framework।"} />
+
+## এই অধ্যায়ে যা যা শিখবেন
+
+- Tailwind CSS কী এবং এর পূর্ণরূপ
+- Utility-First CSS কীভাবে কাজ করে
+- Tailwind কেন এত জনপ্রিয়
+- অন্যান্য CSS framework থেকে এর পার্থক্য
+
+## Tailwind CSS কী?
+
+<InParagraph text={"Tailwind CSS হলো একটি **utility-first CSS framework** যা আপনাকে low-level utility classes প্রদান করে যেগুলো সরাসরি HTML-এ ব্যবহার করা যায়। এর মানে হলো আপনাকে আলাদা CSS ফাইলে custom class লিখতে হয় না — বরং HTML-এই সরাসরি স্টাইল করতে পারেন।"} />
+
+<CodeBlock code={"<!-- Traditional CSS: আলাদা CSS ফাইলে লিখতে হয় -->\n<button class=\"btn-primary\">Click Me</button>\n\n<!-- Tailwind: HTML-তেই সরাসরি স্টাইল করুন -->\n<button class=\"rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700\">\n  Click Me\n</button>"} lang={"html"} title={"Traditional CSS vs Tailwind"} />
+
+## Tailwind-এর জনপ্রিয়তা
+
+- GitHub-এ ৮০,০০০+ star (সবচেয়ে জনপ্রিয় CSS framework)
+- Vercel, Netflix, GitHub, Shopify সহ বড় কোম্পানি ব্যবহার করে
+- React, Vue, Angular, Svelte — সব framework-এর সাথে কাজ করে
+- Next.js, Nuxt.js, SvelteKit — সব meta-framework-এ built-in support
+
+## Tailwind CSS এক নজরে
+
+| বৈশিষ্ট্য | বিবরণ |
+| --- | --- |
+| Utility-first | ছোট ছোট utility class দিয়ে স্টাইল করুন |
+| Responsive | Mobile-first breakpoint সিস্টেম |
+| Customizable | কনফিগ ফাইল দিয়ে সম্পূর্ণ কাস্টমাইজেশন |
+| Zero runtime | Build সময়ে CSS তৈরি হয়, runtime কোনো overhead নেই |
+| Dark mode | Built-in dark mode support |
+
+<Tip tone={"info"} title={"Tailwind CSS সংস্করণ"} text={"এই ডকুমেন্টেশনে **Tailwind CSS v4** এবং **v3** উভয়ের ধারণা কভার করা হয়েছে। v4 হলো সর্বশেষ সংস্করণ যেটি CSS-first কনফিগ এবং নতুন engine ব্যবহার করে। পার্থক্যগুলো নির্দিষ্ট জায়গায় উল্লেখ করা হয়েছে।"} />

@@ -1,0 +1,42 @@
+---
+title: "Environment Variables ও .env"
+label: "Environment Variables"
+order: 11
+level: "Intermediate"
+description: "ENV, ARG, docker run -e, compose environment/env_file, .env — configuration management — বাংলায়।"
+---
+
+<InParagraph text={"কোডের বাইরে রাখতে হয় config — API কী, ডাটাবেস পাসওয়ার্ড, port। **Environment variables** দিয়ে সেটি container-এ ঢোকে, কোডে জানে না।"} />
+
+## docker run -e
+
+<CodeBlock code={"docker run -d \\\n  --name api \\\n  -e PORT=4000 \\\n  -e DB_URL=mongodb://mongo:27017/blog \\\n  -e SECRET_KEY=mysecret123 \\\n  my-api"} lang={"bash"} title={"CLI দিয়ে env"} />
+
+## Dockerfile-এ ENV
+
+<CodeBlock code={"FROM node:20-alpine\nWORKDIR /app\nCOPY . .\n# image-এ default env\nENV NODE_ENV=production \\\n    PORT=3000\nCMD [\"node\", \"app.js\"]"} lang={"dockerfile"} title={"Dockerfile"} />
+
+<InParagraph text={"`docker run -e` দেওয়া value Dockerfile-এর ENV-কে override করে।"} />
+
+## Compose-এ environment vs env_file
+
+<CodeBlock code={"services:\n  api:\n    build: .\n    environment:\n      - NODE_ENV=production       # সরাসরি\n      - PORT=4000\n    env_file:\n      - .env                       # file থেকে সব\n"} lang={"yaml"} title={"compose.yml"} />
+
+## .env file
+
+<CodeBlock code={"DATABASE_URL=mongodb://mongo:27017/blog\nJWT_SECRET=supersecret\nREDIS_URL=redis://redis:6379\n"} lang={"text"} title={".env (এর আগেই $PWD)"} />
+
+<InParagraph text={"এই `.env` file `.gitignore`-এ রাখুন — secrets কখনো repository-তে commit করা উচিত নয়।"} />
+
+## ENV vs ARG
+
+| বিষয় | ENV | ARG |
+| --- | --- | --- |
+| Scope | runtime-এও থাকে | শুধু build-এর সময় |
+| কার্য | app process-এ value যায় | build-time config (version ইত্যাদি) |
+| Compose | `environment:`, `env_file:` | `build.args:` |
+| Dockerfile | `ENV K=V` | `ARG K=V` |
+
+<CodeBlock code={"ARG NODE_VERSION=20\nFROM node:${NODE_VERSION}-alpine\n\n# build সময়: docker build --build-arg NODE_VERSION=22 ."} lang={"dockerfile"} title={"ARG ব্যবহার"} />
+
+<Tip tone={"warning"} title={"Secrets কখনো image-এ না"} text={"Dockerfile-এ `ENV` দিয়ে secret লিখলে তা image layer-এ থেকে যায় — `docker history` দিয়ে দেখা যায়! Production secret-এর জন্য use **Docker secrets** (Swarm), env file (compose), বা cloud secret manager (AWS Secrets Manager ইত্যাদি)।"} />

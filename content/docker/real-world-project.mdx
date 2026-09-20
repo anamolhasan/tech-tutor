@@ -1,0 +1,30 @@
+---
+title: "Real-world Project — Full Stack Deploy"
+label: "Real-world Project"
+order: 24
+level: "Advanced"
+description: "Next.js frontend + Express API + MongoDB + Redis + nginx — পুরো সিস্টেম এক compose file-এ — বাংলায়।"
+---
+
+<InParagraph text={"এত সব শিখলাম — এবার সেগুলোকে একসাথে একটি বাস্তব project-এ বসাই। Project: **Blog SaaS** — Next.js frontend, Express API, MongoDB ডেটা, Redis cache, nginx reverse proxy।"} />
+
+## সম্পূর্ণ compose.prod.yml
+
+<CodeBlock code={"services:\n  web:\n    image: ghcr.io/myorg/blog-web:latest\n    restart: unless-stopped\n    env_file:\n      - .env.production\n    depends_on:\n      - api\n\n  api:\n    image: ghcr.io/myorg/blog-api:latest\n    restart: unless-stopped\n    env_file:\n      - .env.production\n    healthcheck:\n      test: [\"CMD\", \"node\", \"-e\", \"fetch('http://localhost:5000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\"]\n      interval: 30s\n      timeout: 5s\n      retries: 3\n    depends_on:\n      mongo:\n        condition: service_healthy\n      redis:\n        condition: service_healthy\n\n  mongo:\n    image: mongo:7\n    restart: unless-stopped\n    volumes:\n      - mongo-data:/data/db\n    healthcheck:\n      test: [\"CMD\", \"mongosh\", \"--eval\", \"db.runCommand('ping').ok\"]\n      interval: 10s\n      timeout: 5s\n      retries: 5\n\n  redis:\n    image: redis:7-alpine\n    restart: unless-stopped\n    volumes:\n      - redis-data:/data\n    healthcheck:\n      test: [\"CMD\", \"redis-cli\", \"ping\"]\n      interval: 10s\n      timeout: 5s\n      retries: 5\n\n  nginx:\n    image: nginx:1.27-alpine\n    restart: unless-stopped\n    ports:\n      - \"80:80\"\n      - \"443:443\"\n    volumes:\n      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro\n      - ./certs:/etc/nginx/certs:ro\n    depends_on:\n      - web\n      - api\n\nvolumes:\n  mongo-data:\n  redis-data:"} lang={"yaml"} title={"compose.prod.yml"} />
+
+## nginx routing
+
+<CodeBlock code={"# ফ্রন্টএন্ড\nserver {\n  listen 80;\n  server_name blog.example.com;\n\n  location / {\n    proxy_pass http://web:3000;\n    proxy_set_header Host $host;\n  }\n\n  location /api/ {\n    proxy_pass http://api:5000/;\n    proxy_set_header Host $host;\n  }\n}"} lang={"nginx"} title={"nginx.conf"} />
+
+## Deploy steps (server)
+
+<CodeBlock code={"# 1. project folder এ যান\ncd /opt/blog\n\n# 2. config plus registry login\ncat > .env.production <<'EOF'\nMONGODB_URI=mongodb://mongo:27017/blog\nREDIS_URL=redis://redis:6379\nJWT_SECRET=<strong-random>\nNEXT_PUBLIC_API_URL=https://blog.example.com/api\nEOF\n\n# 3. pull ও start\ndocker compose -f compose.prod.yml pull\ndocker compose -f compose.prod.yml up -d\n\n# 4. check\ndocker compose -f compose.prod.yml ps\ncurl -I https://blog.example.com"} lang={"bash"} title={"One-shot deploy"} />
+
+## সাধারণ pitfalls
+
+- `.env.production`-এ secret + server-এ chmod 600 করুন
+- Next.js-এ `NEXT_PUBLIC_*` build-time — সবসময় build-time API URL দরকার
+- HTTP API-কে HTTPS-এর ভেতর proxy করলে cookies ঠিক করতে `secure` সেট করুন
+- log-এ secret যেন না যায় — logger-এ filter
+
+<Tip tone={"success"} title={"Monorepo হলে"} text={"সব service এক repo-তে থাকলে এক compose file-এ `build: ./web` ও `build: ./api` দিয়ে local affiliate — CI-তে registry-তে push করে server pull করে।"} />

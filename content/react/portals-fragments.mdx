@@ -1,0 +1,19 @@
+---
+title: "Portals ও Fragments"
+label: "Portals & Fragments"
+order: 19
+level: "Intermediate"
+description: "createPortal দিয়ে অন্য DOM-এ render এবং <> fragment-এর ব্যবহার — বাংলায়।"
+---
+
+## Portal — কেন দরকার
+
+<InParagraph text={"Modal, tooltip, dropdown-কে component tree-র গভীরে রাখলে CSS (`overflow`, `z-index`) ভাঙতে পারে। **Portal** দিয়ে সেগুলো `document.body`-এর মতো অন্য DOM-এ render করা যায় — React tree তখনো একই থাকে।"} />
+
+<CodeBlock code={"import { createPortal } from \"react-dom\";\n\nfunction Modal({ open, onClose, children }) {\n  if (!open) return null;\n\n  return createPortal(\n    <div className=\"modal-overlay\" onClick={onClose}>\n      <div className=\"modal\" onClick={(e) => e.stopPropagation()}>\n        <button onClick={onClose}>Close</button>\n        {children}\n      </div>\n    </div>,\n    document.body // actual DOM target\n  );\n}"} lang={"jsx"} title={"createPortal modal"} />
+
+## Fragments
+
+<CodeBlock code={"function TwoColumns() {\n  return (\n    <>\n      <td>নাম</td>\n      <td>বয়স</td>\n    </>\n  );\n}\n\n// long-form\n<React.Fragment key={id}>\n  <td>নাম</td>\n  <td>বয়স</td>\n</React.Fragment>"} lang={"jsx"} title={"<> shorthand"} />
+
+<Tip tone={"info"} title={"Fragment কেন"} text={"Fragment DOM-এ **কোনো extra element যোগ করে না** — তাই table/inline layout-এ wrapper div-এর কারণে CSS ভাঙা ঠেকাতে fragments দরকারি।"} />

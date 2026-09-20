@@ -1,0 +1,24 @@
+---
+title: "Lists ও Keys"
+label: "Lists & Keys"
+order: 6
+level: "Beginner"
+description: "array.map() দিয়ে list render ও unique key-এর গুরুত্ব — বাংলায়।"
+---
+
+## List render
+
+<CodeBlock code={"const products = [\n  { id: 1, name: \"মোবাইল\", price: 15000 },\n  { id: 2, name: \"ল্যাপটপ\", price: 65000 },\n];\n\nfunction ProductList() {\n  return (\n    <ul>\n      {products.map((product) => (\n        <li key={product.id}>\n          {product.name} — {product.price} টাকা\n        </li>\n      ))}\n    </ul>\n  );\n}"} lang={"jsx"} title={"map()"} />
+
+## কেন key দরকার
+
+<InParagraph text={"**key** React-কে বলে এই item-টি কার সাথে match — list বদলালে কোনটা update/remove করতে হবে। key না দিলে React warning দেখায় এবং অপ্রত্যাশিত bug হয়।"} />
+
+## সঠিক key বাছুন
+
+- **সেরা key** — ডেটাবেস-এর `id`, slug বা unique value
+- **index না** — row সাজানো/filter করলে order বদলায়, state ভুল element-এ চলে যায়
+- key change হলে component remount হয় (state reset হয়)
+- দুটি ভিন্ন list-এ একই key থাকলে তেমন সমস্যা নেই — একই list-এর মধ্যে unique হলেই হবে
+
+<CodeBlock code={"// index key — শেষ উপায়\n{items.map((item, index) => (\n  <Item key={index} item={item} />\n))}\n\n// ভালো — stable unique value\n{items.map((item) => (\n  <Item key={item.id} item={item} />\n))}"} lang={"jsx"} title={"Key — ভালো ও খারাপ"} />

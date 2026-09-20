@@ -1,0 +1,19 @@
+---
+title: "Prisma বনাম raw SQL — কোনটি কখন"
+label: "Prisma vs Raw SQL"
+order: 2
+level: "Beginner"
+description: "এমন না যে একটাই ভালো — দুটোর শক্তি বোঝা।"
+---
+
+| দিক | Raw SQL (pg) | Prisma |
+| --- | --- | --- |
+| Syntax | SQL string | TypeScript method |
+| Type safety | নেই (নিজের হাতে) | auto-generate |
+| Migration | হাতে লিখতে হয় | auto-diff |
+| এক query-র জটিলতা | সব ক্ষমতা | প্রায় সব; raw fallback |
+| Learning | ভিত্তি | ভিত্তি-থাকা সহজ |
+
+<InParagraph text={"**নিয়ম**: Prisma-তে লিখুন, জটিল/অদ্বিতীয় query-এ `$queryRaw`। আর SQL ভুলে যাবেন না — Prisma-ই শেষে SQL তৈরি করে, তাই সমস্যা হলে SQL বুঝে দেখতে হয়।"} />
+
+<Tip tone={"info"} title={"নতুন developer-কে পরামর্শ"} text={"Prisma শেখার আগে অন্তত JOIN + aggregate + transaction SQL-এ চালিয়ে আসুন — এখানেই ওই course-এর প্রজেক্ট।"} />

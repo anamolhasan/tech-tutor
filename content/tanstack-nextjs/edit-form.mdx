@@ -1,0 +1,21 @@
+---
+title: "Edit Form — Pre-filled"
+label: "Edit Form"
+order: 29
+level: "Intermediate"
+description: "একই ProductForm edit-মোডে — defaultValues, reset-এ data sync — বাংলায়।"
+---
+
+<InParagraph text={"দুর্দান্ত সুবিধা — **একই ProductForm**-কে edit-মোডেও ব্যবহার করা যায়! শুধু `defaultValues` product-এর ডেটা দিয়ে pass করি; button-এর লেখা auto-bদলে 'আপডেট'।"} />
+
+<CodeBlock code={"const updateProduct = useUpdateProduct();\n\nfunction openEdit(product: Product) {\n  setEditingProduct(product);\n  setEditOpen(true);\n}\n\n<Dialog open={editOpen} onOpenChange={setEditOpen}>\n  <DialogContent>\n    <DialogHeader>\n      <DialogTitle>Product সম্পাদনা</DialogTitle>\n    </DialogHeader>\n    {editingProduct && (\n      <ProductForm\n        // edit-মোড: product-এর মান বসে\n        key={editingProduct.id}   // important\n        defaultValues={{\n          name: editingProduct.name,\n          description: editingProduct.description ?? \"\",\n          price: editingProduct.price,\n          category: editingProduct.category,\n          stock: editingProduct.stock,\n          status: editingProduct.status,\n        }}\n        isSubmitting={updateProduct.isPending}\n        onSubmit={(values) => {\n          updateProduct.mutate(\n            { id: editingProduct.id, input: values },\n            { onSuccess: () => setEditOpen(false) },\n          );\n        }}\n      />\n    )}\n  </DialogContent>\n</Dialog>"} lang={"tsx"} title={"Edit dialog-এ"} />
+
+## key=\{editingProduct.id\} কেন
+
+<InParagraph text={"ভিন্ন product-এ ক্লিক করলে `defaultValues` বদলায় বটে — কিন্তু React **একই component instance** রাখে, আর RHF uncontrolled। তাই পুরনো value থেকে থেকে যাবে। `key` ভিন্ন করলে React **পুরো component re-mount** করে — এতে defaultValues ঠিকভাবে বসে।"} />
+
+## reset fallback
+
+<CodeBlock code={"// dialog খোলার সাথে সাথেই\nuseEffect(() => {\n  if (editingProduct) {\n    form.reset({\n      name: editingProduct.name,\n      price: editingProduct.price,\n      category: editingProduct.category,\n      stock: editingProduct.stock,\n      status: editingProduct.status,\n      description: editingProduct.description ?? \"\",\n    });\n  }\n}, [editingProduct]);"} lang={"tsx"} title={"যদি key না চান"} />
+
+<Tip tone={"info"} title={"key vs reset"} text={"উভয়ই valid — `key` simple/নির্ভরযোগ্য, `reset` দরকার যেখানে dialog খোলা-রাখা অবস্থায় অন্যান্য state (যেমন id) ফিল্টার করা। এই project-এ `key` ব্যবহার করব।"} />

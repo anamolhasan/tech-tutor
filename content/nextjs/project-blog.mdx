@@ -1,0 +1,33 @@
+---
+title: "Real-world Project: Blog Platform"
+label: "Project: Blog"
+order: 26
+level: "Advanced"
+description: "Next.js দিয়ে complete blog — dynamic routes, data fetching, metadata, Server Actions বাংলায়।"
+---
+
+<InParagraph text={"চলুন Next.js-এর সব core concept দিয়ে একটি blog platform তৈরি করি।"} />
+
+## Project Structure
+
+<CodeBlock code={"app/\n├── layout.tsx          → root layout + metadata\n├── page.tsx            → blog list home\n├── actions.ts          → \"use server\" actions\n├── blog/\n│   ├── [slug]/\n│   │   ├── page.tsx    → single post (dynamic)\n│   │   └── not-found.tsx\n│   └── loading.tsx     → list loading skeleton\n└── ui/\n    ├── post-card.tsx   → client component\n    └── like-button.tsx → \"use client\""} lang={"text"} title={"app/ structure"} />
+
+## 1. Root Layout + Metadata
+
+<CodeBlock code={"import type { Metadata } from \"next\";\n\nexport const metadata: Metadata = {\n  title: {\n    default: \"My Blog\",\n    template: \"%s | My Blog\",\n  },\n  description: \"আমাদের বাংলা ব্লগ\",\n};\n\nexport default function RootLayout({\n  children,\n}: {\n  children: React.ReactNode;\n}) {\n  return (\n    <html lang=\"bn\">\n      <body className=\"mx-auto max-w-3xl p-6\">{children}</body>\n    </html>\n  );\n}"} lang={"tsx"} title={"app/layout.tsx"} />
+
+## 2. Blog List (Home)
+
+<CodeBlock code={"import Link from \"next/link\";\n\nexport default async function Page() {\n  const posts = await fetch(\"https://api.vercel.app/blog\").then((r) =>\n    r.json()\n  );\n\n  return (\n    <main>\n      <h1 className=\"text-3xl font-bold\">Latest Posts</h1>\n      <ul className=\"mt-6 space-y-4\">\n        {posts.map((post: any) => (\n          <li key={post.id} className=\"rounded-lg border p-4 shadow-sm\">\n            <Link\n              href={`/blog/${post.slug}`}\n              className=\"text-lg font-semibold text-blue-600\"\n            >\n              {post.title}\n            </Link>\n          </li>\n        ))}\n      </ul>\n    </main>\n  );\n}"} lang={"tsx"} title={"app/page.tsx"} />
+
+## 3. Dynamic Post Page
+
+<CodeBlock code={"import { notFound } from \"next/navigation\";\n\n\nexport async function generateMetadata({\n  params,\n}: {\n  params: Promise<{ slug: string }>;\n}): Promise<Metadata> {\n  const { slug } = await params;\n  const post = await getPost(slug);\n  return { title: post?.title };\n}\n\nexport default async function Page({\n  params,\n}: {\n  params: Promise<{ slug: string }>;\n}) {\n  const { slug } = await params;\n  const post = await getPost(slug);\n\n  if (!post) notFound();\n\n  return (\n    <article>\n      <h1 className=\"text-3xl font-bold\">{post.title}</h1>\n      <p className=\"mt-4 text-gray-600\">{post.content}</p>\n    </article>\n  );\n}\n\nasync function getPost(slug: string) {\n  const res = await fetch(`https://api.vercel.app/blog/${slug}`);\n  if (!res.ok) return null;\n  return res.json();\n}"} lang={"tsx"} title={"app/blog/[slug]/page.tsx"} />
+
+## 4. Server Action (Like)
+
+<CodeBlock code={"\"use server\";\n\nexport async function incrementLikes(id: string) {\n  // database-এ like বাড়ান\n  console.log(\"Liked post:\", id);\n}"} lang={"ts"} title={"app/actions.ts"} />
+
+<CodeBlock code={"\"use client\";\n\nexport default function LikeButton({ postId }: { postId: string }) {\n  return (\n    <button\n      onClick={() => {\n        fetch(\"/api/likes\", { method: \"POST\", body: JSON.stringify({ postId }) });\n      }}\n      className=\"rounded-full bg-gray-100 px-4 py-1 text-sm hover:bg-gray-200\"\n    >\n      ♥ Like\n    </button>\n  );\n}"} lang={"tsx"} title={"app/ui/like-button.tsx"} />
+
+<Tip tone={"success"} title={"Practice"} text={"এই blog-এ dark mode, search (`searchParams`), comment form (Server Action) যোগ করুন — Next.js-এর সব core skill এখানেই ব্যবহৃত হয়।"} />

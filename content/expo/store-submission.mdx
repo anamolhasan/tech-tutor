@@ -1,0 +1,25 @@
+---
+title: "App Store / Play Store-এ জমা দেওয়া"
+label: "Store Submission"
+order: 37
+level: "Advanced"
+description: "ios/android release-এর পূর্ব-শর্ত ও submission flow।"
+---
+
+## iOS (App Store Connect + TestFlight)
+
+- App record — Bundle ID `com.example.tasktrack`
+- Screenshot 6.7-inch / 6.9-inch, icon 1024px
+- Privacy policy + store listing
+- TestFlight invite → review
+
+## Android (Play Console)
+
+- App + package name
+- Keystore — EAS auto-manage (backup জরুরি)
+- Android bundle (`.aab`) upload
+- Content rating, data safety
+
+<CodeBlock code={"npx eas submit --platform android\nnpx eas submit --platform ios"} lang={"bash"} title={"terminal"} />
+
+<Tip tone={"warning"} title={"keystore হারানো = সর্বনাশ"} text={"Play Store-এ keystore হারালে সেই app আর আপডেট করা যায় না — EAS-managed key-র back-up অন্য কোথাও রাখুন। প্রথম submission-এ review-তে ১–২ দিন লাগতে পারে।"} />

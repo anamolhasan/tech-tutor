@@ -1,0 +1,21 @@
+---
+title: "Json scalar — flexible data (spec)"
+label: "JSON Fields"
+order: 18
+level: "Advanced"
+description: "PostgreSQL jsonb-র সাথে — read/write ও filter।"
+---
+
+<InParagraph text={"model-এ `spec Json?` (টপিক ৫)। Prisma Client-এ value plain-object/array — লেখা যত সহজ:"} />
+
+<CodeBlock code={"await prisma.product.update({\n  where: { id: 3 },\n  data: {\n    spec: { brand: \"Logitech\", warranty: \"1y\", ports: 2 },\n  },\n});"} lang={"ts"} />
+
+<InParagraph text={"read:"} />
+
+<CodeBlock code={"const p = await prisma.product.findUnique({\n  where: { id: 3 },\n});\n// p.spec.brand --- 'Logitech'"} lang={"ts"} />
+
+- `Json` → Postgres-এ `jsonb`
+- filter `path`-ভিত্তিক: `where: { spec: { path: ['brand'], equals: 'Logitech' } }`
+- জটিল jsonb query-তে `$queryRaw` বেইস — বড় flexibility
+
+<Tip tone={"warning"} title={"jsonb vs column"} text={"রিলেশাল filter-থেকে jsonb-তে সমর্থন-থেকে Prisma-র `path` সীমিত — কতখানি regular data, কতখানি flexible — পরিকল্পনা করতে ভুলবেন না।"} />

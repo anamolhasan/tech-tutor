@@ -1,0 +1,42 @@
+---
+title: "tsconfig.json গভীরে (Compiler Options)"
+label: "tsconfig Options"
+order: 21
+level: "Advanced"
+description: "strict flags, target, module, outDir, rootDir, lib, paths ও module resolution — tsconfig-এর পূর্ণ ব্যবহার বাংলায়।"
+---
+
+<InParagraph text={"`tsconfig.json`-ই TypeScript-এর আচরণ নিয়ন্ত্রণ করে। installment-এর অধ্যায়ে basics দেখেছেন — এবার গুরুত্বপূর্ণ optionগুলো বিস্তারে।"} />
+
+## strict একসাথে কী কী চালু করে
+
+| Flag | অর্থ |
+| --- | --- |
+| strictNullChecks | null/undefined আলাদা টাইপ হিসেবে গণ্য |
+| noImplicitAny | implicit any-তে error |
+| strictFunctionTypes | function variance কঠোর |
+| noUncheckedIndexedAccess | index access-এ \| undefined |
+| useUnknownInCatchVariables | catch এর error: unknown |
+| exactOptionalPropertyTypes | optional-এ undefined ঠিক রাখা |
+
+## target ও module
+
+<CodeBlock code={"{\n  \"compilerOptions\": {\n    \"target\": \"ES2022\",\n    \"module\": \"NodeNext\",\n    \"moduleResolution\": \"nodenext\",\n    \"lib\": [\"ES2022\", \"DOM\", \"DOM.Iterable\"]\n  }\n}"} lang={"json"} title={"tsconfig.json"} />
+
+## outDir ও rootDir
+
+<CodeBlock code={"{\n  \"compilerOptions\": {\n    \"rootDir\": \"./src\",\n    \"outDir\": \"./dist\",\n    \"sourceMap\": true,\n    \"declaration\": true,\n    \"removeComments\": true\n  },\n  \"include\": [\"src\"]\n}"} lang={"json"} />
+
+## lib ও type environment
+
+<InParagraph text={"`lib` বলে দেয় কোন runtime-এর global type জানা দরকার — ব্রাউজার হলে `DOM`, Node হলে `ES2023`+ নাইট। Node global-এর জন্য `@types/node` দরকার।"} />
+
+## paths (Alias)
+
+<CodeBlock code={"{\n  \"compilerOptions\": {\n    \"baseUrl\": \".\",\n    \"paths\": {\n      \"@/*\": [\"src/*\"],\n      \"@components/*\": [\"src/components/*\"]\n    }\n  }\n}"} lang={"json"} />
+
+## Module resolution
+
+<CodeBlock code={"// Node-অনুযায়ী বিকল্প\n\"moduleResolution\": \"bundler\"   // Vite/Next.js ইত্যাদির জন্য\n\"moduleResolution\": \"nodenext\"  // Node.js ESM\n\"moduleResolution\": \"node\"      // (legacy)"} lang={"json"} />
+
+<Tip tone={"success"} title={"সবচেয়ে সরল নিয়ম"} text={"নতুন প্রজেক্টে `strict: true` থেকে শুরু করুন। `tsc --init` রান করে সেখান থেকে নিজের প্রয়োজনে edit করুন — বেশিরভাগ প্রজেক্টে অল্প option-ই যথেষ্ট।"} />

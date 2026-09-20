@@ -1,0 +1,17 @@
+---
+title: "TaskTrack — add, toggle, delete (pure helpers)"
+label: "Project: Task Actions"
+order: 17
+level: "Intermediate"
+description: "TaskTrack-এর core logic — pure function দিয়ে state update।"
+---
+
+<InParagraph text={"TaskTrack-এর heart — **add / toggle / delete**। নিয়ম: pure helper function। `lib/tasks.ts`:"} />
+
+<CodeBlock code={"export type Task = {\n  id: string;\n  title: string;\n  done: boolean;\n  createdAt: string;\n};\n\nexport function makeTask(title) {\n  return {\n    id: Date.now().toString(),\n    title,\n    done: false,\n    createdAt: new Date().toISOString(),\n  };\n}\n\nexport function addTask(list, title) {\n  return [makeTask(title), ...list];\n}\n\nexport function toggleTask(list, id) {\n  return list.map((t) => (t.id === id ? { ...t, done: !t.done } : t));\n}\n\nexport function deleteTask(list, id) {\n  return list.filter((t) => t.id !== id);\n}"} lang={"ts"} title={"lib/tasks.ts"} />
+
+<InParagraph text={"helper-গুলো **pure** — আগের list-কে mutate না করে নতুন array return করে। component-এ ব্যবহার:"} />
+
+<CodeBlock code={"const [tasks, setTasks] = useState<Array<Task>>([]);\n\nfunction handleAdd(title) {\n  setTasks((prev) => {\n    const next = addTask(prev, title);\n    saveTasks(next);\n    return next;\n  });\n}"} lang={"tsx"} />
+
+<Tip tone={"info"} title={"id-এর গুরুত্ব"} text={"stable `id`-ই key, toggle, delete — সব operation সহজ রাখে। `Date.now()` dev demo-তে চলবে; production-এ UUID ব্যবহার ভালো।"} />

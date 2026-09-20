@@ -1,0 +1,18 @@
+---
+title: "Full-Text Search — tsvector, tsquery"
+label: "Full-Text Search"
+order: 28
+level: "Advanced"
+description: "LIKE-এর বাইরে শব্দ-ভিত্তিক অনুসন্ধান — FTS-এর মূল।"
+---
+
+<CodeBlock code={"SELECT to_tsvector('english', name) FROM products\nWHERE name ILIKE '%wireless%';\n\n-- FTS style\nSELECT id, name\nFROM products\nWHERE to_tsvector('english', name)\n      @@ plainto_tsquery('english', 'wireless mouse');"} lang={"sql"} />
+
+<CodeBlock code={"-- index + দ্রুত অনুসন্ধান\nCREATE INDEX idx_products_fts\nON products USING GIN (to_tsvector('english', name));"} lang={"sql"} />
+
+- `to_tsvector` — text → lexemes (normalized)
+- `plainto_tsquery` / `websearch_to_tsquery` — query → tsquery
+- `@@` — match অপারেটর
+- ranking — `ts_rank`
+
+<Tip tone={"info"} title={"engine-তুলনা"} text={"ছোট-মাঝারি অ্যাপে Postgres FTS যথেষ্ট। ধরা পড়লে পরিচিত-শব্দ, did-you-mean, খুব বড় corpus — তখন dedicated (Meilisearch/OpenSearch)।"} />

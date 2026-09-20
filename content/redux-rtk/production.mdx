@@ -1,0 +1,26 @@
+---
+title: "Production Architecture"
+label: "Production"
+order: 36
+level: "Advanced"
+description: "RTK Query-সহ production tips — code splitting, error tracking, testing — বাংলায়।"
+---
+
+## Code splitting
+
+<CodeBlock code={"// লেজি-loaded ফিচারের জন্য separate endpoint file\nconst extendedApi = ordersApi.injectEndpoints({\n  endpoints: (builder) => ({\n    getOrderStats: builder.query<Stats, void>({\n      query: () => \"orders/stats\",\n    }),\n  }),\n});\n\n// শুধু pick যখন route-loaded\nexport const { useGetOrderStatsQuery } = extendedApi;"} lang={"ts"} title={"injectEndpoints"} />
+
+## প্রোডাকশন checklist
+
+- **Error tracking** — listener-এ `reportError(error)`/Sentry capture
+- **Auth headers** — `credentials: 'include'`, CSRF token
+- **StrictMode mounted twice** — RTK Query-হীন idempotent-তা যাচাই
+- **keepUnusedDataFor** দীর্ঘ → স্মৃতি/bandwidth
+- **Rehydration** SSR-এ per-request store
+- **Testing** — `setupListeners`, mock RTK Query hooks (MSW)
+
+## মেট্রিক্স
+
+<CodeBlock code={"\"use client\";\n// উল্লেখযোগ্য queries-কে profile করুন —\n// cache hits অথবা redundant refetch\nexport function TrackQueries() {\n  const status = useAppSelector((s) => s.ordersApi.queries);\n  // status-থেকে lastUpdated/fetchCount ধরে dashboard-এ দেখান\n  return null;\n}"} lang={"ts"} title={"perf profile"} />
+
+<Tip tone={"warning"} title={"production-এ cache reset"} text={"লগআউট-এর সময় user-নির্দিষ্ট cache পরিষ্কার করতে `store.dispatch(api.util.resetApiState())` call করুন — নাহলে পরের user আগের user-এর data cache-এ দেখতে পারে।"} />

@@ -1,0 +1,41 @@
+---
+title: "Type Alias (টাইপ অ্যালিয়াস)"
+label: "Type Alias"
+order: 7
+level: "Beginner"
+description: "Type alias দিয়ে নামকৃত reusable টাইপ — object, function, union, intersection — বাংলায় সম্পূর্ণ গাইড।"
+---
+
+<InParagraph text={"**Type alias** হলো একটি টাইপের নাম দেওয়া। একবার টাইপ বানালে বারবার ব্যবহার করা যায় — `type` কীওয়ার্ড দিয়ে।"} />
+
+## Type Alias কী?
+
+<InParagraph text={"`type` দিয়ে primitive, object, union, function — যেকোনো টাইপকে একটি নাম দেওয়া যায়। এরপর সেই নাম দিয়েই annotation করলেই হয়।"} />
+
+## Basic Type Alias
+
+<CodeBlock code={"type UserId = string;\ntype Score = number;\n\nlet userA: UserId = \"u-101\";\nlet marks: Score = 95;"} lang={"typescript"} />
+
+## Object Type Alias
+
+<CodeBlock code={"type User = {\n  name: string;\n  age: number;\n  email?: string;\n  readonly id: number;\n};\n\nconst user: User = {\n  id: 1,\n  name: \"রহিম\",\n  age: 28,\n};"} lang={"typescript"} />
+
+## Function Type Alias
+
+<CodeBlock code={"type Formatter = (value: string) => string;\n\nconst upper: Formatter = (value) => value.toUpperCase();\nconst reverse: Formatter = (value) => value.split(\"\").reverse().join(\"\");\n\nconsole.log(upper(\"bangla\"));    // BANGLA"} lang={"typescript"} />
+
+## Union Type Alias
+
+<CodeBlock code={"type ID = string | number;\ntype Status = \"pending\" | \"active\" | \"blocked\";\n\nfunction printId(id: ID): void {\n  console.log(\"ID:\", id);\n}\n\nprintId(\"a-1\");\nprintId(10);\n// printId(true);   // ❌ boolean যাবে না"} lang={"typescript"} />
+
+## Intersection Type Alias
+
+<CodeBlock code={"type HasName = { name: string };\ntype HasAge = { age: number };\n\ntype Person = HasName & HasAge;\n\nconst person: Person = {\n  name: \"রহিম\",\n  age: 28,\n};"} lang={"typescript"} />
+
+## Reusable Type Definitions
+
+<InParagraph text={"একটি টাইপ অনেক জায়গায় ব্যবহার করলে কোড dry (reusable) থাকে — প্রপার্টি বদলালে শুধু এক জায়গায় বদলাই যথেষ্ট।"} />
+
+<CodeBlock code={"type Coordinate = { x: number; y: number };\n\nfunction moveTo(place: Coordinate): void {\n  console.log(`যাচ্ছি ${place.x}, ${place.y}`);\n}\n\nfunction distance(a: Coordinate, b: Coordinate): number {\n  return Math.hypot(a.x - b.x, a.y - b.y);\n}"} lang={"typescript"} />
+
+<Tip tone={"info"} title={"কবে type alias?"} text={"union, intersection, tuple, function signature — যেখানে interface পারে না, সেখানে `type` ঘরোয়া। object-এর জন্যও interface চমৎকার — পার্থক্য পরের অধ্যায়ে।"} />

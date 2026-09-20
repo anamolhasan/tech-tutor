@@ -1,0 +1,60 @@
+---
+title: "Express Request ও Response"
+label: "Request & Response"
+order: 5
+level: "Intermediate"
+description: "req object properties, res methods, headers, status codes — Express request/response বাংলায়।"
+---
+
+<InParagraph text={"Express-এ request handler-এ দুটি মূল object পাই: **req** (request) ও **res** (response)। এদের properties ও methods জানা খুব জরুরি।"} />
+
+## Request Object (req)
+
+| Property | কাজ |
+| --- | --- |
+| req.params | URL parameters (:id) |
+| req.query | Query string (?page=2) |
+| req.body | POST body (JSON/form) |
+| req.headers | সব request headers |
+| req.method | HTTP method |
+| req.url | Full URL |
+| req.path | URL path (query ছাড়া) |
+| req.ip | Client IP address |
+| req.cookies | Cookies (cookie-parser লাগবে) |
+
+<CodeBlock code={"app.get(\"/users/:id\", (req, res) => {\n  console.log(req.params);   // { id: \"5\" }\n  console.log(req.query);    // {}\n  console.log(req.method);   // \"GET\"\n  console.log(req.path);     // \"/users/5\"\n  console.log(req.ip);       // \"::1\"\n  console.log(req.hostname); // \"localhost\"\n\n  res.json({\n    param: req.params.id,\n    query: req.query,\n    headers: req.headers[\"user-agent\"],\n  });\n});"} lang={"javascript"} />
+
+## Response Object (res)
+
+| Method | কাজ |
+| --- | --- |
+| res.send() | String/HTML/Buffer পাঠানো |
+| res.json() | JSON data পাঠানো |
+| res.status() | Status code set |
+| res.jsonStatus() | 2 মিলে status + JSON |
+| res.redirect() | অন্য URL-এ পাঠানো |
+| res.sendFile() | File পাঠানো |
+| res.render() | Template render |
+| res.end() | Response শেষ |
+| res.set() | Header set |
+| res.cookie() | Cookie set |
+
+## Response Examples
+
+<CodeBlock code={"// send text\nres.send(\"Hello!\");\n\n// send JSON\nres.json({ success: true, data: [1, 2, 3] });\n\n// status + json\nres.status(201).json({ message: \"তৈরি হয়েছে\" });\n\n// redirect\nres.redirect(\"/login\");\n\n// send file\nres.sendFile(path.join(__dirname, \"file.pdf\"));\n\n// set header\nres.set(\"X-Custom-Header\", \"value\");\nres.set({\n  \"X-One\": \"1\",\n  \"X-Two\": \"2\",\n});"} lang={"javascript"} />
+
+## Status Codes
+
+| Code | অর্থ | কখন |
+| --- | --- | --- |
+| 200 | OK | সফল GET |
+| 201 | Created | সফল POST |
+| 204 | No Content | success কিন্তু body নেই |
+| 400 | Bad Request | client ভুল input |
+| 401 | Unauthorized | login লাগবে |
+| 403 | Forbidden | permission নেই |
+| 404 | Not Found | route নেই |
+| 409 | Conflict | duplicate data |
+| 500 | Server Error | server crash |
+
+<Tip tone={"warning"} title={"যেকেন res.json() vs res.send()"} text={"JSON-এর জন্য সবসময় `res.json()` ব্যবহার করুন — platform সঠিক Content-Type set করবে। `res.send(obj)`-ও কাজ করে তবে json() cleaner।"} />

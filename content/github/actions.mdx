@@ -1,0 +1,45 @@
+---
+title: "GitHub Actions — CI পরিচিতি"
+label: "Actions"
+order: 10
+level: "Advanced"
+description: "GitHub Actions কী, workflow কীভাবে চলে — বাংলায়।"
+---
+
+## GitHub Actions কী?
+
+<InParagraph text={"Actions হলো built-in **CI/CD** system — নির্দিষ্ট ইভেন্টে (push, PR, schedule) আপনার কোড স্বয়ংক্রিয়ভাবে build, test, deploy হতে পারে।"} />
+
+## প্রধান ধারণা
+
+- **Workflow** — `.github/workflows/`-এ YAML ফাইল
+- **Event** — কি ঘটলে চলবে (push, pull_request, schedule)
+- **Job** — নির্দিষ্ট রানার-এ সম্পন্ন কাজ
+- **Step** — job-এর ভেতর কমান্ড
+- **Runner** — যেখানে কোড চলে (GitHub-hosted বা self-hosted)
+
+## প্রথম workflow
+
+<CodeBlock code={"name: CI\n\non:\n  push:\n    branches: [main]\n  pull_request:\n\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-node@v4\n        with:\n          node-version: 20\n      - run: npm ci\n      - run: npm test"} lang={"yaml"} title={".github/workflows/ci.yml"} />
+
+## ট্রিগার (on)
+
+| ট্রিগার | কখন চলে |
+| --- | --- |
+| push | commit push-এ |
+| pull_request | PR ইভেন্টে |
+| schedule | cron (cron দেখে) |
+| workflow_dispatch | manual button |
+
+## সাধারণ steps
+
+- `actions/checkout@v4` — কোড আনে
+- `actions/setup-node@v4` — runtime প্রস্তুত
+- `npm ci` / `pip install` — dependency
+- `npm test` / `npm run build` — verify
+
+## Actions Marketplace
+
+<InParagraph text={"জনপ্রিয় প্রস্তুত actions: [actions/checkout](https://github.com/marketplace/actions/checkout), [actions/setup-node](https://github.com/marketplace/actions/setup-node), ডিপ্লয়, লিন্ট, upload-artifact — লাগান দরকার হলে।"} />
+
+<Tip tone={"info"} title={"মনে রাখুন"} text={"PR-এ CI ফলাফল চলে আসে — **Checks**। দল যদি CI pass ছাড়া merge ব্লক রাখে, তাহলে ভাঙা কোড main-এ ঢুকবে না।"} />

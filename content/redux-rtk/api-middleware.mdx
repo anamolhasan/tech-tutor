@@ -1,0 +1,18 @@
+---
+title: "RTK Query Middleware — Store Integration"
+label: "API Middleware"
+order: 15
+level: "Beginner"
+description: "Store-এ RTK Query-র এ কী কী নতুন আসে — বাংলায়।"
+---
+
+<CodeBlock code={"import { configureStore } from \"@reduxjs/toolkit\";\nimport cartReducer from \"@/features/cart/cartSlice\";\nimport { ordersApi } from \"@/features/orders/ordersService\";\n\nexport const store = configureStore({\n  reducer: {\n    cart: cartReducer,\n    [ordersApi.reducerPath]: ordersApi.reducer,\n  },\n  middleware: (getDefaultMiddleware) =>\n    getDefaultMiddleware().concat(ordersApi.middleware),\n});\n\nexport type RootState = ReturnType<typeof store.getState>;\nexport type AppDispatch = typeof store.dispatch;"} lang={"ts"} title={"store.ts (full)"} />
+
+## মিডলওয়্যার-টা কী করে
+
+- প্রতিটি query hook mount/unmount-এ **fetched** track করে
+- cache policy অনুসারে refetch/dispatch
+- Query trigger-এ ভিন্ন পরিস্থিতি (same key dedupe)
+- DevTools-এ query state ও mutations দেখায়
+
+<Tip tone={"info"} title={"মিডলওয়্যার না-ঘেরা হলে"} text={"মিডলওয়্যার না-ঘেরা থাকলে hooks compile হয় বটে, কিন্তু runtime-এ কিছু চলে না — DevTools-এ শুধু pending state দেখাবে। alignment: reducer+middleware একসাথে store-এ বসান।"} />

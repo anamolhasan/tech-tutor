@@ -1,0 +1,22 @@
+---
+title: "Constraints — NOT NULL, UNIQUE, CHECK, DEFAULT"
+label: "Constraints"
+order: 8
+level: "Beginner"
+description: "data-র গুণ নিশ্চিত করা — table-level constraint-গুলো।"
+---
+
+<CodeBlock code={"CREATE TABLE users (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email     text NOT NULL UNIQUE,\n  name      text NOT NULL,\n  age       integer CHECK (age >= 0 AND age <= 120),\n  role      text NOT NULL DEFAULT 'customer',\n  active    boolean NOT NULL DEFAULT true\n);"} lang={"sql"} title={"constraints প্রয়োগ"} />
+
+| Constraint | কাজ |
+| --- | --- |
+| NOT NULL | NULL মান নিষেধ |
+| UNIQUE | duplicate মান নিষেধ |
+| PRIMARY KEY | NOT NULL + UNIQUE (এক-প্রতি-table) |
+| CHECK | শর্ত অনুযায়ী মান |
+| DEFAULT | man না দিলে সম্ভব মান |
+| FOREIGN KEY | অন্য table-এর reference (পরের টপিক) |
+
+<CodeBlock code={"-- আলাদা করে নাম সহ (drop/error বুঝতে সুবিধা)\nALTER TABLE users\n  ADD CONSTRAINT users_email_key UNIQUE (email);"} lang={"sql"} title={"name constraint দিয়ে"} />
+
+<Tip tone={"info"} title={"database-ই শেষ রক্ষক"} text={"App-এ validation আর database constraint — দুই স্তরই। Validation ভালো UX, constraint data correctness-এর গ্যারান্টি।"} />

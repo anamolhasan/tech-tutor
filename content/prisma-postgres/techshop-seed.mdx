@@ -1,0 +1,17 @@
+---
+title: "Seed — ডিজাইন ডেটা দিয়ে begin"
+label: "TechShop Seed"
+order: 21
+level: "Intermediate"
+description: "dev DB-তে sample data — categories, products, users।"
+---
+
+<CodeBlock code={"import { PrismaClient } from \"@prisma/client\";\n\nconst prisma = new PrismaClient();\n\nasync function main() {\n  const [tech, lifestyle] = await Promise.all([\n    prisma.category.upsert({\n      where: { name: \"Tech\" },\n      update: {},\n      create: { name: \"Tech\" },\n    }),\n    prisma.category.upsert({\n      where: { name: \"Lifestyle\" },\n      update: {},\n      create: { name: \"Lifestyle\" },\n    }),\n  ]);\n\n  await prisma.product.createMany({\n    data: [\n      { name: \"Mechanical Keyboard\", price: 4200, qty: 10, categoryId: tech.id },\n      { name: \"Wireless Mouse\", price: 1800, qty: 25, categoryId: tech.id },\n      { name: \"Desk Lamp\", price: 1200, qty: 15, categoryId: lifestyle.id },\n    ],\n  });\n}\n\nmain()\n  .catch((e) => { console.error(e); process.exit(1); })\n  .finally(() => prisma.$disconnect());"} lang={"ts"} title={"prisma/seed.ts"} />
+
+<CodeBlock code={"// package.json\n\"prisma\": {\n  \"seed\": \"tsx prisma/seed.ts\"\n}\n\nnpx prisma db seed"} lang={"bash"} title={"package.json + চালানো"} />
+
+- seed idempotent — upsert ব্যবহার
+- `tsx` বা `ts-node` — TypeScript seed
+- `migrate reset --force` → auto seed
+
+<Tip tone={"info"} title={"বড় seed"} text={"বড় data-তে loop এড়িয়ে `createMany` — Controller-area আরো পরে।"} />

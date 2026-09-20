@@ -1,0 +1,22 @@
+---
+title: "INNER / LEFT JOIN — একাধিক table একসাথে"
+label: "Joins"
+order: 13
+level: "Intermediate"
+description: "JOIN-এর মূল ধারণা — matching row-এর সাথে data আনা।"
+---
+
+<InParagraph text={"**JOIN** — দুটি table-এর row matching <condition>-এর ভিত্তিতে একত্রিত করে।"} />
+
+<CodeBlock code={"SELECT o.id, u.name, o.total\nFROM orders o\nJOIN users u ON u.id = o.user_id;"} lang={"sql"} title={"INNER JOIN"} />
+
+| JOIN | Result |
+| --- | --- |
+| INNER JOIN | শুধু matching row |
+| LEFT JOIN | left table-এর সব + matching; না মেলে NULL |
+| RIGHT JOIN | right table-এর সব + matching |
+| FULL JOIN | দুই পাশের সব |
+
+<CodeBlock code={"SELECT u.name, o.id AS order_id\nFROM users u\nLEFT JOIN orders o ON o.user_id = u.id;"} lang={"sql"} title={"LEFT JOIN — order না থাকলেও user"} />
+
+<Tip tone={"info"} title={"alias বাধ্যতামূলক নয়, তবে"} text={"`o`, `u` short alias — query পড়া ও লেখা দুটোই সহজ। একাধিক table-এ same column-নাম হলে alias না দিয়ে ambiguity error আসে।"} />

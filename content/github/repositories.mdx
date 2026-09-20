@@ -1,0 +1,45 @@
+---
+title: "Repository তৈরি, clone, fork"
+label: "Repositories"
+order: 3
+level: "Beginner"
+description: "নতুন repo তৈরি, clone, fork কী — বাংলায়।"
+---
+
+## Repository তৈরি
+
+- Tests → **New repository**
+- Repository name (সাধারণত dash-separated)
+- Public (সবাই দেখতে) নাকি Private (শুধু আপনি/দল)
+- Initialize with README — optional
+- .gitignore template বাছুন — ভাষা অনুযায়ী
+- License বাছুন (open-source)
+
+## Clone — লোকালে নেওয়া
+
+<CodeBlock code={"git clone https://github.com/user/project.git\ncd project"} lang={"bash"} />
+
+## Fork কী?
+
+<InParagraph text={"Fork হলো অন্যের public repository-র **নিজের কপি** তৈরি করা। মূল না খাটিয়ে আপনি এতে পরিবর্তন আনেন; পরে PR দিয়ে মূল-এ contribute করতে পারেন।"} />
+
+<CodeBlock code={"# Fork button (repo পেজের উপরে)\n# তারপর আপনার copy clone করুন:\ngit clone https://github.com/you/project.git"} lang={"bash"} />
+
+## আপস্ট্রিম যোগ — আপডেট টেনে আনা
+
+<CodeBlock code={"git remote add upstream https://github.com/original/project.git\ngit fetch upstream\ngit checkout main\ngit merge upstream/main"} lang={"bash"} />
+
+## repo Settings-এ যা পাবেন
+
+- Rename / transfer / archive repository
+- Default branch পরিবর্তন
+- Collaborators/filter যোগ
+- Branch protection rules
+- Topics, description
+- Delete repository (সাবধান!)
+
+## README যোগ করা
+
+<InParagraph text={"প্রথমবার repo-তে একটি README দিলে visitors উপরে সেটি দেখে। Markdown আকারে — পরের অধ্যায়ে।"} />
+
+<Tip tone={"info"} title={"নিরাপত্তা"} text={"Public repository-তে জনসাধারণ কোড দেখতে পারে — secrets (`.env`, API key) থাকবে না। Secret-এর জন্য repository settings-এ **Secrets** ব্যবহার করুন।"} />

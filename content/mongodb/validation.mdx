@@ -1,0 +1,25 @@
+---
+title: "Schema Validation"
+label: "Validation"
+order: 10
+level: "Intermediate"
+description: "Built-in ও custom validator দিয়ে ডেটা যাচাই: required, enum, min/max, match, unique — বাংলায়।"
+---
+
+<InParagraph text={"Validation schema-তে `save()` বা `validate()`-এর সময় চলে — অবৈধ ডেটা collection-এ ঢোকার আগেই আটকে যায়।"} />
+
+## Built-in validators
+
+<CodeBlock code={"const userSchema = new mongoose.Schema({\n  name: {\n    type: String,\n    required: true,\n    minlength: 3,\n    maxlength: 50,\n  },\n  email: {\n    type: String,\n    required: true,\n    lowercase: true,\n    match: /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/,\n  },\n  age: {\n    type: Number,\n    min: 13,\n    max: 120,\n  },\n  role: {\n    type: String,\n    enum: [\"user\", \"admin\", \"moderator\"],\n    default: \"user\",\n  },\n  profileUrl: {\n    type: String,\n    validate: {\n      validator: (v) => v.startsWith(\"https://\"),\n      message: \"URL-টি https:// দিয়ে শুরু হোক\",\n    },\n  },\n});"} lang={"js"} title={"Common validators"} />
+
+## Custom validator
+
+<CodeBlock code={"const orderSchema = new mongoose.Schema({\n  quantity: {\n    type: Number,\n    validate: {\n      validator: (value) => Number.isInteger(value) && value > 0,\n      message: (props) => props.value + \" একটি বৈধ quantity নয়\",\n    },\n  },\n  discountCode: {\n    type: String,\n    validate: {\n      validator: async (value) => {\n        // ডেটাবেসে code-টা আছে কিনা যাচাই\n        const code = await Coupon.findOne({ code: value });\n        return code !== null;\n      },\n      message: \"Invalid discount code\",\n    },\n  },\n});"} lang={"js"} title={"Custom validation"} />
+
+## unique — validator নয়
+
+<Tip tone={"warning"} title={"unique গুরুত্বপূর্ণ বিষয়"} text={"`unique: true` **validator নয়** — এটি একটা **unique index**। ফলে apply হতে collection-এ অবশ্যই index থাকতে হবে, আর duplicate হলে **E11000 MongoServerError** হয় (ValidationError নয়)। Error handle করার সময় `code === 11000` চেক করুন।"} />
+
+## Validation error handle
+
+<CodeBlock code={"try {\n  await User.create({ name: \"ab\", email: \"not-an-email\" });\n} catch (err) {\n  if (err.name === \"ValidationError\") {\n    for (const field in err.errors) {\n      console.log(field, \"→\", err.errors[field].message);\n    }\n  }\n}"} lang={"js"} title={"ValidationError"} />

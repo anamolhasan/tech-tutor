@@ -1,0 +1,27 @@
+---
+title: "Express Input Validation (Zod)"
+label: "Validation"
+order: 14
+level: "Intermediate"
+description: "Zod schema, request validation, error messages — Express-এ input validation বাংলায়।"
+---
+
+<InParagraph text={"**Input validation** user-এর পাঠানো data যাচাই করা। Invalid data হলে 400 respond করা। Beauty tool হলো **Zod** (বিল্ট-ইন TypeScript types)।"} />
+
+## Zod Setup
+
+<CodeBlock code={"npm install zod"} lang={"bash"} />
+
+<CodeBlock code={"const { z } = require(\"zod\");\n\nconst createUserSchema = z.object({\n  name: z.string().min(2, \"নাম কমপক্ষে 2 অক্ষর\").max(50),\n  email: z.string().email(\"সঠিক email দিন\"),\n  age: z.number().int().min(18).max(120).optional(),\n  password: z.string().min(6, \"পাসওয়ার্ড কমপক্ষে 6 অক্ষর\"),\n});\n\nconst updateUserSchema = z.object({\n  name: z.string().min(2).max(50).optional(),\n  age: z.number().int().min(18).max(120).optional(),\n});\n\nmodule.exports = { createUserSchema, updateUserSchema };"} lang={"javascript"} title={"validators/userValidator.js"} />
+
+## Validation Middleware
+
+<CodeBlock code={"const validate = (schema) => (req, res, next) => {\n  const result = schema.safeParse(req.body);\n\n  if (!result.success) {\n    const errors = result.error.issues.map(issue => ({\n      field: issue.path.join(\".\"),\n      message: issue.message,\n    }));\n    return res.status(400).json({ error: \"Validation failed\", errors });\n  }\n\n  req.body = result.data; // cleaned data\n  next();\n};\n\nmodule.exports = validate;"} lang={"javascript"} title={"middleware/validate.js"} />
+
+## Use in Route
+
+<CodeBlock code={"const validate = require(\"../middleware/validate\");\nconst { createUserSchema } = require(\"../validators/userValidator\");\n\nrouter.post(\"/\", validate(createUserSchema), async (req, res) => {\n  const user = await User.create(req.body);\n  res.status(201).json(user);\n});"} lang={"javascript"} />
+
+<CodeBlock code={"POST /api/users\n{ \"name\": \"A\", \"email\": \"bad-email\" }\n\nResponse:\n{\n  \"error\": \"Validation failed\",\n  \"errors\": [\n    { \"field\": \"name\", \"message\": \"নাম কমপক্ষে 2 অক্ষর\" },\n    { \"field\": \"email\", \"message\": \"সঠিক email দিন\" }\n  ]\n}"} lang={"bash"} title={"Invalid request example"} />
+
+<Tip tone={"info"} title={"Zod & TypeScript"} text={"Zod TypeScript-এর সাথে দারুণ কাজ করে — schema থেকে automatically type inference পাওয়া যায় (`z.infer`), তাই type safety নিশ্চিত।"} />

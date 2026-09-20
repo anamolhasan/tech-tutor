@@ -1,0 +1,20 @@
+---
+title: "update, updateMany, delete"
+label: "Update & Delete"
+order: 11
+level: "Intermediate"
+description: "বদলানো ও মুছনো — একক ও বাল্ক সাথে guard।"
+---
+
+<CodeBlock code={"await prisma.product.update({\n  where: { id: 9 },\n  data: { qty: 24, price: 1900 },\n});\n\n// multiple rows\nawait prisma.product.updateMany({\n  where: { categoryId: 2 },\n  data: { active: false },\n});\n\n// delete\nawait prisma.product.delete({ where: { id: 9 } });"} lang={"ts"} />
+
+| Method | আচরণ |
+| --- | --- |
+| update | মিললে রেকর্ড আপডেট; না হলে P2025 |
+| updateMany | matching count (0 হলেও error না) |
+| delete | মিললে মুছে; না হলে P2025 |
+| deleteMany | সব matching মুছে |
+
+<InParagraph text={"`updateMany`/`deleteMany` result-এ **count** দেয় — injury ০ হলে শান্ত থাকুন, error নয়।"} />
+
+<Tip tone={"warning"} title={"soft vs hard delete"} text={"e-commerce-এ প্রায়ই `active`-flag/`deletedAt` — hard delete-র বদলে। Transaction-এ একাধিক delete একসাথে।"} />

@@ -1,0 +1,19 @@
+---
+title: "Selectors — useSelector ও Memoization"
+label: "Selectors"
+order: 11
+level: "Intermediate"
+description: "useSelector-এর কাজ, object সিলেক্ট করার বিপদ, createSelector — বাংলায়।"
+---
+
+<InParagraph text={"**useSelector** React-এ `state` থেকে একটি ভ্যালু বেছে নেয়; store-এ পরিবর্তন হলে এর selected ভ্যালু না-বদলালে component re-render হয় না। কিন্তু object/array select করলে **new reference** নতুন render ট্রিগার করে — এতে সতর্ক থাকা দরকার।"} />
+
+<CodeBlock code={"// প্রতিবার store update-এ re-render হয় —\n// (state.cart) new object reference\nconst all = useAppSelector((state) => state.cart);"} lang={"tsx"} title={"খারাপ প্যাটার্ন"} />
+
+<CodeBlock code={"const items = useAppSelector((state) => state.cart.items);\nconst count = useAppSelector((state) =>\n  state.cart.items.reduce((sum, i) => sum + i.qty, 0),\n);"} lang={"tsx"} title={"ভালো — ছোট অংশ select"} />
+
+## createSelector
+
+<CodeBlock code={"import { createSelector } from \"@reduxjs/toolkit\";\n\nexport const selectCartItems = (state: RootState) => state.cart.items;\n\nexport const selectCartCount = createSelector(\n  [selectCartItems],\n  (items) => items.reduce((sum, i) => sum + i.qty, 0),\n);\n\nexport const selectCartTotal = createSelector(\n  [selectCartItems],\n  (items) =>\n    items.reduce(\n      (sum, i) => sum + i.qty * (pricePerItem(i.productId) ?? 0),\n      0,\n    ),\n);"} lang={"ts"} title={"src/features/cart/cartSelectors.ts"} />
+
+<Tip tone={"warning"} title={"createSelector-input শ্যাডো"} text={"createSelector-এর শেষ ফাংশনটি **cache** করে শুধুমাত্র যখন তার input selector-এর ভ্যালু পরিবর্তন হয়। calculations new-array/expensive হলে ব্যবহার করবেন — ভেতরে object select-ও শুধু প্রয়োজন হলে।"} />

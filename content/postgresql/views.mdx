@@ -1,0 +1,17 @@
+---
+title: "View — query সংরক্ষণ করা"
+label: "Views"
+order: 21
+level: "Intermediate"
+description: "ঘন ব্যবহার হওয়া query-কে view-এ নামকরণ — plus materialized।"
+---
+
+<CodeBlock code={"CREATE VIEW revenue_by_user AS\nSELECT u.id, u.name, SUM(o.total) AS total_spent\nFROM users u\nLEFT JOIN orders o ON o.user_id = u.id\nGROUP BY u.id, u.name;"} lang={"sql"} title={"simple view"} />
+
+<CodeBlock code={"-- view থেকেই query\nSELECT * FROM revenue_by_user WHERE total_spent > 5000;"} lang={"sql"} />
+
+<InParagraph text={"Plain view **নিজে data রাখে না** — query-time-এ execution হয়। বড়/ব্যয়বহুল অথচ কমই বদলানো data-তে **materialized view**:"} />
+
+<CodeBlock code={"CREATE MATERIALIZED VIEW sales_daily AS\nSELECT created_at::date AS day, SUM(total) AS revenue\nFROM orders GROUP BY day;\n\n-- data বদলে গেলে manually refresh\nREFRESH MATERIALIZED VIEW sales_daily;"} lang={"sql"} />
+
+<Tip tone={"info"} title={"view কখন"} text={"প্রতিনিয়ত একই জটিল query — view-এ push করুন; সহকর্মীরা table-এর মতোই query করবে। Materialized view-এ data stale — timing ঠিক রাখুন।"} />

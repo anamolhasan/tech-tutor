@@ -1,0 +1,58 @@
+---
+title: "GitFlow, GitHub Flow, Trunk-based"
+label: "Workflows"
+order: 17
+level: "Advanced"
+description: "জনপ্রিয় branch strategy-গুলো — বাংলায়।"
+---
+
+## Branch Strategy কী?
+
+<InParagraph text={"Branch strategy হলো দলের **সহযোগিতার নিয়ম** — কোন branch থেকে কাজ শুরু হবে, কোথায় merge হবে, কতবার deploy হবে। তিনটি জনপ্রিয় পদ্ধতি জেনে নিন।"} />
+
+## GitFlow
+
+- `main` — production
+- `develop` — ইন্টিগ্রেশন ব্রাঞ্চ
+- `feature/*` — develop থেকে, আবার develop-এ merge
+- `release/*` — release প্রস্তুতিতে
+- `hotfix/*` — main থেকে জরুরি ফিক্স
+
+<InParagraph text={"বড়, versioned release-সম্পন্ন ম্যানিউফ্যাকচার প্রকল্পে উপযুক্ত; ছোট দলে অতিরিক্ত জটিল।"} />
+
+## GitHub Flow
+
+- `main` সবসময় deploy-যোগ্য
+- প্রতিটি কাজ `feature-branch`-এ
+- সঙ্গে PR খোলেন
+- review + test পাসে merge
+- merge সাথেই deploy
+
+<InParagraph text={"সরল ও দ্রুত — অনেক SaaS/startup দলের পছন্দ।"} />
+
+## Trunk-based Development
+
+- সবাই `main`-এ ছোট ছোট commit
+- branch সামান্য বা না
+- feature flag দিয়ে অপ্রস্তুত ফিচার লুকানো
+- দৈনিক (বা আরও বেশি) deploy
+
+<InParagraph text={"অত্যন্ত দ্রুত CI/CD পরিবেশে জনপ্রিয়; শৃঙ্গ flag management প্রয়োজন।"} />
+
+## তুলনা
+
+| বিষয় | GitFlow | GitHub Flow | Trunk-based |
+| --- | --- | --- | --- |
+| সহজতা | মাঝারি-জটিল | সরল | সরল |
+| ব্রাঞ্চের সংখ্যা | অনেক | কম | প্রায় না |
+| release cadence | পরিকল্পিত | প্রায়ই | খুবই ঘনঘন |
+| প্রধান টুল | feature-tuning | PR based | feature flags |
+
+## দলের জন্য কোনটি?
+
+- **সোলো / freelancer** — GitHub Flow-ই যথেষ্ট
+- **ছোট startup** — GitHub Flow
+- **বড়, versioned product** — GitFlow
+- **CI/CD-পূর্ন enterprise** — trunk-based
+
+<Tip tone={"success"} title={"প্রধানসূত্র"} text={"সবচেয়ে গুরুত্বপূর্ণ হলো **main সবসময় deployable** রাখা এবং প্রতিটি কাজের যুক্তি পরিষ্কার। কোনো strategy দল ও দলের টুলিং-এর সঙ্গে মানানসই হলে কাজই ভালো।"} />

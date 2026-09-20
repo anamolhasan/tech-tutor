@@ -1,0 +1,28 @@
+---
+title: "Dark Mode"
+label: "Dark Mode"
+order: 25
+level: "Intermediate"
+description: "Tailwind-এ built-in dark mode support — `dark:` prefix দিয়ে সহজে dark mode তৈরি করুন।"
+---
+
+<InParagraph text={"Tailwind-এ **`dark:` prefix** দিয়ে dark mode-এর জন্য আলাদা styles দেওয়া যায়।"} />
+
+## Dark Mode Setup
+
+<InParagraph text={"Tailwind v4-তে dark mode default ভাবে কাজ করে। `dark:` prefix যোগ করলেই হবে।"} />
+
+## Dark Mode Classes
+
+<CodeBlock code={"<!-- Light: white bg, dark text -->\n<!-- Dark: dark bg, light text -->\n<div class=\"bg-white dark:bg-gray-900 text-black dark:text-white p-4\">\n  <h1 class=\"text-xl font-bold\">Dark Mode Ready</h1>\n  <p class=\"text-gray-600 dark:text-gray-400\">\n    এই পেজ dark mode support করে।\n  </p>\n</div>"} lang={"html"} />
+
+## Dark Mode উদাহরণ
+
+<CodeBlock code={"<div class=\"rounded-lg bg-white dark:bg-gray-800 p-6 shadow-md\">\n  <h2 class=\"text-xl font-semibold text-gray-900 dark:text-white\">\n    Card Title\n  </h2>\n  <p class=\"mt-2 text-gray-600 dark:text-gray-300\">\n    Card content goes here.\n  </p>\n  <button class=\"mt-4 rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700\">\n    Action\n  </button>\n</div>"} lang={"html"} title={"Complete dark mode card"} />
+
+## Dark Mode Strategy
+
+- **Media query** (default) — system preference অনুযায়ী
+- **Class** — manual toggle (`dark` class যোগ/বাদ)
+
+<Tip tone={"info"} title={"Dark mode toggle"} text={"JavaScript দিয়ে `document.documentElement.classList.toggle('dark')` কল করে dark mode toggle করুন। localStorage-এ save করে persistent করুন।"} />

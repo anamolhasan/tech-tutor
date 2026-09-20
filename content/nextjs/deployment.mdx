@@ -1,0 +1,35 @@
+---
+title: "Deployment"
+label: "Deployment"
+order: 21
+level: "Intermediate"
+description: "Vercel ও অন্যান্য platform-এ Next.js deploy — production deployment বাংলায়।"
+---
+
+<InParagraph text={"Next.js deploy-এর জনপ্রিয় উপায় **Vercel** (Next.js-এর creator)। এছাড়া যেকোনো Node.js platform বা static host-এও deploy করা যায়।"} />
+
+## Vercel-এ Deploy
+
+1. GitHub/GitLab/Bitbucket-এ কোড push করুন
+1. vercel.com-এ যান ও repository import করুন
+1. Build config স্বয়ংক্রিয় detect হয়
+1. Deploy complete — environment variables সেট করা যায়
+
+<Tip tone={"info"} title={"Vercel pst"} text={"Vercel CLI দিয়েও deploy সম্ভব: `npm i -g vercel` → `vercel`। প্রতিটি git push-এ auto-deploy হয় (Preview/Production)।"} />
+
+## Static Export
+
+<InParagraph text={"শুধু static content-এর জন্য (dynamic API ছাড়া) **static export** ব্যবহার করা যায় — যেকোনো static host (Netlify, S3, Nginx)-এ hosting।"} />
+
+<CodeBlock code={"import type { NextConfig } from \"next\";\n\nconst nextConfig: NextConfig = {\n  output: \"export\",\n};\n\nexport default nextConfig;"} lang={"ts"} title={"next.config.ts"} />
+
+<InParagraph text={"এতে `next build` একটি `out/` ফোল্ডার তৈরি করে — pure HTML/CSS/JS, server প্রয়োজন হয় না। তবে Route Handlers, Server Actions ইত্যাদি তখন ব্যবহার করা যায় না।"} />
+
+## Deployment-এর আগে যাচাই
+
+- `npm run build` সফল হয় কি না
+- Environment variables `.env.production`-এ সেট করা
+- Secrets-এ `NEXT_PUBLIC_` prefix নেই নিশ্চিত করুন
+- Lighthouse-এ performance test দিন
+
+<Tip tone={"warning"} title={"Static Export-এ সীমাবদ্ধতা"} text={"Static export-এ dynamic routes, cookies/headers, Server Actions — এগুলো work করে না। Dynamic feature দরকার হলে full Node.js deployment নিন।"} />

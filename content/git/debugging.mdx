@@ -1,0 +1,33 @@
+---
+title: "reflog, bisect, blame দিয়ে বাগ খোঁজা"
+label: "Debugging"
+order: 16
+level: "Advanced"
+description: "git reflog, bisect ও log বিকল্প দিয়ে সমস্যা সমাধান — বাংলায়।"
+---
+
+## git reflog — সবকিছুর স্মৃতি
+
+<InParagraph text={"`reflog` আপনার repository-র সাম্প্রতিক **সব** HEAD আন্দোলনের তালিকা — এমনকি যেসব commit বর্তমান branch থেকে বিচ্ছিন্ন হয়ে গেছে। `--hard` এর পরেও এখান থেকে rescued করা যায়।"} />
+
+<CodeBlock code={"git reflog\n# 8f3a2b1 (HEAD -> main) commit done\n# 3d4e5f6 reset: moving to HEAD~2\n# ..."} lang={"bash"} />
+
+## হারানো commit পুনরুদ্ধার
+
+<CodeBlock code={"git reflog                  # hash খুঁজুন\ngit reset --hard 8f3a2b1     # আবার যাও"} lang={"bash"} />
+
+## git bisect — auto খোঁজা
+
+<InParagraph text={"কোন commit থেকে বাগ শুরু হয়েছে তা ২টির-শক্তি গতিতে খুঁজে বের করতে `bisect` ব্যবহার হয়।"} />
+
+<CodeBlock code={"git bisect start\ngit bisect bad HEAD                 # এটা খারাপ\ngit bisect good v1.2.0              # এটা ভালো ছিল\n# bisect মাঝের commit-এ যায়; আপনি পরীক্ষা করে:\ngit bisect good / bad\n# শেষে খারাপ commit-টি শেনোনো হয়\ngit bisect reset"} lang={"bash"} />
+
+## Git blame দিয়ে সন্দেহ
+
+<CodeBlock code={"git blame src/app.js\ngit blame -L 40,60 src/app.js   # নির্দিষ্ট লাইন range"} lang={"bash"} />
+
+## কিছু সহায়ক লগ ট্রিক
+
+<CodeBlock code={"git log --oneline --graph --decorate\ngit log --all --oneline --source\ngit show-branch --all\ngit fsck --lost-found   # orphan commit খুঁজে"} lang={"bash"} />
+
+<Tip tone={"info"} title={"মনে রাখুন"} text={"রিস্টোর করার আগে শান্তভাবে `git status` ও `reflog` দেখুন — বেশিরভাগ Git কমান্ডের পরে সত্যিই recoverable, কারণ reflog পুরো ইতিহাসের স্মৃতি রাখে।"} />

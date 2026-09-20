@@ -1,0 +1,23 @@
+---
+title: "Real-world Project: Dashboard"
+label: "Project: Dashboard"
+order: 34
+level: "Advanced"
+description: "Tailwind CSS দিয়ে একটি admin dashboard layout তৈরি করুন — sidebar, header, content area।"
+---
+
+<InParagraph text={"একটি admin dashboard layout তৈরি করি। এতে Flexbox, Grid, responsive design সব ব্যবহার হবে।"} />
+
+## Dashboard Layout
+
+<CodeBlock code={"<!-- Dashboard Layout -->\n<div class=\"flex min-h-screen bg-gray-100\">\n\n  <!-- Sidebar (Desktop) -->\n  <aside class=\"hidden w-64 bg-gray-900 text-white lg:block\">\n    <div class=\"p-6\">\n      <h2 class=\"text-xl font-bold\">Dashboard</h2>\n    </div>\n    <nav class=\"space-y-1 px-4\">\n      <a href=\"#\" class=\"block rounded-lg bg-gray-800 px-4 py-2\">Home</a>\n      <a href=\"#\" class=\"block rounded-lg px-4 py-2 hover:bg-gray-800\">Analytics</a>\n      <a href=\"#\" class=\"block rounded-lg px-4 py-2 hover:bg-gray-800\">Settings</a>\n    </nav>\n  </aside>\n\n  <!-- Main Content -->\n  <div class=\"flex-1\">\n    <!-- Header -->\n    <header class=\"flex items-center justify-between bg-white px-6 py-4 shadow-sm\">\n      <h1 class=\"text-lg font-semibold\">Dashboard</h1>\n      <div class=\"flex items-center gap-4\">\n        <input\n          type=\"search\"\n          placeholder=\"Search...\"\n          class=\"rounded-lg border px-3 py-2 text-sm\"\n        />\n        <div class=\"h-8 w-8 rounded-full bg-blue-500\"></div>\n      </div>\n    </header>\n\n    <!-- Stats Grid -->\n    <main class=\"p-6\">\n      <div class=\"grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4\">\n        <div class=\"rounded-xl bg-white p-6 shadow-sm\">\n          <p class=\"text-sm text-gray-500\">Total Users</p>\n          <p class=\"mt-1 text-2xl font-bold\">12,345</p>\n        </div>\n        <div class=\"rounded-xl bg-white p-6 shadow-sm\">\n          <p class=\"text-sm text-gray-500\">Revenue</p>\n          <p class=\"mt-1 text-2xl font-bold\">$45,678</p>\n        </div>\n      </div>\n    </main>\n  </div>\n</div>"} lang={"html"} />
+
+## Key Patterns Used
+
+- **Flex layout** — sidebar + main content
+- **Hidden/Block** — responsive sidebar
+- **Grid** — responsive stats cards
+- **Shadow** — card depth
+- **Hover states** — navigation feedback
+
+<Tip tone={"success"} title={"Responsive Sidebar"} text={"মোবাইলে sidebar hide (`hidden lg:block`) এবং hamburger menu show করুন। ডেস্কটপে sidebar visible।"} />

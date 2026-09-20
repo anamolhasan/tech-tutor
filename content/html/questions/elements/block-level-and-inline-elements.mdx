@@ -1,0 +1,15 @@
+---
+question: "What are block-level and inline elements?"
+order: 3
+description: "Block-level এবং inline element-এর বৈশিষ্ট্য ও উদাহরণ।"
+---
+
+<InParagraph text={"HTML element-গুলো মূলত দুই ধরনের — **block-level** এবং **inline**।"} />
+
+<InParagraph text={"**Block-level element** ব্রাউজারে নতুন লাইন থেকে শুরু হয় এবং পারিপার্শ্বিকের পুরো প্রস্থ নেয়। যেমন `<div>`, `<p>`, `<h1>` থেকে `<h6>`, `<section>`, `<ul>`। এক block element-এর পর আরেকটি block element নতুন লাইনে বসে।"} />
+
+<InParagraph text={"**Inline element** নিজের কনটেন্টের শুধু প্রয়োজনীয় জায়গা নেয় এবং একই লাইনের ভেতরে থাকে। যেমন `<span>`, `<a>`, `<strong>`, `<em>`, `<code>`। inline element-কে block element-এর ভেতরে রাখা স্বাভাবিক, কিন্তু উল্টোটাই নিয়ম ভাঙা।"} />
+
+<CodeBlock code={"<div>Block element</div>\n<p>এটি একটি <span style=\"color: red;\">inline span</span> সহ paragraph</p>"} lang={"html"} title={"উদাহরণ"} />
+
+<Tip tone={"success"} title={"মনে রাখুন"} text={"লেআউট তৈরিতে block element, আর ছোট বিট কনটেন্টের স্টাইলিংয়ে inline element ব্যবহার করুন।"} />

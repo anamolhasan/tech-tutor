@@ -1,0 +1,29 @@
+---
+title: "Express + MongoDB (Mongoose)"
+label: "Database"
+order: 13
+level: "Intermediate"
+description: "Express-এ MongoDB সংযোগ, model, CRUD routes — database integration বাংলায়।"
+---
+
+<InParagraph text={"Express-এর সাথে সাধারণত MongoDB (Mongoose ODM) বা SQL (Prisma/Sequelize) ব্যবহার হয়। এখানে MongoDB + Mongoose দেখবো।"} />
+
+## ধাঁধাঁ Setup
+
+<CodeBlock code={"# MongoDB install (ডেস্কটপ বা MongoDB Atlas)\nnpm install mongoose dotenv"} lang={"bash"} />
+
+<CodeBlock code={"PORT=5000\nMONGO_URI=mongodb://localhost:27017/myapp"} lang={"env"} title={".env"} />
+
+## Database Connection
+
+<CodeBlock code={"const mongoose = require(\"mongoose\");\n\nconst connectDB = async () => {\n  try {\n    const conn = await mongoose.connect(process.env.MONGO_URI);\n    console.log(\"MongoDB connected:\", conn.connection.host);\n  } catch (error) {\n    console.error(\"DB ত্রুটি:\", error.message);\n    process.exit(1);\n  }\n};\n\nmodule.exports = connectDB;"} lang={"javascript"} title={"config/db.js"} />
+
+<CodeBlock code={"const mongoose = require(\"mongoose\");\n\nconst userSchema = new mongoose.Schema({\n  name: { type: String, required: true, trim: true },\n  email: {\n    type: String,\n    required: true,\n    unique: true,\n    lowercase: true,\n  },\n  age: { type: Number, min: 0, max: 120, default: 0 },\n  createdAt: { type: Date, default: Date.now },\n});\n\nmodule.exports = mongoose.model(\"User\", userSchema);"} lang={"javascript"} title={"models/User.js"} />
+
+## CRUD Routes
+
+<CodeBlock code={"const express = require(\"express\");\nconst User = require(\"../models/User\");\nconst router = express.Router();\n\n// GET all\nrouter.get(\"/\", async (req, res, next) => {\n  try {\n    const users = await User.find().sort(\"-createdAt\");\n    res.json({ count: users.length, users });\n  } catch (err) { next(err); }\n});\n\n// GET one\nrouter.get(\"/:id\", async (req, res, next) => {\n  try {\n    const user = await User.findById(req.params.id);\n    if (!user) return res.status(404).json({ error: \"User নেই\" });\n    res.json(user);\n  } catch (err) { next(err); }\n});\n\n// POST\nrouter.post(\"/\", async (req, res, next) => {\n  try {\n    const user = await User.create(req.body);\n    res.status(201).json(user);\n  } catch (err) { next(err); }\n});\n\n// PUT\nrouter.put(\"/:id\", async (req, res, next) => {\n  try {\n    const user = await User.findByIdAndUpdate(\n      req.params.id, req.body,\n      { new: true, runValidators: true }\n    );\n    if (!user) return res.status(404).json({ error: \"User নেই\" });\n    res.json(user);\n  } catch (err) { next(err); }\n});\n\n// DELETE\nrouter.delete(\"/:id\", async (req, res, next) => {\n  try {\n    const user = await User.findByIdAndDelete(req.params.id);\n    if (!user) return res.status(404).json({ error: \"User নেই\" });\n    res.json({ message: \"User মুছে ফেলা হয়েছে\" });\n  } catch (err) { next(err); }\n});\n\nmodule.exports = router;"} lang={"javascript"} title={"routes/users.js"} />
+
+<CodeBlock code={"require(\"dotenv\").config();\nconst express = require(\"express\");\nconst connectDB = require(\"./config/db\");\n\nconnectDB();\n\nconst app = express();\napp.use(express.json());\n\napp.use(\"/api/users\", require(\"./routes/users\"));\n\napp.listen(process.env.PORT, () =>\n  console.log(\"Server চলছে port:\", process.env.PORT)\n);"} lang={"javascript"} title={"index.js"} />
+
+<Tip tone={"success"} title={"MVC Structure"} text={"Routes-এ সরাসরি logic না রেখে **Controllers** ফোল্ডারে business logic রাখুন — model (data) + view/route (HTTP) + controller (logic) — মডার্ন pattern।"} />

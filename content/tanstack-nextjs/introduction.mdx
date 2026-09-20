@@ -1,0 +1,43 @@
+---
+title: "Project Overview — Product Management Dashboard"
+label: "Project Overview"
+order: 1
+level: "Beginner"
+description: "Next.js + TanStack Query + TanStack Table + React Hook Form + Zod দিয়ে একটি complete CRUD project-এর পরিকল্পনা — বাংলায়।"
+---
+
+<InParagraph text={"স্বাগতম! এই সম্পূর্ণ কোর্সে আমরা **একটিমাত্র project** বানাব — একটি **Product Management Dashboard**। প্রতিটি অধ্যায়ে সেই project-ই এগোবে, কোনো ছোটোখাটো unrelated উদাহরণ নয়। শেষে আপনি নিজের হাতে একটি production-style CRUD application তৈরি করতে পারবেন।"} />
+
+## আমরা কী বানাব?
+
+<InParagraph text={"**Product Management Dashboard** — যেখানে admin product list দেখবেন, সার্চ/ফিল্টার/পেজিনেশন করবেন, নতুন product যুক্ত করবেন, edit করবেন এবং delete করবেন। সবকিছু থাকবে একটি সুন্দর table-এ।"} />
+
+<CodeBlock code={"type Product = {\n  id: string;\n  name: string;\n  description: string;\n  price: number;\n  category: string;\n  stock: number;\n  status: \"active\" | \"inactive\";\n  createdAt: string;\n  updatedAt: string;\n};"} lang={"ts"} title={"আমাদের মূল Data Model"} />
+
+## ব্যবহৃত প্রযুক্তি
+
+| টুল | ভূমিকা |
+| --- | --- |
+| **Next.js** (App Router) | Frontend ফ্রেমওয়ার্ক ও API route (Route Handler) |
+| **TypeScript** | সম্পূর্ণ type safety |
+| **Axios** | HTTP client — REST API-তে request |
+| **TanStack Query** | Server state — fetch, cache, mutations |
+| **TanStack Table** | Headless table — columns, sorting, actions |
+| **React Hook Form** | Form state ও validation integration |
+| **Zod** | Schema validation — client ও server |
+| **shadcn/ui** | Dialog, Input, Select, Table-এর মতো UI components |
+| **REST API** | Next.js route handlers দিয়ে products endpoints |
+
+## এই কোর্সে যা যা শিখবেন
+
+- Axios instance ও API client তৈরি
+- TanStack Query দিয়ে data fetching ও caching
+- Create / Update / Delete mutation ও cache invalidation
+- Optimistic update, pagination, search, filter, sorting
+- TanStack Table দিয়ে dynamic table
+- React Hook Form + Zod দিয়ে validated form
+- Dialog/modal ও delete confirmation
+- Error handling, loading states ও reusable components
+- Production architecture ও interview questions
+
+<Tip tone={"success"} title={"প্রতিটি ধাপে নিজে করুন"} text={"প্রতিটি অধ্যায়ের কোড নিজের editor-এ লিখে চালান। পড়া শুধু পড়া থাকলে CRUD stack-এর 'connecting' বোঝা কঠিন — হাতে-কলমেই এটি স্পষ্ট হবে।"} />

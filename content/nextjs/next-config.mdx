@@ -1,0 +1,31 @@
+---
+title: "Next.js Configuration"
+label: "Configuration"
+order: 22
+level: "Advanced"
+description: "next.config.ts — images, redirects, rewrites, experimental options বাংলায়।"
+---
+
+<InParagraph text={"`next.config.ts` হলো Next.js-এর central configuration file। এতে project-এর behavior কাস্টমাইজ করা যায়।"} />
+
+## মৌলিক Config
+
+<CodeBlock code={"import type { NextConfig } from \"next\";\n\nconst nextConfig: NextConfig = {\n  // এখানে options\n};\n\nexport default nextConfig;"} lang={"ts"} title={"next.config.ts"} />
+
+## Common Options
+
+<CodeBlock code={"import type { NextConfig } from \"next\";\n\nconst nextConfig: NextConfig = {\n  images: {\n    remotePatterns: [\n      {\n        protocol: \"https\",\n        hostname: \"res.cloudinary.com\",\n      },\n    ],\n  },\n  redirects: async () => [\n    {\n      source: \"/old-about\",\n      destination: \"/about\",\n      permanent: true,\n    },\n  ],\n  cacheComponents: true,\n};\n\nexport default nextConfig;"} lang={"ts"} title={"next.config.ts"} />
+
+## Redirects ও Rewrites
+
+| Feature | কাজ |
+| --- | --- |
+| redirects | এক URL আরেক URL-এ পাঠায় |
+| rewrites | URL change না করে ভিন্ন source |
+| headers | Custom HTTP headers |
+
+## Image Remote Patterns
+
+<InParagraph text={"External domain থেকে image দেখাতে `next/image`-এ `remotePatterns` সেট করতে হয়।"} />
+
+<Tip tone={"info"} title={"TypeScript Support"} text={"`next.config.ts` (TypeScript) supported — config-এ type safety পাবেন। Template literal ব্যবহার করে placeholder দিলেও সম্পূর্ণ typing অব্যাহত থাকে।"} />

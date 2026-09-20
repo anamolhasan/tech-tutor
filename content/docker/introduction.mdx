@@ -1,0 +1,40 @@
+---
+title: "Docker Introduction"
+label: "Introduction"
+order: 1
+level: "Beginner"
+description: "Docker কী, কেন ব্যবহার করা হয়, containerization ধারণা ও এটি কীভাবে কাজ করে — বাংলায় পূর্ণাঙ্গ পরিচিতি।"
+---
+
+<InParagraph text={"**Docker** হলো একটি containerization platform যার মাধ্যমে application এবং তার dependencies-কে একটি isolated container-এর মধ্যে চালানো যায়। অর্থাৎ আপনার কোড তার প্রায় সব প্রয়োজনীয় জিনিস (runtime, library, configuration) সহ বান্ডেল হয়ে যায় — যেকোনো জায়গায় ঠিক একইভাবে চলে।"} />
+
+## Docker কী?
+
+<InParagraph text={"সহজ ভাষায়, Docker হলো এমন একটি tool যা আপনার application-কে একটি **package (image)**-এ বান্ডেল করে এবং সেটা থেকে **container** নামের isolated process চালায়। এটি আধুনিক DevOps ও cloud deployment-এর অপরিহার্য অংশ — React, Next.js, Node.js, database — সবকিছুই Docker দিয়ে চলানো যায়।"} />
+
+## Docker কেন ব্যবহার করা হয়?
+
+- **একই আচরণ সবখানে** — development, testing, production-এ ঠিক একই 'works on my machine' সমস্যা শেষ
+- **Isolation** — প্রতিটি app নিজের runtime ও library নিয়ে আলাদা থাকে, অন্য app-কে প্রভাবিত করে না
+- **দ্রুত ডিপ্লয়** — নতুন server-এ এক কমান্ডে app চালু
+- **Version control** — image-এর version tag করে যেকোনো পুরোনো version-এ ফেরা যায়
+- **Scalability** — একই image থেকে যত খুশি container চালানো যায়
+- **Team workflow** — onboarding-এর সময় পুরো environment setup-এর ঝামেলা থাকে না
+
+## Docker কীভাবে কাজ করে?
+
+<InParagraph text={"開発者は **Dockerfile** নামের একটি file লিখে বলেন image-এ কী থাকবে। Docker সেই file থেকে **image** build করে, তারপর image থেকে **container** রান হয়। Container চালু হয় ইঙ্গিত engine-এর **isolated process** হিসেবে — নিজস্ব file system, network ও resources নিয়ে।"} />
+
+<CodeBlock code={"Dockerfile  →  docker build  →  Image\n                                        ↓\n                              docker run  ←  Container"} lang={"text"} title={"এক নজরে workflow"} />
+
+## এই কোর্সে যা যা শিখবেন
+
+- Containerization ও VM vs Container পার্থক্য
+- Image, Container, Volume, Network — মূল concept
+- Dockerfile ও Docker Compose লেখা
+- Node.js, Next.js, Express.js, NestJS-কে Docker-এ চালানো
+- MongoDB, PostgreSQL, Redis-এর সাথে Docker ব্যবহার
+- Production, Security, Optimization ও CI/CD
+- Real-world Project ডিপ্লয় ও Interview Questions
+
+<Tip tone={"success"} title={"শুরু করার আগে"} text={"প্রতিটি কমান্ড নিজে টার্মিনালে চালিয়ে দেখুন। অনুশীলন ছাড়া Docker শেখা হয় না — পাশাপাশি চলুন।"} />

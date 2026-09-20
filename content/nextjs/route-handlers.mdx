@@ -1,0 +1,39 @@
+---
+title: "Route Handlers (API)"
+label: "Route Handlers"
+order: 13
+level: "Intermediate"
+description: "route.ts দিয়ে API endpoint তৈরি — GET, POST এবং dynamic params বাংলায়।"
+---
+
+<InParagraph text={"**Route Handlers** দিয়ে `app` ফোল্ডারের ভেতরেই custom API endpoint তৈরি করা যায় — Web `Request`/`Response` API ব্যবহার করে।"} />
+
+## প্রথম Route Handler
+
+<CodeBlock code={"export async function GET(request: Request) {\n  return Response.json({ message: \"Hello from API\" });\n}"} lang={"ts"} title={"app/api/route.ts"} />
+
+<InParagraph text={"এই API `/api` URL-এ GET request-এ response দেবে।"} />
+
+## GET with Params
+
+<CodeBlock code={"import type { NextRequest } from \"next/server\";\n\nexport async function GET(\n  _req: NextRequest,\n  ctx: RouteContext<\"/api/users/[id]\">\n) {\n  const { id } = await ctx.params;\n  return Response.json({ id });\n}"} lang={"ts"} title={"app/api/users/[id]/route.ts"} />
+
+## POST Handler
+
+<CodeBlock code={"export async function POST(request: Request) {\n  const body = await request.json();\n\n  // database-এ save করুন...\n\n  return Response.json({ success: true, data: body }, { status: 201 });\n}"} lang={"ts"} title={"app/api/posts/route.ts"} />
+
+## Supported Methods
+
+| Method | ব্যবহার |
+| --- | --- |
+| GET | Data পড়া |
+| POST | নতুন data তৈরি |
+| PUT / PATCH | Data update |
+| DELETE | Data মুছে ফেলা |
+| HEAD / OPTIONS | Metadata checking |
+
+## Caching
+
+<InParagraph text={"Route Handlers **default-এ cached নয়**। চাইলে `GET`-এ `export const dynamic = 'force-static'` দিয়ে static-cache opt-in করা যায়।"} />
+
+<Tip tone={"info"} title={"page.tsx নাকি route.ts?"} text={"একই route segment-এ **`page.tsx` ও `route.ts` একসাথে থাকতে পারবে না** — conflict। Page UI-এর জন্য, route API-এর জন্য।"} />

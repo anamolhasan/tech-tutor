@@ -1,0 +1,49 @@
+---
+title: "Git ব্যবহারের সেরা অভ্যাস"
+label: "Best Practices"
+order: 18
+level: "Intermediate"
+description: "প্রতিদিনের Git-এ ক্লিন, নিরাপদ, ও কার্যকর কাজ — বাংলায়।"
+---
+
+## ছোট ও অর্থপূর্ণ commit
+
+- এক commit = এক logical কাজ
+- একসাথে ১০০ ফাইল বদলে না
+- যত শীঘ্র commit, তত ভালো
+- complete, runable state-এ commit করুন
+
+## পরিষ্কার message নিয়ম
+
+<CodeBlock code={"# ভালো\nfeat: add user profile page\nfix: handle empty input in login\n\n# খারাপ\nupdates\nmmmm\nfix stuff"} lang={"bash"} />
+
+## secret কখনো commit নয়
+
+<CodeBlock code={"# ব্যান্ডে রাখুন:\nnode_modules/\n.env\n*.pem\ndist/"} lang={"bash"} />
+
+## branch-এ নিয়ম মানুন
+
+- feature branch-এ কাজ করুন
+- মূল থেকে বেশিদিনে বিচ্ছিন্ন নয় — প্রায়ই rebase/pull
+- PR ছোট রাখুন
+- প্রথমে local-এ পরীক্ষা, তারপর push
+
+## সতর্ক কিছু নিয়ম
+
+- `git add -A` অন্ধভাবে নয় — `git status` আগে
+- `--force` নয়; `--force-with-lease` প্রয়োজনে
+- public history কখনো rewrite নয়
+- রাত্রি জেগে নয় — ব্যবসায়িক কাজ commit করুন
+
+## commit এ অনুমতি/লেখক যাচাই
+
+<CodeBlock code={"git show --author=\"anamolhasan\"\ngit shortlog -sn           # কে কী পরিমাণ\ngit log --format=\"%h %an %s\""} lang={"bash"} />
+
+## ডকুমেন্টেশন নিয়ম
+
+- প্রতিটি রিপোতে README
+- CONTRIBUTING.md দলে নিয়ম
+- CHANGELOG release টিপে সংস্করণ
+- `.gitignore` প্রথম দিন থেকেই
+
+<Tip tone={"success"} title={"মনে রাখুন"} text={"Git-এর কোনো কিছুই ভয় নয় — কিন্তু ইতিহাস rewrite মানে সাবধান। আর **সবচেয়ে important**: push-এর পূর্বে `git status` ও `git diff` একবার চোখে নিন।"} />

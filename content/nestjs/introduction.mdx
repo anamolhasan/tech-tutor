@@ -1,0 +1,43 @@
+---
+title: "NestJS Introduction"
+label: "Introduction"
+order: 1
+level: "Beginner"
+description: "NestJS কী, কেন ব্যবহার হয়, architecture, NestJS বনাম Express — বাংলায় পরিচিতি।"
+---
+
+<InParagraph text={"**NestJS** হলো একটি progressive, enterprise-ready **Node.js framework** যা TypeScript দিয়ে scalable, maintainable backend application তৈরি করতে সাহায্য করে। এটি Angular থেকে অনুপ্রাণিত।"} />
+
+## NestJS কী?
+
+<InParagraph text={"NestJS হলো Node.js backend framework যা **modular architecture**, **dependency injection**, আর **decorators** — এই তিনটি মূল concept-এ ভিত্তি করে গড়ে ওঠে। এর under the hood Express (ডিফল্ট) or Fastify চলে।"} />
+
+## NestJS কেন ব্যবহার করবেন?
+
+- **TypeScript-first** — ধরনের সাথে সম্পূর্ণ type safety
+- **Modular** — আলাদা module-এ কোড ভাগ, maintainable ও scalable
+- **Dependency Injection (DI)** — ক্লাস gdatetime আবার testable
+- **Decorator-based** — জারগন minimal, readable code
+- **Structure** — architecture-এর নির্দিষ্ট guideline, ছোট project-ও পরিষ্কার
+- **Ecosystem** — Mongoose, TypeORM, GraphQL, microservices — সব integrated
+- **Testing** — unit & e2e testing built-in support
+
+## NestJS বনাম Express
+
+| বৈশিষ্ট্য | Express | NestJS |
+| --- | --- | --- |
+| Structure | Unopinionated (আপনার ইচ্ছা) | Opinionated (structure fix) |
+| TypeScript | Optional | First-class |
+| Dependency Injection | নেই | আছে (built-in) |
+| Modularity | ম্যানুয়াল | আছে (module system) |
+| Shining | Simple ও lightweight | Scalable ও enterprise |
+| Learning curve | Easy | মধ্যম |
+| Best for | Small/medium API | Large/complex application |
+
+## NestJS Architecture Overview
+
+<CodeBlock code={"Client (HTTP Request)\n        │\n        ▼\n  ┌─────────────┐\n  │ Controller  │  ← Routes define করে (GET/POST)\n  └──────┬──────┘\n         ▼\n  ┌─────────────┐\n  │  Providers  │  ← Business logic (Service, Repository)\n  │  (Service)  │\n  └──────┬──────┘\n         ▼\n  ┌─────────────┐\n  │ CORS/Guard/ │  ← Interceptors, Pipes, Middleware\n  │ Middleware  │     (request-এর আগে-পরে)\n  └──────┬──────┘\n         ▼\n  ┌─────────────┐\n  │  Module     │  ← সবগুলো organize করে (@Module)\n  └─────────────┘"} lang={"text"} title={"Core Building Blocks"} />
+
+<InParagraph text={"NestJS-এর প্রতিটি request flow: **Controller** → **Guard** → **Interceptor/Pipe** → **Service** → **Repository** → Database, আবার মাধ্যমে response ফেরত।"} />
+
+<Tip tone={"success"} title={"পরবর্তী ধাপ"} text={"পরবর্তী topic-এ NestJS ইনস্টল ও প্রথম project-এর structure বুঝবো।"} />

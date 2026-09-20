@@ -1,0 +1,35 @@
+---
+title: "ইতিহাস ঘাটান: diff, log, blame"
+label: "Diff & Log"
+order: 14
+level: "Intermediate"
+description: "git diff, git log-এর রূপ, git blame দিয়ে কে কী করেছে — বাংলায়।"
+---
+
+## git diff — পরিবর্তন দেখা
+
+<CodeBlock code={"git diff              # unstaged\ngit diff --staged   # staged\ngit diff HEAD       # সব (যা commit হয়নি)\ngit diff main..feature   # দুই branch-এর তুলনা"} lang={"bash"} />
+
+<InParagraph text={"`-` চিহ্নিত লাইন মুছে গেছে, `+` যোগ হয়েছে। `git diff -w` whitespace খেয়াল না করে দেখে।"} />
+
+## git log-এর শক্তিশালী বৈচিত্র
+
+<CodeBlock code={"git log --oneline --graph --all\ngit log --oneline -5\ngit log --oneline --author=\"anamol\"\ngit log --oneline --since=\"2 weeks ago\"\ngit log --oneline -- src/utils.js   # একটি ফাইলের ইতিহাস\ngit log -p                          # প্রতিটি commit-এর diff সহ"} lang={"bash"} />
+
+## একটি commit বিস্তারিত
+
+<CodeBlock code={"git show 8f3a2b1\ngit show HEAD --stat"} lang={"bash"} />
+
+## git blame — কে লিখেছে?
+
+<CodeBlock code={"git blame src/app.js\n# প্রতিটি লাইনের পাশে hash, লেখক, তারিখ দেখায়"} lang={"bash"} />
+
+## একটি commit কী কী পরিবর্তন এসেছে
+
+<CodeBlock code={"git diff a1b2c3d..e4f5g6h --stat\ngit diff a1b2c3d..e4f5g6h -- src/"} lang={"bash"} />
+
+## Search করুন commit message/continue
+
+<CodeBlock code={"git log --grep=\"login\"        # message খোঁজেন\ngit log -S \"fetchUser\"           # কোড স্ট্রিং যোগ/মুছার সময়"} lang={"bash"} />
+
+<Tip tone={"info"} title={"অভ্যাস"} text={"খুব পুরনো commit-এ সমস্যা দেখলে `git bisect`(পরের অধ্যায়) দিয়ে কার্যকরভাবে খুঁজুন।"} />

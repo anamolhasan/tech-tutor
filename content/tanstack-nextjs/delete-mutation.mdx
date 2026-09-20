@@ -1,0 +1,23 @@
+---
+title: "Delete Mutation"
+label: "Delete Mutation"
+order: 16
+level: "Intermediate"
+description: "DELETE request, confirmation dialog ও cache update — বাংলায়।"
+---
+
+<InParagraph text={"Delete-এ প্রধান কথা — **দুর্ঘটনা আটকানো** (confirmation) আর **cache থেকে সরানো**। দেখি সহজ ও দ্ব্যর্থক-মুক্ত delete mutation।"} />
+
+<CodeBlock code={"export function useDeleteProduct() {\n  const queryClient = useQueryClient();\n\n  return useMutation({\n    mutationFn: (id: string) => deleteProduct(id),\n\n    onSuccess: () => {\n      queryClient.invalidateQueries({ queryKey: productKeys.all });\n      toast.success(\"Product মুছে ফেলা হয়েছে\");\n    },\n\n    onError: (error) => toast.error(error.message),\n  });\n}"} lang={"ts"} title={"use-product-mutations.ts (add)"} />
+
+## Confirm dialog-এ delete
+
+<CodeBlock code={"const deleteProduct = useDeleteProduct();\n\nfunction confirmDelete() {\n  deleteProduct.mutate(product.id, {\n    onSuccess: () => {\n      setOpen(false);        // alert dialog বন্ধ\n    },\n  });\n}\n\n// alert-dialog-এর confirm button\n<Button\n  variant=\"destructive\"\n  disabled={deleteProduct.isPending}\n  onClick={confirmDelete}\n>\n  {deleteProduct.isPending ? \"মুছে ফেলা হচ্ছে…\" : \"Delete\"}\n</Button>"} lang={"tsx"} title={"Delete hook ব্যবহার"} />
+
+## নোট: delete-এর পরে
+
+- সব variant invalidate করলে ফিল্টার/পেজ যাই থাকুক cache সঠিক থাকে
+- optimistic delete চাইলে পরের অধ্যায়ে দেখব
+- DELETE-এর response-এ সাধারণত body থাকে না — `deleteProduct` returns void
+
+<Tip tone={"warning"} title={"সবসময় confirm"} text={"Delete-কমন action — confirm dialog ছাড়া কখনো দিরে instant delete button দেবেন না, বিশেষত production dashboard-এ। পরের অধ্যায়ে পুরো delete-confirmation dialog বানাব।"} />

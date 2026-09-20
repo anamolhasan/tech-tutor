@@ -1,0 +1,53 @@
+---
+title: "Git Interview Questions"
+label: "Interview"
+order: 21
+level: "Advanced"
+description: "Git interview-এর গুরুত্বপূর্ণ প্রশ্ন ও উত্তর — বাংলায়।"
+---
+
+## 1. Git ও GitHub-এর পার্থক্য কী?
+
+<InParagraph text={"**Git** — একটি distributed version control tool, লোকালে চলে। **GitHub** — Git-based হোস্টিং প্ল্যাটফর্ম, দূর থেকে repository সংরক্ষণ ও সহযোগিতা।"} />
+
+## 2. Working Directory, Staging, Repository?
+
+<InParagraph text={"Working Directory — ফাইল edit হয়; Staging Area — commit-এর জন্য ফাইল প্রস্তুত হয়; Repository — commit সংরক্ষিত হয়।"} />
+
+## 3. merge ও rebase-এর পার্থক্য?
+
+| Merge | Rebase |
+| --- | --- |
+| commit ইতিহাস থাকে, merge commit যোগ | ইতিহাস linear, rewrite |
+| safe for public branch | public history rewrite — নিষেধ |
+| ধরানে conflict কম | পরিষ্কার ইতিহাস |
+
+## 4. reset, revert, checkout?
+
+<InParagraph text={"`reset` — HEAD সরানো (local); `revert` — উল্টো commit (সেফ, push-এর পর); `checkout` — file/branch ধরে নেওয়া, পুরোনো টুল।"} />
+
+## 5. conflict কৌশল?
+
+<InParagraph text={"`<<<<<<<`, `=======`, `>>>>>>>` মার্কার দেখে manual merge করুন, তারপর `git add` + `commit`। বা `--ours`/`--theirs`, `--abort`।"} />
+
+## 6. HEAD, index, working tree?
+
+<InParagraph text={"`HEAD` — বর্তমান অবস্থা (pointer); `index` — staging area (index file); `working tree` — আপনি যে ফাইলগুলির সাথে কাজ করছেন।"} />
+
+## 7. লুকানো commit কীভাবে ফিরে?
+
+<InParagraph text={"`git reflog` দিয়ে timestamps-সহ commit hash খুঁজুন, তারপর `git reset --hard <hash>` বা নতুন branch বানিয়ে।"} />
+
+## 8. pull ও fetch?
+
+<InParagraph text={"`fetch` — শুধু remote রেফারেন্স আনে; `pull` — fetch + merge (default)। `pull --rebase` korলে merge না করে rebase করে।"} />
+
+## 9. squash merge কী?
+
+<InParagraph text={"এক branch-এর সব commit-কে একটি commit-এ গুড়িয়ে মূল branch-এ যোগ করা (GitHub-এ squash merge button)। ইতিহাস পরিষ্কার রাখে।"} />
+
+## 10. বড় ফাইল ভুলে commit হল?
+
+<InParagraph text={"যদি ইতিহাসে ঢুকেছে — `git filter-branch`/`git filter-repo` দিয়ে মুছে পুনরায় push। ভবিষ্যতে `.gitignore` ও BFG/ filter-repo ব্যবহার করুন।"} />
+
+<Tip tone={"success"} title={"প্রস্তুতি উপায়"} text={"শুধু থিওরি নয় — নিজের প্রজেক্টে branch, conflict, rebase, reflog, SP আমল হাতে-কলমে করুন। Interview-এ তখন নিশ্চিন্তভাবে উদাহরণ দিয়ে উত্তর দিতে পারবেন।"} />

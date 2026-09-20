@@ -1,0 +1,33 @@
+---
+title: "Development ও Production Mode"
+label: "Development ও Production"
+order: 20
+level: "Intermediate"
+description: "next dev, next build, next start — development ও production-এর পার্থক্য ও scripts বাংলায়।"
+---
+
+<InParagraph text={"Next.js-এ দুটি mode — **development** (প্রতিটি সংরক্ষণে instant update) ও **production** (optimized build)।"} />
+
+## Development Mode
+
+<CodeBlock code={"npm run dev"} lang={"bash"} title={"Terminal"} />
+
+- Fast Refresh — edit করলেই instant update
+- Detailed error overlays
+- Turbopack দিয়ে দ্রুত compile
+
+## Production Build
+
+<CodeBlock code={"npm run build\nnpm run start"} lang={"bash"} title={"Terminal"} />
+
+- `next build` — optimized, minified bundle তৈরি
+- Prerendering শুরু এই সময়ে
+- `next start` — production server চালায়
+
+<Tip tone={"info"} title={"Next 16-এ lint"} text={"Next.js 16 থেকে `next build` আর automatic linter run করে না। আলাদা script `npm run lint`/`npm run lint:fix` দিয়ে run করুন।"} />
+
+## Build Output বুঝুন
+
+<CodeBlock code={"Route (app)            Size    First Load JS\n┌ ○ /                  486 B          88 kB\n├ λ /blog              3.7 kB          91 kB\n└ ○ /about             381 B          88 kB\n\n○  (Static)   → prerendered as static content\nλ  (Dynamic)  → server-rendered on demand"} lang={"text"} title={"Terminal (build summary)"} />
+
+<Tip tone={"success"} title={"Static বনাম Dynamic"} text={"○ = static (build-এ prerender, fastest), λ = dynamic (request-এ render)। যতটা সম্ভব static রাখুন, তবে dynamic data লাগলে dynamic সাধারণ।"} />

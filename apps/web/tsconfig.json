@@ -1,0 +1,20 @@
+{
+  "extends": "@tech-tutor/typescript-config/nextjs.json",
+  "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "incremental": true,
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "../../packages/**/*.ts",
+    "../../packages/**/*.tsx",
+    "../../content/**/*.mdx"
+  ],
+  "exclude": ["node_modules"]
+}

@@ -1,0 +1,10 @@
+{
+  "extends": "@tech-tutor/typescript-config/base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "isolatedModules": true,
+    "noEmit": true
+  },
+  "include": ["src"]
+}

@@ -1,0 +1,27 @@
+---
+title: "প্র্যাকটিক্যাল মিনি প্রজেক্ট (Todo CLI)"
+label: "Mini Project"
+order: 28
+level: "Advanced"
+description: "টাইপ-সহ কনসোলভিত্তিক todo app — types, functions, main ও run — Real-world প্রয়োগের পূর্ণ চিত্র।"
+---
+
+<InParagraph text={"এখন পর্যন্ত যা শিখলেন তা এক সুন্দর ছোট প্রজেক্টে জুড়ে দেখুন — একটি টাইপ-সুরক্ষিত **Todo CLI**।"} />
+
+## Step 1: Types
+
+<CodeBlock code={"export type TodoStatus = \"pending\" | \"done\";\n\nexport interface Todo {\n  id: number;\n  title: string;\n  status: TodoStatus;\n  createdAt: Date;\n}\n\nexport type NewTodo = Omit<Todo, \"id\" | \"createdAt\">;"} lang={"typescript"} title={"src/types.ts"} />
+
+## Step 2: Store (State + Logic)
+
+<CodeBlock code={"import type { NewTodo, Todo, TodoStatus } from \"./types\";\n\nexport class TodoStore {\n  private todos: Todo[] = [];\n\n  add(input: NewTodo): Todo {\n    const todo: Todo = {\n      ...input,\n      id: this.nextId(),\n      createdAt: new Date(),\n    };\n    this.todos.push(todo);\n    return todo;\n  }\n\n  toggle(id: number): void {\n    const todo = this.todos.find((item) => item.id === id);\n    if (!todo) throw new Error(\"Todo পাওয়া যায়নি\");\n    todo.status = todo.status === \"pending\" ? \"done\" : \"pending\";\n  }\n\n  byStatus(status: TodoStatus): Todo[] {\n    return this.todos.filter((item) => item.status === status);\n  }\n\n  private nextId(): number {\n    return this.todos.length\n      ? Math.max(...this.todos.map((t) => t.id)) + 1\n      : 1;\n  }\n}"} lang={"typescript"} title={"src/store.ts"} />
+
+## Step 3: Main
+
+<CodeBlock code={"import { TodoStore } from \"./store\";\n\n\nconst store = new TodoStore();\n\nstore.add({ title: \"TypeScript শেখা\", status: \"pending\" });\nstore.add({ title: \"Mini project লেখা\", status: \"pending\" });\n\nstore.toggle(1);\n\nfunction printList(status: TodoStatus): void {\n  const items = store.byStatus(status);\n  console.log(status.toUpperCase() + \":\");\n  items.forEach((todo) => console.log(\"  [\" + todo.id + \"] \" + todo.title));\n}\n\nprintList(\"pending\");\nprintList(\"done\");"} lang={"typescript"} title={"src/index.ts"} />
+
+## Step 4: Run
+
+<CodeBlock code={"# dev (tsx)\nnpx tsx src/index.ts\n\n# production\nnpx tsc\nnode dist/index.js"} lang={"bash"} />
+
+<Tip tone={"success"} title={"কোথা থেকে এগোবেন?"} text={"এখন File system (fs) ও `readline` এ রূপান্তর করুন — storage-এ file, UI-তে ইন-অ্যাকশন। API-দ্বারা cloud storage যোগ করলে intermediate-advanced অনুশীলন পূর্ণ হবে।"} />

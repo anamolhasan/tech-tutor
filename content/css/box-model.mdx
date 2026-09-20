@@ -1,0 +1,26 @@
+---
+title: "CSS Box Model"
+label: "Box Model"
+order: 7
+level: "Beginner"
+description: "Content, padding, border ও margin — CSS box model-এর প্রতিটি স্তর বাংলায় বুঝুন।"
+---
+
+<InParagraph text={"HTML-এর প্রতিটি element একটি **বাক্স (box)**। CSS-এ সেই বাক্সের মাপ-সংক্রান্ত সব নিয়মকে বলা হয় **Box Model**। চারটি অংশ মিলিয়ে গঠিত:"} />
+
+- **Content** — text বা ছবি
+- **Padding** — content ও border-এর মাঝের ফাঁকা জায়গা
+- **Border** — চারপাশের কাঠামো
+- **Margin** — border-এর বাইরের দূরত্ব
+
+## উদাহরণ
+
+<CodeBlock code={".box {\n  width: 300px;\n\n  padding: 20px;      /* content ও border-এর ঘর */\n  border: 2px solid #333;\n  margin: 10px;       /* দুই box-এর মাঝের ঘর */\n}"} lang={"css"} />
+
+## box-sizing
+
+<InParagraph text={"`box-sizing: border-box` দিলে `width`-এর ভেতরেই padding ও border ধরা হয় — মাপ হিসাব করা সহজ হয়। আধুনিক প্রজেক্টে এটি universal ভাবে দেওয়া হয়।"} />
+
+<CodeBlock code={"*,\n*::before,\n*::after {\n  box-sizing: border-box;\n}"} lang={"css"} />
+
+<Tip tone={"success"} title={"মনে রাখার নিয়ম"} text={"`margin` বাইরের, `padding` ভেতরের জায়গা। দুইটি element-এর margin গুলে এক হয়ে যায় (margin collapse), কিন্তু padding কখনও নয়।"} />

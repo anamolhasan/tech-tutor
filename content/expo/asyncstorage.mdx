@@ -1,0 +1,17 @@
+---
+title: "AsyncStorage — অ্যাপ বন্ধ করে data বাঁচানো"
+label: "AsyncStorage"
+order: 16
+level: "Intermediate"
+description: "local persistent key-value storage — install, Read/Write API।"
+---
+
+<InParagraph text={"অ্যাপ বন্ধ হয়ে গেলেও local data বাঁচাতে **`@react-native-async-storage/async-storage`** — key-value, promise-based।"} />
+
+<CodeBlock code={"npx expo install @react-native-async-storage/async-storage"} lang={"bash"} title={"terminal"} />
+
+<CodeBlock code={"import AsyncStorage from \"@react-native-async-storage/async-storage\";\n\nconst KEY = \"tasktrack.tasks\";\n\nexport async function loadTasks() {\n  const raw = await AsyncStorage.getItem(KEY);\n  return raw ? JSON.parse(raw) : [];\n}\n\nexport async function saveTasks(tasks) {\n  await AsyncStorage.setItem(KEY, JSON.stringify(tasks));\n}\n\nexport async function clearTasks() {\n  await AsyncStorage.removeItem(KEY);\n}"} lang={"ts"} title={"lib/storage.ts"} />
+
+<InParagraph text={"সব data **serializable** (JSON) হতে হবে। Date রাখলে ISO string-এ রাখুন।"} />
+
+<Tip tone={"warning"} title={"কী জমা উচিত না"} text={"AsyncStorage-এ data **encrypted নয়** — token/credential-এর জন্য নয়; সেগুলোর জন্য `expo-secure-store` (পরের lesson)।"} />

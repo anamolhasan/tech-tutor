@@ -1,0 +1,25 @@
+---
+title: "NestJS Controllers"
+label: "Controllers"
+order: 4
+level: "Beginner"
+description: "@Controller, HTTP methods, params, query, status codes — Request handling বাংলায়।"
+---
+
+<InParagraph text={"**Controller** হলো request গ্রহণ করে response ফেরত দেওয়ার জায়গা। এটি route ও HTTP method define করে।"} />
+
+## Controller তৈরি
+
+<CodeBlock code={"nest g controller users"} lang={"bash"} />
+
+<CodeBlock code={"import {\n  Controller,\n  Get,\n  Post,\n  Put,\n  Delete,\n  Param,\n  Query,\n  Body,\n} from \"@nestjs/common\";\n\n@Controller(\"users\") // prefix → /users\nexport class UsersController {\n  @Get() // GET /users\n  findAll(@Query(\"page\") page: number) {\n    return { data: [], page };\n  }\n\n  @Get(\":id\") // GET /users/:id\n  findOne(@Param(\"id\") id: string) {\n    return { id };\n  }\n\n  @Post() // POST /users\n  create(@Body() body: any) {\n    return { ...body, id: Date.now() };\n  }\n\n  @Put(\":id\") // PUT /users/:id\n  update(@Param(\"id\") id: string, @Body() body: any) {\n    return { id, ...body };\n  }\n\n  @Delete(\":id\") // DELETE /users/:id\n  remove(@Param(\"id\") id: string) {\n    return { message: \"deleted\", id };\n  }\n}"} lang={"typescript"} title={"src/users/users.controller.ts"} />
+
+## Route Params ও Query
+
+<CodeBlock code={"// URL: /users/5/posts?limit=10&sort=asc\n@Get(\":id/posts\")\ngetUserPosts(\n  @Param(\"id\") userId: string,\n  @Query(\"limit\") limit = \"10\",\n  @Query(\"sort\") sort = \"asc\",\n) {\n  return { userId, limit, sort };\n}"} lang={"typescript"} />
+
+## Status Codes
+
+<CodeBlock code={"import { HttpCode, HttpStatus } from \"@nestjs/common\";\n\n@Post()\n@HttpCode(HttpStatus.CREATED) // 201\ncreate(@Body() data: any) {\n  return data;\n}\n\n// অথবা @Res() দিয়ে manual\n@Get(\":id\")\ncustom(@Res() res: ExpressResponse) {\n  res.status(404).json({ error: \"Not found\" });\n}"} lang={"typescript"} />
+
+<Tip tone={"warning"} title={"@Res() এড়িয়ে চলুন"} text={"@Res() ব্যবহার করলে NestJS-এর interceptor/pipe flow-এ বাধা পড়তে পারে। সাধারণত return value দিয়েই কাজ করা best practice।"} />

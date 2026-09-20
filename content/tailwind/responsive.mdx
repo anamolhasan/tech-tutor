@@ -1,0 +1,32 @@
+---
+title: "Responsive Design"
+label: "Responsive Design"
+order: 21
+level: "Beginner"
+description: "Tailwind-এর breakpoint prefix দিয়ে responsive design — mobile-first approach বাংলায়।"
+---
+
+<InParagraph text={"Tailwind **mobile-first** responsive design ব্যবহার করে। প্রথমে মোবাইলের স্টাইল লিখুন, তারপর breakpoint prefix দিয়ে বড় স্ক্রিনের জন্য ঠিক করুন।"} />
+
+## Breakpoints
+
+| Prefix | মিনিমাম Width | ডিভাইস |
+| --- | --- | --- |
+| (কোনো prefix নেই) | 0px | মোবাইল (default) |
+| sm: | 640px | Small tablet |
+| md: | 768px | Tablet |
+| lg: | 1024px | Desktop |
+| xl: | 1280px | Large desktop |
+| 2xl: | 1536px | Extra large |
+
+## Responsive Classes
+
+<CodeBlock code={"<!-- মোবাইলে: 1 column, md: 2 columns -->\n<div class=\"grid grid-cols-1 md:grid-cols-2 gap-4\">\n  <div>Card 1</div>\n  <div>Card 2</div>\n</div>\n\n<!-- মোবাইলে: hidden, lg: block -->\n<div class=\"hidden lg:block\">Desktop-only content</div>\n\n<!-- মোবাইলে: small text, lg: large text -->\n<h1 class=\"text-2xl lg:text-4xl\">Responsive heading</h1>"} lang={"html"} title={"Mobile-first responsive"} />
+
+## Container Query (Tailwind v4)
+
+<InParagraph text={"Tailwind v4-তে container query support আছে — element-এর প্রস্থের উপর ভিত্তি করে responsive।"} />
+
+<CodeBlock code={"<div class=\"@container\">\n  <div class=\"flex flex-col @md:flex-row\">\n    <div>Sidebar</div>\n    <div>Main content</div>\n  </div>\n</div>"} lang={"html"} />
+
+<Tip tone={"success"} title={"সবসময় mobile-first"} text={"Tailwind-এ prefix ছাড়া লেখা class mobile-এ প্রয়োগ হয়। prefix যোগ করলে সেই breakpoint ও তার উপর প্রয়োগ হয়। তাই সবসময় ছোট স্ক্রিন থেকে শুরু করুন।"} />

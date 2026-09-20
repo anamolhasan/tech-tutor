@@ -1,0 +1,24 @@
+---
+title: "Cart UI — Dispatch ও RTK Query একসাথে"
+label: "Cart UI"
+order: 27
+level: "Intermediate"
+description: "product price-টা query-থেকে cart-এ যোগ করে — cart drawer — বাংলায়।"
+---
+
+<CodeBlock code={"\"use client\";\n\nimport { useAppDispatch } from \"@/hooks/use-app-dispatch\";\nimport { addItem } from \"@/features/cart/cartSlice\";\n\nexport function AddToCartButton({ product }: { product: Product }) {\n  const dispatch = useAppDispatch();\n\n  function handleAdd() {\n    // RTK Query-র data নয় — slice action dispatch\n    dispatch(addItem({ productId: product.id, qty: 1 }));\n  }\n\n  return (\n    <Button\n      onClick={handleAdd}\n      disabled={product.stock === 0}\n    >\n      {product.stock === 0 ? \"স্টক শেষ\" : \"কার্টে যোগ করুন\"}\n    </Button>\n  );\n}"} lang={"tsx"} title={"add-to-cart button"} />
+
+## Cart drawer — price joining
+
+<CodeBlock code={"export function CartDrawer() {\n  const items = useAppSelector(selectCartItems);\n  const { data: products } = useGetProductsQuery();\n\n  const total = items.reduce((sum, item) => {\n    const price = products?.find((p) => p.id === item.productId)?.price ?? 0;\n    return sum + price * item.qty;\n  }, 0);\n\n  return (\n    <Sheet>\n      <SheetContent className=\"w-80\">\n        <SheetHeader>\n          <SheetTitle>উত্পাদিত পণ্যের কার্ট</SheetTitle>\n        </SheetHeader>\n\n        {items.length === 0 ? (\n          <p className=\"py-10 text-center text-muted-foreground\">\n            কার্ট খালি\n          </p>\n        ) : (\n          <>\n            <ul className=\"space-y-3\">\n              {items.map((item) => {\n                const product = products?.find(\n                  (p) => p.id === item.productId,\n                );\n                return (\n                  <li key={item.productId}>\n                    <div className=\"flex items-center justify-between\">\n                      <span>{product?.name ?? \"…\"}</span>\n                      <span>{product?.price ?? 0} ৳</span>\n                    </div>\n                    <div className=\"flex items-center gap-2\">\n                      <Button size=\"sm\" variant=\"ghost\"\n                        onClick={() => dispatch(decrement(item.productId))}>\n                        −\n                      </Button>\n                      <span>{item.qty}</span>\n                      <Button size=\"sm\" variant=\"ghost\"\n                        onClick={() => dispatch(increment(item.productId))}>\n                        +\n                      </Button>\n                    </div>\n                  </li>\n                );\n              })}\n            </ul>\n\n            <Separator />\n            <div className=\"flex justify-between font-semibold\">\n              <span>সর্বমোট</span>\n              <span>{total} ৳</span>\n            </div>\n            <CheckoutButton />\n          </>\n        )}\n      </SheetContent>\n    </Sheet>\n  );\n}"} lang={"tsx"} title={"price products-থেকে মিলিয়ে"} />
+
+## কে কী dispatch
+
+| ইন্টারঅ্যাকশন | RTK Query | slice action |
+| --- | --- | --- |
+| প্রোডাক্ট লিস্ট | `useGetProductsQuery` | — |
+| কার্টে যোগ | — | `dispatch(addItem(...))` |
+| পরিমাণ ± | — | `dispatch(increment/decrement)` |
+| চেকআউট | `useCreateOrderMutation` | তারপর `dispatch(clearCart())` |
+
+<Tip tone={"success"} title={"Data→state-৪০ ছাড়াই"} text={"`products?.find(...)` — query data-র copy করা state ছাড়াই direct derivation। **Redux-এ derived value** সর্বদা selector/loop — stash duplicates করবেন না।"} />

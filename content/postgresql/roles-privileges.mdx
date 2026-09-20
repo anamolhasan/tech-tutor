@@ -1,0 +1,20 @@
+---
+title: "Role, GRANT — access নিয়ন্ত্রণ"
+label: "Roles & Privileges"
+order: 30
+level: "Advanced"
+description: "সব superuser নয় — least privilege হয়ে access ব্যবস্থাপনা।"
+---
+
+<CodeBlock code={"CREATE ROLE app_user LOGIN PASSWORD 'secret';\nGRANT CONNECT ON DATABASE techshop TO app_user;\nGRANT USAGE ON SCHEMA public TO app_user;"} lang={"sql"} />
+
+<CodeBlock code={"GRANT SELECT ON products TO app_user;\nGRANT INSERT, UPDATE ON products TO app_user;\n\n-- সব table-এ, এক লাইনে\nGRANT SELECT ON ALL TABLES IN SCHEMA public TO app_user;\n\n-- sequence (id-র জন্য)\nGRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO app_user;"} lang={"sql"} />
+
+- `postgres` superuser-এ অ্যাপ চালাবেন না
+- জন্য app-এর জন্য **dedicated role** — read-only/reporting আলাদা
+- `REVOKE` — উল্টো দিক
+- schema/host-ভিত্তিক separation — PostgreSQL multi-tenant-এ
+
+<CodeBlock code={"-- view role-গুলো\n\\du"} lang={"sql"} />
+
+<Tip tone={"info"} title={"principle of least privilege"} text={"কম access-ই নিরাপত্তা — app-grade role plausible; DDL (CREATE/DROP) শুধু admin-role। যেকোনো migration superuser/owner-দিয়ে।"} />

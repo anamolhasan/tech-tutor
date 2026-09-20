@@ -1,0 +1,33 @@
+---
+title: "JavaScript Objects (অবজেক্ট)"
+label: "Objects"
+order: 10
+level: "Beginner"
+description: "Object তৈরি, key-value, access, destructuring, array of objects — JavaScript অবজেক্ট বাংলায়।"
+---
+
+<InParagraph text={"**Object** হলো key-value জোড়ার একটি সংগ্রহ — যেমন একটি ব্যক্তির নাম, বয়স, শহর — সব একসাথে।"} />
+
+## অবজেক্ট তৈরি
+
+<CodeBlock code={"const user = {\n  name: \"আনামুল হাসান\",\n  age: 28,\n  city: \"ঢাকা\",\n  skills: [\"HTML\", \"CSS\", \"JavaScript\"],\n};\n\nconsole.log(user.name);     // আনামুল হাসান\nconsole.log(user[\"city\"]);  // ঢাকা"} lang={"javascript"} />
+
+## মান বদলানো
+
+<CodeBlock code={"user.age = 29;\nuser.email = \"hello@example.com\";\n\nconsole.log(user.age);   // 29\nconsole.log(user.email); // hello@example.com"} lang={"javascript"} />
+
+## Destructuring
+
+<CodeBlock code={"const { name, city } = user;\n\nconsole.log(name); // আনামুল হাসান\nconsole.log(city); // ঢাকা"} lang={"javascript"} />
+
+## Objects-এর array
+
+<CodeBlock code={"const products = [\n  { id: 1, name: \"মোবাইল\", price: 15000 },\n  { id: 2, name: \"ল্যাপটপ\", price: 65000 },\n  { id: 3, name: \"হেডফোন\", price: 2000 },\n];\n\nconst cheap = products.filter(p => p.price < 10000);\nconsole.log(cheap.map(p => p.name)); // [\"হেডফোন\"]"} lang={"javascript"} />
+
+## Object-এর মেথড
+
+<CodeBlock code={"const product = {\n  name: \"কীবোর্ড\",\n  price: 1500,\n  discountedPrice() {\n    return this.price * 0.9;\n  },\n};\n\nconsole.log(product.discountedPrice()); // 1350"} lang={"javascript"} />
+
+<InParagraph text={"মেথডের ভেতরে `this` দিয়ে নিজের object-এর property উল্লেখ করা যায়।"} />
+
+<Tip tone={"info"} title={"Object.keys / Object.values"} text={"`Object.keys(user)` সব key-এর array দেয়, `Object.values(user)` দেয় সব values — লুপ ও চেকের কাজে সুবিধা।"} />

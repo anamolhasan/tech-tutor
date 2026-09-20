@@ -1,0 +1,37 @@
+---
+title: "Next.js Install"
+label: "Installation"
+order: 3
+level: "Beginner"
+description: "create-next-app দিয়ে Next.js project তৈরি — TypeScript, ESLint, Tailwind সহ modern setup।"
+---
+
+<InParagraph text={"নতুন Next.js project তৈরির সবচেয়ে সহজ উপায় হলো **`create-next-app`** CLI, যা TypeScript, ESLint, Tailwind CSS — সব ready-made setup করে দেয়।"} />
+
+## Quick Start
+
+<CodeBlock code={"npx create-next-app@latest my-app --yes\ncd my-app\nnpm run dev"} lang={"bash"} title={"Terminal"} />
+
+<InParagraph text={"`--yes` flag দিলে default settings ব্যবহার হয় — TypeScript, ESLint, Tailwind CSS, App Router, import alias `@/*`। URL: `http://localhost:3000`।"} />
+
+## System Requirements
+
+- Node.js **20.9** বা তার বেশি
+- macOS, Windows (WSL সহ), Linux
+- modern browser (Chrome 111+, Firefox 111+, Safari 16.4+)
+
+## Interactive Prompts
+
+<InParagraph text={"`--yes` না দিলে CLI আপনাকে নিচের প্রশ্নগুলো করবে:"} />
+
+<CodeBlock code={"What is your project named? my-app\nWould you like to use the recommended Next.js defaults?\n    Yes, use recommended defaults - TypeScript, ESLint, Tailwind CSS, App Router\n    No, reuse previous settings\n    No, customize settings\n\nউদাহরণ: নিচের প্রশ্নগুলোও আসতে পারে —\nWould you like to use TypeScript? No / Yes\nWhich linter would you like to use? ESLint / Biome / None\nWould you like your code inside a src/ directory? No / Yes\nWould you like to use App Router? (recommended) No / Yes"} lang={"text"} title={"Terminal"} />
+
+## Manual Install
+
+<InParagraph text={"আগে থেকে project থাকলে manual install করতে পারেন:"} />
+
+<CodeBlock code={"npm install next@latest react@latest react-dom@latest"} lang={"bash"} title={"Terminal"} />
+
+<CodeBlock code={"{\n  \"scripts\": {\n    \"dev\": \"next dev\",\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"lint\": \"eslint\"\n  }\n}"} lang={"json"} title={"package.json scripts"} />
+
+<Tip tone={"info"} title={"Turbopack default"} text={"Next.js-এ **Turbopack** default bundler — `next dev` ও `next build` দুটিই Turbopack ব্যবহার করে দ্রুত compile হয়। Webpack চাইলে `next dev --webpack`।"} />

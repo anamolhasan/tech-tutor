@@ -1,0 +1,27 @@
+---
+title: "Server Actions ও Mutations"
+label: "Server Actions"
+order: 14
+level: "Advanced"
+description: "\"use server\" দিয়ে form submission ও data mutation — Server Actions সম্পূর্ণ বাংলায়।"
+---
+
+<InParagraph text={"**Server Actions** হলো server-এ চলা asynchronous functions যাকে Client Component থেকে সরাসরি কল করা যায়। Form submission, data update-এর জন্য সবচেয়ে modern পদ্ধতি।"} />
+
+## Inline Server Action
+
+<CodeBlock code={"export default function Page() {\n  async function createPost(formData: FormData) {\n    \"use server\";\n\n    const title = formData.get(\"title\");\n    await db.post.create({ data: { title } });\n  }\n\n  return (\n    <form action={createPost}>\n      <input name=\"title\" placeholder=\"Post title\" required />\n      <button type=\"submit\">Publish</button>\n    </form>\n  );\n}"} lang={"tsx"} title={"app/posts/page.tsx"} />
+
+## Separate Actions File
+
+<CodeBlock code={"\"use server\";\n\nexport async function createPost(formData: FormData) {\n  const title = formData.get(\"title\");\n  await db.post.create({ data: { title } });\n}"} lang={"ts"} title={"app/actions.ts"} />
+
+## useActionState দিয়ে State Management
+
+<CodeBlock code={"\"use client\";\n\nimport { useActionState } from \"react\";\nimport { createPost } from \"@/app/actions\";\n\nconst initialState = { message: \"\" };\n\nexport function Form() {\n  const [state, formAction, pending] = useActionState(\n    createPost,\n    initialState\n  );\n\n  return (\n    <form action={formAction}>\n      <input type=\"text\" name=\"title\" required />\n      {state?.message && <p aria-live=\"polite\">{state.message}</p>}\n      <button disabled={pending}>\n        {pending ? \"Creating...\" : \"Create Post\"}\n      </button>\n    </form>\n  );\n}"} lang={"tsx"} title={"app/ui/form.tsx"} />
+
+## Revalidate After Mutation
+
+<CodeBlock code={"\"use server\";\n\nimport { revalidatePath } from \"next/cache\";\nimport { redirect } from \"next/navigation\";\n\nexport async function createPost(formData: FormData) {\n  const post = await db.post.create({\n    data: { title: formData.get(\"title\") },\n  });\n\n  revalidatePath(\"/posts\"); // cache refresh\n  redirect(`/posts/${post.id}`);\n}"} lang={"ts"} title={"app/actions.ts"} />
+
+<Tip tone={"info"} title={"directive সতর্কতা"} text={"`\"use server\"` directive ফাইলের শুরুতে বা function-এর ভেতরে দেওয়া যায়। ফাইলে দিলে সব export Server Action হয়। Client Component থেকে import করা যায় এবং সবসময় async function হতে হয়।"} />

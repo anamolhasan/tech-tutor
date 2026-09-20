@@ -1,0 +1,23 @@
+---
+title: "Error Handling — RTK Query ভুল"
+label: "Error Handling"
+order: 30
+level: "Intermediate"
+description: "Serialized error shape, matcher, retry, user-friendly message — বাংলায়।"
+---
+
+<InParagraph text={"RTK Query-র `error` হলো **serializable** object — `{ status, data }` shape. Middleware-এ global error handler-এ সেটা থেকে user-friendly Bangla message বানাই।"} />
+
+## Error shape
+
+<CodeBlock code={"// HTTP error\n{\n  status: 404,\n  data: { message: \"Not found\" },\n}\n\n// network error\n{\n  status: \"FETCH_ERROR\",\n  error: \"TypeError: Failed to fetch\",\n}\n\n// timeout / parse error\n{ status: \"TIMEOUT_ERROR\" }"} lang={"ts"} title={"fetchBaseQuery error"} />
+
+## Global handler
+
+<CodeBlock code={"startAppListening({\n  matcher: isAnyOf(\n    ordersApi.endpoints.createOrder.matchRejected,\n    ordersApi.endpoints.getOrders.matchRejected,\n  ),\n  effect: async (action) => {\n    const error = action.payload;\n    const message =\n      typeof error?.data?.message === \"string\"\n        ? error.data.message\n        : \"কিছু ভুল হয়েছে, আবার চেষ্টা করুন\";\n    toast.error(message);\n  },\n});"} lang={"tsx"} title={"listener দিয়ে toast"} />
+
+## fetchBaseQuery-এ transform
+
+<CodeBlock code={"baseQuery: fetchBaseQuery({\n  baseUrl: \"https://api.example.com/\",\n  // 401 হলে logout ইত্যাদি\n  prepareHeaders: (headers, { getState }) => {\n    const token = (getState() as RootState).auth.token;\n    if (token) headers.set(\"Authorization\", \"Bearer \" + token);\n    return headers;\n  },\n}),"} lang={"ts"} title={"Global refetch retry"} />
+
+<Tip tone={"warning"} title={"Error কখনো raw দেখান"} text={"`error.status` + raw data user-কে দেখবেন না — সুস্পষ্ট message + recovery (retry/back) দরকার। dev-এ DevTools-এ full inspect।"} />

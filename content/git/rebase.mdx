@@ -1,0 +1,52 @@
+---
+title: "Rebase ও Interactive Rebase"
+label: "Rebase"
+order: 10
+level: "Advanced"
+description: "git rebase কী, কেন ব্যবহার হয়, interactive squash — বাংলায়।"
+---
+
+## Rebase কী?
+
+<InParagraph text={"Rebase হলো আপনার branch-এর commit গুলো অন্য একটি বেস-এর উপরে **সরিয়ে নেওয়া**। এটি ইতিহাসকে linear (সরলরেখার মতো) রাখে।"} />
+
+<CodeBlock code={"আগে:  main ●──●──A\nfeature └──●──●\nপরে:  main ●──●──A\n      feature        └──●──●   (A-এর উপরে বসে গেছে)"} lang={"bash"} title={"Before / After"} />
+
+## রিবেস করা
+
+<CodeBlock code={"git switch feature/x\ngit rebase main"} lang={"bash"} />
+
+## Rebase vs Merge
+
+| বিষয় | Merge | Rebase |
+| --- | --- | --- |
+| ইতিহাস | branches + merge commit | যদিও linear |
+| ইতিহাস নিরাপত্তা | আসল থাক | rewrite করে |
+| public branch | নিরাপদ | বিপজ্জনক |
+| যখন ব্যবহার | দলগত, main merge | আলাদা feature সাফ করার আগে |
+
+## Interactive Rebase (সবচেয়ে দরকারি)
+
+<CodeBlock code={"git rebase -i HEAD~3\n# একটি editor খুলবে — তিনটি commit তালিকাভুক্ত\npick 1a2b3c feat: add login\npick 4d5e6f feat: tweak login\npick 7g8h9i fix: typo"} lang={"bash"} />
+
+## প্রধান অপশন
+
+- `pick` — commit রাখুন যেমন আছে
+- `reword` — message পরিবর্তন করুন
+- `edit` — commit content পরিবর্তন করুন
+- `squash` — আগের commit-এ মিলিয়ে নিন
+- `fixup` — squash কিন্তু message না রেখে
+- `drop` — commit বাদ দিন
+
+## Squash উদাহরণ
+
+<CodeBlock code={"# ইতিহাস\npick 1a2b3c feat: add login\nsquash 4d5e6f tweak: fix style\nsquash 7g8h9i fix: typo\n\n# Result — একটি clean commit:\n# 9x8y7z feat: add login"} lang={"bash"} />
+
+## যেসব ক্ষেত্রে rebase ব্যবহার করা হয়
+
+- main-এর নতুন commit ডেকে নেওয়া (ফিচার সতেজ রাখা)
+- একাধিক messy commit clean করা (squash)
+- PR merge-এর আগে প্রধান ইতিহাস ক্রমে রাখা
+- font রূপে staged snapshot
+
+<Tip tone={"warning"} title={"Golden Rule"} text={"**আরও কিছু public branch-এ কখনো rebase নয়।** একবার commit push হয়ে গেলে সেটি অন্যের বেস হয়ে গেছে; সেখানে rewrite মানে সবার গণ্ডগোল।"} />

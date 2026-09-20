@@ -1,0 +1,19 @@
+---
+title: "Typed Hooks — useAppDispatch / useAppSelector"
+label: "Typed Hooks"
+order: 10
+level: "Intermediate"
+description: "Pre-typed hooks বানিয়ে dispatch/selector-এ type safety — বাংলায়।"
+---
+
+<CodeBlock code={"\"use client\";\n\nimport { useDispatch, useSelector } from \"react-redux\";\n\n\n// সর্বত্র এই hooks ব্যবহার করুন —\n// টাইপড, তাই ভুল হলে compile-time-ই জামাল\nexport const useAppDispatch = useDispatch.withTypes<AppDispatch>();\nexport const useAppSelector = useSelector.withTypes<RootState>();"} lang={"ts"} title={"src/hooks/use-app-dispatch.ts"} />
+
+## কেন typed hooks
+
+- `useDispatch()`-এ টাইপ না দিলে error silent হয়
+- `useSelector((state) => state.cart.items)` — RootState টাইপ অনুযায়ী autocomplete
+- App বড় হলে `RootState` প্রতিটি file-এ import না করে hooks-থেকে আসে
+
+<CodeBlock code={"const dispatch = useAppDispatch();\nconst items = useAppSelector((state) => state.cart.items);\n\n<button onClick={() => dispatch(increment(product.id))}>\n  +\n</button>"} lang={"tsx"} title={"Component-এ use"} />
+
+<Tip tone={"success"} title={"React Redux v9"} text={"`useDispatch.withTypes<T>()` / `useSelector.withTypes<T>()` হলো official typed-hook pattern (React-Redux v9 client)। বা `useDispatch<AppDispatch>()`-ও পুরনো method-ভালো — কোনোটিই ঠিক।"} />

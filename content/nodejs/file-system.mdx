@@ -1,0 +1,46 @@
+---
+title: "Node.js File System (fs Module)"
+label: "File System"
+order: 5
+level: "Beginner"
+description: "fs.readFile, writeFile, mkdir, unlink — Node.js দিয়ে ফাইল ও ফোল্ডার ম্যানেজমেন্ট বাংলায়।"
+---
+
+<InParagraph text={"**fs (File System)** module দিয়ে Node.js থেকে ফাইল ও ডিরেক্টরি পড়া, লেখা, মুছে ফেলা, rename করা — সব সম্ভব। এটি `require('node:fs')` দিয়ে ব্যবহার করা হয়।"} />
+
+## Synchronous বনাম Asynchronous
+
+| Type | Function | বৈশিষ্ট্য |
+| --- | --- | --- |
+| Sync | readFileSync | কোড block হয়, পরের line আগে execute হয় না |
+| Async | readFile | Non-blocking, callback বা promise দিয়ে result |
+
+<Tip tone={"info"} title={"সুপারিশ"} text={"Production-এ সবসময় asynchronous version ব্যবহার করুন। Sync version single-threaded Node.js-কে block করে।"} />
+
+## ফাইল পড়া (Read)
+
+<CodeBlock code={"const fs = require(\"node:fs\");\n\n// Callback style\nfs.readFile(\"data.txt\", \"utf8\", (err, data) => {\n  if (err) {\n    console.error(\"ফাইল পড়তে সমস্যা:\", err);\n    return;\n  }\n  console.log(\"ফাইলের content:\", data);\n});"} lang={"javascript"} title={"Async — readFile"} />
+
+<CodeBlock code={"const fs = require(\"node:fs\").promises;\n\nasync function readFile() {\n  try {\n    const data = await fs.readFile(\"data.txt\", \"utf8\");\n    console.log(data);\n  } catch (error) {\n    console.error(\"ত্রুটি:\", error.message);\n  }\n}\n\nreadFile();"} lang={"javascript"} title={"Promise style (promises API)"} />
+
+## ফাইল লেখা (Write)
+
+<CodeBlock code={"const fs = require(\"node:fs\").promises;\n\nasync function writeFile() {\n  // নতুন ফাইল তৈরি / পুরোনো overwrite\n  await fs.writeFile(\"output.txt\", \"Hello Node.js!\", \"utf8\");\n  console.log(\"ফাইল লেখা হয়েছে!\");\n\n  // append — শুধু যোগ করা\n  await fs.appendFile(\"output.txt\", \"\\nনতুন লাইন\", \"utf8\");\n}\n\nwriteFile();"} lang={"javascript"} />
+
+## ফোল্ডার তৈরি (mkdir)
+
+<CodeBlock code={"const fs = require(\"node:fs\").promises;\n\nasync function createFolders() {\n  // single folder\n  await fs.mkdir(\"uploads\");\n\n  // nested folders (recursive)\n  await fs.mkdir(\"uploads/images/2024\", { recursive: true });\n}\n\ncreateFolders();"} lang={"javascript"} />
+
+## ফাইল/ফোল্ডার Delete (unlink, rm)
+
+<CodeBlock code={"const fs = require(\"node:fs\").promises;\n\nasync function deleteFiles() {\n  // ফাইল মুছে ফেলা\n  await fs.unlink(\"output.txt\");\n  console.log(\"ফাইল মুছে ফেলা হয়েছে\");\n\n  // ফোল্ডার মুছে ফেলা (recursive)\n  await fs.rm(\"uploads\", { recursive: true, force: true });\n  console.log(\"ফোল্ডার মুছে ফেলা হয়েছে\");\n}\n\ndeleteFiles();"} lang={"javascript"} />
+
+## ফাইল/ফোল্ডার Check ও Rename
+
+<CodeBlock code={"const fs = require(\"node:fs\").promises;\n\nasync function fileOperations() {\n  // ফাইল আছে কিনা দেখুন\n  try {\n    await fs.access(\"data.txt\");\n    console.log(\"ফাইল আছে!\");\n  } catch {\n    console.log(\"ফাইল নেই!\");\n  }\n\n  // rename\n  await fs.rename(\"old.txt\", \"new.txt\");\n\n  // stat — ফাইলের info\n  const stats = await fs.stat(\"package.json\");\n  console.log(\"সাইজ:\", stats.size, \"bytes\");\n  console.log(\"ধরন:\", stats.isFile() ? \"ফাইল\" : \"ফোল্ডার\");\n}\n\nfileOperations();"} lang={"javascript"} />
+
+## ডিরেক্টরি পড়া (readdir)
+
+<CodeBlock code={"const fs = require(\"node:fs\").promises;\n\nasync function listFiles() {\n  const files = await fs.readdir(\".\");\n  console.log(\"সব ফাইল:\", files);\n\n  // nested files\n  const allFiles = await fs.readdir(\".\", {\n    recursive: true,\n    withFileTypes: true,\n  });\n  allFiles.forEach((item) => {\n    console.log(item.name, item.isDirectory() ? \"📁\" : \"📄\");\n  });\n}\n\nlistFiles();"} lang={"javascript"} />
+
+<Tip tone={"warning"} title={"সতর্কতা"} text={"বড় ফাইল (GB-এর পরিমাণ) `readFile` দিয়ে পড়বেন না — Streams ব্যবহার করুন। এতে memory leak হতে পারে।"} />

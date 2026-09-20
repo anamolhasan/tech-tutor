@@ -1,0 +1,21 @@
+---
+title: "Relationships — one-to-many, many-to-many"
+label: "Relationships"
+order: 12
+level: "Intermediate"
+description: "foreign key দিয়ে relation — ১:N এবং N:M-এর সঠিক pattern।"
+---
+
+| Relation | কীভাবে |
+| --- | --- |
+| 1 : N (user → orders) | N টেবিলে FK |
+| N : M (product ↔ tag) | bridge table |
+| 1 : 1 (user → profile) | বিরল; FK+UNIQUE |
+
+<CodeBlock code={"CREATE TABLE orders (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    bigint NOT NULL REFERENCES users(id),\n  total      numeric(10,2) NOT NULL,\n  status     text NOT NULL DEFAULT 'pending',\n  created_at timestamptz DEFAULT now()\n);"} lang={"sql"} title={"one-to-many: orders → users"} />
+
+<CodeBlock code={"CREATE TABLE order_items (\n  order_id   bigint NOT NULL REFERENCES orders(id),\n  product_id bigint NOT NULL REFERENCES products(id),\n  qty        integer NOT NULL,\n  price      numeric(10,2) NOT NULL,\n  PRIMARY KEY (order_id, product_id)\n);"} lang={"sql"} title={"many-to-many: order × product (bridge)"} />
+
+<InParagraph text={"**bridge table**-ই N:M-এর সমাধান — দুইটি FK, আর জোড়ার নিজস্ব attribute (qty, price) ওই table-এ।"} />
+
+<Tip tone={"info"} title={"ON DELETE-এর কথা"} text={"`REFERENCES users(id) ON DELETE CASCADE` — child-ও মুছে যায়; `RESTRICT`/`SET NULL` বিকল্প। ডিফল্ট behavior নিয়ে পরে (টপিক ২৪)।"} />

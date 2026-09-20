@@ -1,0 +1,34 @@
+---
+title: "HTML Attributes (অ্যাট্রিবিউট)"
+label: "HTML Attributes"
+order: 5
+level: "Beginner"
+description: "HTML attribute কী, কীভাবে ব্যবহার হয় — href, src, alt, class, id সহ প্রয়োজনীয় অ্যাট্রিবিউট নিয়ে বাংলা টিউটোরিয়াল।"
+---
+
+<InParagraph text={"**Attributes** হলো এলিমেন্ট সম্পর্কে অতিরিক্ত তথ্য। এগুলো start tag-এর ভেতরে লেখা হয় এবং সাধারণত `name=\"value\"` ফরম্যাটে হয়।"} />
+
+## Syntax
+
+<CodeBlock code={"<a href=\"https://example.com\">ভিজিট করুন</a>\n   │     │                │\n   │     └─ attribute name └── attribute value"} lang={"html"} />
+
+## প্রয়োজনীয় অ্যাট্রিবিউট
+
+- `href` — `<a>` লিংকের গন্তব্য URL
+- `src` — `<img>`-এর ছবির অবস্থান
+- `alt` — `<img>`-এর বিকল্প টেক্সট
+- `class` — CSS স্টাইল করার জন্য
+- `id` — পেজের মধ্যে একটি এলিমেন্টকে অনন্য নাম দেওয়ার জন্য
+- `width` / `height` — ছবির মাপ
+
+### class বনাম id
+
+| class | id |
+| --- | --- |
+| একাধিক এলিমেন্টে ব্যবহার করা যায় | একটি পেজে প্রতিটি id হয় অনন্য |
+| CSS ও JavaScript উভয়েই ব্যবহৃত | লিংক ও JavaScript-এর জন্য ব্যবহৃত |
+| `.` দিয়ে বোঝানো হয় | `#` দিয়ে বোঝানো হয় |
+
+<CodeBlock code={"<img src=\"profile.jpg\" alt=\"আমার প্রোফাইল ছবি\" width=\"200\" />\n<a href=\"mailto:info@example.com\" class=\"btn\">ইমেইল করুন</a>\n<div id=\"about-section\">...</div>"} lang={"html"} title={"অ্যাট্রিবিউট সহ উদাহরণ"} />
+
+<Tip tone={"warning"} title={"alt অ্যাট্রিবিউট ভুলবেন না"} text={"`alt` টেক্সট শুধু ছবি না দেখালে দেখায় না — screen reader ব্যবহারকারী ও আগের জন্য গুরুত্বপূর্ণ। এটি accessibility এবং SEO-তেও সাহায্য করে।"} />

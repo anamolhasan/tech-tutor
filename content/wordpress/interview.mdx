@@ -1,0 +1,61 @@
+---
+title: "WordPress Interview Questions"
+label: "Interview Questions"
+order: 24
+level: "Intermediate"
+description: "WordPress job interview-এ আসা সবচেয়ে সাধারণ প্রশ্নগুলো এবং তাদের সহজ-সঠিক উত্তর।"
+---
+
+## Common Questions
+
+<InParagraph text={"নিচে WordPress interview-এ প্রায়ই আসা প্রশ্ন-উত্তরগুলো দেয়া হলো:"} />
+
+### WordPress কী? এটি কীভাবে কাজ করে?
+
+<InParagraph text={"WordPress হলো PHP লিখিত একটি **open-source CMS** যা MySQL database ব্যবহার করে। এটি content-কে database-এ রাখে এবং theme/plugin-এর মাধ্যমে প্রেজেন্ট করে।"} />
+
+### WordPress.com ও WordPress.org-এর পার্থক্য কী?
+
+<InParagraph text={"WordPress.com hosted service (limited control), WordPress.org হলো self-hosted software যেখানে full code control, সকল theme/plugin ব্যবহার যায়।"} />
+
+### Post ও Page-এর মধ্যে পার্থক্য?
+
+<InParagraph text={"Post dynamic, date-based, blog content; page static, date নেই, permanent content (About/Contact)।"} />
+
+### Category ও Tag-এর পার্থক্য কী?
+
+<InParagraph text={"Category হলো broad grouping (hierarchical possible), tag হলো specific keyword label (flat)।"} />
+
+### Theme কীভাবে কাজ করে?
+
+<InParagraph text={"Theme-এর template files গুলো template hierarchy অনুযায়ী সিলেক্ট হয় — structural ও visual look নিয়ন্ত্রণ করে।"} />
+
+### Plugin কীভাবে কাজ করে?
+
+<InParagraph text={"Plugin core-এর **hooks (action/filter)**-এ নিজের code attach করে। Core code বদলায় না, তাই update নিরাপদ।"} />
+
+### WordPress database-এ প্রধান table-গুলো কী কী?
+
+<InParagraph text={"`wp_posts`, `wp_postmeta`, `wp_comments`, `wp_options`, `wp_users`, `wp_term_taxonomy` ইত্যাদি।"} />
+
+### wp-config.php কী?
+
+<InParagraph text={"WordPress-এর **config file** — database credentials, table prefix এবং অন্যান্য বিশেষ settings-defined। root folder-এ থাকে।"} />
+
+### Hook কী? Action ও Filter-এর পার্থক্য?
+
+<InParagraph text={"Action হলো কিছু চালানোর event; filter হলো data পরিবর্তন করার function। `do_action` ও `apply_filters` দিয়ে trigger হয়।"} />
+
+### Admin, Editor, Author-এর রোল পার্থক্য?
+
+<InParagraph text={"Admin সর্বোচ্চ ক্ষমতা, editor সব content manage করে, author শুধু নিজের post publish করতে পারে।"} />
+
+### Site-এর safety keep-সেবা কোরবেন কীভাবে?
+
+<InParagraph text={"Regular update, strong login, minimal plugin, backup, SSL, security plugin — এইগুলঅই main।"} />
+
+### স্লগ (slug) কী?
+
+<InParagraph text={"URL-এর readable অংশ — যেমন `https://mysite.com/**best-wordpress-themes**/`। Permalink setting থেকে control করা যায়।"} />
+
+<Tip tone={"info"} title={"পরবর্তী ধাপ"} text={"উত্তরগুলো হাতে-কলমে **practice** করুন — নিজেই একটি test site বানিয়ে বিভিন্ন feature ব্যবহার করে দেখুন। তবেই interview-এ আত্মবিশ্বাস আসবে।"} />

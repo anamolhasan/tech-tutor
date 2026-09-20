@@ -1,0 +1,29 @@
+---
+title: "JavaScript Conditionals (শর্ত)"
+label: "Conditions"
+order: 6
+level: "Beginner"
+description: "if, else if, else, switch — JavaScript-এ শর্ত অনুযায়ী সিদ্ধান্ত নেওয়ার সব উপায় বাংলায়।"
+---
+
+<InParagraph text={"কোনো শর্ত সত্য হলে কী হবে, মিথ্যা হলে কী হবে — নিয়ন্ত্রণ করতে শর্ত (condition) ব্যবহৃত হয়।"} />
+
+## if / else
+
+<CodeBlock code={"const age = 20;\n\nif (age >= 18) {\n  console.log(\"প্রাপ্তবয়স্ক\");\n} else {\n  console.log(\"নাবালক\");\n}"} lang={"javascript"} />
+
+## else if
+
+<CodeBlock code={"const marks = 78;\n\nif (marks >= 80) {\n  console.log(\"A+\");\n} else if (marks >= 70) {\n  console.log(\"A\");\n} else if (marks >= 60) {\n  console.log(\"B\");\n} else {\n  console.log(\"Improve\");\n}"} lang={"javascript"} />
+
+## Truthy ও Falsy
+
+<InParagraph text={"শর্তে মান অবশ্যই boolean হতে হয় না — JavaScript কিছু মানকে *falsy* ধরে: `0`, `\"\"`, `null`, `undefined`, `NaN`, `false`। বাকি সব *truthy*।"} />
+
+<CodeBlock code={"const name = \"\";\n\nif (name) {\n  console.log(\"নাম আছে: \" + name);\n} else {\n  console.log(\"নাম দেওয়া হয়নি\");\n}"} lang={"javascript"} />
+
+## switch
+
+<CodeBlock code={"const day = 3;\n\nswitch (day) {\n  case 1:\n    console.log(\"রবিবার\");\n    break;\n  case 2:\n    console.log(\"সোমবার\");\n    break;\n  case 3:\n    console.log(\"মঙ্গলবার\");\n    break;\n  default:\n    console.log(\"অজানা দিন\");\n}"} lang={"javascript"} />
+
+<Tip tone={"success"} title={"সহজ তুলনায় ternary"} text={"যখন শুধু দুইটি ফলাফল, তখন ছোট্ট ternary দিয়ে লাইন কমাতে পারেন — কিন্তু জটিল লজিকে if/else-ই পড়তে সুবিধা।"} />

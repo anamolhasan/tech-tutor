@@ -1,0 +1,54 @@
+---
+title: "TypeScript Introduction"
+label: "Introduction"
+order: 1
+level: "Beginner"
+description: "TypeScript কী, কেন ব্যবহার করবেন, JavaScript-এর সাথে পার্থক্য, সুবিধা ও সীমাবদ্ধতা — বাংলায় সম্পূর্ণ পরিচিতি।"
+---
+
+<InParagraph text={"**TypeScript** হলো JavaScript-এর একটি **superset** — অর্থাৎ JavaScript-এর সবকিছুই TypeScript, তবে তার সাথে যোগ হয় **static type checking**। আপনি টাইপ লিখেন, আর TypeScript সেই টাইপ মিলে গেছে কিনা অ্যাপ রান করার *আগেই* যাচাই করে দেয়।"} />
+
+## TypeScript কী?
+
+<InParagraph text={"TypeScript একটি open-source ভাষা যা Microsoft তৈরি করেছে। `.ts` ফাইলে লেখা কোড টাইপ-চেক হয়ে **plain JavaScript**-এ রূপান্তরিত হয় — তাই যেকোনো জায়গায় যেখানে JavaScript চলে (ব্রাউজার, Node.js, Deno), সেখানে TypeScript-ও চলে।"} />
+
+## কেন TypeScript ব্যবহার করব?
+
+- **রান করার আগেই** ভুল ধরা পড়ে — টাইপ মিল না হলেই compiler লাল দাগ দেয়
+- **Editor autocomplete** — টাইপ থাকার কারণে IDE ঠিক মতো suggestion দেয়
+- **কোড পঠনযোগ্য** — অন্য developers টাইপ দেখেই বুঝে যায় কী কী মান প্রত্যাশিত
+- **বড় প্রজেক্টে নিরাপদ** — হাজারো ফাইলের মধ্যেও টাইপের ভুল দ্রুত ধরা পড়ে
+- **রিফ্যাক্টর নিরাপদ** — নাম বদলালে TypeScript সব জায়গা খুঁজে বের করে
+
+## JavaScript বনাম TypeScript
+
+| বিষয় | JavaScript | TypeScript |
+| --- | --- | --- |
+| টাইপ | Dynamic (runtime-এ ঠিক হয়) | Static (লেখার সময় ঠিক হয়) |
+| ত্রুটি ধরা পড়ে | রান করার সময় | কম্পাইল/এডিটের সময় |
+| কম্পাইল ধাপ | নেই | tsc দিয়ে ধাপ থাকে |
+| কোড ফাইল | .js | .ts |
+| টাইপ annotation | নেই | আছে |
+| ব্রাউজারে চলে | সরাসরি | কম্পাইল করার পরে |
+
+## TypeScript-এর সুবিধা
+
+- অ্যাপ রান না করেই টাইপ ভুল ধরা পড়ে
+- self-documenting কোড — টাইপই ডকুমেন্টেশন
+- বড় টিম ও বড় কোডবেসে মেন্টেইনযোগ্য
+- আধুনিক JavaScript features (যেমন enums, decorators) আগে পৌঁছে দেয়
+
+## TypeScript-এর সীমাবদ্ধতা
+
+- শেখার বাড়তি খরচ — টাইপ, generics, config শিখতে হয়
+- বাড়তি build step — কোড চালাতে আগে compile করতে হয়
+- কখনো কখনো টাইপ লিখতে বেশি সময় লাগে
+- `any` ব্যবহার করলে সব সুরক্ষা হারিয়ে যায়
+
+## TypeScript কীভাবে কাজ করে?
+
+<InParagraph text={"`tsc` (TypeScript compiler) দুই কাজ করে: প্রথমে **type check** (টাইপ মিলবে?), তারপর **transpile** (`.ts` থেকে `.js`-এ রূপান্তর)। ব্রাউজার বা Node.js শুধু সেই `.js` ফাইলই দেখে।"} />
+
+<CodeBlock code={"# TypeScript ফাইল\nindex.ts\n   │\n   ▼  (tsc: type check + transpile)\nindex.js\n   │\n   ▼  (node / browser চালায়)\nচূড়ান্ত আউটপুট"} lang={"bash"} />
+
+<Tip tone={"info"} title={"মুখস্থ নিয়ম"} text={"TypeScript ফাইল `.ts`, আউটপুট `.js`, আর প্রতিটি ভুল এডিটরের ভেতরেই লাল আন্ডারলাইন দিয়ে দেখা যায় — এটাই সবচেয়ে বড় সুবিধা।"} />

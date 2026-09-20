@@ -1,0 +1,27 @@
+---
+title: "Performance Optimization"
+label: "Performance"
+order: 21
+level: "Advanced"
+description: "React Compiler, Suspense, lazy loading, code splitting ও stale closure — বাংলায়।"
+---
+
+## React Compiler
+
+<InParagraph text={"React 19-এর **React Compiler** automatic memo-জাতীয় optimization প্রয়োগ করে — যাতে এড়িয়ে চলা যায় অপ্রয়োজনীয় re-render। বড় প্রজেক্টে migration-এর আগে ধাপে ধাপে validate করুন।"} />
+
+## lazy + Suspense
+
+<CodeBlock code={"import { lazy, Suspense } from \"react\";\n\n// শুধু প্রয়োজন হলে এই component-টি load হবে\nconst AdminPanel = lazy(() => import(\"./AdminPanel\"));\n\nfunction App() {\n  return (\n    <Suspense fallback={<Spinner />}>\n      <AdminPanel />\n    </Suspense>\n  );\n}"} lang={"jsx"} title={"Code splitting"} />
+
+## মনে রাখা টিপস
+
+- list-এ stable unique key দিন — index নয়
+- গভীর ও ব্যয়বহুল re-render → React.memo/Compiler
+- useEffect-এ ভুল dependency → infinite loop, সাবধান
+- বড় bundle ও part lazy-load করুন — dynamic import
+- DevTools Profiler দিয়ে আসল সমস্যা খুঁজে নিন
+
+## Stale closure
+
+<CodeBlock code={"// ভুল — পুরনো count ধরে রাখতে পারে\nuseEffect(() => {\n  const timer = setInterval(() => {\n    setCount(count + 1); // প্রতিবার পুরনো count\n  }, 1000);\n}, []);\n\n// ঠিক — functional update\nuseEffect(() => {\n  const timer = setInterval(() => {\n    setCount((prev) => prev + 1);\n  }, 1000);\n}, []);"} lang={"jsx"} title={"পুরনো value আটকে যাওয়া"} />

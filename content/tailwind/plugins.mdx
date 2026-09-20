@@ -1,0 +1,37 @@
+---
+title: "Tailwind Plugins"
+label: "Plugins"
+order: 29
+level: "Intermediate"
+description: "Tailwind-এ plugins, official plugins এবং third-party plugins — কীভাবে extend করবেন।"
+---
+
+<InParagraph text={"Tailwind plugins দিয়ে framework-কে আরও powerful করা যায়। Plugins নতুন utilities, components এবং base styles যোগ করে।"} />
+
+## Official Plugins
+
+| Plugin | কাজ |
+| --- | --- |
+| @tailwindcss/typography | Prose content styling |
+| @tailwindcss/forms | Form element styling |
+| @tailwindcss/container-queries | Container queries |
+| @tailwindcss/line-clamp | Text truncation |
+
+## Plugin Install
+
+<CodeBlock code={"# v4: CSS-এ import\nnpm install @tailwindcss/typography\n\n# Terminal"} lang={"bash"} title={"Terminal"} />
+
+<CodeBlock code={"@import \"tailwindcss\";\n@plugin \"@tailwindcss/typography\";"} lang={"css"} title={"src/index.css (v4)"} />
+
+## Typography Plugin
+
+<CodeBlock code={"<!-- prose class দিয়ে rich content styling -->\n<article class=\"prose prose-lg dark:prose-invert max-w-none\">\n  <h1>Article Title</h1>\n  <p>This is a paragraph with <strong>bold</strong> and <em>italic</em>.</p>\n  <ul>\n    <li>List item 1</li>\n    <li>List item 2</li>\n  </ul>\n</article>"} lang={"html"} />
+
+## Third-party Plugins
+
+- **DaisyUI** — 50+ pre-built components
+- **Headless UI** — unstyled, accessible components
+- **tailwindcss-animate** — animation utilities
+- **tailwind-merge** — merge Tailwind classes programmatically
+
+<Tip tone={"info"} title={"Plugin বাছাই"} text={"প্রয়োজন অনুযায়ী plugin বাছাই করুন। সব plugin একসাথে ব্যবহার করলে CSS bundle size বাড়তে পারে।"} />

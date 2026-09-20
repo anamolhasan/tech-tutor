@@ -1,0 +1,41 @@
+---
+title: "Project Architecture — Data Flow"
+label: "Architecture"
+order: 2
+level: "Intermediate"
+description: "Browser থেকে REST API পর্যন্ত সম্পূর্ণ ডেটা ফ্লো — Query ও Mutation দৃষ্টিকোণ থেকে — বাংলায়।"
+---
+
+<InParagraph text={"শুরু থেকেই ঠিকঠাক architecture বোঝা গুরুত্বপূর্ণ। আমাদের project তিনটি বড় স্তরে ভাগ: **UI Layer** (React client components), **API Layer** (Axios) এবং **Server Layer** (Next.js route handlers / backend REST)।"} />
+
+<CodeBlock code={"Browser (React client component)\n    │  TanStack Query (useQuery/useMutation)\n    ▼\nAxios client  (lib/axios.ts)\n    │  GET / POST / PUT / DELETE\n    ▼\nNext.js Route Handlers  (app/api/**)\n    │  (proxy / BFF)\n    ▼\nBackend REST API + Database"} lang={"text"} title={"সম্পূর্ণ Data Flow"} />
+
+## Query (Read) ফ্লো
+
+1. Dashboard page-এ `useProducts()` hook চলে
+1. TanStack Query-র **queryKey** দেখে cache-এ আছে কিনা সিদ্ধান্ত নেয়
+1. Cache-এ না থাকলে **queryFn** চালায় — যা Axios দিয়ে GET request করে
+1. Axios যায় `/api/products` route handler-এ
+1. Route handler backend REST API থেকে ডেটা আনে ও JSON return করে
+1. TanStack Query ডেটা cache করে ও component-এ `data` হিসেবে দেয়
+
+## Mutation (Write) ফ্লো
+
+1. User form submit করে → React Hook Form validation (Zod)
+1. Validation পাস হলে **mutation**-এর `mutationFn` চালায়
+1. Axios POST/PUT/DELETE করে `/api/products`
+1. Route handler কাজ শেষে response দেয়
+1. mutation-এর `onSuccess`-এ list query **invalidate** হয়
+1. TanStack Query আবার fetch করে — UI instant refresh
+
+## স্তরগুলোর দায়িত্ব
+
+| স্তর | কী করে | কার উদাহরণ |
+| --- | --- | --- |
+| Client components | UI render, state, হুক ব্যবহার | `product-table.tsx` |
+| TanStack Query | Server state, cache, refetch | `use-products.ts` |
+| React Hook Form | Form state ও submit | `product-form.tsx` |
+| Axios layer | HTTP request-এর একমাত্র জায়গা | `products-api.ts` |
+| Route Handlers | API gateway, validation server-side | `app/api/products/route.ts` |
+
+<Tip tone={"info"} title={"কেন এত স্তর?"} text={"স্তর আলাদা রাখলে প্রতিটি অংশ **পরীক্ষাযোগ্য** ও **পুনঃব্যবহারযোগ্য** হয়। TanStack Query-র নামে সরাসরি `fetch` লেখা ট্র্যাশ নয় — কিন্তু Axios layer আলাদা করলে baseURL, headers, error handling এক জায়গায় থাকে, পরিবর্তন সহজ হয়।"} />

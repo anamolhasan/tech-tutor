@@ -1,0 +1,21 @@
+---
+title: "EAS Update — OTA release ও rollback"
+label: "EAS Update"
+order: 36
+level: "Advanced"
+description: "store-এ যাওয়া ছাড়াই update publish — channel, rollout।"
+---
+
+<InParagraph text={"JS-level পরিবর্তন OTA-তে পাঠাতে **EAS Update**:"} />
+
+<CodeBlock code={"npx eas update --channel production --message \"dashboard fix\""} lang={"bash"} title={"terminal"} />
+
+<InParagraph text={"project config-এ Updates URL ও runtimeVersion:"} />
+
+<CodeBlock code={"{\n  \"expo\": {\n    \"updates\": { \"url\": \"https://u.expo.dev/your-project\" },\n    \"ios\": { \"runtimeVersion\": { \"policy\": \"appVersion\" } },\n    \"android\": { \"runtimeVersion\": { \"policy\": \"appVersion\" } }\n  }\n}"} lang={"json"} title={"app.json"} />
+
+- `runtimeVersion` — binary-র সাথে match; mismatch হলে update skip
+- rollback — EAS dashboard থেকে আগের update restore
+- rollout — % ভিত্তিতে ধীরে ধীরে release
+
+<Tip tone={"warning"} title={"কী OTA-তে যায় না"} text={"Native code (package, gradle/xcode ফাইল, config plugin) OTA-তে যায় না — binary আপডেট ছাড়া সেসব effect হবে না।"} />

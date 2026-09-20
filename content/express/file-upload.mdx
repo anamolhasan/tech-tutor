@@ -1,0 +1,29 @@
+---
+title: "Express File Upload (Multer)"
+label: "File Upload"
+order: 11
+level: "Intermediate"
+description: "Multer install, single/multiple upload, validation, static serve — বাংলায়।"
+---
+
+<InParagraph text={"**Multer** হলো Node.js-এ file upload-এর সবচেয়ে জনপ্রিয় library। এটি `multipart/form-data` handle করে।"} />
+
+## Multer Setup
+
+<CodeBlock code={"npm install multer"} lang={"bash"} />
+
+<CodeBlock code={"const multer = require(\"multer\");\nconst path = require(\"node:path\");\n\n// Storage configuration\nconst storage = multer.diskStorage({\n  destination: (req, file, cb) => {\n    cb(null, \"uploads/\");\n  },\n  filename: (req, file, cb) => {\n    const ext = path.extname(file.originalname);\n    const unique = Date.now() + \"-\" + Math.round(Math.random() * 1e9);\n    cb(null, file.fieldname + \"-\" + unique + ext);\n  },\n});\n\n// File filter — types\nconst fileFilter = (req, file, cb) => {\n  const allowed = /jpeg|jpg|png|gif|webp/;\n  const ok = allowed.test(path.extname(file.originalname).toLowerCase());\n  cb(null, ok);\n};\n\n// Multer instance\nconst upload = multer({\n  storage,\n  fileFilter,\n  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB\n});\n\nmodule.exports = upload;"} lang={"javascript"} title={"config/upload.js"} />
+
+## Single File Upload
+
+<CodeBlock code={"const upload = require(\"./config/upload\");\n\n// avatar field-এ one file\napp.post(\"/api/avatar\", upload.single(\"avatar\"), (req, res) => {\n  if (!req.file) {\n    return res.status(400).json({ error: \"ফাইল লাগবে\" });\n  }\n  res.status(201).json({\n    message: \"Upload সফল\",\n    file: {\n      name: req.file.filename,\n      size: req.file.size,\n      url: \"/uploads/\" + req.file.filename,\n    },\n  });\n});"} lang={"javascript"} />
+
+## Multiple Files
+
+<CodeBlock code={"// একই field-এ একাধিক\napp.post(\"/api/gallery\", upload.array(\"photos\", 10), (req, res) => {\n  res.json({ count: req.files.length });\n});\n\n// একাধিক field — avatar + cover\napp.post(\"/api/profile\", upload.fields([\n  { name: \"avatar\", maxCount: 1 },\n  { name: \"cover\", maxCount: 1 },\n]), (req, res) => {\n  res.json({\n    avatar: req.files[\"avatar\"][0],\n    cover: req.files[\"cover\"][0],\n  });\n});"} lang={"javascript"} />
+
+## Uploaded Files Serve করা
+
+<CodeBlock code={"const app = express();\nconst path = require(\"node:path\");\n\n// uploads/ folder থেকে files serve\napp.use(\"/uploads\", express.static(path.join(__dirname, \"uploads\")));"} lang={"javascript"} />
+
+<Tip tone={"warning"} title={"Security"} text={"Uploaded ফাইলের extension ও size সবসময় validate করুন। আসল সিস্টেমে Cloudinary বা S3 bucket-এ ফাইল store করা best practice।"} />

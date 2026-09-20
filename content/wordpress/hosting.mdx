@@ -1,0 +1,38 @@
+---
+title: "Hosting কী?"
+label: "Hosting"
+order: 17
+level: "Beginner"
+description: "Web Hosting-এর ধারণা, hosting-এর প্রকারভেদ ও WordPress-এর জন্য কোন hosting উপযুক্ত — বাংলায়।"
+---
+
+## Hosting কী?
+
+<InParagraph text={"**Hosting** হলো এমন একটি **server** (বড় কম্পিউটার, ২৪ ঘণ্টা ও সারা বছর চালু থাকে) যেখানে আপনার website-এর files ও database থাকে। যেকোনো visitor URL লিখে আপনার সাইটে এলে এই server-ই তা দেখায়।"} />
+
+## WordPress-এর জন্য hosting-এ কী থাকা দরকার
+
+- **PHP** (7.4 অথবা 8.x)
+- **MySQL** / MariaDB
+- **Web server** (Apache / Nginx)
+- **Domain** সংযোগ করার system
+
+<CodeBlock code={"একটি WordPress-এর minimum requirement:\n- PHP 7.4+\n- MySQL 5.7+  বা  MariaDB 10.3+\n- HTTPS (শুরুই থেকে SSL)"} lang={"text"} title={"Hosting-এ WordPress-এর জন্য যা প্রয়োজন"} />
+
+## Hosting-এর প্রকারভেদ
+
+| Hosting টাইপ | ব্যবহার | উদাহরণ |
+| --- | --- | --- |
+| Shared Hosting | শুরুর site, একই server-এ অনেক site | বাজেট-friendly, কম technical |
+| VPS Hosting | আলাদা virtual server, বেশি control | Growing site, developers |
+| Dedicated Hosting | পুরো server নিজের, maximum performance | Large e-commerce |
+| Cloud Hosting | একাধিক server থেকে site চলে, scalable | ভালো uptime, scalability |
+| Managed WordPress | Optimized theme/plugin/backup service | Big-name provider (Kinsta, WP Engine) |
+
+## কোন্টি বাছবেন?
+
+- **শৌখিন blog** → budget managed/shared
+- **Business site** → cloud ভিত্তিক managed
+- **Store / বড় traffic** → VPS বা dedicated
+
+<Tip tone={"info"} title={"Local Development"} text={"আগে আপনার কম্পিউটারে **Local** (Local by Flywheel) বা **XAMPP** দিয়ে WordPress install করে শিখুন — কোন cost নেই, আর পরে line-এ publish করবেন।"} />

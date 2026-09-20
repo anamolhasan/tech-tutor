@@ -1,0 +1,19 @@
+---
+title: "Client-optimization — দ্রুত query"
+label: "Performance"
+order: 28
+level: "Advanced"
+description: "select-নিয়ন্ত্রণ, filter index, raw-থেকে escape।"
+---
+
+- `select` ঠিক ঠিক — সব row/column নয়
+- `take`/`cursor` — বড় list-এ পেজ
+- needed filter-এ index — `prisma validate`-এর feedback
+- `include` depth সীমিত — নিজে চেন
+- `$queryRaw` — specialists
+
+<CodeBlock code={"const prisma = new PrismaClient({\n  log: [\"query\", \"warn\", \"error\"],\n});\n\n// query log-এ gen SQL — n+1/অপ্রয়োজনীয় দেখুন"} lang={"ts"} title={"checked query-log"} />
+
+<InParagraph text={"Prisma 5-এর output-এ query event-এ `duration` — long-query খুঁজুন।"} />
+
+<Tip tone={"warning"} title={"index-চেয়ে"} text={"সাধারণত index-যথেষ্ট — কিন্তু Prisma Client index generate করে না; migration SQL-এ `CREATE INDEX` manually দিন।"} />

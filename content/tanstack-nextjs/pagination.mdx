@@ -1,0 +1,21 @@
+---
+title: "Pagination — Server-side"
+label: "Pagination"
+order: 19
+level: "Intermediate"
+description: "page/pageSize state, queryKey-তে page ও pagination UI — বাংলায়।"
+---
+
+<InParagraph text={"ডেটা বড় হলে পুরো list fetch করা উচিত নয় — **server-side pagination**। আমরা page ও pageSize-কে state-এ রাখব; বদলালে queryKey বদলে নতুন page আসে।"} />
+
+<CodeBlock code={"\"use client\";\n\nimport { useState } from \"react\";\nimport { ProductList } from \"@/components/products/product-list\";\nimport { ProductPagination } from \"@/components/products/product-pagination\";\n\nexport default function ProductsPage() {\n  const [page, setPage] = useState(1);\n  const [pageSize, setPageSize] = useState(10);\n\n  return (\n    <main>\n      <ProductList params={{ page, pageSize }} />\n      <ProductPagination\n        page={page}\n        pageSize={pageSize}\n        onPageChange={setPage}\n        onPageSizeChange={(size) => {\n          setPageSize(size);\n          setPage(1);   // size বদলালে ১ম পেজে\n        }}\n      />\n    </main>\n  );\n}"} lang={"tsx"} title={"Dashboard page-এ state"} />
+
+## Pagination component
+
+<CodeBlock code={"\"use client\";\n\nimport { Button } from \"@/components/ui/button\";\nimport { useProducts } from \"@/lib/hooks/use-products\";\n\nexport function ProductPagination({ page, pageSize, onPageChange }) {\n  // totalPages জানতে একই query-র total-needed\n  const { data } = useProducts({ page, pageSize });\n\n  const totalPages = data?.totalPages ?? 1;\n\n  return (\n    <div className=\"flex items-center justify-between\">\n      <span className=\"text-sm text-muted-foreground\">\n        {data ? `মোট ${data.total}টি product` : \"...\"}\n      </span>\n      <div className=\"flex gap-2\">\n        <Button\n          variant=\"outline\"\n          disabled={page <= 1}\n          onClick={() => onPageChange(page - 1)}\n        >\n          আগের\n        </Button>\n        <span className=\"px-2 text-sm\">\n          {page} / {totalPages}\n        </span>\n        <Button\n          variant=\"outline\"\n          disabled={page >= totalPages}\n          onClick={() => onPageChange(page + 1)}\n        >\n          পরের\n        </Button>\n      </div>\n    </div>\n  );\n}"} lang={"tsx"} title={"product-pagination.tsx"} />
+
+## কেন queryKey-তে page
+
+<InParagraph text={"প্রতিটি page-র নিজস্ব cache — user page ৩-তে গিয়ে page ১-এ ফিরে আসলে **fetch ছাড়াই** instant। `keepPreviousData`-য় পেজ-বদলের মুহূর্তেও পুরনো টেবিল blush করে না।"} />
+
+<Tip tone={"info"} title={"সাইজ-বদল বা rowCount"} text={"`pageSize` (row per page) পরিবর্তনে page-কে ১-এ reset করা best practice — নাহলে বড় pageSize-তে page ৫-এ কোনো ডেটাই না-ও থাকতে পারে।"} />

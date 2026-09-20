@@ -1,0 +1,33 @@
+---
+title: "Data Fetching"
+label: "Data Fetching"
+order: 10
+level: "Intermediate"
+description: "Server ও Client Component-এ data fetch, caching এবং streaming — Next.js-এ ডেটা-ফেচিংয়ের সম্পূর্ণ বাংলা গাইড।"
+---
+
+<InParagraph text={"App Router-এ data fetch-এর জন্য দেখানো পদ্ধতি **Server Components**-এ `async`/`await`। এতে API key client-এ যায় না এবং code simple থাকে।"} />
+
+## Server Component-এ fetch
+
+<CodeBlock code={"export default async function Page() {\n  const data = await fetch(\"https://api.vercel.app/blog\");\n  const posts = await data.json();\n\n  return (\n    <ul>\n      {posts.map((post) => (\n        <li key={post.id}>{post.title}</li>\n      ))}\n    </ul>\n  );\n}"} lang={"tsx"} title={"app/blog/page.tsx"} />
+
+<InParagraph text={"এখানে component-টি `async function`, আর `fetch`-কেই `await` করা হয়েছে।"} />
+
+## Database/ORM দিয়ে
+
+<CodeBlock code={"import { db, posts } from \"@/lib/db\";\n\nexport default async function Page() {\n  const allPosts = await db.select().from(posts);\n\n  return (\n    <ul>\n      {allPosts.map((post) => (\n        <li key={post.id}>{post.title}</li>\n      ))}\n    </ul>\n  );\n}"} lang={"tsx"} title={"app/blog/page.tsx"} />
+
+<InParagraph text={"Server Component-এ database query করলেও credential/client bundle-এ যায় না — সম্পূর্ণ server-এ থাকে।"} />
+
+## Parallel Data Fetching
+
+<CodeBlock code={"export default async function Page({\n  params,\n}: {\n  params: Promise<{ username: string }>;\n}) {\n  const { username } = await params;\n\n  // একসাথে শুরু হয়\n  const artistData = fetch(`https://api.example.com/artist/${username}`);\n  const albumsData = fetch(`https://api.example.com/artist/${username}/albums`);\n\n  const [artist, albums] = await Promise.all([artistData, albumsData]);\n\n  return (\n    <>\n      <h1>{artist.name}</h1>\n      {/* ... */}\n    </>\n  );\n}"} lang={"tsx"} title={"app/artist/[username]/page.tsx"} />
+
+## Client Component-এ fetch
+
+<InParagraph text={"Client-এ data fetch-এর জন্য React-এর `use` API অথবা SWR / TanStack Query (community library) ব্যবহার হয়।"} />
+
+<CodeBlock code={"\"use client\";\n\nimport { use } from \"react\";\n\nexport default function Posts({\n  posts,\n}: {\n  posts: Promise<{ id: string; title: string }[]>;\n}) {\n  const allPosts = use(posts);\n\n  return (\n    <ul>\n      {allPosts.map((post) => (\n        <li key={post.id}>{post.title}</li>\n      ))}\n    </ul>\n  );\n}"} lang={"tsx"} title={"app/ui/posts.tsx"} />
+
+<Tip tone={"success"} title={"Memoization"} text={"একই `fetch` request (same URL & options) একই render pass-এ **memoized** হয় — একাধিক component-এ একই data ডুপ্লিকেট fetch হয় না।"} />

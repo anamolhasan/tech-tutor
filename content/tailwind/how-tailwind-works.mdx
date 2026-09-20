@@ -1,0 +1,28 @@
+---
+title: "Tailwind CSS কীভাবে কাজ করে?"
+label: "Tailwind কীভাবে কাজ করে?"
+order: 4
+level: "Beginner"
+description: "Tailwind CSS-এর অন্তর্গত JIT engine, CSS generation এবং build process — বাংলায় বিস্তারিত।"
+---
+
+<InParagraph text={"Tailwind CSS কীভাবে কাজ করে তা বোঝা গুরুত্বপূর্ণ। এটি **JIT (Just-In-Time)** engine ব্যবহার করে যা আপনার HTML/JSX ফাইলগুলো scan করে এবং শুধুমাত্র ব্যবহৃত utility classes-এর CSS generate করে।"} />
+
+## Build Process
+
+1. Tailwind আপনার ফাইলগুলো (HTML, JSX, TSX ইত্যাদি) scan করে
+1. কোন utility class ব্যবহার করা হয়েছে তা শনাক্ত করে
+1. শুধু সেই classes-এর CSS generate করে
+1. Output CSS ফাইলে শুধু প্রয়োজনীয় CSS থাকে
+
+## JIT Engine (Just-In-Time)
+
+<InParagraph text={"Tailwind v3 থেকে **JIT engine** default। এটি real-time সময়ে CSS generate করে, ফলে development faster এবং CSS file ছোট থাকে। Tailwind v4-এও JIT mode default, তবে এটি আরও optimized।"} />
+
+<CodeBlock code={"/* Tailwind v4-এ CSS-first approach */\n@import \"tailwindcss\";\n\n/* Custom theme */\n@theme {\n  --color-brand: #3b82f6;\n  --font-heading: \"Inter\", sans-serif;\n}"} lang={"css"} title={"Tailwind v4 কনফিগ"} />
+
+## Output CSS
+
+<InParagraph text={"Tailwind-এর output CSS file-এ থাকে শুধু আপনার ব্যবহৃত utility classes। যদি আপনি `bg-blue-500` ব্যবহার করেন, তাহলে output CSS-এ `bg-blue-500` class থাকবে — `bg-red-500` থাকবে না।"} />
+
+<Tip tone={"success"} title={"Tailwind v4-এর উন্নতি"} text={"Tailwind v4 **Oxide engine** ব্যবহার করে যা Rust-based — এটি v3 থেকে ১০x পর্যন্ত দ্রুত। CSS generation, rebuild time সব অনেক দ্রুত হয়েছে।"} />

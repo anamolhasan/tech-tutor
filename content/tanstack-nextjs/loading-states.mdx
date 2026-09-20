@@ -1,0 +1,21 @@
+---
+title: "Loading States — Skeleton ও spinner"
+label: "Loading States"
+order: 35
+level: "Intermediate"
+description: "Table/Form skeleton, button pending ও suspense boundary — বাংলায়।"
+---
+
+<CodeBlock code={"export function ProductTableSkeleton() {\n  return (\n    <div className=\"space-y-3\">\n      {Array.from({ length: 5 }).map((_, i) => (\n        <div key={i} className=\"flex items-center gap-4 rounded-lg border p-3\">\n          <Skeleton className=\"h-4 w-40\" />\n          <Skeleton className=\"h-4 w-20\" />\n          <Skeleton className=\"h-4 w-16\" />\n          <Skeleton className=\"ml-auto h-8 w-24\" />\n        </div>\n      ))}\n    </div>\n  );\n}"} lang={"tsx"} title={"Table skeleton"} />
+
+## button loading
+
+<CodeBlock code={"<Button disabled={createProduct.isPending}>\n  {createProduct.isPending ? (\n    <Loader2 className=\"size-4 animate-spin\" />\n  ) : (\n    <Plus className=\"size-4\" />\n  )}\n  {createProduct.isPending ? \"সেভ হচ্ছে…\" : \"নতুন Product\"}\n</Button>"} lang={"tsx"} title={"mutations পেন্ডিং-এ"} />
+
+## Suspense-এ query (optional)
+
+<CodeBlock code={"import { useSuspenseQuery } from \"@tanstack/react-query\";\n\nexport function CurrentOrders() {\n  const { data } = useSuspenseQuery({\n    queryKey: productKeys.lists(),\n    queryFn: () => listProducts({ page: 1, pageSize: 5 }),\n  });\n\n  return <OrderPreview orders={data.items} />;\n}"} lang={"tsx"} title={"useSuspenseQuery"} />
+
+<CodeBlock code={"<Suspense fallback={<ProductTableSkeleton />}>\n  <CurrentOrders />\n</Suspense>"} lang={"tsx"} title={"Suspense wrap"} />
+
+<Tip tone={"info"} title={"গোটা পেজ loading দেবেন না"} text={"চোখ-ধাঁধানো skeleton-এ `isPending` দেখালেও বাকি UI-র popup এলোমেলো হয়। সেরা প্রতি-অঞ্চল loading — table-এর skeleton, button-এর spinner, form-এর disabled — যাতে অন্য অঞ্চল স্পর্শ না করে।"} />

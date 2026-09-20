@@ -1,0 +1,51 @@
+---
+title: "WordPress Best Practices"
+label: "Best Practices"
+order: 23
+level: "Intermediate"
+description: "Security, performance, updates, backup ও SEO — WordPress site-কে professional রাখার সেরা অভ্যাস।"
+---
+
+## Security Best Practices
+
+- **Strong admin password** ও two-factor authentication
+- Default username `admin`-এর ব্যবহার বন্ধ
+- সর্বশেষ WordPress, theme, plugin version-এ রাখুন
+- সংখ্যাবদ্ধ login limit plugin
+- XML-RPC নিষ্ক্রিয় করুন (hack vector হয়)
+- Security plugin (Wordfence) সুপারভাইজড
+
+## Backup Strategy
+
+| কী | কতবার |
+| --- | --- |
+| File (theme/plugin/uploads) | weekly |
+| Database | daily (ব্যস্ত site) |
+| Offsite storage | Google Drive / S3 |
+| Restore test | মাসে অন্তত একবার |
+
+## Performance Boosting
+
+- **Caching** — page cache plugin
+- **Image optimization** — compress + WebP
+- **CDN** — Cloudflare-style delivery
+- **DB cleanup** — reams, unused data
+- সস্তা না বুঝে **quality hosting** বাছা
+
+## SEO Fundamentals
+
+- SEO plugin দিয়ে meta title/description set
+- **Permalink** structure `postname`
+- Image-তে alt text
+- Internal linking ও XML sitemap
+- **Core Web Vitals** — গতিবিধি ঠিক রাখা
+
+## Good Development Habits
+
+- Production-এ **Child Theme** দিয়ে customize
+- অপ্রয়োজনীয় plugin অবিলম্বে delete
+- Staging environment-এ প্রথমে test
+- Site health check tools ব্যবহার
+- Changes-র আগে **backup**
+
+<Tip tone={"info"} title={"কথা"} text={"Best practices আসলে **consistency** — update, backup, monitor নিয়মিত করলে site দীর্ঘ দিন নিরাপদ ও দ্রুত থাকে।"} />

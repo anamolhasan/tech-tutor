@@ -1,0 +1,26 @@
+---
+title: "Best practices — পরিপাটি Expo app"
+label: "Best Practices"
+order: 39
+level: "Advanced"
+description: "Readable, maintainable, accessible mobile code-এর নিয়ম।"
+---
+
+- TypeScript strict — types ছাড়া mobile code বড় হলে কষ্ট
+- component ছোট — এক screen এক ফাইল
+- state minimal — local → context → store (যা দরকার)
+- accessibility — `accessibilityLabel`, `testID`
+- list + memo — FlatList performance
+- theme কেন্দ্রীয় — screen-এ hardcode নয়
+
+<CodeBlock code={"<Pressable\n  accessibilityRole=\"button\"\n  accessibilityLabel=\"টাস্ক সম্পন্ন করুন\"\n  onPress={onToggle}\n>\n  <Text>Complete</Text>\n</Pressable>"} lang={"tsx"} />
+
+<InParagraph text={"Release-এর আগে checklist:"} />
+
+- version bump + changelog
+- icon/splash resolution ঠিক আছে
+- crash-free test — TestFlight / internal track
+- error logging (Sentry) active
+- credentials back-up
+
+<Tip tone={"success"} title={"মাপকাঠি"} text={"চেহারা নয়, আসল কথা **maintainable** code — সহকর্মী/ভবিষ্যৎ-নিজেরাও পড়ে বোঝে।"} />

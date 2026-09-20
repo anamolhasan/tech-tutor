@@ -1,0 +1,36 @@
+---
+title: "JavaScript Functions (ফাংশন)"
+label: "Functions"
+order: 8
+level: "Beginner"
+description: "Function declaration, expression, arrow function, parameter, return — JavaScript ফাংশনের বাংলা গাইড।"
+---
+
+<InParagraph text={"**ফাংশন** হলো পুনরায় ব্যবহারযোগ্য কোডের ব্লক — ইনপুট নেয়, কাজ করে, ফলাফল দেয়। বড় প্রোগ্রাম ফাংশনে ভাগ করলে সহজ হয়।"} />
+
+## Function declaration
+
+<CodeBlock code={"function add(a, b) {\n  return a + b;\n}\n\nconsole.log(add(3, 5)); // 8"} lang={"javascript"} />
+
+## Function expression
+
+<CodeBlock code={"const subtract = function (a, b) {\n  return a - b;\n};\n\nconsole.log(subtract(10, 4)); // 6"} lang={"javascript"} />
+
+## Arrow function
+
+<CodeBlock code={"const multiply = (a, b) => a * b;\nconst square = x => x * x;\n\nconsole.log(multiply(6, 7)); // 42\nconsole.log(square(9));      // 81"} lang={"javascript"} />
+
+<InParagraph text={"Arrow function আধুনিক প্রথা — সংক্ষিপ্ত এবং `this`-এর আচরণ আলাদা।"} />
+
+## Default parameter
+
+<CodeBlock code={"function greet(name = \"প্রিয় পাঠক\") {\n  return \"নমস্কার \" + name + \"!\";\n}\n\nconsole.log(greet());        // নমস্কার প্রিয় পাঠক!\nconsole.log(greet(\"রহিম\"));  // নমস্কার রহিম!"} lang={"javascript"} />
+
+## কেন ফাংশন ব্যবহার করবেন
+
+- কোড পুনরায় ব্যবহার করা যায় (DRY)
+- এক-পরিবর্তনে সব জায়গায় প্রভাব
+- কোড পড়া ও debug করা সহজ
+- জটিল কাজ ছোট ছোট ভাগ হয়
+
+<Tip tone={"success"} title={"একটি কাজ, একটি ফাংশন"} text={"প্রতিটি ফাংশন একটি মাত্র কাজ করুক — নামও তাই বলবে (যেমন `calculateTotal`, `validateEmail`)।"} />

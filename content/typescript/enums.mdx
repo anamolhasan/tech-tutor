@@ -1,0 +1,29 @@
+---
+title: "Enums (এনাম)"
+label: "Enums"
+order: 12
+level: "Intermediate"
+description: "Numeric ও string enum, enum ব্যবহার, const enum এবং কখন enum অপেক্ষা অন্য পদ্ধতি ভালো — বাংলায়।"
+---
+
+<InParagraph text={"**Enum** দিয়ে নামকৃত ধ্রুবকের (named constants) একটি গ্রুপ বানানো যায় — যেমন status, direction, role। এতে কোড পঠনযোগ্য ও ভুলের সম্ভাবনা কমে।"} />
+
+## Numeric Enum
+
+<CodeBlock code={"enum Direction {\n  Up,       // 0\n  Down,     // 1\n  Left,     // 2\n  Right,    // 3\n}\n\n// নিজে start দিলে বাকিগুলো ক্রমে বাড়ে\nenum Status {\n  Pending = 1,\n  Active = 5,\n  Blocked,     // 6\n}\n\nconsole.log(Direction.Up);      // 0\nconsole.log(Status.Blocked);    // 6"} lang={"typescript"} />
+
+## String Enum
+
+<CodeBlock code={"enum Color {\n  Primary = \"primary\",\n  Secondary = \"secondary\",\n  Danger = \"danger\",\n}\n\nconst badge: Color = Color.Primary;\nconsole.log(badge);    // \"primary\""} lang={"typescript"} />
+
+## Enum ব্যবহার
+
+<CodeBlock code={"enum Role {\n  Admin = \"admin\",\n  Editor = \"editor\",\n  Viewer = \"viewer\",\n}\n\nfunction canEdit(role: Role): boolean {\n  return role === Role.Admin || role === Role.Editor;\n}\n\nconsole.log(canEdit(Role.Admin));    // true\nconsole.log(canEdit(Role.Viewer));   // false"} lang={"typescript"} />
+
+## const enum
+
+<InParagraph text={"`const enum` compile-এর সময় সরাসরি মান বসিয়ে দেয় — runtime-এ object রেখে যায় না। ফলে পারফরম্যান্স ভালো, তবে `isolatedModules`-এর মতো কিছু সেটিং-এ সীমাবদ্ধতা আছে।"} />
+
+<CodeBlock code={"const enum Size {\n  Small = 10,\n  Medium = 20,\n  Large = 30,\n}\n\n// output-এ অদৃশ্য — সরাসরি 20 বসে যায়\nconst current = Size.Medium;"} lang={"typescript"} />
+
+<Tip tone={"info"} title={"enum নাকি const object?"} text={"আধুনিক TS-এ প্রায়ই `const obj = {...} as const` + union preferable হয় — enum-এর বিশ্বস্ত behavior (reverse mapping) সব সেটিংয়ে কাজ নাও করতে পারে। ছোট-মাঝারি ক্ষেত্রে উভয়ই গ্রহণযোগ্য।"} />

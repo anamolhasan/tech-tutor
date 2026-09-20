@@ -1,0 +1,24 @@
+---
+title: "React Hook Form — Setup"
+label: "React Hook Form"
+order: 26
+level: "Intermediate"
+description: "react-hook-form install, useForm-এর core API — register, handleSubmit, errors — বাংলায়।"
+---
+
+<InParagraph text={"**React Hook Form (RHF)** React-এ form-এর সবচেয়ে জনপ্রিয় library — re-render কম, ভলিডেশন সহজ, আর uncontrolled components-বেষ্টিত। প্রথমে এটি project-এ যোগ করতে হবে:"} />
+
+<CodeBlock code={"npm i react-hook-form @hookform/resolvers zod"} lang={"bash"} title={"তিনটি package"} />
+
+## useForm basics
+
+<CodeBlock code={"\"use client\";\n\nimport { useForm } from \"react-hook-form\";\n\ninterface FormValues {\n  name: string;\n  price: number;\n}\n\nexport function ProductForm() {\n  const {\n    register,\n    handleSubmit,\n    formState: { errors },\n  } = useForm<FormValues>({\n    defaultValues: { name: \"\", price: 0 },\n  });\n\n  function onSubmit(values: FormValues) {\n    console.log(values);\n  }\n\n  return (\n    <form onSubmit={handleSubmit(onSubmit)}>\n      <Input placeholder=\"নাম\" {...register(\"name\")} />\n      <Input placeholder=\"দাম\" type=\"number\" {...register(\"price\")} />\n      <Button type=\"submit\">সাবমিট</Button>\n    </form>\n  );\n}"} lang={"tsx"} title={"সরল form"} />
+
+## কেন register
+
+- **register('name')** → input-কে form-এর state-র সাথে সংযুক্ত করে
+- **handleSubmit(onSubmit)** → validation পাস হলে onSubmit চালায়, errors এলে আটকে দেয়
+- **formState.errors** → প্রতিটি field-এর error message (zod থেকে আসবে)
+- আপনি আর কোনো onChange/useState রাখতে হবে না — এটি **uncontrolled** হতে পারে
+
+<Tip tone={"info"} title={"শুধু ফর্ম focus"} text={"RHF value-কে প্রতি keystroke-এ re-render করে না — কারণ এটি uncontrolled। তাই বড় form-এও পারফরম্যান্স ভয় নেই। ইনপুট-মান দরকার হলে `watch()`, edits-এ `setValue()` ব্যবহার হয়।"} />

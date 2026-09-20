@@ -1,0 +1,51 @@
+---
+title: "TypeScript Functions (ফাংশন)"
+label: "Functions"
+order: 5
+level: "Beginner"
+description: "Parameter ও return type, optional/default/rest parameter, function type, callback, arrow function, overload এবং never — সম্পূর্ণ বাংলা।"
+---
+
+<InParagraph text={"ফাংশনই প্রোগ্রামের মূল একক। TypeScript-এ ফাংশনের **parameter** ও **return type** দুটিই strict করা যায় — ফলে ভুল arguments দিয়ে call করা অসম্ভব হয়ে যায়।"} />
+
+## Parameter ও Return Types
+
+<CodeBlock code={"function add(a: number, b: number): number {\n  return a + b;\n}\n\n// add(\"10\", 5);    // ❌ string দেওয়া যাবে না\n// add(1, 2, 3);    // ❌ অতিরিক্ত argument\nconsole.log(add(2, 3));   // 5\n\nfunction greet(name: string): string {\n  return \"হ্যালো, \" + name;\n}"} lang={"typescript"} />
+
+## Optional ও Default Parameters
+
+<CodeBlock code={"// Optional — '?' থাকলে দেওয়াও যায়, না-দেওয়াও যায়\nfunction introduce(name: string, title?: string): string {\n  return title ? title + \" \" + name : name;\n}\n\n// Default — না দিলে ডিফল্ট মান বসে\nfunction multiply(a: number, b: number = 2): number {\n  return a * b;\n}\n\nconsole.log(multiply(5));    // 10\nconsole.log(multiply(5, 4)); // 20"} lang={"typescript"} />
+
+## Rest Parameters
+
+<CodeBlock code={"function sum(...numbers: number[]): number {\n  return numbers.reduce((total, n) => total + n, 0);\n}\n\nconsole.log(sum(1, 2, 3));         // 6\nconsole.log(sum(1, 2, 3, 4, 5));   // 15"} lang={"typescript"} />
+
+## Function Type
+
+<InParagraph text={"ফাংশনকেই টাইপ হিসেবে ধরা যায় — এতে callback পাস করা এবং reusable function signature বানানো সহজ হয়।"} />
+
+<CodeBlock code={"type Calculator = (a: number, b: number) => number;\n\nconst addFn: Calculator = (a, b) => a + b;\nconst mulFn: Calculator = (a, b) => a * b;\n\nfunction operate(op: Calculator, x: number, y: number) {\n  return op(x, y);\n}\n\nconsole.log(operate(addFn, 2, 3));   // 5"} lang={"typescript"} />
+
+## Callback Function
+
+<CodeBlock code={"function fetchUserName(callback: (name: string) => void) {\n  // সিমুলেশন: পরে ডেটা আসবে\n  const name = \"রহিম\";\n  callback(name);\n}\n\nfetchUserName((name) => {\n  console.log(\"ব্যবহারকারী:\", name);\n});"} lang={"typescript"} />
+
+## Arrow Function ও Inline Type
+
+<CodeBlock code={"// Inline type\nconst double = (n: number): number => n * 2;\n\n// Object টাইপ ফেরত দেয়\nconst makeUser: (name: string, age: number) => { name: string; age: number } =\n  (name, age) => ({ name, age });"} lang={"typescript"} />
+
+## Function Overloading
+
+<InParagraph text={"একই ফাংশন **ভিন্ন arguments** আকারে call করা যায় — overload signature দিয়ে সম্ভাব্য সব রূপ টাইপ করে দেওয়া হয়। এক ধাপ নিচে implementation লেখা হয়।"} />
+
+<CodeBlock code={"function format(value: string): string;\nfunction format(value: number): string;\nfunction format(value: string | number): string {\n  return typeof value === \"number\"\n    ? value.toFixed(2)\n    : value.toUpperCase();\n}\n\nconsole.log(format(3.14159));   // \"3.14\"\nconsole.log(format(\"hello\"));   // \"HELLO\""} lang={"typescript"} />
+
+## this Parameter
+
+<CodeBlock code={"interface Counter {\n  count: number;\n  add(this: Counter, amount: number): void;\n}\n\nconst counter: Counter = {\n  count: 0,\n  add(this: Counter, amount: number) {\n    this.count += amount;\n  },\n};\n\ncounter.add(5);\nconsole.log(counter.count);   // 5"} lang={"typescript"} />
+
+## never Return
+
+<CodeBlock code={"function throwError(message: string): never {\n  throw new Error(message);\n}\n\nfunction assertNever(value: never): never {\n  throw new Error(\"অপ্রত্যাশিত মান: \" + value);\n}"} lang={"typescript"} />
+
+<Tip tone={"info"} title={"সহজ নিয়ম"} text={"প্রতিটি প্যারামিটারে টাইপ দিন, return type লিখুন (ফাংশন public API হলে), আর `void`/`never` মনে রাখুন — return না করা বনাম শেষ না হওয়া।"} />

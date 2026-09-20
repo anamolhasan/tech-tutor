@@ -1,0 +1,25 @@
+---
+title: "Express Template Engines (EJS)"
+label: "Template Engines"
+order: 9
+level: "Intermediate"
+description: "EJS install, res.render, dynamic pages — server-side rendering বাংলায়।"
+---
+
+<InParagraph text={"**Template engine** দিয়ে dynamic HTML pages render করা যায়। Express-এর জনপ্রিয় template engine হলো **EJS** (Embedded JavaScript), Pug, Handlebars।"} />
+
+## EJS Setup
+
+<CodeBlock code={"npm install ejs"} lang={"bash"} />
+
+<CodeBlock code={"const express = require(\"express\");\nconst path = require(\"node:path\");\n\nconst app = express();\n\n// view engine set\napp.set(\"view engine\", \"ejs\");\napp.set(\"views\", path.join(__dirname, \"views\"));\n\n// route render\napp.get(\"/\", (req, res) => {\n  res.render(\"index\", {\n    title: \"হোম\",\n    user: { name: \"রহিম\" },\n  });\n});"} lang={"javascript"} />
+
+<CodeBlock code={"<!DOCTYPE html>\n<html>\n<head>\n  <title><%= title %></title>\n</head>\n<body>\n  <h1>Welcome, <%= user.name %></h1>\n  <!-- loop -->\n  <ul>\n    <% for (const item of items) { %>\n      <li><%= item %></li>\n    <% } %>\n  </ul>\n\n  <!-- conditional -->\n  <% if (user.isAdmin) { %>\n    <p>Admin প্যানেল</p>\n  <% } %>\n</body>\n</html>"} lang={"html"} title={"views/index.ejs"} />
+
+## Layouts (Partials)
+
+<CodeBlock code={"<nav>\n  <a href=\"/\">হোম</a>\n  <a href=\"/about\">সম্পর্কে</a>\n  <a href=\"/contact\">যোগাযোগ</a>\n</nav>"} lang={"html"} title={"views/partials/header.ejs"} />
+
+<CodeBlock code={"<body>\n  <!-- partial include -->\n  <%- include(\"partials/header\") %>\n\n  <main>\n    <h1>Dashboard</h1>\n    <p>Welcome, <%= user.name %></p>\n  </main>\n</body>"} lang={"html"} title={"views/dashboard.ejs"} />
+
+<Tip tone={"info"} title={"EJS vs React"} text={"আপনি যদি front-end-এ React/Next.js ব্যবহার করেন, template engine-এর প্রয়োজন নাও হতে পারে — API-ঠিক backend থাকবে। EJS ছোট server-rendered pages-এ ব্যবহৃত হয়।"} />

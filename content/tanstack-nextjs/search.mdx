@@ -1,0 +1,23 @@
+---
+title: "Search — Debounce"
+label: "Search"
+order: 20
+level: "Intermediate"
+description: "Search input, debounce ও API-তে search param — বাংলায়।"
+---
+
+<InParagraph text={"সার্চ প্রতিটি keystroke-এ server-এ request পাঠালে spam হয়। তাই **debounce** — ব্যবহারকারী লেখা থামানোর ৪০০ms পরে request।"} />
+
+## useDebounce hook
+
+<CodeBlock code={"\"use client\";\n\nimport { useEffect, useState } from \"react\";\n\nexport function useDebounce<T>(value: T, delay = 400): T {\n  const [debounced, setDebounced] = useState(value);\n\n  useEffect(() => {\n    const timer = setTimeout(() => setDebounced(value), delay);\n    return () => clearTimeout(timer);\n  }, [value, delay]);\n\n  return debounced;\n}"} lang={"ts"} title={"src/lib/hooks/use-debounce.ts"} />
+
+## Dashboard-এ প্রয়োগ
+
+<CodeBlock code={"const [searchInput, setSearchInput] = useState(\"\");\nconst search = useDebounce(searchInput, 400);\n\n// search-এ কোনো ডেটা থাকলে পেজ রিসেট\nuseEffect(() => {\n  setPage(1);\n}, [search]);\n\nconst params: ProductQueryParams = {\n  page,\n  pageSize,\n  search: search || undefined,   // খালি হলে param নেই\n  category: category || undefined,\n  status: status === \"all\" ? undefined : status,\n};\n\n<ProductList params={params} />"} lang={"tsx"} title={"Search integration"} />
+
+## ইনপুট component
+
+<CodeBlock code={"<div className=\"relative\">\n  <SearchIcon className=\"absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground\" />\n  <Input\n    value={searchInput}\n    onChange={(e) => setSearchInput(e.target.value)}\n    placeholder=\"Product খুঁজুন…\"\n    className=\"pl-9\"\n  />\n</div>"} lang={"tsx"} title={"Search input"} />
+
+<Tip tone={"success"} title={"Debounce কেন"} text={"`queryKey`-এ `search` দিলে প্রতিটি অক্ষরে নতুন query হতো। debounce-এর পরে প্রতি ৪০০ms-এ একবার — সার্ভারের উপর চাপ কম, বরং UX-এ কোনো তফাত নেই।"} />

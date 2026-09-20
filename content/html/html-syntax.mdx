@@ -1,0 +1,43 @@
+---
+title: "HTML Syntax (বাক্য গঠন)"
+label: "HTML Syntax"
+order: 3
+level: "Beginner"
+description: "HTML ট্যাগ, এলিমেন্ট ও অ্যাট্রিবিউটের গঠন কীভাবে হয় — HTML-এর মূল সিনট্যাক্স বাংলায় শিখুন।"
+---
+
+<InParagraph text={"HTML-এর প্রতিটি content একটি **element** দিয়ে ঘেরা থাকে। একটি element সাধারণত একটি *start tag*, *content* এবং *end tag* নিয়ে গঠিত।"} />
+
+## ট্যাগ ও এলিমেন্টের গঠন
+
+<CodeBlock code={"<p>  এটি একটি প্যারাগ্রাফের content  </p>\n│ │                            │   │\n│ └── start tag ──────────────┘   └── end tag"} lang={"html"} />
+
+- `<p>` — শুরুর ট্যাগ (opening tag)
+- `</p>` — শেষের ট্যাগ (closing tag)
+- মাঝখানে থাকে element-এর content
+- `<p>...</p>` পুরো অংশটুকুকে একসাথে element বলে
+
+## Nested Element
+
+<InParagraph text={"একটি element-এর ভেতরে আরেকটি element থাকতে পারে — একে **nesting** বলে। সঠিক নেস্টিং হলো আগে খোলা ট্যাগ আগে বন্ধ করা।"} />
+
+<CodeBlock code={"<ul>\n  <li>প্রথম আইটেম</li>\n  <li>দ্বিতীয় আইটেম</li>\n</ul>"} lang={"html"} />
+
+## Empty Elements
+
+<InParagraph text={"কিছু element-এর content ও closing tag থাকে না — এগুলোকে **empty element** বলে। যেমন `<br>`, `<img>`, `<hr>`।"} />
+
+### সাধারণ ট্যাগের তালিকা
+
+| ট্যাগ | অর্থ |
+| --- | --- |
+| \<h1> - \<h6> | শিরোনাম |
+| \<p> | প্যারাগ্রাফ |
+| \<a> | লিংক |
+| \<img> | ছবি |
+| \<ul> / \<ol> / \<li> | লিস্ট |
+| \<table> \<tr> \<td> | টেবিল |
+| \<div> | ব্লক কনটেইনার |
+| \<span> | ইনলাইন কনটেইনার |
+
+<Tip tone={"info"} title={"ট্যাগ কি কেস-সেনসিটিভ?"} text={"HTML ট্যাগ *কেস-সেনসিটিভ নয়*। তবে সবাই lowercase ব্যবহার করেন — এটি প্রথা এবং Best Practice, তাই সর্বদা ছোট হাতের লেখা লিখুন।"} />

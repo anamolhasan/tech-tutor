@@ -1,0 +1,27 @@
+---
+title: "Expo vs Bare React Native — কোনটা ব্যবহার করবেন"
+label: "Expo vs React Native"
+order: 2
+level: "Beginner"
+description: "Expo ও bare React Native workflow-এর পার্থক্য — কখন কোনটা সঠিক — বাংলায়।"
+---
+
+<InParagraph text={"Expo হলো React Native-এর **framework**। React Native core (RN CLI)-এ native project তৈরি হয়, আর Expo সেই project-এর উপর developer experience ও service layer যোগ করে।"} />
+
+| বিষয় | Expo (managed) | Bare React Native |
+| --- | --- | --- |
+| Setup | ২ মিনিট, Expo Go-তেই চলে | Xcode + Android Studio লাগে |
+| Native modules | expo-* প্যাকেজ declaratively | নিজে install + link |
+| Update | EAS Update (OTA) | নিজস্ব পাইপলাইন |
+| Build | EAS Build (cloud) | Fastlane / manual |
+| Web | বিল্ট-ইন support | নিজে config করতে হয় |
+
+<InParagraph text={"আধুনিক React Native নিজেও Expo recommend করে — সরকারি ডকুমেন্টেশনে নতুন project-এর জন্য **Expo default**। তবে `npx react-native init` (RN CLI) এখনও একটি option।"} />
+
+### কখন কী ব্যবহার করবেন
+
+- নতুন প্রজেক্ট → **Expo** (ডিফল্ট পছন্দ)
+- যে native module শুধু bare-এ available → bare বা prebuild
+- Expo দিয়ে শুরু, প্রয়োজনে **prebuild** দিয়ে native folder খুলুন
+
+<Tip tone={"warning"} title={"lock-in নিয়ে ভয় নেই"} text={"Managed বা bare — দুটোই workflow; খুশি মতো বদলানো যায়। Modern Expo-তে `expo prebuild` দিয়ে যেকোনো সময় native code অ্যাক্সেস করা যায়।"} />

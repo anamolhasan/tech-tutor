@@ -1,0 +1,19 @@
+---
+title: "Best Practices — পরিপাটি PostgreSQL"
+label: "Best Practices"
+order: 38
+level: "Advanced"
+description: "Developer-স্তরে অভ্যাস — naming, types, query hygiene।"
+---
+
+- Column/table naming — `snake_case`, plural table-নাম
+- প্রত্যেক table-এ `id` PK + `created_at`
+- money-তে `numeric`, timestamp-এ `timestamptz`
+- FK সবসময় index (যদি তা PK না হয়)
+- সব query parameterized — injection নয়
+- Big INSERT batch-এ transaction + prepared
+- `SELECT *` বাদ; explicit columns
+
+<CodeBlock code={"-- table: products, column: product_id\nSELECT p.id, p.name, oi.product_id\nFROM order_items oi JOIN products p ON p.id = oi.product_id;"} lang={"sql"} title={"নামকরণ sample"} />
+
+<Tip tone={"success"} title={"code review-এ database"} text={"PR-এ query-গুলো `EXPLAIN` সহ এলে সিদ্ধান্ত হয় দ্রুত। Schema change ব্যাচে আসুক।"} />

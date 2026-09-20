@@ -1,0 +1,33 @@
+---
+title: "Layouts"
+label: "Layouts"
+order: 6
+level: "Beginner"
+description: "Root layout, nested layouts, template — shared UI কীভাবে তৈরি করবেন বাংলায়।"
+---
+
+<InParagraph text={"**Layout** হলো shared UI যা একাধিক page-এর মাঝে ভাগ করা থাকে — যেমন navbar, footer, sidebar। Navigation সময় layout state ধরে রাখে এবং পুনরায় render হয় না।"} />
+
+## Root Layout
+
+<InParagraph text={"`app/layout.tsx` হলো **root layout** — এটি **বাধ্যতামূলক** এবং অবশ্যই `<html>` ও `<body>` tag থাকতে হবে।"} />
+
+<CodeBlock code={"export default function RootLayout({\n  children,\n}: {\n  children: React.ReactNode;\n}) {\n  return (\n    <html lang=\"bn\">\n      <body>\n        <header>Shared Navbar</header>\n        <main>{children}</main>\n        <footer>Shared Footer</footer>\n      </body>\n    </html>\n  );\n}"} lang={"tsx"} title={"app/layout.tsx"} />
+
+## Nested Layouts
+
+<InParagraph text={"যেকোনো route segment-এ আলাদা `layout.tsx` দিলে সেটি তার child partner-এর সব route-কে (root layout-এর ভেতরে) মোড়ায়।"} />
+
+<CodeBlock code={"export default function BlogLayout({\n  children,\n}: {\n  children: React.ReactNode;\n}) {\n  return (\n    <section className=\"flex gap-6\">\n      <aside>Blog Sidebar</aside>\n      <main>{children}</main>\n    </section>\n  );\n}"} lang={"tsx"} title={"app/blog/layout.tsx"} />
+
+<InParagraph text={"এখন `/blog` ও `/blog/[slug]` দুটোই এই layout এর ভেতরে render হবে।"} />
+
+## Layout Hierarchy
+
+<CodeBlock code={"RootLayout (app/layout.tsx)\n└── BlogLayout (app/blog/layout.tsx)\n    └── Page (app/blog/page.tsx)"} lang={"text"} title={"Component hierarchy"} />
+
+## Route Groups দিয়ে Separate Layout
+
+<CodeBlock code={"app/\n├── (marketing)/\n│   ├── layout.tsx      → marketing layout\n│   └── page.tsx        → /\n└── (shop)/\n    ├── layout.tsx      → shop layout\n    └── cart/\n        └── page.tsx    → /cart"} lang={"text"} title={"Structure"} />
+
+<Tip tone={"info"} title={"Layout বনাম Template"} text={"Layout navigation-এ state ধরে রাখে (re-render হয় না)। **template.tsx** চাইলে প্রতিবার নতুন instance তৈরি হয় — state reset হয়। সাধারণত layout-ই যথেষ্ট।"} />

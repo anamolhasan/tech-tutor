@@ -1,0 +1,37 @@
+---
+title: "Query Builder ও Operators"
+label: "Querying"
+order: 9
+level: "Intermediate"
+description: "Mongoose chainable query, comparison operators, sort/limit/select ও lean — বাংলায়।"
+---
+
+## Chainable query
+
+<CodeBlock code={"const popularPosts = await Post.find({ published: true })\n  .sort({ views: -1 })   // সবচেয়ে বেশি দেখা আগে\n  .limit(10)             // শুধু ১০টি\n  .skip(20)              // পেজিনেশন: আগের ২০ বাদ\n  .select(\"title views\") // শুধু দরকারি field\n  .lean();               // plain object (fast)"} lang={"js"} title={"Chained query"} />
+
+## Comparison operators
+
+<CodeBlock code={"// দাম ১০০ থেকে ৫০০ এর মধ্যে\nawait Product.find({\n  price: { $gte: 100, $lte: 500 },\n});\n\n// status এই কয়েকটির যেকোনো একটি\nawait Order.find({ status: { $in: [\"pending\", \"shipped\"] } });\n\n// title-এ 'mongoose' আছে এমন — case insensitive\nawait Post.find({ title: { $regex: \"mongoose\", $options: \"i\" } });\n\n// author reference-এর চেয়ে নির্দিষ্ট\nawait Post.find({ author: { $ne: someUserId } });"} lang={"js"} title={"Operator ব্যবহার"} />
+
+| Operator | অর্থ |
+| --- | --- |
+| `$eq` | সমান |
+| `$ne` | সমান না |
+| `$gt` / `$gte` | বড় / বড় বা সমান |
+| `$lt` / `$lte` | ছোট / ছোট বা সমান |
+| `$in` / `$nin` | লিস্টের ভেতরে / বাইরে |
+| `$regex` | Pattern match |
+| `$exists` | field আছে কিনা |
+
+## Logical operators ($and / $or)
+
+<CodeBlock code={"const result = await User.find({\n  $or: [\n    { email: userEmail },\n    { username: username },\n  ],\n});"} lang={"js"} title={"$or সহ"} />
+
+## where() সিনট্যাক্স
+
+<CodeBlock code={"const cheap = await Product.find()\n  .where(\"price\")\n  .gte(50)\n  .lt(300)\n  .where(\"inStock\")\n  .equals(true)\n  .sort(\"-price\");"} lang={"js"} title={"where-based"} />
+
+## lean() কী ও কখন
+
+<InParagraph text={"`.lean()` document-গুলো plain JavaScript object বানায় — lighter ও অনেক দ্রুত। কিন্তু document method ছাড়া কাজ করবে না (যেমন `user.save()`)। শুধু read/render-এর জন্য `lean()` ব্যবহার করুন।"} />

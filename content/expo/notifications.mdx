@@ -1,0 +1,23 @@
+---
+title: "expo-notifications — local reminder"
+label: "Notifications"
+order: 23
+level: "Advanced"
+description: "টাস্ক reminder-এর জন্য local notification শুরুর নিয়ম।"
+---
+
+<InParagraph text={"Reminder-এর জন্য **local notification** — কোনো server ছাড়াই ফোনে schedule হয়।"} />
+
+<CodeBlock code={"npx expo install expo-notifications"} lang={"bash"} title={"terminal"} />
+
+<CodeBlock code={"import * as Notifications from \"expo-notifications\";\n\nasync function setReminder(title, seconds) {\n  await Notifications.scheduleNotificationAsync({\n    content: { title: \"TaskTrack Reminder\", body: title },\n    trigger: { type: \"timeInterval\", seconds, repeats: false },\n  });\n}"} lang={"ts"} />
+
+<InParagraph text={"Permission:"} />
+
+<CodeBlock code={"const { status } = await Notifications.requestPermissionsAsync();\nif (status === \"granted\") {\n  await setReminder(\"দুধ কিনবেন\", 3600);\n}"} lang={"tsx"} />
+
+- `scheduleNotificationAsync` — schedule; id return করে
+- `cancelScheduledNotificationAsync(id)` — বাতিল
+- date trigger-এ `{ type: "date", date: ... }`
+
+<Tip tone={"warning"} title={"SDK 53+ trigger"} text={"বেশিরভাগ SDK-তে trigger-এর `type` field অপরিহার্য (`timeInterval` / `date`)। Foreground-এ অ্যাপ থাকলে notification-এর response listener দিয়ে handle করুন।"} />

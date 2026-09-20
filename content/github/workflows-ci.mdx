@@ -1,0 +1,36 @@
+---
+title: "একাধিক job, matrix ও deploy"
+label: "Workflows & CI"
+order: 11
+level: "Advanced"
+description: "Advanced workflow: matrix, cache, deploy — বাংলায়।"
+---
+
+## Matrix — একাধিক সংস্করণে পরীক্ষা
+
+<CodeBlock code={"jobs:\n  test:\n    strategy:\n      matrix:\n        node: [18, 20, 22]\n        os: [ubuntu-latest, windows-latest]\n    runs-on: ${ { matrix.os }}\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-node@v4\n        with:\n          node-version: ${ { matrix.node }}\n      - run: npm ci\n      - run: npm test"} lang={"yaml"} title={"matrix উদাহরণ"} />
+
+## Cache — দ্রুত সেটআপ
+
+<CodeBlock code={"- uses: actions/cache@v4\n  with:\n    path: ~/.npm\n    key: npm-${ { hashFiles('package-lock.json') }}\n- run: npm ci"} lang={"yaml"} />
+
+## Deploy job — প্রোডাকশনে
+
+<CodeBlock code={"deploy:\n  needs: test          # test pass-এর পরে\n  if: github.ref == 'refs/heads/main'\n  runs-on: ubuntu-latest\n  steps:\n    - uses: actions/checkout@v4\n    - run: npm run build\n    - run: npx prisma migrate deploy --prod"} lang={"yaml"} />
+
+## Secrets workflow-তে
+
+<CodeBlock code={"env:\n  DATABASE_URL: ${ { secrets.DATABASE_URL }}"} lang={"yaml"} />
+
+<InParagraph text={"Repository Settings → Secrets and variables → Actions → New repository secret — দিয়ে secret যোগ করুন। workflow-এ সরাসরি লিখবেন না।"} />
+
+## রানারের ধরণ
+
+- **GitHub-hosted** — ubuntu/windows/macos, free minutes (public)
+- **Self-hosted** — নিজের মেশিন/সার্ভার, নিজের নিয়ন্ত্রণ
+
+## Logs ও debugging
+
+<CodeBlock code={"# workflow-তে verbose log\nACTIONS_STEP_DEBUG=true"} lang={"bash"} />
+
+<Tip tone={"warning"} title={"সতর্কতা"} text={"Secrets কখনো `run: echo ${{ secrets.X }}` দিয়ে print করবেন না — সেগুলো log-এ দেখানো হয়। দরকার হলে আপনাকে প্রয়োজনীয় mask করা যায়।"} />

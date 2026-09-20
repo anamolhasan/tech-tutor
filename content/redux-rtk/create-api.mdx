@@ -1,0 +1,23 @@
+---
+title: "createApi — প্রথম API Definition"
+label: "createApi"
+order: 14
+level: "Intermediate"
+description: "createApi + fetchBaseQuery — endpoint definition — বাংলায়।"
+---
+
+<CodeBlock code={"import { createApi, fetchBaseQuery } from \"@reduxjs/toolkit/query/react\";\n\nexport const ordersApi = createApi({\n  reducerPath: \"ordersApi\",\n  baseQuery: fetchBaseQuery({ baseUrl: \"https://api.example.com/\" }),\n  tagTypes: [\"Order\"],\n  endpoints: (builder) => ({\n    // Query: GET https://api.example.com/orders\n    getOrders: builder.query<Order[], void>({\n      query: () => \"orders\",\n      providesTags: [\"Order\"],\n    }),\n\n    // Mutation: POST https://api.example.com/orders\n    createOrder: builder.mutation<Order, { items: CartItem[] }>({\n      query: (body) => ({\n        url: \"orders\",\n        method: \"POST\",\n        body,\n      }),\n      invalidatesTags: [\"Order\"],\n    }),\n  }),\n});\n\n// Auto-generated hooks\nexport const {\n  useGetOrdersQuery,\n  useCreateOrderMutation,\n} = ordersApi;"} lang={"ts"} title={"src/features/orders/ordersService.ts"} />
+
+## builder.query vs builder.mutation
+
+|  | builder.query | builder.mutation |
+| --- | --- | --- |
+| কাজ | ডেটা পড়া (GET) | write (POST/PUT/DELETE) |
+| Generated counts | loading/error/data | pending/error, আর no cache-শেয়ার |
+| লাইফসাইকেল | cache-ভিত্তিক, refetch | trigger-সাথে-সাথে, onSuccess |
+
+## Types
+
+<CodeBlock code={"getOrders: builder.query<Order[], void>({\n  // ↑ <Result, Arg>\n  query: () => \"orders\",\n}),"} lang={"ts"} title={"Typing endpoint"} />
+
+<Tip tone={"warning"} title={"reducerPath গুরুত্বপূর্ণ"} text={"`reducerPath` store-এ এই slice-এর কী। `configureStore`-এ `[ordersApi.reducerPath]: ordersApi.reducer` ও `concat(ordersApi.middleware)` — দুইটাই site-এ বাধতেই store-এ যুক্ত করতে হবে। ভুলে গেলে hooks কাজ করবে না।"} />

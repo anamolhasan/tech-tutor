@@ -1,0 +1,27 @@
+---
+title: "Cache Invalidation — Tag Mechanics"
+label: "Cache Invalidation"
+order: 21
+level: "Advanced"
+description: "invalidatesTags ও providesTags-এর গভীর কাজ, বনাম manual refetch — বাংলায়।"
+---
+
+<InParagraph text={"প্রথম query-র প্রতিটি result-এর সাথে **providesTags** জড়িয়ে রাখা হয়। কোনো mutation-এ **invalidatesTags** মিলে গেলে — matching সেগুলো query cache sau'b]['stale'] হয়ে যাবে এবং mounted হলে refetch।"} />
+
+## কাজ করার ধাপ
+
+1. `getProducts` সফল → cache-এ result + tags `[Product:LIST ...]`
+1. `deleteProduct(p1)` সফল → `invalidatesTags [Product]`
+1. RTK Query খোঁজে: cache-এ **Product-type** প্রবেশমাত্র tag-সহ query?
+1. মিলে গেলে → `status: 'rejected', isUninitialized: false` + refetch
+
+## manual refetch vs invalidation
+
+| বিষয় | invalidatesTags | refetch() |
+| --- | --- | --- |
+| Scope | সব matching query | একটি hook scope |
+| Design | Declarative (tag-based) | imperative |
+| RRF | optimistic/UI-অনির্ভর | আমরা কোথায় বলব |
+| সেরা জন্য | CRUD mutations | pull-to-refresh, ভাষা |
+
+<Tip tone={"warning"} title={"over-invalidating"} text={"অতিরিক্ত broad tag (`[\"Product\"]` সর্বত্র) প্রতিটি mutation-এ পুরো ডাটাবেস refetch — bottleneck। যতটা সম্ভব specific tag (`Product:${id}` + `Product:LIST`) রাখুন।"} />

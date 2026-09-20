@@ -1,0 +1,26 @@
+---
+title: "RTK Query — Server State Simplified"
+label: "RTK Query"
+order: 13
+level: "Intermediate"
+description: "RTK Query কী, কী সমস্যার সমাধান, fetchBaseQuery — বাংলায়।"
+---
+
+<InParagraph text={"**RTK Query** হলো Redux Toolkit-এর ভেতরে-built data-fetching & caching library। TanStack Query-র মতো এটিও server state-র যত্ন নেয় — fetch, cache, loading/error, refetch, invalidation — শুধু তা Redux store-ভিত্তিক।"} />
+
+## কী বানানোর ব্যপার বাদ দেয়
+
+- Manual `useEffect` + `fetch` + loading/error state
+- Cache + deduplication logic
+- Retry, refetch, polling setup
+- CRUD mutations ও tag-based invalidation
+
+| Feature | TanStack Query | RTK Query |
+| --- | --- | --- |
+| Cache storage | External store | Redux store (Redux-এ বাধা) |
+| React-হীন/framework-independent | ✓ | fetchBaseQuery, তবে Redux-এ |
+| DevTools | বিশেষ tab | Redux DevTools (ঐ store) |
+| Setup | Provider আলাদা | একই Redux configureStore |
+| যদি Redux already ব্যবহার করেন | duplicate state | ✓ একীভূত |
+
+<Tip tone={"info"} title={"Redux ব্যবহারকারীদের জন্য"} text={"যদি আপনার অ্যাপে **Redux Toolkit** আগে থেকেই আছে, RTK Query হলো natural choice — কারণ এতে আলাদা cache-store বা provider লাগে না। Redux-হীন প্রজেক্টে TanStack Queryও দারুণ। দুটোই শিখুন, প্রজেক্ট অনুযায়ী বাছাই করুন।"} />

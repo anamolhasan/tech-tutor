@@ -1,0 +1,27 @@
+---
+title: "Tailwind CSS with Vite"
+label: "Tailwind + Vite"
+order: 12
+level: "Beginner"
+description: "Vite প্রজেক্টে Tailwind CSS কীভাবে setup করবেন — step by step বাংলা গাইড।"
+---
+
+<InParagraph text={"Vite হলো আধুনিক frontend build tool। Tailwind CSS v4-এ Vite-এর সাথে setup খুবই সহজ।"} />
+
+## Step 1: Vite Project তৈরি
+
+<CodeBlock code={"npm create vite@latest my-project -- --template react\ncd my-project\nnpm install"} lang={"bash"} title={"Terminal"} />
+
+## Step 2: Tailwind Install
+
+<CodeBlock code={"npm install tailwindcss @tailwindcss/vite"} lang={"bash"} title={"Terminal"} />
+
+## Step 3: Vite Config Update
+
+<CodeBlock code={"import { defineConfig } from \"vite\";\nimport react from \"@vitejs/plugin-react\";\nimport tailwindcss from \"@tailwindcss/vite\";\n\nexport default defineConfig({\n  plugins: [react(), tailwindcss()],\n});"} lang={"typescript"} title={"vite.config.ts"} />
+
+## Step 4: CSS Import
+
+<CodeBlock code={"@import \"tailwindcss\";"} lang={"css"} title={"src/index.css"} />
+
+<Tip tone={"success"} title={"ব্যস, তৈরি!"} text={"এখন `npm run dev` চালান। Tailwind CSS কাজ করতে শুরু করবে!"} />

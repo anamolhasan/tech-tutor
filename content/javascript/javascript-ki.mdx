@@ -1,0 +1,34 @@
+---
+title: "JavaScript কী?"
+label: "JavaScript কী?"
+order: 2
+level: "Beginner"
+description: "JavaScript কী, এর ভূমিকা, JavaScript বনাম Java, এবং কেন এটি ওয়েব ডেভেলপমেন্টে অপরিহার্য — সম্পূর্ণ বাংলায়।"
+---
+
+<InParagraph text={"**JavaScript** একটি উচ্চ-স্তরের, শিথিল-টাইপের (loosely typed) **interpreted** প্রোগ্রামিং ভাষা। এটি ওয়েবপেজে ইন্টারঅ্যাকশন ও গতিশীলতা আনে।"} />
+
+## কী কী সম্ভব JavaScript দিয়ে
+
+- পেজের content HTML/CSS বদলানো
+- ফর্ম যাচাই ও ডেটা প্রসেসিং
+- API থেকে ডেটা আনা ও দেখানো
+- অ্যানিমেশন ও খেলার মতো অভিজ্ঞতা তৈরি
+- সার্ভারে (Node.js) অ্যাপ বানানো
+
+## JavaScript বনাম Java
+
+<InParagraph text={"নাম মিললেও Java ও JavaScript সম্পূর্ণ আলাদা দুটি ভাষা। Java ক্লাস-ভিত্তিক compiled ভাষা, আর JavaScript dynamic interpreted ভাষা। এরা একে অপরের সাথে সম্পর্কহীন।"} />
+
+## JS-এর প্রকৃতি
+
+| বৈশিষ্ট্য | ব্যাখ্যা |
+| --- | --- |
+| Dynamic | টাইপ runtime-এ ঠিক হয় |
+| Interpreted | কম্পাইল ছাড়াই ব্রাউজারে চলে |
+| Event-driven | ইভেন্টে (ক্লিক, টাইপ) সাড়া দেয় |
+| Multi-paradigm | OOP, functional, procedural যেকোনো |
+
+<CodeBlock code={"const name = \"রহিম\";\nlet age = 25;\n\nconst greet = (user) => {\n  return \"নমস্কার \" + user;\n};\n\nconsole.log(greet(name));\nconsole.log(age + 5);"} lang={"javascript"} title={"ছোট্ট উদাহরণ"} />
+
+<Tip tone={"warning"} title={"HTML-এ ব্যবহার"} text={"JavaScript script ট্যাগে বা আলাদা .js ফাইলে থাকে এবং তা বন্ধ-শেষের ট্যাগে থাকুক বা নিয়মিত, `<script>` একটি বদ্ধ ট্যাগ — ভিতরে `</script>` লিখলে তা বন্ধ হয়ে যায়।"} />

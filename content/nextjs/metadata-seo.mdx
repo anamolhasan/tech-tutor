@@ -1,0 +1,34 @@
+---
+title: "Metadata ও SEO"
+label: "Metadata ও SEO"
+order: 16
+level: "Beginner"
+description: "metadata export, generateMetadata, Open Graph — Next.js-এ SEO ও metadata বাংলায়।"
+---
+
+<InParagraph text={"Metadata হলো page সম্পর্কে browser ও search engine-এর জন্য info — title, description, Open Graph image ইত্যাদি। Next.js-এ **Metadata API** দিয়ে সহজেই দেওয়া হয়।"} />
+
+## Static Metadata
+
+<CodeBlock code={"import type { Metadata } from \"next\";\n\nexport const metadata: Metadata = {\n  title: {\n    default: \"My Blog\",\n    template: \"%s | My Blog\",\n  },\n  description: \"A blog built with Next.js\",\n};\n\nexport default function RootLayout({\n  children,\n}: {\n  children: React.ReactNode;\n}) {\n  return (\n    <html lang=\"bn\">\n      <body>{children}</body>\n    </html>\n  );\n}"} lang={"tsx"} title={"app/layout.tsx (root)"} />
+
+## Page-Like Metadata
+
+<CodeBlock code={"import type { Metadata } from \"next\";\n\nexport const metadata: Metadata = {\n  title: \"About\",\n  description: \"আমাদের সম্পর্কে\",\n};\n\nexport default function Page() {\n  return <h1>About</h1>;\n}"} lang={"tsx"} title={"app/about/page.tsx"} />
+
+## generateMetadata (Dynamic)
+
+<CodeBlock code={"import type { Metadata } from \"next\";\n\nexport async function generateMetadata({\n  params,\n}: {\n  params: Promise<{ slug: string }>;\n}): Promise<Metadata> {\n  const { slug } = await params;\n  const post = await getPost(slug);\n\n  return {\n    title: post.title,\n    description: post.excerpt,\n    openGraph: {\n      title: post.title,\n      description: post.excerpt,\n    },\n  };\n}"} lang={"tsx"} title={"app/blog/[slug]/page.tsx"} />
+
+## Common Metadata Fields
+
+| Field | কাজ |
+| --- | --- |
+| title | ব্রাউজার tab ও SERP-এ শিরোনাম |
+| description | SERP-এ সংক্ষিপ্ত বিবরণ |
+| openGraph | Social media share preview |
+| keywords | SEO keywords |
+| robots | index/noindex নিয়ন্ত্রণ |
+| alternates | Canonical URL |
+
+<Tip tone={"info"} title={"Metadata Files"} text={"`sitemap.ts` ও `robots.ts` ফাইল দিয়েও automatic SEO ফাইল তৈরি হয়। আর `opengraph-image.png` দিয়ে social preview image।"} />

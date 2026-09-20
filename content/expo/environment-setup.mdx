@@ -1,0 +1,19 @@
+---
+title: "Development Environment — Node, Expo Go, SDK"
+label: "Environment Setup"
+order: 4
+level: "Beginner"
+description: "Expo project চালানোর জন্য কী কী লাগে — install থেকে first run পর্যন্ত।"
+---
+
+<InParagraph text={"Expo project চালাতে বেশি কিছু লাগে না — একটি **Node.js** আর ফোনে **Expo Go** অ্যাপই যথেষ্ট। নিচে complete tool set:"} />
+
+- **Node.js LTS** — npx, npm চালানোর জন্য
+- **Expo Go** app — ফোনে (App Store / Play Store)
+- (প্রয়োজনে) **Android Studio** / **Xcode** — emulator বা native build
+
+<CodeBlock code={"node -v\nnpm -v\nnpx expo --version"} lang={"bash"} title={"terminal"} />
+
+<InParagraph text={"Web-এও পরীক্ষা করা যায় — start করলে `w` চাপলেই browser। **Expo Go** একটি native app যা Metro bundler থেকে আপনার JS লোড করে — তাই install-এর মতো `xcodebuild`/`gradle` দেওয়ার দরকার নেই।"} />
+
+<Tip tone={"warning"} title={"প্ল্যাটফর্ম সীমা"} text={"iOS simulator অফিসিয়ালি শুধু macOS-এ। Windows/Linux-এ Android emulator বা ফিজিক্যাল ডিভাইস (Expo Go) ব্যবহার করুন।"} />

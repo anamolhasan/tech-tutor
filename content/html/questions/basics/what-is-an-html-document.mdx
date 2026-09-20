@@ -1,0 +1,13 @@
+---
+question: "What is an HTML document?"
+order: 3
+description: "HTML document কী, এবং এর সাধারণ গঠন কেমন হয়।"
+---
+
+<InParagraph text={"একটি **HTML document** হলো একটি সাধারণ text file যার নাম শেষ হয় `.html` (বা `.htm`) দিয়ে এবং যেখানে একটি ওয়েবপেজের সম্পূর্ণ কাঠামো থাকে। ব্রাউজার যখন এটি পড়ে, তখন সেটিকে একটি দৃশ্যমান পেজে রূপ দেয়।"} />
+
+<InParagraph text={"প্রতিটি HTML document-এর কিছু মৌলিক অংশ থাকে — `<!DOCTYPE html>` ঘোষণা, দৃশ্যমান নয় এমন `<head>` অংশ, এবং পেজে যা দেখা যায় সেই `<body>` অংশ:"} />
+
+<CodeBlock code={"<!DOCTYPE html>\n<html lang=\"bn\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <title>আমার পেজ</title>\n  </head>\n  <body>\n    <h1>Hello World!</h1>\n  </body>\n</html>"} lang={"html"} title={"index.html"} />
+
+<InParagraph text={"একটি ভালো HTML document অবশ্যই ভ্যালিড (valid) হতে হবে — অর্থাৎ প্রতিটি tag সঠিকভাবে খোলা ও বন্ধ হওয়া জরুরি, যাতে ব্রাউজার ও screen reader সেটি সঠিকভাবে পড়তে পারে।"} />

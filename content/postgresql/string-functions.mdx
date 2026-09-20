@@ -1,0 +1,23 @@
+---
+title: "Text functions — LOWER, TRIM, SUBSTRING…"
+label: "String Functions"
+order: 17
+level: "Intermediate"
+description: "string নিয়ে কাজ — জরুরি function-গুলো উদাহরণসহ।"
+---
+
+<CodeBlock code={"SELECT UPPER(name)      AS up,\n       LOWER(name)      AS lo,\n       LENGTH(name)     AS len,\n       TRIM('  x  ')    AS trimmed,\n       CONCAT(name, ' (', category, ')') AS label\nFROM products\nLIMIT 3;"} lang={"sql"} />
+
+<CodeBlock code={"SELECT SUBSTRING(name FROM 1 FOR 5) AS first5\nFROM products\nWHERE name LIKE 'M%';"} lang={"sql"} />
+
+| Function | কাজ |
+| --- | --- |
+| UPPER / LOWER | case বদল |
+| LENGTH / CHAR_LENGTH | দৈর্ঘ্য |
+| TRIM / LTRIM / RTRIM | spaces কাটা |
+| CONCAT / \|\| | join |
+| SUBSTRING(text FROM s FOR n) | অংশ |
+| REPLACE(str, old, new) | প্রতিস্থাপন |
+| POSITION('x' IN str) | অবস্থান |
+
+<Tip tone={"warning"} title={"LIKE-এ index"} text={"`LIKE 'M%'` prefix index ব্যবহার করতে পারে, তবে `%M%`-তে সাধারণত scan — বড় text search-এ full-text (টপিক ২৮)।"} />

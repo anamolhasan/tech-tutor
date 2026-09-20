@@ -1,0 +1,43 @@
+---
+title: "Express.js Introduction"
+label: "Introduction"
+order: 1
+level: "Beginner"
+description: "Express কী, কেন ব্যবহার হয়, features, Express বনাম plain Node.js — বাংলায় পরিচিতি।"
+---
+
+<InParagraph text={"**Express.js** হলো Node.js-এর সবচেয়ে জনপ্রিয় web application framework। এটি minimal, flexible ও unopinionated — HTTP সার্ভার তৈরিকে দ্রুত ও সহজ করে তোলে।"} />
+
+## Express কী?
+
+<InParagraph text={"Express হলো Node.js-এর **back-end framework** যা routing, middleware, template engine, request/response handling — সবকিছু অনেক সহজ করে দেয়। Express-এর উপর ভর করেই Nest.js, Sails.js-এর মতো জনপ্রিয় frameworks তৈরি হয়েছে।"} />
+
+## Express কেন ব্যবহার করবেন?
+
+- **সহজ Routing** — GET, POST, PUT, DELETE সহজে define করা যায়
+- **Middleware** — request-এর মাঝে customizable logic চালানো যায়
+- **Huge Ecosystem** — বিশ্বের সবচেয়ে ব্যবহৃত Node.js framework
+- **Performance** — মিনিমাল design, দ্রুত execution
+- **Flexible** — মডেল, database, template anything ব্যবহার করা যায়
+- **Documentation** — অসাধারণ docs ও বিশাল community
+
+## Express-এর Features
+
+<CodeBlock code={"✅ Routing (HTTP methods)\n✅ Middleware system\n✅ Query & body parsing\n✅ Static file serving\n✅ Template engine support (EJS, Pug)\n✅ Error handling\n✅ Router (modular routes)\n✅ Scalability (cluster, load balancer)"} lang={"text"} title={"Express Feature List"} />
+
+## Express বনাম Pure Node.js
+
+| বৈশিষ্ট্য | Plain Node.js | Express.js |
+| --- | --- | --- |
+| তারিখ | require('node:http') | require('express') |
+| Routing | হাতে কষ্ট করে parse | সহজ app.get/post |
+| Middleware | নেই | আছে, robust |
+| Body parsing | readFile manually | express.json() |
+| Static files | হাতে লিখতে হয় | express.static() |
+| সময় | বেশি | কম |
+
+## কোন version ব্যবহার করবেন?
+
+<InParagraph text={"Express 5.x হলো latest stable version (Node.js 18+ লাগবে)। Express 4.x এখনও wide ব্যবহার হয়। নতুন project-এ **Express 5** ব্যবহার করুন।"} />
+
+<Tip tone={"success"} title={"পরবর্তী ধাপ"} text={"পরবর্তী topic-এ দেখবো কীভাবে Express ইনস্টল করতে হয় ও প্রথম express server চালাতে হয়।"} />

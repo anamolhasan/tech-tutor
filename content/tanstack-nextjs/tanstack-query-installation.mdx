@@ -1,0 +1,30 @@
+---
+title: "TanStack Query Installation ও Setup"
+label: "Query Install"
+order: 8
+level: "Beginner"
+description: "packages install, QueryClient তৈরি ও default options — বাংলায়।"
+---
+
+<InParagraph text={"Previous topic-এ packages install করে রেখেছি — এবার setup করি: **QueryClient** বানিয়ে options ঠিক করব।"} />
+
+<CodeBlock code={"npm install @tanstack/react-query @tanstack/react-query-devtools"} lang={"bash"} title={"Install (যা পরে)"} />
+
+## QueryClient কী?
+
+<InParagraph text={"**QueryClient** হলো TanStack Query-র 'brain' — এর ভেতরে cache, fetch logic, retry, stale time-এর মতো সবকিছু থাকে। App-টি একটি **একমাত্র** QueryClient ব্যবহার করে, এবং তা **Provider**-এর মাধ্যমে React tree-কে দেয়।"} />
+
+## Default options
+
+<CodeBlock code={"import { QueryClient } from \"@tanstack/react-query\";\n\nexport const queryClient = new QueryClient({\n  defaultOptions: {\n    queries: {\n      staleTime: 60_000,        // ১ মিনিট 'fresh' থাকবে\n      retry: 1,                 // ব্যর্থ হলে ১ বার retry\n      refetchOnWindowFocus: false,\n      gcTime: 5 * 60_000,       // ৫ মিনিট unused থাকলে GC\n    },\n    mutations: {\n      retry: 0,                 // mutation-এ auto retry বন্ধ\n    },\n  },\n});"} lang={"ts"} title={"QueryClient config"} />
+
+## Options-এর অর্থ
+
+| Option | মানে |
+| --- | --- |
+| `staleTime` | কতক্ষণ ডেটা fresh থাকবে — ব্যবহারকারী-প্রভাবিত refetch কমায় |
+| `retry` | network/সার্ভার error-এ কতবার আবার চেষ্টা |
+| `refetchOnWindowFocus` | tab-এ ফেরলে আবার fetch হবে কিনা |
+| `gcTime` | cache-এ unused data কতক্ষণ থাকবে |
+
+<Tip tone={"warning"} title={"Mutation-এ retry না"} text={"mutation (create/update/delete) **auto-retry না** করাই ভালো — নাহলে delete double-run হয়ে duplicate/doble operation হতে পারে। তাই `mutations: { retry: 0 }`।"} />

@@ -1,0 +1,58 @@
+---
+title: "প্রথম Repository: init, add, commit"
+label: "Git Basics"
+order: 3
+level: "Beginner"
+description: "Repo তৈরি, ফাইল track, stage এবং commit — Git-এর প্রথম ধাপ বাংলায়।"
+---
+
+## Repository (Repo) কী?
+
+<InParagraph text={"Repository হলো একটি প্রজেক্ট ফোল্ডার যেখানে Git আপনার ফাইলের ইতিহাস সংরক্ষণ করে। Git এই ইতিহাস **`.git` ফোল্ডারে** রেখে দেয়।"} />
+
+## নতুন প্রজেক্ট শুরু করা
+
+<CodeBlock code={"mkdir my-project\ncd my-project\ngit init\n# Initialized empty Git repository in .../.git/"} lang={"bash"} title={"Git init"} />
+
+<InParagraph text={"`git init` একটি নতুন repository তৈরি করে। এই মুহূর্তে প্রজেক্টটির একটা ছোট ফাইল বানিয়ে দেখি।"} />
+
+<CodeBlock code={"echo \"# আমার প্রথম প্রজেক্ট\" > README.md"} lang={"bash"} />
+
+## git status — অবস্থা দেখা
+
+<CodeBlock code={"git status"} lang={"bash"} />
+
+<InParagraph text={"Output-এ দেখা যাবে `README.md` ফাইলটি **untracked** — অর্থাৎ Git এখনো এটি দেখেনি। Git কাজ করে তিনটি area-তে:"} />
+
+| Area | কী হয় | কমান্ড |
+| --- | --- | --- |
+| Working Directory | ফাইল edit করা হয় | — |
+| Staging Area | কোন ফাইল commit হবে তা প্রস্তুত | git add |
+| Repository (.git) | commit সংরক্ষিত হয় | git commit |
+
+## git add — Staging এ ফাইল নেওয়া
+
+<CodeBlock code={"git add README.md\ngit status\n# Changes to be committed:\n#   README.md"} lang={"bash"} />
+
+## git commit — ইতিহাস সেভ করা
+
+<CodeBlock code={"git commit -m \"docs: README যোগ করা হলো\"\n# [main 5b3d2a1] docs: README যোগ করা হলো\n#  1 file changed, 1 insertion(+)"} lang={"bash"} />
+
+## একবারে সব ফাইল stage করা
+
+<CodeBlock code={"git add .          # সব নতুন/পরিবর্তিত ফাইল\ngit add -A          # সব ব্যবহার্য ফাইল (git 2.x+)\ngit add src/        # নির্দিষ্ট ফোল্ডার"} lang={"bash"} />
+
+## git log — ইতিহাস দেখা
+
+<CodeBlock code={"git log --oneline\n# 5b3d2a1 docs: README যোগ করা হলো"} lang={"bash"} />
+
+<InParagraph text={"`git log --oneline` একটি লাইনে প্রতিটি commit দেখায় — commit hash ও message।"} />
+
+## প্রথম commit-এর সাধারণ ভুল
+
+- `node_modules` commit করা — `.gitignore` ব্যবহার করতে হবে
+- কমিটের আগে `git status` না দেখা
+- `git add` ভুলে commit চালানো — তখন কিছু stage হয় না
+- রহস্যময় message যেমন `update`, `fix`
+
+<Tip tone={"success"} title={"অভ্যাস"} text={"প্রতিবার `git add` ও `git commit`-এর আগে `git status` চালান। ছোট এবং অর্থপূর্ণ commit করুন যেন ইতিহাস পড়তে সহজ হয়।"} />

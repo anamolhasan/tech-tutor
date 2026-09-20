@@ -1,0 +1,48 @@
+---
+title: "NestJS Best Practices"
+label: "Best Practices"
+order: 19
+level: "Advanced"
+description: "Structure, DTO everywhere, error handling, performance, security — সেরা অভ্যাস বাংলায়।"
+---
+
+## 1. Proper Folder Structure
+
+<CodeBlock code={"src/\n├── modules/            # feature modules\n│   ├── users/\n│   │   ├── users.module.ts\n│   │   ├── users.controller.ts\n│   │   ├── users.service.ts\n│   │   ├── dto/\n│   │   ├── schemas/  (বা entities/)\n│   │   └── test files\n│   └── auth/\n├── common/            # shared\n│   ├── guards/\n│   ├── pipes/\n│   ├── interceptors/\n│   ├── decorators/\n│   └── filters/\n├── types/             # shared interfaces\n├── config/\n└── main.ts"} lang={"text"} />
+
+## 2. DTO সর্বত্র
+
+<CodeBlock code={"// ❌ avoid — any\ncreate(@Body() body: any) {}\n\n// ✅ DTO\n@Post()\ncreate(@Body() dto: CreateUserDto) {}\n\n// separate dto per operation\n// CreateUserDto, UpdateUserDto, LoginDto"} lang={"typescript"} />
+
+## 3. Single Responsibility
+
+<CodeBlock code={"// Controller → HTTP layer শুধু\n// Service → business logic\n// Repository/Model → data access\n// Module → grouping\n\n// ❌ controller-এ DB logic\n@Get()\nasync findAll(@Query() q: any) {\n  const db = await getDb();\n  return db.collection('users').find().toArray();\n}\n\n// ✅ service-এ\n@Get()\nfindAll() {\n  return this.usersService.findAll();\n}"} lang={"typescript"} />
+
+## 4. Global Validation & Filters
+
+<CodeBlock code={"import { ValidationPipe, Logger } from \"@nestjs/common\";\nimport { HttpAdapterHost, NestFactory } from \"@nestjs/core\";\n\nasync function bootstrap() {\n  const app = await NestFactory.create(AppModule);\n\n  app.setGlobalPrefix(\"api/v1\"); // versioning\n\n  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));\n\n  app.enableCors({ origin: process.env.FRONTEND_URL });\n\n  app.useLogger([\"error\", \"warn\", \"log\"]);\n\n  await app.listen(3000);\n}\nbootstrap();"} lang={"typescript"} title={"main.ts — production baseline"} />
+
+## 5. Performance
+
+<CodeBlock code={"# build production\nnpm run build\n\n# run — NODE_ENV=production + cluster\npm2 start dist/main.js -i max\n\n# enable gzip (nginx বা compression)\n# app.use(compression()) — अगर application server"} lang={"bash"} />
+
+## 6. Security Checklist
+
+<CodeBlock code={"// main.ts\nimport { NestFactory } from \"@nestjs/core\";\nimport { helmet } from \"helmet\";\n\n// helmet\napp.use(helmet());\n\n// rate limit (nestjs-rate-limiter package)\napp.enableCors({\n  origin: [\"https://myapp.com\"],\n  credentials: true,\n});"} lang={"typescript"} />
+
+<CodeBlock code={"# extra packages\nnpm i helmet express-rate-limit"} lang={"bash"} />
+
+| ✔ | অভ্যাস |
+| --- | --- |
+| ✔ | DTO + class-validator (whitelist) |
+| ✔ | Guards দিয়ে authorization |
+| ✔ | Swagger docs (api tags) |
+| ✔ | Global exception format |
+| ✔ | ConfigModule + env validation |
+| ✔ | Unit + e2e test |
+| ✔ | Controller thin, Service logic |
+| ✔ | Helmet + rate limit + CORS |
+| ✔ | Versioned prefix /api/v1 |
+| ✔ | Logging (nestjs Logger/class-validator) |
+
+<Tip tone={"success"} title={"Opensource reference"} text={"NestJS-এর অফিসিয়াল `nestjs/sample` repositories প্রতিটি concept-এর reference — শুরুতে ওগুলো পড়ে অনুসরণ করা ভালো।"} />

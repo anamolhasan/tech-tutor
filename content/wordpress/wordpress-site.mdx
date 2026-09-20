@@ -1,0 +1,35 @@
+---
+title: "WordPress Site কী এবং কীভাবে কাজ করে"
+label: "WordPress Site"
+order: 3
+level: "Beginner"
+description: "WordPress site মূলত দুটি অংশ — files ও database। Frontend ও backend কী, request কীভাবে কাজ করে — বাংলায় ব্যাখ্যা।"
+---
+
+## WordPress Site বলতে কী বোঝায়?
+
+<InParagraph text={"একটি **WordPress site** হলো WordPress software দিয়ে পরিচালিত একটি website। এটি আসলে **দুটি জিনিসের সমন্বয়**:"} />
+
+- **WordPress Files** — PHP, Theme, Plugin-এর সব কোড (server-এ থাকে)
+- **Database** — সব content, settings, user তথ্য (MySQL-এ থাকে)
+
+<CodeBlock code={"WordPress Site\n├── Files (PHP কোড, Themes, Plugins, Media)\n└── Database (MySQL — posts, pages, settings, users)"} lang={"text"} title={"একটি WordPress site-এর গঠন"} />
+
+## Frontend ও Backend
+
+<InParagraph text={"যেকোনো WordPress site-এর দুটি অংশ থাকে:"} />
+
+- **Frontend** — দর্শকরা যা দেখে (website-এর homepage, blog post)
+- **Backend (Admin area)** — মালিক/সম্পাদক-রা যা দেখে; `wp-admin` নামে পরিচিত
+
+<CodeBlock code={"Visitor  ⟶  https://mysite.com/about\n         ↓\nServer-এ index.php (একমাত্র entry point)\n         ↓\nWordPress PHP code load হয় (Theme + plugin)\n         ↓\nDatabase থেকে content আনা হয় (posts/pages/settings)\n         ↓\nHTML/CSS/JS হিসেবে visitor-কে পাঠানো হয়"} lang={"text"} title={"কীভাবে একটি page-এর request কাজ করে"} />
+
+<Tip tone={"info"} title={"মনে রাখুন"} text={"WordPress-এর **সব folder-এর ভেতরে** `index.php` থাকে — visitor-রা সরাসরি ফাইল ব্রাউজ করতে পারে না। সব request `index.php` দিয়ে ঢুকে WordPress-এর ভেতরের logic চালায়।"} />
+
+## Site-কে বানায় কী কী?
+
+- **Core WordPress** — মূল engine
+- **Theme** — design ও layout
+- **Plugin** — অতিরিক্ত functionality
+- **Content** — post, page, media ইত্যাদি
+- **Database** — সব content ও setting সংরক্ষণ

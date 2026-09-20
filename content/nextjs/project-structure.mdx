@@ -1,0 +1,51 @@
+---
+title: "Next.js Project Structure"
+label: "Project Structure"
+order: 4
+level: "Beginner"
+description: "app/, public/, src/ ফোল্ডার ও special files — Next.js project-এর গঠন বাংলায়।"
+---
+
+<InParagraph text={"Next.js-এ **file-system routing** — ফোল্ডার ও ফাইল দিয়ে route তৈরি হয়। project-এর মৌলিক গঠন জানা গুরুত্বপূর্ণ।"} />
+
+## Top-level ফোল্ডার
+
+| ফোল্ডার | কাজ |
+| --- | --- |
+| app/ | App Router — routes, layouts, pages |
+| pages/ | Pages Router (পুরোনো, App Router-এ ব্যবহার হয় না) |
+| public/ | Static assets (ছবি, font ইত্যাদি) |
+| src/ | Optional — application code আলাদা রাখতে |
+
+## app/ ফোল্ডারের Special Files
+
+| ফাইল | কাজ |
+| --- | --- |
+| layout.tsx | Shared UI — navbar, footer ইত্যাদি |
+| page.tsx | Route-এর UI (public page) |
+| loading.tsx | Loading/Skeleton UI |
+| error.tsx | Error boundary UI |
+| not-found.tsx | 404 UI |
+| route.ts | API endpoint |
+| template.tsx | Re-rendered layout |
+
+## সাধারণ Project Structure
+
+<CodeBlock code={"my-app/\n├── app/\n│   ├── layout.tsx      → রুট লেআউট — <html> ও <body>\n│   ├── page.tsx        → হোম পেজ (/)\n│   ├── globals.css     → global styles\n│   └── favicon.ico\n├── public/\n│   └── (static assets)\n├── next.config.ts      → Next.js configuration\n├── tsconfig.json       → TypeScript configuration\n├── eslint.config.mjs   → ESLint configuration\n└── package.json"} lang={"text"} title={"create-next-app structure"} />
+
+## Route-এর ভিত্তি (Segments)
+
+<InParagraph text={"প্রতিটি ফোল্ডার হলো একটি **route segment**, যা URL-এর সাথে ম্যাপ হয়:"} />
+
+| Path | URL |
+| --- | --- |
+| app/page.tsx | / |
+| app/blog/page.tsx | /blog |
+| app/blog/authors/page.tsx | /blog/authors |
+
+## Route Groups ও Private Folders
+
+- **`(group)`** — parenthesis দিয়ে group; URL-এ আসে না, তবে নিজস্ব layout দেওয়া যায়
+- **`_folder`** — underscore দিয়ে private folder; routing-এর বাইরে, component/util রাখতে
+
+<Tip tone={"info"} title={"Colocation"} text={"`app` ফোল্ডারের ভেতরে যেকোনো ফাইল রাখা যায় — যতক্ষণ না `page.tsx` বা `route.ts` থাকে, ততক্ষণ route হয়ে যায় না। অর্থাৎ component, utility — সব কিছু route-এর পাশেই রাখা যায়।"} />

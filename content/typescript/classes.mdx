@@ -1,0 +1,39 @@
+---
+title: "TypeScript Classes (ক্লাস)"
+label: "Classes"
+order: 14
+level: "Intermediate"
+description: "Class type, implements, access modifier, parameter property, abstract class ও static member — বাংলায় সম্পূর্ণ গাইড।"
+---
+
+<InParagraph text={"**Class** হলো object তৈরি করার ছাঁচ। TypeScript-এ class-এ টাইপ, access control ও interface বাস্তবায়ন (implements) যোগ হয় — অর্গানাইজড OOP কোড সহজে লেখা যায়।"} />
+
+## Class Type ও implements
+
+<CodeBlock code={"interface Pointable {\n  x: number;\n  y: number;\n}\n\nclass Point implements Pointable {\n  x: number;\n  y: number;\n\n  constructor(x: number, y: number) {\n    this.x = x;\n    this.y = y;\n  }\n}\n\nconst p = new Point(3, 4);"} lang={"typescript"} />
+
+## Access Modifiers
+
+<CodeBlock code={"class BankAccount {\n  public owner: string;      // সবাই দেখতে পারে\n  private balance: number;   // class-এর ভেতরেই\n  protected id: string;      // subclass-এ দৃশ্য\n\n  constructor(owner: string, balance: number) {\n    this.owner = owner;\n    this.balance = balance;\n    this.id = \"acc-\" + Math.random();\n  }\n\n  deposit(amount: number): void {\n    this.balance += amount;\n  }\n\n  getBalance(): number {\n    return this.balance;\n  }\n}\n\nconst acc = new BankAccount(\"রহিম\", 100);\n// acc.balance = 0;      // ❌ private\nconsole.log(acc.getBalance());   // 100"} lang={"typescript"} />
+
+## readonly Properties
+
+<CodeBlock code={"class User {\n  readonly createdAt: Date;\n\n  constructor(public name: string) {\n    this.createdAt = new Date();\n  }\n}\n\nconst u = new User(\"করিম\");\n// u.createdAt = new Date();   // ❌ readonly"} lang={"typescript"} />
+
+## Parameter Properties
+
+<InParagraph text={"Constructor প্যারামিটারে `public`/`private` ইত্যাদি দিলে নিজে থেকেই property ঘোষণা ও assign হয় — কোড ছোট হয়ে যায়।"} />
+
+<CodeBlock code={"class Product {\n  constructor(\n    public name: string,\n    private price: number,\n    public readonly sku: string,\n  ) {}\n\n  showPrice(): string {\n    return this.name + \": \" + this.price + \"৳\";\n  }\n}\n\nconst phone = new Product(\"বাংলাফোন\", 15000, \"B-100\");\nconsole.log(phone.showPrice());"} lang={"typescript"} />
+
+## Abstract Class
+
+<InParagraph text={"**Abstract class** সরাসরি object বানাতে দেয় না — শুধু subclass-এর ছাঁচ নির্ধারণ করে। বাধ্যতামূলক abstract method-গুলো subclass-কে লিখতে হয়।"} />
+
+<CodeBlock code={"abstract class Shape {\n  abstract area(): number;\n\n  describe(): string {\n    return \"একটি আকৃতি\";\n  }\n}\n\nclass Circle extends Shape {\n  constructor(private radius: number) {\n    super();\n  }\n\n  area(): number {\n    return Math.PI * this.radius ** 2;\n  }\n}\n\nconst circle: Shape = new Circle(5);"} lang={"typescript"} />
+
+## static Members
+
+<CodeBlock code={"class Config {\n  static appName = \"TechTutor\";\n  static version = \"1.0.0\";\n\n  static info(): string {\n    return Config.appName + \" v\" + Config.version;\n  }\n}\n\nconsole.log(Config.info());   // TechTutor v1.0.0"} lang={"typescript"} />
+
+<Tip tone={"info"} title={"class বনাম interface"} text={"interface শুধু গঠন বর্ণনা করে (runtime-এ থাকে না), class বাস্তব implementation ও value দেয়। ডেটা শেপ চাইলে interface, লজিক চাইলে class।"} />

@@ -1,0 +1,23 @@
+---
+title: "Production-এ migrate deploy"
+label: "Deploy Migrations"
+order: 31
+level: "Advanced"
+description: "দুটি env — এক schema: dev-এ migrate, prod-এ deploy।"
+---
+
+<InParagraph text={"মনে রাখুন — `migrate dev` dev ওই। Production build pipeline-এ চলবে না।"} />
+
+<CodeBlock code={"# after build\nnpx prisma migrate deploy\nnpx prisma generate"} lang={"bash"} title={"CI/deploy script"} />
+
+| Command | চলে কোথায় |
+| --- | --- |
+| migrate dev | প্রতিটি dev-মেশিনে |
+| migrate deploy | প্রোডাকশন / staging / CI |
+| db push | থিয়রি প্রটোটাইপিং ডেভ |
+
+- deploy-এর আগে migration folder committed
+- pending migration-থেকে shrinking-এ — backup
+- `--skip-generate` এড়াবেন — client সিঙ্ক
+
+<Tip tone={"warning"} title={"out-of-date client"} text={"Schema বদলে client না generate → runtime mismatch। pipeline-এ deploy-এর পরে `prisma generate` বাধ্যতামূলক।"} />

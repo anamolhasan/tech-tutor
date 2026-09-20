@@ -1,0 +1,68 @@
+---
+title: "Containerization ও VM vs Container"
+label: "Containerization"
+order: 2
+level: "Beginner"
+description: "Containerization কী, Virtual Machine বনাম Container, Docker-এর সুবিধা, সীমাবদ্ধতা ও ব্যবহারের ক্ষেত্র — বাংলায়।"
+---
+
+<InParagraph text={"Containerization সমস্যা বুঝতে আগে জানা দরকার: আগে প্রতিটি application-এর জন্য আলাদা server বা VM লাগত — অনেক resource নষ্ট। **Container** সেই ভার হালকা করল। এবার শিখে নেওয়া যাক এটি ঠিক কী।"} />
+
+## Containerization কী?
+
+<InParagraph text={"**Containerization** হলো operating system level-এ application-কে তার সব dependency সহ **isolated environment**-এ প্যাকেজ করার কৌশল। Container-গুলো host OS-এর kernel শেয়ার করে কিন্তু নিজস্ব file system, process, network-এ চলে। ফলে এটি VM-এর চেয়ে অনেক হালকা ও দ্রুত।"} />
+
+<CodeBlock code={"┌────────────────────────────┐\n│         App (Node/Python)   │\n│     Libraries & Binaries    │\n│        Config & Env vars    │\n│   Shared (host) OS Kernel   │\n└────────────────────────────┘"} lang={"text"} title={"Container ভেতরে কি থাকে"} />
+
+## Virtual Machine কী?
+
+<InParagraph text={"**Virtual Machine (VM)** হলো hypervisor-এর মাধ্যমে তৈরি সম্পূর্ণ virtual computer — নিজস্ব operating system সহ। প্রতিটি VM-এ আলাদা Guest OS চলে, তাই resource খরচ অনেক বেশি।"} />
+
+## Virtual Machine vs Container
+
+| বিষয় | Virtual Machine | Container |
+| --- | --- | --- |
+| অপারেটিং সিস্টেম | নিজস্ব Guest OS | Host OS-এর kernel শেয়ার |
+| আকার | GB-level (আমি) | MB-level |
+| বুট সময় | মিনিট | সেকেন্ড |
+| Performance | মাঝারি (overhead) | প্রায় native |
+| Isolation | দেরী-নিরাপদ | মোটামুটি (process-level) |
+| Resource ব্যবহার | অনেক | কম |
+| Portability | আসে তবে ভারী | সহজ ও হালকা |
+
+## Docker-এর সুবিধা
+
+- **Consistency** — সব environment-এ একই result
+- **হালকা** — VM-এর চেয়ে অনেক কম resource
+- **দ্রুত শুরু** — মিলিসেকেন্ডে container বুট
+- **Easily scalable** — এক image থেকে অনেক container
+- **Versioning** — image tag দিয়ে পুরোনো version recovery
+- **পরিপাটি setup** — developer laptop-এ লাগালাগি ছাড়া isolated environment
+
+## Docker-এর সীমাবদ্ধতা
+
+- **GUI-less** — শুধু command-line-ভিত্তিক workflow (যদিও Docker Desktop-এ UI আছে)
+- **Windows** — কিছু Linux-specific image Windows-এ ঠিকমতো চলে না (WSL2 প্রয়োজন)
+- **Security** — kernel শেয়ার করার কারণে কম ঝুঁকি-মুক্ত isolation than VM
+- **Storage** — অলস image/container জমে disk ভরে যায় (prune করতে হয়)
+- **ঢালু expert** — network, volume, orchestration বুঝতে learning curve
+
+## Docker কখন ব্যবহার করবেন?
+
+- Development environment দ্রুত setup করতে চাইলে
+- Multiple project-এ ভিন্ন version-এর Node.js/Python দরকার হলে
+- Database (MongoDB, PostgreSQL, Redis) লোকালি চালাতে চাইলে
+- Microservices বা multi-service architecture-এ
+- CI/CD pipeline-এ build ও test চালাতে
+- Production-এ server-এ app deploy ও scale করতে
+
+## Docker কোথায় ব্যবহার হয়?
+
+- **Local development** — Docker Desktop / Docker Engine
+- **CI/CD** — GitHub Actions, GitLab CI, Jenkins-এ build ও test
+- **Cloud** — AWS, Azure, GCP-এর container services
+- **Orchestration** — Kubernetes, Docker Swarm দিয়ে হাজার container
+- **Database hosting** — DB-গুলিও container হিসেবে চলে
+- **Edge computing ও batch jobs** — হালকা container-এ দ্রুত চালানো
+
+<Tip tone={"info"} title={"কোথায় container ব্যবহার না-ও করতে পারেন"} text={"একটিমাত্র tiny script বা গোটা desktop application যেখানে একেবারে বারোটা বাজে GUI দরকার, সেখানে container সেরা সমাধান নাও হতে পারে। ডাক্তার নয় — requirement দেখে বেছে নিন।"} />

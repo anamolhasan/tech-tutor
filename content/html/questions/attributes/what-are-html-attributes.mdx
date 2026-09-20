@@ -1,0 +1,15 @@
+---
+question: "What are HTML attributes?"
+order: 1
+description: "HTML attribute কী এবং কীভাবে element-কে অতিরিক্ত তথ্য দেওয়া হয়।"
+---
+
+<InParagraph text={"**HTML attribute** হলো element-এর opening tag-এ লেখা অতিরিক্ত তথ্য, যা element কীভাবে আচরণ করবে বা দেখাবে তা ঠিক করে। প্রতিটি attribute `নাম=\"মান\"` — এই ফরম্যাটে লেখা হয়।"} />
+
+<InParagraph text={"উদাহরণস্বরূপ, `<img>`-এ `src` attribute ঠিক করে কোন ছবি দেখাতে হবে, আর `<a>`-এ `href` ঠিক করে লিংক কোথায় যাবে:"} />
+
+<CodeBlock code={"<img src=\"photo.jpg\" alt=\"বাগানের ছবি\" />\n<a href=\"https://example.com\">Visit</a>"} lang={"html"} title={"উদাহরণ"} />
+
+<InParagraph text={"কিছু attribute প্রায় প্রতিটি element-এ দেওয়া যায় — এদের **global attribute** বলে, যেমন `id`, `class`, `title`, `style`। আবার কিছু attribute নির্দিষ্ট element-এর জন্য, যেমন `href` শুধু `<a>`-এ।"} />
+
+<Tip tone={"success"} title={"মনে রাখুন"} text={"একটি element-এ একাধিক attribute থাকতে পারে, আর attribute-গুলোকে স্পেস দিয়ে আলাদা করা হয়।"} />

@@ -1,0 +1,20 @@
+---
+title: "Migrations — schema কে database-এ আনা"
+label: "Migrations"
+order: 7
+level: "Intermediate"
+description: "migrate dev, migrate deploy, db push — কখন কোনটা।"
+---
+
+<CodeBlock code={"npx prisma migrate dev --name init"} lang={"bash"} title={"first migration"} />
+
+<InParagraph text={"এরপরই database-এ table তৈরি হয়েছে — `prisma/migrations/`-এ SQL ফাইল হিসেবে ইতিহাস।"} />
+
+| Command | কাজ |
+| --- | --- |
+| migrate dev | dev-এ: diff → apply + client generate |
+| migrate deploy | prod/CI-এ: pending SQL apply |
+| db push | দ্রুত dev; migration history নয় |
+| migrate reset | সব মুছে গিয়ে fresh apply |
+
+<Tip tone={"warning"} title={"dev-এ schema বের করুন"} text={"`migrate dev` কয়েকবার চালান জোড়া/address-এ — `--help` দেখুন। Prod-এ `migrate dev` নয় — শুধু `deploy`।"} />

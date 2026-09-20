@@ -1,0 +1,21 @@
+---
+title: "Table Actions — Edit ও Delete row"
+label: "Table Actions"
+order: 25
+level: "Intermediate"
+description: "প্রতিটি row-এ action buttons — edit dialog খোলা, delete confirm — বাংলায়।"
+---
+
+<InParagraph text={"অ্যাকশন কলামে edit/delete button থাকে যার হুক upstream (dialog state) — তাই এর componentহীণ client-এ اتفق।"} />
+
+<CodeBlock code={"import { Pencil, Trash2 } from \"lucide-react\";\nimport { Button } from \"@/components/ui/button\";\n\ninterface ProductTableProps {\n  data: Product[];\n  onEdit: (product: Product) => void;\n  onDelete: (product: Product) => void;\n}"} lang={"tsx"} title={"Actions cell (inside product-table.tsx)"} />
+
+<CodeBlock code={"{\n  id: \"actions\",\n  header: () => <span className=\"sr-only\">Actions</span>,\n  cell: ({ row }) => {\n    const product = row.original;\n    return (\n      <div className=\"flex justify-end gap-1\">\n        <Button\n          variant=\"ghost\"\n          size=\"icon\"\n          onClick={() => onEdit(product)}\n          aria-label={\"Edit \" + product.name}\n        >\n          <Pencil className=\"size-4\" />\n        </Button>\n        <Button\n          variant=\"ghost\"\n          size=\"icon\"\n          onClick={() => onDelete(product)}\n          aria-label={\"Delete \" + product.name}\n        >\n          <Trash2 className=\"size-4 text-red-500\" />\n        </Button>\n      </div>\n    );\n  },\n}"} lang={"tsx"} title={"actions ColumnDef"} />
+
+## কেন id:'actions'
+
+<InParagraph text={"এই column-এর কোনো `accessorKey` নেই — এটি pure UI. টান-টেবিলে এমন column-এর নাম `id: \"actions\"` দেওয়া convention।"} />
+
+<CodeBlock code={"<ProductTable\n  data={data}\n  columns={productColumns}\n  onEdit={(p) => { setEditingProduct(p); setDialogOpen(true); }}\n  onDelete={(p) => { setDeletingProduct(p); setDeleteOpen(true); }}\n/>"} lang={"tsx"} title={"Table একসাথে ব্যবহার"} />
+
+<Tip tone={"success"} title={"Dialog state-মাত্র upward"} text={"এখানে `onEdit`/`onDelete` parent-এর state বদলায় — **column ও dialog-কে আলাদা রাখা** মানে table reusable থাকে (export/mobile view-এ একই column ব্যবহার করা যায়)।"} />

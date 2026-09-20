@@ -1,0 +1,27 @@
+---
+title: "Mapped Types (ম্যাপড টাইপ)"
+label: "Mapped Types"
+order: 19
+level: "Advanced"
+description: "keyof, mapped type basics, readonly/? modifiers remove এবং real-world utility গড়া — বাংলায়।"
+---
+
+<InParagraph text={"**Mapped type** একটি অবজেক্ট টাইপের প্রতিটি প্রপার্টিতে লুপ চালিয়ে নতুন অবজেক্ট টাইপ বানায় — যেমন সব প্রপার্টি boolean করা বা optional করা।"} />
+
+## keyof
+
+<CodeBlock code={"type Person = { name: string; age: number };\n\n// keyof → \"name\" | \"age\"\ntype PersonKeys = keyof Person;\n\nfunction getValue(obj: Person, key: PersonKeys): Person[PersonKeys] {\n  return obj[key];\n}"} lang={"typescript"} />
+
+## মৌলিক Mapped Type
+
+<CodeBlock code={"// প্রতিটি প্রপার্টিকে boolean-এ বদলে নতুন টাইপ\ntype OptionsFlags<T> = { [K in keyof T]: boolean };\n\ntype Feature = { layout: string; theme: string };\ntype Flags = OptionsFlags<Feature>;\n// → { layout: boolean; theme: boolean }"} lang={"typescript"} />
+
+## Modifiers: readonly ও ?
+
+<CodeBlock code={"type ReadonlyAll<T> = { readonly [K in keyof T]: T[K] };\n\ntype OptionalAll<T> = { [K in keyof T]?: T[K] };\n\ntype Person = { name: string; age: number };\n\ntype RO_Person = ReadonlyAll<Person>;   // readonly\ntype Opt_Person = OptionalAll<Person>;  // সব optional\n\n// '-' দিয়ে modifier সরানো হয়\ntype MyRequired<T> = { [K in keyof T]-?: T[K] };"} lang={"typescript"} />
+
+## Real-world প্রয়োগ
+
+<CodeBlock code={"// প্রতিটি প্রপার্টির জন্য event handler সৃষ্টি\ntype EventMap<T> = {\n  [K in keyof T as `on${Capitalize<keyof T>}`]: () => Promise<void>;\n};\n\ntype AppEvents = EventMap<{ load: string; save: string }>;\n// → { onLoad: () => Promise<void>; onSave: () => Promise<void> }"} lang={"typescript"} />
+
+<Tip tone={"success"} title={"keyof + mapped = শক্তি"} text={"`keyof` ও mapped type-এর জুটি টাইপ-স্তরের লুপ। আগের অধ্যায়ের **Partical/Record** মূলত এই প্যাটার্নেই তৈরি করা।"} />

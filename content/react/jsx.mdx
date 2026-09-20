@@ -1,0 +1,31 @@
+---
+title: "JSX ও React Element"
+label: "JSX"
+order: 3
+level: "Beginner"
+description: "JSX কী, HTML-এর সাথে পার্থক্য, expressions ও attribute rule — বাংলায়।"
+---
+
+## JSX কী?
+
+<InParagraph text={"**JSX** হলো JavaScript-এ HTML-এর মতো লেখার syntax। এটি browser সরাসরি বোঝে না — **Babel/compiler** এটাকে `React.createElement()`-এ রূপান্তর করে। ব্রাউজারে যাওয়ার আগেই JSX plain JavaScript-এ convert হয়।"} />
+
+<CodeBlock code={"// JSX\nconst el = <h1 className=\"title\">Hello</h1>;\n\n// উপরেরটি equivalent:\nconst el2 = React.createElement(\"h1\", { className: \"title\" }, \"Hello\");"} lang={"jsx"} title={"JSX vs createElement"} />
+
+## Expression — \{\}
+
+<CodeBlock code={"const user = { name: \"রহিম\", age: 24 };\n\nfunction Card() {\n  return (\n    <div>\n      {/* JS expression — যেকোনো JavaScript value */}\n      <h2>{user.name}</h2>\n      <p>Age: {user.age + 1}</p>\n      <p>{user.age >= 18 ? \"প্রাপ্তবয়স্ক\" : \"নাবালক\"}</p>\n    </div>\n  );\n}"} lang={"jsx"} title={"Dynamic value"} />
+
+## JSX নিয়ম
+
+- প্রতিটি component একটি parent element return করে — `div`, `<>` (fragment) বা component
+- Attribute নাম **camelCase** — `className`, `onClick`, `htmlFor`
+- সব tag **self-close** — `<img />`, `<br />`
+- JSX-এ `class` লেখা যায় না — `className`
+- `style` object আকারে — `style={{ color: "red" }}`
+
+<CodeBlock code={"function Badge() {\n  return (\n    <span\n      className=\"badge\"\n      style={{ backgroundColor: \"#22c55e\", padding: \"4px 8px\" }}\n    >\n      Active\n    </span>\n  );\n}"} lang={"jsx"} title={"Style ও className"} />
+
+## কমেন্ট
+
+<CodeBlock code={"return (\n  <div>\n    {/* এটা JSX comment — output-এ আসে না */}\n    <h1>Hello</h1>\n  </div>\n);"} lang={"jsx"} title={"JSX comment"} />

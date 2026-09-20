@@ -1,0 +1,45 @@
+---
+title: "Caching ও Revalidation"
+label: "Caching ও Revalidation"
+order: 15
+level: "Advanced"
+description: "use cache directive, cacheLife, cacheTag, revalidateTag/updateTag — আধুনিক caching বাংলায়।"
+---
+
+<InParagraph text={"**Caching** হলো data fetch-এর ফলাফল সংরক্ষণ করা যাতে বারবার একই কাজ না করতে হয়। Next.js-এ **Cache Components** (Next 15.3+/16) দিয়ে সহজ caching হয়।"} />
+
+## Cache Components চালু করা
+
+<CodeBlock code={"import type { NextConfig } from \"next\";\n\nconst nextConfig: NextConfig = {\n  cacheComponents: true,\n};\n\nexport default nextConfig;"} lang={"ts"} title={"next.config.ts"} />
+
+## use cache হুড
+
+<InParagraph text={"`\"use cache\"` directive দিয়ে একটি async function বা component-এর ফলাফল cache করা যায়, `cacheLife()` দিয়ে lifetime ঠিক করা যায়।"} />
+
+<CodeBlock code={"import { cacheLife } from \"next/cache\";\n\nexport async function getUsers() {\n  \"use cache\";\n  cacheLife(\"hours\");\n\n  return db.query(\"SELECT * FROM users\");\n}"} lang={"ts"} title={"app/lib/data.ts"} />
+
+<CodeBlock code={"import { cacheLife } from \"next/cache\";\n\nexport default async function Page() {\n  \"use cache\";\n  cacheLife(\"hours\");\n\n  const users = await db.query(\"SELECT * FROM users\");\n\n  return (\n    <ul>\n      {users.map((user) => (\n        <li key={user.id}>{user.name}</li>\n      ))}\n    </ul>\n  );\n}"} lang={"tsx"} title={"app/page.tsx (UI-level)"} />
+
+## cacheLife Profiles
+
+| Profile | Stale | Revalidate | Expire |
+| --- | --- | --- | --- |
+| seconds | 0 | 1s | 60s |
+| minutes | 5m | 1m | 1h |
+| hours | 5m | 1h | 1d |
+| days | 5m | 1d | 1w |
+| weeks | 5m | 1w | 30d |
+| max | 5m | 30d | ~indefinite |
+
+## Revalidation (cache হারিয়ে গেলে)
+
+- `cacheTag('posts')` — cached data-তে tag দিন
+- `revalidateTag('posts')` — on-demand invalidate (Route Handler/Server Action)
+- `updateTag('posts')` — এখনই expire (read-your-own-writes)
+- `revalidatePath('/posts')` — path-based invalidate
+
+<CodeBlock code={"\"use server\";\n\nimport { updateTag } from \"next/cache\";\nimport { redirect } from \"next/navigation\";\n\nexport async function createPost(formData: FormData) {\n  const post = await db.post.create({\n    data: { title: formData.get(\"title\") },\n  });\n\n  updateTag(\"posts\");\n  redirect(`/posts/${post.id}`);\n}"} lang={"ts"} title={"app/actions.ts"} />
+
+<Tip tone={"info"} title={"updateTag বনাম revalidateTag"} text={"`updateTag` Server Actions-এ — user-এর নিজের লেখা এখনই দেখায়। `revalidateTag` Server Action ও Route Handler উভয়ে — stale-while-revalidate (background refresh)। Tag-based revalidation path-based-এর চেয়ে বেশি precise, সুতরাং পছন্দ করুন।"} />
+
+<Tip tone={"success"} title={"কখন cache করবেন?"} text={"যে data runtime-data-এর উপর নির্ভর করে না ও কিছু সময় পুরোনো রাখা চলবে, তাই `use cache` + `cacheLife` দিন। Content-শোর জন্য tag + длинный cache ব্যবহার করে mutation-এ revalidate করুন।"} />

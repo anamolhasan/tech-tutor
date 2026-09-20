@@ -1,0 +1,19 @@
+---
+title: "Complete Flow — Storefront থেকে Order পর্যন্ত"
+label: "Complete Flow"
+order: 34
+level: "Advanced"
+description: "কার্ট যোগ → অর্ডার — পুরো উদাহরণ, Slice ও RTK Query-র সমন্বয় — বাংলায়।"
+---
+
+<InParagraph text={"এখন সব টুকরো এক পেজে মেলে দেখি — **Storefront → Cart → Checkout → Order** — Redux slice (cart) আর RTK Query (products/orders) একসাথে কীভাবে মসৃণভাবে কাজ করে।"} />
+
+## Checkout flow ধাপে ধাপে
+
+<CodeBlock code={"1) Storefront mount → useGetProductsQuery() fetch (cache)\n2) \"কার্টে যোগ\" click → dispatch(addItem(...))   (slice)\n3) CartDrawer → items×product-price → total\n4) Checkout click → createOrder({ items }).unwrap()  (mutation)\n5) Success → listenerMiddleware → toast + clearCart()\n6) Invalidation \"Order\" → orders list auto-refetch"} lang={"text"} title={"State journey"} />
+
+## একসাথে সব hooks
+
+<CodeBlock code={"function useCheckout() {\n  const items = useAppSelector(selectCartItems);\n  const dispatch = useAppDispatch();\n  const [createOrder, result] = useCreateOrderMutation();\n\n  const total = useAppSelector(selectCartTotal);\n  const { data: products } = useGetProductsQuery();\n\n  const checkout = async () => {\n    if (items.length === 0) return;\n    const order = await createOrder({ items }).unwrap();\n    dispatch(clearCart());\n    return order;\n  };\n\n  return { items, total, checkout, result };\n}"} lang={"ts"} title={"checkout-in-one.tsx"} />
+
+<Tip tone={"success"} title={"Refactor-friendly"} text={"সব logic hook/composable-তে ঢাকা — UI component-গুলো pure। এ structure-তে store, listener, RTK Query patch ছাড়াই নতুন flow যোগ করা সহজ।"} />

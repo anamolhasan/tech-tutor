@@ -1,0 +1,19 @@
+---
+title: "createSlice — Slice Basics"
+label: "createSlice"
+order: 8
+level: "Beginner"
+description: "createSlice-এ name, initialState, reducers — বাংলায়।"
+---
+
+<CodeBlock code={"import { createSlice } from \"@reduxjs/toolkit\";\n\n\ninterface CartState {\n  items: CartItem[];      // [{ productId, qty }]\n}\n\nconst initialState: CartState = {\n  items: [],\n};\n\nconst cartSlice = createSlice({\n  name: \"cart\",\n  initialState,\n  reducers: {\n    addItem: (state, action: PayloadAction<CartItem>) => {\n      // Immer: mutate করলেও আসল state বদলায় না\n      const existing = state.items.find(\n        (i) => i.productId === action.payload.productId,\n      );\n      if (existing) {\n        existing.qty += action.payload.qty;\n      } else {\n        state.items.push(action.payload);\n      }\n    },\n  },\n});\n\nexport const { addItem } = cartSlice.actions;\nexport default cartSlice.reducer;"} lang={"ts"} title={"src/features/cart/cartSlice.ts"} />
+
+## createSlice কী তৈরি করে
+
+- প্রতিটি reducer-এর জন্য **action creator** (`addItem` ফাংশন)
+- Action type string (`cart/addItem`) — collision এড়াতে name-prefixed
+- **Reducer** — যা store-এ মাউন্ট করা যায়
+
+<CodeBlock code={"dispatch(addItem({ productId: \"p1\", qty: 1 }));\n// action:  { type: \"cart/addItem\", payload: { productId: \"p1\", qty: 1 } }"} lang={"ts"} title={"Dispatch করার সময়"} />
+
+<Tip tone={"success"} title={"PayloadAction<type>"} text={"`action.payload` optional-বিহীনভাবে typed — TS চেক করে যে কোনো অমিল হয়। এতে `any`-ছাড়া action লেখা চলবে much সহজে।"} />

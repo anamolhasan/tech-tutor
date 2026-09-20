@@ -1,0 +1,27 @@
+---
+title: "Node.js Debugging"
+label: "Debugging"
+order: 11
+level: "Intermediate"
+description: "console methods, Node Inspector, debugger statement — Node.js code debug করার বাংলা গাইড।"
+---
+
+<InParagraph text={"Debugging হলো bug খুঁজে বের করা ও fix করা। Node.js-এ অনেক debugging tools আছে।"} />
+
+## console Methods
+
+<CodeBlock code={"console.log(\"সাধারণ output\");\nconsole.error(\"Error message\");\nconsole.warn(\"Warning message\");\n\n// structured data\nconsole.table([\n  { name: \"রহিম\", age: 25 },\n  { name: \"করিম\", age: 30 },\n]);\n\n// time tracking\nconsole.time(\"loop\");\nfor (let i = 0; i < 1000000; i++) {}\nconsole.timeEnd(\"loop\");\n\n// group output\nconsole.group(\"User Info\");\nconsole.log(\"Name: রহিম\");\nconsole.log(\"Age: 25\");\nconsole.groupEnd();"} lang={"javascript"} />
+
+## Node Inspector (Debugger)
+
+<CodeBlock code={"# --inspect দিয়ে debug mode চালু\nnode --inspect app.js\n\n# breakpoint-এ থামাবে\nnode --inspect-brk app.js\n\n# তারপর Chrome-এ chrome://inspect খুলুন"} lang={"bash"} />
+
+## debugger Statement
+
+<CodeBlock code={"function calculateTotal(items) {\n  let total = 0;\n  for (const item of items) {\n    debugger; // এখানে থামবে\n    total += item.price;\n  }\n  return total;\n}\n\ncalculateTotal([{ price: 10 }, { price: 20 }]);"} lang={"javascript"} />
+
+## util.inspect
+
+<CodeBlock code={"const util = require(\"node:util\");\n\nconst obj = {\n  name: \"রহিম\",\n  address: {\n    city: \"ঢাকা\",\n    zip: \"1205\",\n  },\n};\n\n// deep inspection\nconsole.log(util.inspect(obj, {\n  showHidden: false,\n  depth: null,      // সব depth দেখাবে\n  colors: true,     // colored output\n  compact: false,\n}));"} lang={"javascript"} />
+
+<Tip tone={"success"} title={"VS Code Integration"} text={"VS Code-এ `launch.json` কনফিগার করে direct Node.js debug করা যায়। এতে breakpoint set, variable inspect, call stack check — সব সম্ভব।"} />

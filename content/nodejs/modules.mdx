@@ -1,0 +1,64 @@
+---
+title: "Node.js Modules (মডিউল)"
+label: "Modules"
+order: 3
+level: "Beginner"
+description: "CommonJS, ESM, require/import, module.exports — Node.js-এ কোড সংগঠনের সম্পূর্ণ বাংলা গাইড।"
+---
+
+<InParagraph text={"**Module** হলো Node.js-এ কোডকে ছোট ছোট, পুনঃব্যবহারযোগ্য অংশে ভাগ করার পদ্ধতি। প্রতিটি JavaScript ফাইল একটি module।"} />
+
+## Module কেন দরকার?
+
+- কোড reusable হয় — একবার লেখা, অনেক জায়গায় ব্যবহার
+- Codebase organized থাকে — ছোট ছোট ফাইলে ভাগ
+- Namespace conflict হয় না — প্রতিটি module এর own scope
+- Maintainability বাড়ে — একটি ফাইল পরিবর্তনে অন্য ফাইলে প্রভাব কম
+
+## CommonJS Modules (require)
+
+<InParagraph text={"Node.js-এর পুরোনো ও classic module system। `require()` দিয়ে import, `module.exports` দিয়ে export করা হয়।"} />
+
+<CodeBlock code={"// Export করা\nconst add = (a, b) => a + b;\nconst subtract = (a, b) => a - b;\nconst multiply = (a, b) => a * b;\n\nmodule.exports = { add, subtract, multiply };"} lang={"javascript"} title={"math.js"} />
+
+<CodeBlock code={"// Import করা\nconst math = require(\"./math\");\n\nconsole.log(math.add(5, 3));       // 8\nconsole.log(math.subtract(10, 4)); // 6\nconsole.log(math.multiply(3, 7));  // 21"} lang={"javascript"} title={"app.js"} />
+
+## ES Modules (import/export)
+
+<InParagraph text={"JavaScript-এর modern module system। Node.js 14+ থেকে সমর্থিত। `package.json`-এ `\"type\": \"module\"` বা `.mjs` extension প্রয়োজন।"} />
+
+<CodeBlock code={"export const add = (a, b) => a + b;\nexport const subtract = (a, b) => a - b;\n\n// default export\nexport default class Calculator {\n  add(a, b) { return a + b; }\n}"} lang={"javascript"} title={"utils.mjs"} />
+
+<CodeBlock code={"import Calculator, { add, subtract } from \"./utils.mjs\";\n\nconst calc = new Calculator();\nconsole.log(calc.add(10, 5));  // 15\nconsole.log(add(3, 4));        // 7"} lang={"javascript"} title={"app.mjs"} />
+
+## Built-in Modules
+
+<InParagraph text={"Node.js অনেক built-in modules সরবরাহ করে যেগুলো install ছাড়াই ব্যবহার করা যায়:"} />
+
+| Module | কাজ |
+| --- | --- |
+| fs | ফাইল সিস্টেম (পড়া, লেখা, মুছে ফেলা) |
+| path | ফাইল পাথ ম্যানেজমেন্ট |
+| http | HTTP সার্ভার ও ক্লায়েন্ট |
+| os | অপারেটিং সিস্টেম সম্পর্কিত তথ্য |
+| crypto | ক্রিপ্টোগ্রাফিক অপারেশন |
+| events | Event Emitter pattern |
+| stream | Stream processing |
+| url | URL parsing |
+| querystring | Query string parsing |
+
+<CodeBlock code={"const os = require(\"node:os\");\nconst path = require(\"node:path\");\n\nconsole.log(os.platform());     // \"win32\", \"linux\", \"darwin\"\nconsole.log(os.cpus().length);   // CPU core সংখ্যা\nconsole.log(os.totalmem());      // মোট memory\n\nconsole.log(__filename);        // বর্তমান ফাইলের পাথ\nconsole.log(__dirname);         // বর্তমান directory\nconsole.log(path.extname(\"app.js\")); // \".js\""} lang={"javascript"} />
+
+## CommonJS বনাম ESM
+
+| বৈশিষ্ট্য | CommonJS | ESM |
+| --- | --- | --- |
+| Syntax | require() / module.exports | import / export |
+| Loading | Synchronous | Asynchronous |
+| Tree Shaking | সম্ভব নয় | সম্ভব |
+| Extension | .js (default) | .mjs বা type:module |
+| Dynamic import | require() দিয়ে | import() দিয়ে |
+
+<CodeBlock code={"// runtime-ে condition অনুযায়ী import\nif (process.env.NODE_ENV === \"production\") {\n  const logger = await import(\"./prod-logger.mjs\");\n  logger.log(\"Production mode\");\n} else {\n  const logger = await import(\"./dev-logger.mjs\");\n  logger.log(\"Development mode\");\n}"} lang={"javascript"} title={"Dynamic import (ESM)"} />
+
+<Tip tone={"info"} title={"নতুন project-এর জন্য"} text={"নতুন project-এ ESM (import/export) ব্যবহার করুন। এটি modern JavaScript standard এবং tree-shaking support করে।"} />

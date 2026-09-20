@@ -1,0 +1,24 @@
+---
+title: "Context API"
+label: "Context"
+order: 13
+level: "Intermediate"
+description: "Props drilling কমাতে Context — createContext, Provider, useContext — বাংলায়।"
+---
+
+## কখন Context দরকার
+
+<InParagraph text={"যখন অনেক component-কে একই ডেটা (theme, user, language) দরকার — আর props ধরে ধরে পাঠানো ক্লান্তিকর। তখন **Context** সেই ডেটা সরাসরি যেকোনো গভীরের component-এ পৌঁছে দেয়।"} />
+
+<CodeBlock code={"import { createContext, useContext, useState } from \"react\";\n\nconst ThemeContext = createContext(\"light\");\n\nfunction App() {\n  const [theme, setTheme] = useState(\"light\");\n\n  return (\n    <ThemeContext.Provider value={{ theme, setTheme }}>\n      <Toolbar />\n    </ThemeContext.Provider>\n  );\n}\n\n// যেকোনো গভীরে\nfunction ThemeButton() {\n  const { theme, setTheme } = useContext(ThemeContext);\n\n  return (\n    <button onClick={() => setTheme(theme === \"light\" ? \"dark\" : \"light\")}>\n      Current: {theme}\n    </button>\n  );\n}"} lang={"jsx"} title={"Theme Context"} />
+
+## Provider নিয়ম
+
+- `value` বদলালে context-এর সব consumer re-render হয়
+- Overuse এড়িয়ে চলুন — অপ্রয়োজনীয় 값을 context-এ না
+- Context-এ state-ও রাখা যায় — সাথে reducer দিয়ে জটিলতা কমান
+- Server Components-এ পুরো object পাস না — serializable value দিন
+
+## Reducer + Context combo
+
+<CodeBlock code={"const AuthContext = createContext(null);\n\nfunction AuthProvider({ children }) {\n  const [user, dispatch] = useReducer(authReducer, null);\n\n  return (\n    <AuthContext.Provider value={{ user, dispatch }}>\n      {children}\n    </AuthContext.Provider>\n  );\n}\n\nfunction useAuth() {\n  return useContext(AuthContext);\n}"} lang={"jsx"} title={"Mini store"} />

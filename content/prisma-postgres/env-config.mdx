@@ -1,0 +1,19 @@
+---
+title: "DATABASE_URL ও env ব্যবস্থাপনা"
+label: "Env Config"
+order: 23
+level: "Intermediate"
+description: "schema/dev/prod URL— process.env-এ ছড়ান।"
+---
+
+<InParagraph text={"Prisma `env(...)`-এ ছাড়া `.env`-এর value পড়ে — `schema.prisma`-তে `datasource.url = env('DATABASE_URL')`।"} />
+
+<CodeBlock code={"# .env (dev)\nDATABASE_URL=\"postgresql://postgres:secret@localhost:5432/techshop\"\n\n# production upload-server env-এ\nDATABASE_URL=\"postgresql://admin:pass@db-prod:5432/techshop\""} lang={"bash"} />
+
+- `prisma generate`-এও env দরকার — schema-তে connection
+- `dotenv-cli`/CI env — deploy-এ `--schema` flag
+- Prisma 5: client-এ no env import — client-তে `prisma` process.env-এ না
+
+<CodeBlock code={"import { z } from \"zod\";\n\nconst envSchema = z.object({\n  DATABASE_URL: z.string().url(),\n});\n\nexport const env = envSchema.parse(process.env);"} lang={"ts"} title={"runtime পেতে validate"} />
+
+<Tip tone={"warning"} title={"secret"} text={"`.env` .gitignore-য়ে — প্রজেক্টে কখনো commit নয়।"} />

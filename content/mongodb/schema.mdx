@@ -1,0 +1,38 @@
+---
+title: "Schema ডিফাইন"
+label: "Schema"
+order: 5
+level: "Beginner"
+description: "Mongoose Schema কী, field type, nested schema, options এবং এর পুরো নিয়ম — বাংলায়।"
+---
+
+## Schema কী?
+
+<InParagraph text={"**Schema** হলো document-এর blueprint — কোন field থাকবে, কী type-এর হবে, কোনটা required — সবই এখানে define করা হয়। Schema থেকেই পরে **Model** তৈরি হয়।"} />
+
+<CodeBlock code={"import mongoose from \"mongoose\";\n\nconst userSchema = new mongoose.Schema({\n  name: { type: String, required: true },\n  email: { type: String, required: true, unique: true, lowercase: true },\n  age: { type: Number, min: 13 },\n  isActive: { type: Boolean, default: true },\n  tags: { type: [String], default: [] },\n  createdAt: { type: Date, default: Date.now },\n});"} lang={"js"} title={"সাধারণ schema"} />
+
+## Built-in Types
+
+| Type | ব্যবহার |
+| --- | --- |
+| `String` | Text, email, name |
+| `Number` | সংখ্যা (int/float) |
+| `Date` | তারিখ ও সময় |
+| `Boolean` | সত্য/মিথ্যা |
+| `Buffer` | Binary data (photo, file) |
+| `ObjectId` | অন্য document-এর reference |
+| `Array` | List of values |
+| `Mixed` | যেকোনো type (যত্নে ব্যবহার করুন) |
+| `Decimal128` | নিখুঁত decimal (money) |
+| `Map` | Dynamic key-value object |
+
+## Nested Schema
+
+<CodeBlock code={"const addressSchema = new mongoose.Schema({\n  city: String,\n  zip: String,\n  country: { type: String, default: \"BD\" },\n});\n\nconst userSchema = new mongoose.Schema({\n  name: String,\n  address: addressSchema, // nested document\n  orders: [\n    {\n      product: { type: String, required: true },\n      quantity: { type: Number, default: 1 },\n    },\n  ], // array of subdocuments\n});"} lang={"js"} title={"Nested + array of objects"} />
+
+## Schema Options
+
+<CodeBlock code={"const postSchema = new mongoose.Schema(\n  {\n    title: { type: String, required: true },\n    body: String,\n  },\n  {\n    timestamps: true, // createdAt, updatedAt নিজে থেকেই যুক্ত হয়\n    versionKey: false, // __v field না রাখতে\n    strict: true,      // schema-তে নেই এমন field নেবে না (default)\n  }\n);"} lang={"js"} title={"Timestamps সহ"} />
+
+<Tip tone={"warning"} title={"strict: false সাবধানে"} text={"`strict: false` দিলে schema-তে নেই এমন field-ও save হবে — যা অবাঞ্ছিত ডেটা জমা করে। সাধারণত `strict: true` (default) রেখে দরকারি field স্পষ্টভাবে বাড়ান।"} />

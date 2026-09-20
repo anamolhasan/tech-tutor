@@ -1,0 +1,19 @@
+---
+title: "expo-auth-session — OAuth (Google) login"
+label: "Auth Session"
+order: 29
+level: "Advanced"
+description: "PKCE-based OAuth flow — expo-auth-session দিয়ে sign-in।"
+---
+
+<InParagraph text={"তৃতীয়-পক্ষ OAuth (Google, GitHub)-এ **`expo-auth-session`** — PKCE + deep-link redirect-এর standard flow।"} />
+
+<CodeBlock code={"npx expo install expo-auth-session expo-web-browser"} lang={"bash"} title={"terminal"} />
+
+<CodeBlock code={"import * as AuthSession from \"expo-auth-session\";\nimport * as WebBrowser from \"expo-web-browser\";\n\nWebBrowser.maybeCompleteAuthSession();\n\nconst config = {\n  clientId: \"YOUR_CLIENT_ID\",\n  scopes: [\"openid\", \"profile\", \"email\"],\n  redirectUri: AuthSession.makeRedirectUri({ scheme: \"tasktrack\" }),\n};\n\nexport function useGoogleAuth() {\n  return AuthSession.useAuthRequest({\n    ...config,\n    authorizationEndpoint:\n      \"https://accounts.google.com/o/oauth2/v2/auth\",\n    tokenEndpoint: \"https://oauth2.googleapis.com/token\",\n  });\n}"} lang={"ts"} title={"lib/useGoogleAuth.ts"} />
+
+<InParagraph text={"**redirectUri** — `tasktrack://` — app.json-এ `scheme` আগে থেকেই ঠিক আছে। Result handle:"} />
+
+<CodeBlock code={"const [request, response, promptAsync] = useGoogleAuth();\n\nuseEffect(() => {\n  if (response?.type === \"success\") {\n    const token = response.params.access_token;\n    saveToken(token);\n  }\n}, [response]);\n\npromptAsync(); // button-এ call করবেন"} lang={"tsx"} />
+
+<Tip tone={"warning"} title={"client secret নয়"} text={"Mobile OAuth = **public client** — client_secret কখনও অ্যাপ-এ রাখবেন না। Token server-এ verify করে session complete করুন (PKCE safety)।"} />

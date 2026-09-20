@@ -1,0 +1,18 @@
+---
+title: "বড় schema-পরিবর্তন — data migration"
+label: "Schema Evolution"
+order: 35
+level: "Advanced"
+description: "rename/transform — পার্শ্বে-থেকে existing data ঠিক রাখা।"
+---
+
+<InParagraph text={"২-phase pattern — code-নতুন column-এ যাক, তারপর পুরোনো মুছে দাও।"} />
+
+- নতুন column add (nullable/default)
+- মিডল-টাইম — app-দুটোই লেখে
+- backfill — copy/transform data
+- পুরোনো column নিষিদ্ধ → drop
+
+<CodeBlock code={"const products = await prisma.product.findMany({\n  where: { slug: null },\n  select: { id: true, name: true },\n});\n\nfor (const p of products) {\n  const slug = p.name.toLowerCase().split(\" \").join(\"-\");\n  await prisma.product.update({\n    where: { id: p.id },\n    data: { slug },\n  });\n}"} lang={"ts"} title={"backfill (prisma)"} />
+
+<Tip tone={"warning"} title={"destructive-সতর্ক"} text={"Production-এ সরাসরি column rename নয় — ২-phase deploy + test। বড় টেবিলে ALTER lock নেয় — সতর্কভাবে গণ-সময় ঠিক করুন।"} />

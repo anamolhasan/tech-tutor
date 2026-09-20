@@ -1,0 +1,30 @@
+---
+title: "Wiki, CODEOWNERS, কোডবেস রুটিন"
+label: "Collaboration"
+order: 17
+level: "Intermediate"
+description: "দলের সঠিক সহযোগিতা: Wiki, CODEOWNERS ও নিয়ম — বাংলায়।"
+---
+
+## Repository সহযোগিতার বৈশিষ্ট্য
+
+- **Wiki** — docs-এর হালকা জায়গা
+- **CODEOWNERS** — কোন ফাইলের দায়িত্ব কে
+- **Issue templates** — পরিষ্কার রিপোর্ট
+- **PR templates** — পরিষ্কার পরিবর্তন
+
+## CODEOWNERS
+
+<CodeBlock code={"# প্রতিটি লাইন: path + যাদের অনুমতি\n*            @team-lead\n/api/        @backend\n/app/        @frontend\n/docs/       @docs-team"} lang={"text"} title={".github/CODEOWNERS (root-এ)"} />
+
+<InParagraph text={"যে file-টি আপনার ক্ষেত্রে matching — PR-এ সেই team-কে automatic reviewer দেওয়া হয়।"} />
+
+## Issue/PR templates
+
+<CodeBlock code={"---\nname: \"🐛 বাগ রিপোর্ট\"\nabout: সংযোজন করুন সঠিকভাবে রিপোর্ট করতে\nlabels: bug\n---\n**এক লাইনে:**\n**Steps:**\n**Expected:**\n**Actual:**"} lang={"text"} title={".github/ISSUE_TEMPLATE/bug_report.md"} />
+
+## Project-এ দলগত কাজ
+
+<CodeBlock code={"# দলের প্রতিদিন\ngit pull origin main\ngit switch -c fix/xyz\n# ... কাজ ...\ngit push -u origin fix/xyz\n# PR ছোট → review → merge → branch delete"} lang={"bash"} />
+
+<Tip tone={"success"} title={"দলের ভাব"} text={"সংরক্ষিত নিয়ম (templates, CODEOWNERS, protected main) দলকে শৃঙ্খল দেয় — মানুষের ভুল হলে Panic নয়, system গাইড করে।"} />

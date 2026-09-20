@@ -1,0 +1,19 @@
+---
+title: "Prisma — schema-driven ORM"
+label: "Prisma Intro"
+order: 33
+level: "Intermediate"
+description: "Postgres ORM — schema file → type-safe client।"
+---
+
+<CodeBlock code={"npm install prisma @prisma/client\nnpx prisma init"} lang={"bash"} title={"terminal"} />
+
+<CodeBlock code={"datasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\ngenerator client {\n  provider = \"prisma-client-js\"\n}\n\nmodel Product {\n  id    Int     @id @default(autoincrement())\n  name  String  @unique\n  price Decimal\n  qty   Int     @default(0)\n  items OrderItem[]\n}"} lang={"prisma"} title={"prisma/schema.prisma"} />
+
+<CodeBlock code={"import { PrismaClient } from \"@prisma/client\";\n\nconst prisma = new PrismaClient();\n\nconst products = await prisma.product.findMany({\n  where: { qty: { gt: 0 } },\n  orderBy: { price: \"desc\" },\n  take: 10,\n});"} lang={"ts"} title={"usage"} />
+
+- schema.prisma-ই single source of truth
+- `npx prisma generate` → type-safe client
+- Prisma query → SQL (raw-lite via `$queryRaw`)
+
+<Tip tone={"info"} title={"Prisma learn-generation"} text={"Prisma-র query API-র transaction, include, relation loading সুবিধা — তবে raw SQL-এর power বোঝা থাকলে Prisma মনে আরো সহজ।"} />

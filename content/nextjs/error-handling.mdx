@@ -1,0 +1,29 @@
+---
+title: "Error Handling"
+label: "Error Handling"
+order: 12
+level: "Beginner"
+description: "error.tsx, not-found.tsx, expected errors ও error boundaries — Next.js-এ error handling বাংলায়।"
+---
+
+<InParagraph text={"Next.js error-কে দুই ভাগে ভাগ করে — **expected errors** (যেমন form validation failure) ও **uncaught exceptions** (অপ্রত্যাশিত crash)।"} />
+
+## Uncaught Error: error.tsx
+
+<InParagraph text={"Route segment-এ `error.tsx` ফাইল দিলে সেটি একটি **error boundary** — সবচেয়ে কাছের parent error.tsx-এ error memorial হয়।"} />
+
+<CodeBlock code={"\"use client\"; // Error boundary সবসময় Client Component\n\nimport { useEffect } from \"react\";\n\nexport default function ErrorPage({\n  error,\n  unstable_retry,\n}: {\n  error: Error & { digest?: string };\n  unstable_retry: () => void;\n}) {\n  useEffect(() => {\n    console.error(error);\n  }, [error]);\n\n  return (\n    <div>\n      <h2>Something went wrong!</h2>\n      <button onClick={() => unstable_retry()}>Try again</button>\n    </div>\n  );\n}"} lang={"tsx"} title={"app/dashboard/error.tsx"} />
+
+## 404: not-found.tsx
+
+<CodeBlock code={"import { notFound } from \"next/navigation\";\n\nexport default async function Page({\n  params,\n}: {\n  params: Promise<{ slug: string }>;\n}) {\n  const { slug } = await params;\n  const post = getPostBySlug(slug);\n\n  if (!post) {\n    notFound();\n  }\n\n  return <h1>{post.title}</h1>;\n}"} lang={"tsx"} title={"app/blog/[slug]/page.tsx"} />
+
+<CodeBlock code={"export default function NotFound() {\n  return <div>404 - এই পেজটি পাওয়া যায়নি</div>;\n}"} lang={"tsx"} title={"app/blog/[slug]/not-found.tsx"} />
+
+## Expected Errors
+
+<InParagraph text={"Form submission বা যাচাই-বাছাই-এর মতো **expected errors-এ throw না করে** return value হিসেবে মডেল করুন — `useActionState` দিয়ে দেখান।"} />
+
+<CodeBlock code={"\"use server\";\n\nexport async function createPost(prevState: any, formData: FormData) {\n  const title = formData.get(\"title\");\n\n  const res = await fetch(\"https://api.vercel.app/posts\", {\n    method: \"POST\",\n    body: JSON.stringify({ title }),\n  });\n\n  if (!res.ok) {\n    return { message: \"Failed to create post\" };\n  }\n}"} lang={"tsx"} title={"app/actions.ts"} />
+
+<Tip tone={"info"} title={"Global Error"} text={"Root layout-এর error-এর জন্য `app/global-error.tsx` — এতে নিজস্ব `<html>` ও `<body>` দিতে হয়, কারণ এটি root layout replace করে।"} />

@@ -1,0 +1,31 @@
+---
+title: "NestJS Swagger (OpenAPI)"
+label: "Swagger"
+order: 17
+level: "Intermediate"
+description: "@nestjs/swagger setup, decorators, DTO binding, production — API documentation বাংলায়।"
+---
+
+<InParagraph text={"**Swagger/OpenAPI** দিয়ে automatic interactive API documentation তৈরি হয় — বড় project-এ 매우 গুরুত্বপূর্ণ।"} />
+
+## Setup
+
+<CodeBlock code={"npm i @nestjs/swagger"} lang={"bash"} />
+
+<CodeBlock code={"import { NestFactory } from \"@nestjs/core\";\nimport { SwaggerModule, DocumentBuilder } from \"@nestjs/swagger\";\nimport { AppModule } from \"./app.module\";\n\nasync function bootstrap() {\n  const app = await NestFactory.create(AppModule);\n\n  const config = new DocumentBuilder()\n    .setTitle(\"Nest API\")\n    .setDescription(\"Tech Tutor API documentation\")\n    .setVersion(\"1.0\")\n    .addBearerAuth() // JWT authorization\n    .build();\n\n  const document = SwaggerModule.createDocument(app, config);\n  SwaggerModule.setup(\"api\", app, document); // /api-এ docs\n\n  await app.listen(3000);\n}\nbootstrap();"} lang={"typescript"} title={"main.ts"} />
+
+## DTO-তে Swagger Decorator
+
+<CodeBlock code={"import { ApiProperty } from \"@nestjs/swagger\";\nimport { IsEmail, IsString, MinLength } from \"class-validator\";\n\nexport class CreateUserDto {\n  @ApiProperty({ example: \"রহিম\", description: \"User নাম\" })\n  @IsString()\n  @MinLength(2)\n  name: string;\n\n  @ApiProperty({ example: \"rahim@example.com\" })\n  @IsEmail()\n  email: string;\n\n  @ApiProperty({ example: \"secret123\", minLength: 6 })\n  @IsString()\n  password: string;\n}"} lang={"typescript"} title={"create-user.dto.ts"} />
+
+## Controller-Level Decorator
+
+<CodeBlock code={"import { ApiTags, ApiBearerAuth, ApiResponse } from \"@nestjs/swagger\";\n\n@ApiTags(\"users\") // section grouping\n@Controller(\"users\")\nexport class UsersController {\n  @Get(\":id\")\n  @ApiBearerAuth()\n  @ApiResponse({ status: 200, description: \"সফল\", type: User })\n  @ApiResponse({ status: 404, description: \"User নেই\" })\n  findOne(@Param(\"id\") id: string) {\n    return this.usersService.findOne(id);\n  }\n}"} lang={"typescript"} />
+
+<CodeBlock code={"# docs URL\nhttp://localhost:3000/api      # swagger UI\n\n# JSON spec\nhttp://localhost:3000/api-json"} lang={"bash"} />
+
+## Production-এ Docs
+
+<CodeBlock code={"// production-এ docs বন্ধ রাখা\nconst app = await NestFactory.create(AppModule);\n\nif (process.env.NODE_ENV !== \"production\") {\n  SwaggerModule.setup(\"api\", app, SwaggerModule.createDocument(\n    app,\n    new DocumentBuilder().setTitle(\"API\").build(),\n  ));\n}"} lang={"typescript"} />
+
+<Tip tone={"info"} title={"Auto-detection"} text={"Swagger auto DTO থেকে properties detect করে — শুধু `@ApiProperty` যোগ করলে docs uicreate হয়, প্রায় ফ্রি।"} />

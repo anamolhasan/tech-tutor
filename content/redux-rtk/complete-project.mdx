@@ -1,0 +1,20 @@
+---
+title: "Complete Project — Reference ফোল্ডার"
+label: "Complete Project"
+order: 35
+level: "Advanced"
+description: "পুরো Redux+RTK project-এর file-by-file জায়গা — বাংলায়।"
+---
+
+<CodeBlock code={"src/\n├─ app/\n│  ├─ layout.tsx             # ReduxProvider\n│  ├─ page.tsx               # storefront (client)\n│  ├─ store.ts               # configureStore + types\n│  ├─ listener.ts            # createListenerMiddleware\n│  └─ cart/page.tsx          # cart page (client)\n├─ components/\n│  ├─ ui/                    # shadcn\n│  ├─ products/\n│  │  ├─ product-grid.tsx\n│  │  ├─ product-card.tsx\n│  │  └─ add-to-cart-button.tsx\n│  └─ cart/\n│     ├─ cart-drawer.tsx\n│     └─ checkout-button.tsx\n├─ features/\n│  ├─ cart/\n│  │  ├─ cartSlice.ts\n│  │  └─ cartSelectors.ts\n│  ├─ orders/\n│  │  └─ ordersService.ts    # createApi\n│  └─ products/\n│     └─ productsService.ts  # createApi\n├─ hooks/\n│  ├─ use-app-dispatch.ts\n│  └─ use-app-selector.ts\n└─ types/\n   └─ index.ts\n"} lang={"text"} title={"final structure"} />
+
+## Building order
+
+1. `types` → `use-app-*` hooks → `store.ts`
+1. `cartSlice` + `cartSelectors`
+1. `ordersService`/`productsService` (createApi)
+1. listener.ts + store-এ middleware
+1. react-redux Provider wrapping
+1. UI components → RTK Query হুক + slice dispatch
+
+<Tip tone={"info"} title={"এটাই minima"} text={"এই reference-টি production-ready minimum ভিত্তি। এর উপর সহজে auth slice, entities, notifications-listener — একই pattern-এ যোগ করা যায়।"} />

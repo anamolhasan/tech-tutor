@@ -1,0 +1,19 @@
+---
+title: "Delete Confirmation Dialog"
+label: "Delete Confirmation"
+order: 31
+level: "Intermediate"
+description: "AlertDialog দিয়ে destructive action confirm — বাংলায়।"
+---
+
+<CodeBlock code={"\"use client\";\n\nimport {\n  AlertDialog,\n  AlertDialogAction,\n  AlertDialogCancel,\n  AlertDialogContent,\n  AlertDialogDescription,\n  AlertDialogFooter,\n  AlertDialogHeader,\n  AlertDialogTitle,\n} from \"@/components/ui/alert-dialog\";\n\ninterface DeleteDialogProps {\n  product: Product | null;\n  open: boolean;\n  onOpenChange: (open: boolean) => void;\n  onConfirm: () => void;\n  isDeleting?: boolean;\n}\n\nexport function DeleteDialog({\n  product,\n  open,\n  onOpenChange,\n  onConfirm,\n  isDeleting,\n}: DeleteDialogProps) {\n  return (\n    <AlertDialog open={open} onOpenChange={onOpenChange}>\n      <AlertDialogContent>\n        <AlertDialogHeader>\n          <AlertDialogTitle>নিশ্চিত?</AlertDialogTitle>\n          <AlertDialogDescription>\n            আপনি কি নিশ্চিত যে <b>{product?.name}</b> মুছে ফেলতে চান?\n            এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।\n          </AlertDialogDescription>\n        </AlertDialogHeader>\n        <AlertDialogFooter>\n          <AlertDialogCancel disabled={isDeleting}>বাতিল</AlertDialogCancel>\n          <AlertDialogAction\n            disabled={isDeleting}\n            onClick={(e) => {\n              e.preventDefault();\n              onConfirm();\n            }}\n          >\n            {isDeleting ? \"মুছে ফেলা হচ্ছে…\" : \"হ্যাঁ, মুছে ফেলুন\"}\n          </AlertDialogAction>\n        </AlertDialogFooter>\n      </AlertDialogContent>\n    </AlertDialog>\n  );\n}"} lang={"tsx"} title={"delete-alert-dialog.tsx"} />
+
+## কেন e.preventDefault
+
+<InParagraph text={"`AlertDialogAction` ডিফল্ট dialog বন্ধ করে দেয়। আমরা চাই disabling state-এর পরে delete শেষ হয়ে `onOpenChange(false)` ডাকা হোক — তাই onClick-এ preventDefault করে সেটা নিজে manage করছি। (যদি চাই তাৎক্ষণিক close, তবে ছাড়া concern নয়।.)"} />
+
+## dashboard-এ wiring
+
+<CodeBlock code={"const [deletingProduct, setDeletingProduct] = useState<Product | null>(null);\nconst deleteProduct = useDeleteProduct();\n\n<DeleteDialog\n  product={deletingProduct}\n  open={deletingProduct !== null}\n  onOpenChange={(open) => {\n    if (!open && !deleteProduct.isPending) setDeletingProduct(null);\n  }}\n  isDeleting={deleteProduct.isPending}\n  onConfirm={() => {\n    deleteProduct.mutate(deletingProduct!.id, {\n      onSuccess: () => setDeletingProduct(null),\n    });\n  }}\n/>"} lang={"tsx"} title={"Page-এ"} />
+
+<Tip tone={"success"} title={"destructive pattern"} text={"destructive action-এ সুস্পষ্ট শব্দ: 'হ্যাঁ, মুছে ফেলুন' — চোখে চলে। `AlertDialogCancel` সর্বদা keep করুন — user-কে ফাঁস বিহীন বিকল্প দিন।"} />

@@ -1,0 +1,27 @@
+---
+title: "Proxy (Former Middleware)"
+label: "Proxy"
+order: 24
+level: "Advanced"
+description: "proxy.ts দিয়ে request-এই code চালানো — redirect, rewrite, auth বাংলায়।"
+---
+
+<InParagraph text={"**Proxy** (`proxy.ts`) হলো একটি file যা **প্রতিটি request-এ server side চলে** — request সম্পন্ন হওয়ার আগে। redirect, rewrite, authentication চেকের জন্য ব্যবহৃত হয়।"} />
+
+<InParagraph text={"এটি আগে **Middleware** নামে পরিচিত ছিল। Next.js 16-এ এই নামে রেনাম হয়েছে।"} />
+
+## প্রথম Proxy
+
+<CodeBlock code={"import { NextRequest } from \"next/server\";\n\nexport function proxy(request: NextRequest) {\n  // উদাহরণ: /about → / page\n  if (request.nextUrl.pathname === \"/about\") {\n    return NextResponse.redirect(new URL(\"/\", request.url));\n  }\n}"} lang={"ts"} title={"proxy.ts"} />
+
+## Auth Check
+
+<CodeBlock code={"import { NextRequest, NextResponse } from \"next/server\";\n\nexport function proxy(request: NextRequest) {\n  const isLoggedIn = request.cookies.get(\"session\");\n\n  if (!isLoggedIn && request.nextUrl.pathname.startsWith(\"/dashboard\")) {\n    return NextResponse.redirect(new URL(\"/login\", request.url));\n  }\n\n  return NextResponse.next();\n}\n\nexport const config = {\n  matcher: [\"/dashboard/:path*\"],\n};"} lang={"ts"} title={"proxy.ts"} />
+
+<Tip tone={"warning"} title={"Edge/Node runtime"} text={"Proxy default-এ ~~Node~~ runtime-এ চলে। ভারী Node API ব্যবহার করা যায়; প্রতি request-এ চলে বলায় lightweight রাখুন।"} />
+
+## Matcher
+
+<InParagraph text={"`config.matcher` দিয়ে কোন path-এ proxy চালবে তা নির্দেশ করা যায় — সব route-এ চালানোর দরকার নেই।"} />
+
+<CodeBlock code={"export const config = {\n  matcher: [\"/about/:path*\", \"/((?!_next|api).*)\"],\n};"} lang={"ts"} />

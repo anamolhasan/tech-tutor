@@ -1,0 +1,65 @@
+---
+title: "Docker Interview Questions"
+label: "Interview Questions"
+order: 25
+level: "Advanced"
+description: "সবচেয়ে গুরুত্বপূর্ণ Docker প্রশ্ন-উত্তর — বাংলায়, interview প্রস্তুতির জন্য।"
+---
+
+<InParagraph text={"Docker interview-এ সাধারণ যেসব প্রশ্ন আসে, সাথে চমৎকার উত্তর — নিজেকে যাচাই করতে শেষে নিজে উত্তর দিন, তারপর এখান থেকে মেলান।"} />
+
+## Image বনাম Container — পার্থক্য?
+
+<InParagraph text={"**Image** immutable template/blueprint (read-only file system); **Container** হলো image-এর চলমান instance। একই image থেকে অসংখ্য container।"} />
+
+## Container বনাম Virtual Machine?
+
+<InParagraph text={"Container host kernel শেয়ার করে — হালকা, দ্রুত (মিলিসেকেন্ডে শুরু)। VM-এর নিজস্ব Guest OS থাকে hypervisor-এ — ভারী কিন্তু শক্ত আইসোলেশন।"} />
+
+## Bind mount বনাম Volume?
+
+<InParagraph text={"**Volume** Docker-managed storage — backup, cross-host-এ ভালো; **bind mount** host-এর যেকোনো folder — ডেভেলপমেন্ট/লোকাল config-এ উপযোগী।"} />
+
+## CMD বনাম ENTRYPOINT?
+
+<InParagraph text={"`CMD` রান-টাইমে override হয় (default command); `ENTRYPOINT` fixed command। একসাথে: ENTRYPOINT + CMD-এর args।"} />
+
+## কিভাবে 상황 ধরে রাখবেন secret?
+
+<InParagraph text={"Dockerfile-এ নয় — **Docker Secrets** (Swarm), env_file (compose), অথবা cloud secret manager (AWS Secrets Manager)। image-তে secret থাকলে `docker history`-এ দেখা যায়।"} />
+
+## Container \`docker stop\`-এ থামে না, কী করবেন?
+
+<InParagraph text={"প্রথমে SIGTERM পাঠায় (10s) — না মানলে `docker kill` (SIGKILL)। অ্যাপে graceful shutdown implement করুন (`process.on('SIGTERM')`)।"} />
+
+## 'works on my machine' সমস্যায় Docker কীভাবে সাহায্য করে?
+
+<InParagraph text={"সব dependency image-এ বান্ডেল হয় — তাই এক machine-তে যেভাবে run হয়, অন্য যেকোনো machine-তে (dev/testing/prod) ঠিক একইভাবে হয়।"} />
+
+## Multi-stage build-এর উদ্দেশ্য?
+
+<InParagraph text={"এক Dockerfile-এ একাধিক stage — build stage-এ সব tools, runtime stage-এ শুধু দরকারি artifact। ফলে image ছোট, নিরাপদ ও দ্রুত retrieve।"} />
+
+## \`docker compose down -v\` কী করে?
+
+<InParagraph text={"Container ও network বন্ধ করে এবং **named volumes-ও মুছে** — ডেটা হারাবে! normal deploy-এ `-v` ব্যবহার সতর্কতা।"} />
+
+## Container-এর ভেতর থেকে database-তে কীভাবে connect হয়?
+
+<InParagraph text={"**একই custom network**-এ রেখে service/image-এর **নাম দিয়ে** — যেমন `mongodb://mongo:27017/`, `postgres://postgres@postgres:5432/`। Port publish শুধু host-বাইরের access-এর।"} />
+
+## \`EXPOSE\` না দিলে port কি কাজ করে না?
+
+<InParagraph text={"`EXPOSE` শুধু **documentation** — কখনো container-কে বাইরে থেকে অ্যাক্সেসযোগ্য করে না। বাইরে থেকে access-এর জন্য `-p host:container`/`ports:` দিতেই হয়।"} />
+
+## Layer caching কীভাবে optimize করে build?
+
+<InParagraph text={"Docker অপরিবর্তিত layer-গুলো cache থেকে reuse করে। তাই **stable file আগে** (`COPY package*.json` + `RUN npm ci`), **পরবর্তী code**। বদলে গেলে সেই layer-ই re-run হয়, cache ভেঙে যায়।"} />
+
+## \`docker ps\`-এ container নেই, কিন্তু app respond করছে?
+
+<InParagraph text={"host-এ অন্য process চলছে (যেমন systemd-এ chala) অথবা container নাম host-port শেয়ার। `sudo netstat -tlnp`/`lsof -i` দিয়ে কে port-টা নিয়েছে দেখুন।"} />
+
+<CodeBlock code={"netstat -tlnp | grep :3000\n# অথবা Windows-এ\nnetstat -ano | findstr :3000"} lang={"bash"} title={"port occupation check"} />
+
+<Tip tone={"info"} title={"আরও প্রস্তুতিতে"} text={"প্রশ্নের স্টাইল অনুরূপ — নিজের project-এর Dockerfile/compose file গুলোকে কথা বলেন ব্যাখ্যা করতে পারলে interview-এ সোনা।"} />

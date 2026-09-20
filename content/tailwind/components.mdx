@@ -1,0 +1,27 @@
+---
+title: "Common UI Components"
+label: "Components"
+order: 27
+level: "Beginner"
+description: "Tailwind দিয়ে button, card, form, navbar, modal — common UI components তৈরি করুন।"
+---
+
+<InParagraph text={"Tailwind-এ নিজেই component তৈরি করতে হয়। চলুন কিছু common components দেখি।"} />
+
+## Button
+
+<CodeBlock code={"<!-- Primary button -->\n<button class=\"rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 transition-colors\">\n  Primary\n</button>\n\n<!-- Secondary button -->\n<button class=\"rounded-lg border border-blue-600 px-4 py-2 text-blue-600 hover:bg-blue-50 transition-colors\">\n  Secondary\n</button>\n\n<!-- Ghost button -->\n<button class=\"rounded-lg px-4 py-2 text-blue-600 hover:bg-blue-50 transition-colors\">\n  Ghost\n</button>"} lang={"html"} />
+
+## Card
+
+<CodeBlock code={"<div class=\"rounded-xl bg-white p-6 shadow-md\">\n  <h3 class=\"text-lg font-semibold\">Card Title</h3>\n  <p class=\"mt-2 text-gray-600\">Card content goes here.</p>\n  <button class=\"mt-4 rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700\">\n    Read More\n  </button>\n</div>"} lang={"html"} />
+
+## Input Field
+
+<CodeBlock code={"<div>\n  <label class=\"mb-2 block text-sm font-medium text-gray-700\">ইমেইল</label>\n  <input\n    type=\"email\"\n    class=\"w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500\"\n    placeholder=\"you@example.com\"\n  />\n</div>"} lang={"html"} />
+
+## Navbar
+
+<CodeBlock code={"<nav class=\"flex items-center justify-between bg-white px-6 py-3 shadow-sm\">\n  <a href=\"#\" class=\"text-xl font-bold text-blue-600\">Logo</a>\n  <div class=\"flex gap-4\">\n    <a href=\"#\" class=\"text-gray-600 hover:text-blue-600\">Home</a>\n    <a href=\"#\" class=\"text-gray-600 hover:text-blue-600\">About</a>\n    <a href=\"#\" class=\"text-gray-600 hover:text-blue-600\">Contact</a>\n  </div>\n</nav>"} lang={"html"} />
+
+<Tip tone={"success"} title={"Component Libraries"} text={"নিজে component তৈরি না করতে চাইলে **Headless UI**, **DaisyUI**, **shadcn/ui** ব্যবহার করুন — এগুলো Tailwind-এর উপর তৈরি popular component libraries।"} />

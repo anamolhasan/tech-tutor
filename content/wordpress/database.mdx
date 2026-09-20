@@ -1,0 +1,36 @@
+---
+title: "WordPress-এর Database (MySQL) কী"
+label: "Database"
+order: 16
+level: "Beginner"
+description: "WordPress-এর সব content কোথায় থাকে — MySQL database, wp_ prefix table-গুলো ও database-এর ভূমিকা।"
+---
+
+## Database কী?
+
+<InParagraph text={"**Database** হলো এমন জায়গা যেখানে সব তথ্য **organized** করে রাখা হয়। WordPress-এ **MySQL** database ব্যবহার হয় — যেখানে post, page, comments, users, settings, plugin data — সব সংরক্ষণ থাকে।"} />
+
+## WordPress-এর Table-গুলো
+
+<InParagraph text={"WordPress install করলে ** default prefix `wp_`** নিয়ে ১২টিরও বেশি table তৈরি হয়।"} />
+
+| Table | কী থাকে |
+| --- | --- |
+| wp_posts | সব post, page, media entry (content) |
+| wp_postmeta | post-এর অতিরিক্ত detail (meta data) |
+| wp_comments | সব comment |
+| wp_users | user account |
+| wp_usermeta | user-এর additional তথ্য |
+| wp_terms / wp_taxonomy | Category, tag, taxonomy |
+| wp_options | site setting (siteurl, theme, plugins) |
+| wp_links / wp_term_relationships | সম্পর্ক connect |
+
+## Content কীভাবে সংরক্ষিত হয়
+
+<CodeBlock code={"ID  post_type  post_status  post_title        post_date\n1    post        publish      \"প্রথম Post\"       2026-08-15\n2    page        publish      \"About\"              2026-08-10\n3    replay      approve      \"মন্তব্যও এখানে\"     2026-08-16\n4    attachment  inherit      \"ব্যানার-ছবি.jpg\"    2026-08-11"} lang={"text"} title={"wp_posts table-এর examples row (সরলীকৃত)"} />
+
+## Database-এ নিরাপত্তা
+
+<InParagraph text={"**wp-config.php**-এ database-এর name, user, password, host থাকে। Database-এ access আছে মানে site-এর control — তাই সাবধানে credentials রাখা জরুরি।"} />
+
+<Tip tone={"warning"} title={"Backup"} text={"Post/image সব **database-এ** জমা থাকে — তাই database-এর নিয়মিত **backup** করুন। Plugin (যেমন UpdraftPlus) বা host-এর automatic backup ব্যবহার করা সবচেয়ে নিরাপদ অভ্যাস।"} />

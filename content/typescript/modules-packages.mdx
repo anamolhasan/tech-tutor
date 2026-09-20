@@ -1,0 +1,37 @@
+---
+title: "Modules ও Type Declaration"
+label: "Modules & Types"
+order: 22
+level: "Advanced"
+description: "import type, declaration files (.d.ts), @types packages, declare module ও global typing — বাংলায়।"
+---
+
+<InParagraph text={"TypeScript-এ modules শুধু value নয় — **টাইপও** ভাগ হয়। একটি ফাইল `export` করলে সেখানকার টাইপ অন্য ফাইলে `import` করা যায়।"} />
+
+## import type
+
+<CodeBlock code={"// types.ts\nexport interface User {\n  id: number;\n  name: string;\n}\n\n// app.ts — টাইপ স্পষ্ট বলাই ভালো\n\n\nconst user: User = { id: 1, name: \"রহিম\" };"} lang={"typescript"} />
+
+## Declaration File (.d.ts)
+
+<InParagraph text={"`.d.ts` ফাইলে শুধু টাইপ ঘোষণা থাকে — runtime code নেই। লাইব্রেরির ধরন describe করতে এবং JavaScript-এ লেখা কোডে টাইপ দিতে ব্যবহৃত হয়।"} />
+
+<CodeBlock code={"export function add(a: number, b: number): number;\nexport const VERSION: string;"} lang={"typescript"} title={"math.d.ts"} />
+
+## @types packages
+
+<InParagraph text={"JavaScript লাইব্রেরি ব্যবহারে টাইপ পেতে **DefinitelyTyped**-এর `@types/...` নামে install করতে হয়।"} />
+
+<CodeBlock code={"# Node.js global type\nnpm install -D @types/node\n\n# Express-এর টাইপ\nnpm install -D @types/express\n\n# React-এ ডিফল্ট ভাবে টাইপ সহ আছে (react + @types/react)"} lang={"bash"} />
+
+## declare module
+
+<InParagraph text={"টাইপ নেই এমন module বা global value ঘোষণা করার জন্য `declare` ব্যবহার হয়।"} />
+
+<CodeBlock code={"// কোনো module-এর ধরন নিজে ঘোষণা\ndeclare module \"*.png\" {\n  const src: string;\n  export default src;\n}\n\n// global variable\ndeclare const API_BASE_URL: string;"} lang={"typescript"} title={"env.d.ts"} />
+
+## Ambient ও Global
+
+<CodeBlock code={"// Windows-এ custom বৈশিষ্ট্য যোগ\ndeclare global {\n  interface Window {\n    __analyticsId?: string;\n  }\n}\n\n// export না থাকলে এটি module-এ পরিণত হয় না"} lang={"typescript"} />
+
+<Tip tone={"info"} title={"রুলস মনে রাখুন"} text={"value-ও ব্যবহার করলে `import`, শুধু টাইপ হলে `import type` (tree-shaking-এ সহায়ক)। লাইব্রেরিতে টাইপ পাওয়া যায় না মানে `@types/...` খুঁজুন।"} />

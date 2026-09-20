@@ -1,0 +1,33 @@
+---
+title: "NestJS Guards & Authorization"
+label: "Guards"
+order: 7
+level: "Advanced"
+description: "@CanActivate, auth guard, role guard, apply — Authentication/Authorization বাংলায়।"
+---
+
+<InParagraph text={"**Guard** request execution-এর আগে decide করে — request এগোবে কি না। এটি authentication/authorization-এর জন্য প্রধান tool।"} />
+
+## Auth Guard তৈরি
+
+<CodeBlock code={"npm i @nestjs/jwt"} lang={"bash"} />
+
+<CodeBlock code={"import {\n  Injectable,\n  CanActivate,\n  ExecutionContext,\n  UnauthorizedException,\n} from \"@nestjs/common\";\nimport { JwtService } from \"@nestjs/jwt\";\nimport { Request } from \"express\";\n\n@Injectable()\nexport class AuthGuard implements CanActivate {\n  constructor(private jwtService: JwtService) {}\n\n  async canActivate(context: ExecutionContext): Promise<boolean> {\n    const request = context.switchToHttp().getRequest<Request>();\n    const token = this.extractToken(request);\n\n    if (!token) {\n      throw new UnauthorizedException(\"Login প্রয়োজন\");\n    }\n\n    try {\n      const payload = await this.jwtService.verifyAsync(token);\n      request[\"user\"] = payload; // controller-এ access\n    } catch {\n      throw new UnauthorizedException(\"Invalid token\");\n    }\n\n    return true;\n  }\n\n  private extractToken(request: Request): string | undefined {\n    const [type, token] = request.headers.authorization?.split(\" \") ?? [];\n    return type === \"Bearer\" ? token : undefined;\n  }\n}"} lang={"typescript"} title={"src/auth/auth.guard.ts"} />
+
+## Guard Apply করা
+
+<CodeBlock code={"import { Controller, Get, UseGuards } from \"@nestjs/common\";\nimport { AuthGuard } from \"../auth/auth.guard\";\n\n@Controller(\"profile\")\n@UseGuards(AuthGuard) // পুরো controller protected\nexport class ProfileController {\n  @Get()\n  getProfile(@Req() req: Request) {\n    return { user: req[\"user\"] };\n  }\n\n  @Get(\"public\")\n  // এটা কোনো guard ছাড়া ধরে দরকার হলে override\n  publicEndpoint() {\n    return { message: \"public\" };\n  }\n}"} lang={"typescript"} />
+
+## Role Guard (Custom metadata)
+
+<CodeBlock code={"import { SetMetadata } from \"@nestjs/common\";\n\nexport const ROLES_KEY = \"roles\";\nexport const Roles = (...roles: string[]) =>\n  SetMetadata(ROLES_KEY, roles);"} lang={"typescript"} title={"src/auth/roles.decorator.ts"} />
+
+<CodeBlock code={"import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from \"@nestjs/common\";\nimport { Reflector } from \"@nestjs/core\";\nimport { ROLES_KEY } from \"./roles.decorator\";\n\n@Injectable()\nexport class RolesGuard implements CanActivate {\n  constructor(private reflector: Reflector) {}\n\n  canActivate(context: ExecutionContext): boolean {\n    const requiredRoles = this.reflector.getAllAndOverride<string[]>(\n      ROLES_KEY,\n      [context.getHandler(), context.getClass()],\n    );\n\n    if (!requiredRoles) return true;\n\n    const { user } = context.switchToHttp().getRequest();\n    if (!user?.role || !requiredRoles.includes(user.role)) {\n      throw new ForbiddenException(\"অনুমতি নেই\");\n    }\n    return true;\n  }\n}"} lang={"typescript"} title={"src/auth/roles.guard.ts"} />
+
+<CodeBlock code={"@Controller(\"admin\")\n@UseGuards(AuthGuard, RolesGuard)\nexport class AdminController {\n  @Get()\n  @Roles(\"admin\") // শুধু admin\n  dashboard() {\n    return { message: \"Admin panel\" };\n  }\n}"} lang={"typescript"} />
+
+## Global Guard
+
+<CodeBlock code={"// main.ts\nconst app = await NestFactory.create(AppModule);\napp.useGlobalGuards(new RolesGuard());\n// app.module-এ providers সেকশনে ensure করুন"} lang={"typescript"} />
+
+<Tip tone={"success"} title={"Guard vs Middleware"} text={"Middleware-এর পরে guards চলে — guards-এ `ExecutionContext` ও reflector/meta-data access পাই, তাই authorization গার্ডেই করা ভালো।"} />

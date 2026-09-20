@@ -1,0 +1,23 @@
+---
+title: "Relational Model — table, row, column"
+label: "Relational Model"
+order: 2
+level: "Beginner"
+description: "Database-কে table-এ ভাগ করার মূল ধারণা — Mongo/Document-এর সাথে তুলনা।"
+---
+
+<InParagraph text={"Relational database-এ data সাজানো হয় **table**-এ — প্রতিটি table একটি entity, প্রতিটি **row** একটি record, প্রতিটি **column** একটি attribute।"} />
+
+| NoSQL (Document) | Relational (PostgreSQL) |
+| --- | --- |
+| Collection | Table |
+| Document | Row |
+| Field | Column |
+| Embedding relation | JOIN / foreign key |
+| Schema-less (flexible) | Schema strict |
+
+<CodeBlock code={"id | name        | price | qty\n---|-------------|-------|----\n1  | Laptop      | 62000 |  5\n2  | Mouse       |   450 | 20"} lang={"sql"} title={"products table - ধারণা"} />
+
+<InParagraph text={"প্রতিটি row-এর জন্য একটি **primary key** (উদাহরণে `id`) — table-এর প্রতিটি row-কে uniquely চেনায়। Relation বানানো হয় ঐ key দিয়ে, অন্য table-এ **foreign key** হিসেবে।"} />
+
+<Tip tone={"info"} title={"কেন relational"} text={"রিলেশন থাকা data-য় duplicates এড়ানো (normalization), আর প্রশ্নগুলো রূপ নেয় নির্দিষ্ট **query** — আগে থেকে ঠিক করা হয় কীভাবে data পড়বে।"} />

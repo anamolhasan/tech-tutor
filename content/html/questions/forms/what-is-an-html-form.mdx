@@ -1,0 +1,13 @@
+---
+question: "What is an HTML form?"
+order: 1
+description: "HTML form কী এবং কীভাবে ব্যবহারকারীর ইনপুট সংগ্রহ করা হয়।"
+---
+
+<InParagraph text={"একটি **HTML form** ব্যবহারকারীর কাছ থেকে **data সংগ্রহ করার জায়গা**। `<form>` element-এর ভেতরে বিভিন্ন input ফিল্ড, dropdown, checkbox আর submit button থাকে — যা ব্যবহারকারী পূরণ করে জমা দেয়।"} />
+
+<InParagraph text={"সাধারণত ফর্ম জমা দিলে সেই data `action`-এ দেওয়া URL-এ পাঠানো হয়, আর কীভাবে পাঠানো হবে তা ঠিক করে `method` attribute (`GET` বা `POST`)।"} />
+
+<CodeBlock code={"<form action=\"/search\" method=\"get\">\n  <label for=\"q\">খুঁজুন:</label>\n  <input id=\"q\" name=\"q\" type=\"text\" />\n  <button type=\"submit\">Search</button>\n</form>"} lang={"html"} title={"উদাহরণ"} />
+
+<InParagraph text={"প্রতিটি input-এর জন্য একটি `<label>` রাখা ভালো অভ্যাস — এটি যেমন ব্যবহারকারীকে বুঝতে সাহায্য করে, তেমনি accessibility-ও বাড়ায়।"} />

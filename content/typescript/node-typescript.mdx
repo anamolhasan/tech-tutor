@@ -1,0 +1,27 @@
+---
+title: "Node.js ও TypeScript"
+label: "Node.js + TypeScript"
+order: 25
+level: "Intermediate"
+description: "tsx/ts-node সেটআপ, process.env typing, Express + @types এবং async handler — সার্ভার-সাইড TS বাংলায়।"
+---
+
+<InParagraph text={"Node.js-এ TypeScript চলে — `tsx` দিয়ে সরাসরি run করা যায়, বা আগে compile করে। সার্ভার কোডে টাইপ দিলে API-র বাগ দ্রুত ধরা পড়ে।"} />
+
+## Setup ও Run
+
+<CodeBlock code={"# tsx ব্যবহারে সরাসরি TypeScript run\nnpm install -D typescript tsx @types/node\n\n# package.json\n\"scripts\": {\n  \"dev\": \"tsx watch src/index.ts\",\n  \"build\": \"tsc\",\n  \"start\": \"node dist/index.js\"\n}"} lang={"bash"} />
+
+## process.env টাইপ
+
+<CodeBlock code={"interface AppConfig {\n  port: number;\n  databaseUrl: string;\n}\n\nfunction readConfig(): AppConfig {\n  return {\n    port: Number(process.env.PORT ?? 3000),\n    databaseUrl: process.env.DATABASE_URL ?? \"mongodb://localhost\",\n  };\n}\n\nexport const config = readConfig();"} lang={"typescript"} title={"config.ts"} />
+
+## Express + Types
+
+<CodeBlock code={"import express from \"express\";\n\n\nconst app = express();\napp.use(express.json());\n\ninterface Todo {\n  id: number;\n  title: string;\n  done: boolean;\n}\n\nconst todos: Todo[] = [];\n\napp.get(\"/todos\", (_req: Request, res: Response<Todo[]>) => {\n  res.json(todos);\n});\n\napp.listen(3000, () => {\n  console.log(\"সার্ভার চলছে :3000\");\n});"} lang={"typescript"} />
+
+## Async Error Handling
+
+<CodeBlock code={"import type { Request, Response, NextFunction } from \"express\";\n\n// async handler টাইপ\ntype AsyncHandler = (req: Request, res: Response, next: NextFunction) => Promise<void>;\n\nconst wrapAsync =\n  (handler: AsyncHandler) =>\n  async (req: Request, res: Response, next: NextFunction) => {\n    try {\n      await handler(req, res, next);\n    } catch (error) {\n      next(error);\n    }\n  };\n\napp.get(\n  \"/users\",\n  wrapAsync(async (req, res) => {\n    const data = await getUsers();\n    res.json(data);\n  }),\n);"} lang={"typescript"} />
+
+<Tip tone={"warning"} title={"tsconfig for Node"} text={"ESM-প্রজেক্টে `module: NodeNext` আর CommonJS-এ `module: commonjs` — module system অনুযায়ী import syntax ঠিক হয়। `@types/node` ভুললে process/__dirname টাইপ পাওয়া যায় না।"} />

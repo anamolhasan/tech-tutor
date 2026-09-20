@@ -1,0 +1,19 @@
+---
+title: "JSONB — relational + document একসাথে"
+label: "JSONB"
+order: 27
+level: "Advanced"
+description: "structure-less data relational column-এ — অপারেটর ও index।"
+---
+
+<CodeBlock code={"ALTER TABLE products ADD COLUMN spec jsonb;\n\nUPDATE products\nSET spec = '{\"brand\":\"Logitech\",\"warranty\":\"1y\"}'\nWHERE id = 4;"} lang={"sql"} title={"product_spec jsonb"} />
+
+<CodeBlock code={"-- -> jsonb আউটপুট, ->> text আউটপুট\nSELECT name, spec ->> 'brand' AS brand\nFROM products;\n\n-- key exists?\nSELECT name FROM products\nWHERE spec ? 'brand';\n\n-- path-match\nSELECT name FROM products\nWHERE spec @> '{\"warranty\":\"2y\"}';"} lang={"sql"} />
+
+- `->` / `->>` — key access (jsonb vs text)
+- `@>` — contains, `?` — key exists
+- jsonb-এ data validate হয়, তবে schema-less
+
+<CodeBlock code={"-- jsonb-তে GIN index\nCREATE INDEX idx_products_spec ON products USING GIN (spec);"} lang={"sql"} />
+
+<Tip tone={"warning"} title={"jsonb বনাম columns"} text={"Filter-প্রয়োজন এমন data-তে **নিয়মিত column** ভালো (type, index, constraint)। jsonb-কে রাখুন flexible/optional রাশি ও just storage-এর জন্য।"} />

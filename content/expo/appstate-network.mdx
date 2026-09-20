@@ -1,0 +1,23 @@
+---
+title: "AppState, expo-network ও offline handling"
+label: "AppState & Network"
+order: 30
+level: "Intermediate"
+description: "app background/foreground detect ও network status — বাংলায়।"
+---
+
+<InParagraph text={"app-টি background-এ গেলে/ফিরলে আমাদের কাজ— **`AppState`**:"} />
+
+<CodeBlock code={"import { AppState } from \"react-native\";\n\nuseEffect(() => {\n  const sub = AppState.addEventListener(\"change\", (next) => {\n    if (next === \"active\") {\n      refetchTasks();\n    }\n  });\n  return () => sub.remove();\n}, []);"} lang={"tsx"} />
+
+<InParagraph text={"নেটওয়ার্ক status — **`expo-network`**:"} />
+
+<CodeBlock code={"npx expo install expo-network"} lang={"bash"} title={"terminal"} />
+
+<CodeBlock code={"import * as Network from \"expo-network\";\n\nconst state = await Network.getNetworkStateAsync();\n// state.isConnected, state.type (WIFI / CELLULAR / NONE)"} lang={"ts"} />
+
+- offline → banner "ইন্টারনেট নেই"
+- reconnect → auto-refresh
+- offline-এ লেখা queue — connect-এ sync
+
+<Tip tone={"info"} title={"offline-first"} text={"data আগে local-এ (AsyncStorage/SQLite), তারপর network-এ sync — এটিই offline-first pattern। আরও বিস্তারিত connection-এর জন্য community প্যাকেজ `@react-native-community/netinfo`।"} />

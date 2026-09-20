@@ -1,0 +1,55 @@
+---
+title: "Commit ও ভালো Commit Message লিখা"
+label: "Commit"
+order: 5
+level: "Intermediate"
+description: "Commit কী, কীভাবে ভালো commit message লিখতে হয়, amend — বাংলায়।"
+---
+
+## Commit আসলে কী?
+
+<InParagraph text={"Commit হলো আপনার ফাইলের একটি নির্দিষ্ট অবস্থার **স্ন্যাপশট**। প্রতিটি commit-এর থাকে একটি ইউনিক SHA-1 হ্যাশ, একটি message, লেখকের নাম/ইমেইল, সময়, এবং parent commit-এর রেফারেন্স।"} />
+
+## Commit-এর অংশগুলো
+
+<CodeBlock code={"$ git show --stat HEAD\ncommit a1b2c3d4e5f6... (HEAD -> main)\nAuthor: Anamul Hasan <anamolhasan@example.com>\nDate:   Sun Sep 10 12:00:00 2026\n\n    fix: navbar responsive হওয়ার সমস্যা সমাধান\n\n README.md | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)"} lang={"bash"} />
+
+## ভালো Commit Message-এর নিয়ম
+
+- **সংক্ষিপ্ত** — প্রথম লাইন ৫০ অক্ষরের মধ্যে
+- **ক্রিয়াবাচক imperative** — prettier  এর মতো শব্দে শুরু
+- **Computer-readable + human-readable**
+- শব্দ ব্যবহার করুন — `fix`, `feat`, `docs`, `chore`, `refactor`, `test`, `style` prefix
+- প্রয়োজনে body তে বিস্তারিত লিখুন
+
+<CodeBlock code={"git commit -m \"feat: user login API যোগ করা হয়েছে\" -m \"POST /api/login endpoint, JWT token return করে। slash ব্যবহার করে শরীর।\""} lang={"bash"} title={"মাল্টি-লাইন commit message"} />
+
+## Conventional Commits
+
+| টাইপ | কী বোঝায় | উদাহরণ |
+| --- | --- | --- |
+| feat | নতুন ফিচার | feat: dark mode added |
+| fix | বাগ সমাধান | fix: crash on null user |
+| docs | ডকুমেন্টেশন | docs: update README |
+| refactor | আচরণ-অপরিবর্তিত কোড সমাধান | refactor: extract utils |
+| test | টেস্ট সংযোজন/পরিবর্তন | test: add auth tests |
+| chore | রক্ষণাবেক্ষণ | chore: bump deps |
+| perf | পারফরম্যান্স উন্নতি | perf: cache responses |
+
+## git commit --amend
+
+<InParagraph text={"সর্বশেষ commit-এ কিছু ভুল হলে (message ভুল, একটি ফাইল বাদ) `--amend` দিয়ে এটি ঠিক করতে পারেন — এটি নতুন commit না বানিয়ে আগেরটি পরিবর্তন করে।"} />
+
+<CodeBlock code={"git commit --amend -m \"fix: typo corrected\"   # message বদল\ngit add forgotten.js && git commit --amend     # ফাইল যোগ"} lang={"bash"} title={"Amend ব্যবহার"} />
+
+<Tip tone={"warning"} title={"সাবধান"} text={"`git commit --amend` ইতিহাস rewrite করে। যদি কেউ ইতিমধ্যে পুরোনো commit-কে push করে নিয়ে থাকে, তবে amend করবেন না — কারণ তখন ইতিহাস ভিন্ন হয়ে যাবে।"} />
+
+## যা commit করা উচিত নয়
+
+- `node_modules` — dependency install-এ তৈরি হয়
+- `.env` — গোপন তথ্য!
+- বিল্ড আউটপুট — `dist/`, `build/`
+- লগ/টেম্পোরারি ফাইল — `*.log`, `*.tmp`
+- সিস্টেম ফাইল — `.DS_Store`, `Thumbs.db`
+
+<Tip tone={"success"} title={"অভ্যাস"} text={"প্রতিটি commit একটি সম্পূর্ণ, চালুযোগ্য অবস্থা বজায় রাখুক। ছোট commit, পরিষ্কার message — এক মাস পরে নিজেই নিজের ইতিহাস পড়ে বুঝতে পারবেন।"} />

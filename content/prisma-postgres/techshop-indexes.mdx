@@ -1,0 +1,17 @@
+---
+title: "Index — নিজেই migration-এ"
+label: "TechShop Indexes"
+order: 32
+level: "Advanced"
+description: "JOIN/filter-চালু index — schema-র @@index vs manual SQL।"
+---
+
+<CodeBlock code={"model OrderItem {\n  orderId   Int\n  productId Int\n\n  @@id([orderId, productId])\n  @@index([productId])\n}\n\nmodel Order {\n  id     Int   @id @default(autoincrement())\n  userId Int\n\n  @@index([userId])\n}"} lang={"prisma"} title={"schema-তে @@index"} />
+
+<CodeBlock code={"npx prisma migrate dev --create-only --name add_indexes"} lang={"bash"} title={"create-only migration"} />
+
+<CodeBlock code={"CREATE INDEX idx_orders_user\nON orders (user_id);\n\nCREATE INDEX idx_order_items_product\nON order_items (product_id);"} lang={"sql"} title={"migrations/xxx_add_indexes/migration.sql"} />
+
+<InParagraph text={"`--create-only` — SQL ফাইল inspect/edit করেই apply করতে হবে।"} />
+
+<Tip tone={"warning"} title={"index fidelity"} text={"Prisma-র `@@index` migration-auto বানায় — কিন্তু index naming/partial index-এ হাতে।"} />

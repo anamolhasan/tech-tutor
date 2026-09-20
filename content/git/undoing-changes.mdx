@@ -1,0 +1,44 @@
+---
+title: "reset, revert, checkout — ভুল সংশোধন"
+label: "Undoing Changes"
+order: 13
+level: "Intermediate"
+description: "commit না হওয়া ও হওয়া পরিবর্তন কীভাবে ফিরিয়ে আনা যায় — বাংলায়।"
+---
+
+## কোন ধাপে কীভাবে undo করবেন
+
+| অবস্থা | কমান্ড | কী দেয় |
+| --- | --- | --- |
+| Working dir পরিবর্তন | git restore file | ফাইল পুরোনো অবস্থায় |
+| Staging এ আছে | git restore --staged file | stage থেকে বের |
+| সর্বশেষ commit ভুল | git commit --amend | fix |
+| commit করা যায়নি | git reset --soft HEAD~1 | commit মুছে stage-এ রাখে |
+| local commit বাদ | git reset --hard HEAD~1 | commit ও পরিবর্তন বাদ |
+| push হয়ে গেছে | git revert \<hash> | নতুন commit দিয়ে উল্টে |
+
+## git restore — working dir undo
+
+<CodeBlock code={"git restore app.js               # file এর change ফেলে দাও\ngit restore .                    # সব ফাইল ফেলে দাও"} lang={"bash"} />
+
+## git reset
+
+<CodeBlock code={"git reset --soft HEAD~1      # commit undo, change staged\ngit reset --mixed HEAD~1        # commit undo, change unstaged (default)\ngit reset --hard HEAD~1         # commit undo + change বাদ (জোরে সাবধান)\ngit reset <hash>                # যে commit-এ ফিরে যেতে চান\n\n# upstream ভুলে — সবচেয়ে নিরাপদ path\ngit reset --hard origin/main    # রিমোটের অবস্থায়"} lang={"bash"} title={"সবচেয়ে গুরুত্বপূর্ণ তিনটা"} />
+
+<Tip tone={"warning"} title={"সতর্কতা"} text={"`--hard` অপরিবর্তনীয় — uncommitted কাজ এবং commit উভয়ই মুছে ফেলে। ব্যবহারের আগে মনে করে নিন, বা stash দিয়ে ব্যাকআপ রাখুন।"} />
+
+## git revert — push হওয়ার পরে
+
+<CodeBlock code={"git revert 8f3a2b1\n# একটি নতুন commit তৈরি হয় যা পুরোনোটির বিপরীত\n# ইতিহাস অপরিবর্তিত — টিমের জন্য নিরাপদ"} lang={"bash"} />
+
+## git checkout (পুরোনো রীতি)
+
+<InParagraph text={"পুরোনো গাইডে `git checkout -- file` বা `git checkout <hash>` — ধরণের কমান্ড পাবেন। `git restore` ও `git switch` হলো এর আধুনিক বিভাজন, পড়তে সহজ।"} />
+
+## কোনটা কখন ব্যবহার করবেন
+
+- **push হয়নি** — reset ব্যবহার করুন (history rewrite করার সুযোগ আছে)
+- **push হয়েছে, টিম/প্রোডাকশনে আছে** — revert ব্যবহার করুন
+- **শুধু stage ফাঁকা** — restore --staged
+
+<Tip tone={"success"} title={"রবীন্দ"} text={"প্রতিটি undo-র আগে `git status` দেখুন। চোখের সামনে কী অবস্থা তা বোঝা সহজ — panic কম।"} />

@@ -1,0 +1,18 @@
+---
+title: "app.config.ts ও env variables"
+label: "Config & Env"
+order: 33
+level: "Advanced"
+description: "Dynamic config ও EXPO_PUBLIC_ env — সঠিক ব্যবহার।"
+---
+
+<InParagraph text={"জটিল config-এ `app.json`-এর বদলে দুই পছন্দ — **`app.config.js`** (JS) কিংবা **`app.config.ts`** (TS)।"} />
+
+<CodeBlock code={"import type { ConfigContext, ExpoConfig } from \"expo/config\";\n\nexport default ({ config }: ConfigContext): ExpoConfig => ({\n  ...config,\n  name: \"TaskTrack\",\n  version: \"1.1.0\",\n  extra: {\n    apiUrl: process.env.API_URL ?? \"https://api.example.com\",\n  },\n});"} lang={"ts"} title={"app.config.ts"} />
+
+- **build-time env** — `.env` + `EXPO_PUBLIC_` prefix; code-এ `process.env.EXPO_PUBLIC_API_URL`
+- **runtime safe** — `config.extra` → code-এ `Constants.expoConfig.extra.apiUrl`
+
+<CodeBlock code={"import Constants from \"expo-constants\";\n\nconst apiUrl = Constants.expoConfig?.extra?.apiUrl ?? \"\";"} lang={"ts"} />
+
+<Tip tone={"warning"} title={"EXPO_PUBLIC_ নিয়ম"} text={"`EXPO_PUBLIC_` prefix ছাড়া var client-এ embed হয় না। secret (API key/private token) কখনও client-এ রাখবেন না — server proxy-তে রাখুন।"} />

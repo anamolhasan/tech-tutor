@@ -1,0 +1,29 @@
+---
+title: "useEffect ও Side Effects"
+label: "useEffect"
+order: 11
+level: "Intermediate"
+description: "useEffect কীভাবে কাজ করে — dependency array, cleanup, fetch pattern — বাংলায়।"
+---
+
+## Side effect কী?
+
+<InParagraph text={"Rendering-এর বাইরে যেসব কাজ — **network request, timer, localStorage, DOM ম্যানিপুলেশন, subscription** — সেগুলো **side effect**। এগুলো component body-তে সরাসরি করা যায় না; `useEffect`-এর ভেতরে করা হয়।"} />
+
+<CodeBlock code={"import { useEffect, useState } from \"react\";\n\nfunction App() {\n  const [data, setData] = useState(null);\n\n  useEffect(() => {\n    // mount-এ চলে\n    console.log(\"Component mounted\");\n\n    // cleanup — unmount/পরের চালনার আগে\n    return () => console.log(\"Cleaning up\");\n  }, []); // dependency array\n\n  return <div />;\n}"} lang={"jsx"} title={"useEffect basics"} />
+
+## Dependency array
+
+| Deps | কখন চলে |
+| --- | --- |
+| `[]` | শুধু mount-এ একবার |
+| `[count]` | count বদলালে |
+| (কিছু না দেওয়া) | প্রতিটি render-এ |
+
+## Fetch pattern
+
+<CodeBlock code={"function Profile({ userId }) {\n  const [user, setUser] = useState(null);\n  const [loading, setLoading] = useState(true);\n\n  useEffect(() => {\n    let cancelled = false; // race condition আটকাতে\n\n    setLoading(true);\n    fetch(\"/api/users/\" + userId)\n      .then((r) => r.json())\n      .then((data) => {\n        if (!cancelled) setUser(data);\n      })\n      .finally(() => {\n        if (!cancelled) setLoading(false);\n      });\n\n    return () => {\n      cancelled = true; // cleanup\n    };\n  }, [userId]); // userId বদলালে আবার fetch\n\n  if (loading) return <p>Loading…</p>;\n  return <h1>{user?.name}</h1>;\n}"} lang={"jsx"} title={"Data fetching + cleanup"} />
+
+## StrictMode double
+
+<Tip tone={"warning"} title={"দ্বিগুণ ডেভ রান"} text={"ডেভেলপমেন্টের `StrictMode`-এ effect mount-এ দুবার চলে — এটা স্বাভাবিক; production-এ একবার। তাই effect-কে **idempotent** (বারবার চালালেও একই ফল) রাখুন, যেমন cleanup দিয়ে timer/request বাতিল।"} />

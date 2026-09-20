@@ -1,0 +1,29 @@
+---
+title: "Async JavaScript (অ্যাসিংক্রোনাস)"
+label: "Async JavaScript"
+order: 13
+level: "Intermediate"
+description: "Synchronous বনাম Asynchronous, callback, event loop, setTimeout — async JavaScript-এর ভিত্তি বাংলায়।"
+---
+
+<InParagraph text={"JavaScript সাধারণত **synchronous** — এক কাজ শেষ হলে পরেরটি। কিন্তু API কল, ফাইল পড়া, টাইমারের মতো কাজ দীর্ঘ সময় নেয়। এক্ষেত্রে **asynchronous** চালনার প্রয়োজন।"} />
+
+## Synchronous বনাম Asynchronous
+
+<CodeBlock code={"console.log(\"১\");\nsetTimeout(() => {\n  console.log(\"২ (setTimeout)\");\n}, 0);\nconsole.log(\"৩\");\n\n// Output: ১ → ৩ → ২ (setTimeout)"} lang={"javascript"} />
+
+<InParagraph text={"`setTimeout` টাইমার সেট করে, তাই `console.log(\"৩\")` আগে চলে। কাজটি ব্লক হয়নি।"} />
+
+## Callback
+
+<CodeBlock code={"function fetchData(callback) {\n  setTimeout(() => {\n    callback({ id: 1, name: \"ডেটা\" });\n  }, 1000);\n}\n\nfetchData((data) => {\n  console.log(data.name);\n});"} lang={"javascript"} />
+
+## Event Loop
+
+<InParagraph text={"ব্রাউজার **event loop** দিয়ে async কাজ সাথেও synchronized রাখে — যতক্ষণ main কল স্ট্যাক খালি হয়, ততক্ষণ queue-এর কাজ থেমে থাকে।"} />
+
+## callback-এর সমস্যা
+
+<InParagraph text={"একের ভেতরে আরেকটি callback-কে অনেকবার nesting করলে কোড পড়া কঠিন হয় — এটিকে বলা হয় **callback hell**। এর সমাধানে আসে Promise ও async/await — পরের অধ্যায়ে।"} />
+
+<Tip tone={"warning"} title={"UI বাঁচান"} text={"বড় heavy sync কাজ (বিশাল লুপ) main thread আটকে পেজ freeze করতে পারে। দরকারে async/worker ব্যবহার করুন।"} />

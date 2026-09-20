@@ -1,0 +1,27 @@
+---
+title: "Node.js Database Integration"
+label: "Database"
+order: 15
+level: "Advanced"
+description: "MongoDB (Mongoose), PostgreSQL (Prisma), connection, CRUD — Node.js-এ database বাংলায়।"
+---
+
+<InParagraph text={"Node.js-এ বেশিরভাগ project-এ database লাগে। দুটি জনপ্রিয় database: **MongoDB** (NoSQL) ও **PostgreSQL** (SQL)।"} />
+
+## MongoDB + Mongoose
+
+<CodeBlock code={"npm install mongoose"} lang={"bash"} />
+
+<CodeBlock code={"const mongoose = require(\"mongoose\");\n\nconst userSchema = new mongoose.Schema({\n  name: { type: String, required: true },\n  email: { type: String, required: true, unique: true },\n  age: { type: Number, default: 0 },\n  createdAt: { type: Date, default: Date.now },\n});\n\nmodule.exports = mongoose.model(\"User\", userSchema);"} lang={"javascript"} title={"models/User.js"} />
+
+<CodeBlock code={"const mongoose = require(\"mongoose\");\n\n// Connect\nmongoose.connect(\"mongodb://localhost:27017/myapp\")\n  .then(() => console.log(\"MongoDB connected\"))\n  .catch(err => console.error(err));\n\n// CRUD\nconst User = require(\"./models/User\");\n\n// Create\nconst user = await User.create({\n  name: \"রহিম\",\n  email: \"rahim@example.com\",\n});\n\n// Read\nconst users = await User.find();\nconst user = await User.findById(id);\n\n// Update\nawait User.findByIdAndUpdate(id, { name: \"নতুন নাম\" });\n\n// Delete\nawait User.findByIdAndDelete(id);"} lang={"javascript"} title={"server.js"} />
+
+## PostgreSQL + Prisma
+
+<CodeBlock code={"npm install prisma @prisma/client\nnpx prisma init"} lang={"bash"} />
+
+<CodeBlock code={"generator client {\n  provider = \"prisma-client-js\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id    Int     @id @default(autoincrement())\n  name  String\n  email String  @unique\n  posts Post[]\n}\n\nmodel Post {\n  id       Int    @id @default(autoincrement())\n  title    String\n  author   User   @relation(fields: [authorId], references: [id])\n  authorId Int\n}"} lang={"prisma"} title={"prisma/schema.prisma"} />
+
+<CodeBlock code={"const { PrismaClient } = require(\"@prisma/client\");\nconst prisma = new PrismaClient();\n\n// Create\nconst user = await prisma.user.create({\n  data: { name: \"রহিম\", email: \"rahim@example.com\" },\n});\n\n// Read with relations\nconst users = await prisma.user.findMany({\n  include: { posts: true },\n});\n\n// Update\nawait prisma.user.update({\n  where: { id: 1 },\n  data: { name: \"নতুন নাম\" },\n});\n\n// Delete\nawait prisma.user.delete({ where: { id: 1 } });"} lang={"javascript"} title={"Prisma usage"} />
+
+<Tip tone={"info"} title={"কোনটি বেছে নেবেন?"} text={"MongoDB flexibel schema চাইলে, PostgreSQL strict relational data চাইলে। উভয়ই Node.js-এ দারুণ কাজ করে।"} />

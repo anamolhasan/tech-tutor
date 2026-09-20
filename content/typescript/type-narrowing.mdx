@@ -1,0 +1,37 @@
+---
+title: "Type Narrowing (টাইপ ন্যারোয়িং)"
+label: "Type Narrowing"
+order: 10
+level: "Intermediate"
+description: "typeof, truthiness, equality, in, instanceof ও discriminated union — কীভাবে union টাইপকে সরু করে নিরাপদ কোড লেখা যায়।"
+---
+
+<InParagraph text={"**Type narrowing** মানে union টাইপের মান নিয়ে যাচাই করে টাইপটিকে **সরু** করা। condition-এর ভেতরে টাইপ আরও সুনির্দিষ্ট হয়ে যায়, ফলে প্রপার্টি নিরাপদে ব্যবহার করা যায়।"} />
+
+## typeof narrowing
+
+<CodeBlock code={"function printValue(value: string | number): void {\n  if (typeof value === \"string\") {\n    console.log(\"টেক্সট:\", value.toUpperCase());\n  } else {\n    console.log(\"সংখ্যা:\", value.toFixed(2));\n  }\n}\n\nprintValue(\"hello\");\nprintValue(3.1416);"} lang={"typescript"} />
+
+## Truthiness narrowing
+
+<CodeBlock code={"function getLength(text?: string): number {\n  if (text) {\n    return text.length;    // এখানে text: string\n  }\n  return 0;\n}"} lang={"typescript"} />
+
+## Equality narrowing
+
+<CodeBlock code={"function pick(x: string | number, y: string | boolean) {\n  if (x === y) {\n    // এখানে x ও y দুইটিই string\n    console.log(x.toUpperCase());\n  }\n}"} lang={"typescript"} />
+
+## in Operator
+
+<CodeBlock code={"type Fish = { swim: () => void };\ntype Bird = { fly: () => void };\n\nfunction move(animal: Fish | Bird): void {\n  if (\"swim\" in animal) {\n    animal.swim();    // narrowing: Fish\n  } else {\n    animal.fly();     // narrowing: Bird\n  }\n}"} lang={"typescript"} />
+
+## instanceof Operator
+
+<CodeBlock code={"function addOrLog(value: string[] | Date): void {\n  if (value instanceof Date) {\n    console.log(value.toISOString());\n  } else {\n    console.log(value.join(\", \"));\n  }\n}"} lang={"typescript"} />
+
+## Discriminated Unions
+
+<InParagraph text={"যখন প্রতিটি union member-এ একটি আলাদা **tag প্রপার্টি** থাকে (যেমন `kind`), তখন সেই ট্যাগ দিয়ে টাইপ সরু করা যায় — এটাই real-world-এর সবচেয়ে দরকারি প্যাটার্ন।"} />
+
+<CodeBlock code={"type Shape =\n  | { kind: \"circle\"; radius: number }\n  | { kind: \"square\"; size: number }\n  | { kind: \"rect\"; width: number; height: number };\n\nfunction area(shape: Shape): number {\n  switch (shape.kind) {\n    case \"circle\":\n      return Math.PI * shape.radius ** 2;\n    case \"square\":\n      return shape.size ** 2;\n    case \"rect\":\n      return shape.width * shape.height;\n  }\n}\n\nconsole.log(area({ kind: \"circle\", radius: 3 }));   // ≈ 28.27"} lang={"typescript"} />
+
+<Tip tone={"success"} title={"exhaustive চেক"} text={"switch-এ নতুন case যোগ করতে ভুল হলে `default`-এ `assertNever(value)` ব্যবহার করুন — TypeScript তখন compile-error দেবে, যা পরিবর্তন tracking-এ অভিজ্ঞভাবে সাহায্য করে।"} />

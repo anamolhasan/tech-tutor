@@ -1,0 +1,48 @@
+---
+title: "Branch — সমান্তরাল কাজের উপায়"
+label: "Branching"
+order: 7
+level: "Beginner"
+description: "Branch কী, কীভাবে তৈরি, নামকরণ ও মুছতে হয় — বাংলায়।"
+---
+
+## Branch কী?
+
+<InParagraph text={"Branch হলো মূল ধার থেকে আলাদা একটি **workstream**। আপনি main branch-কে স্পর্শ না করে নতুন ফিচার বানাতে পারেন; কাজ শেষে merge করে আবার জুড়ে দেন।"} />
+
+<CodeBlock code={"main ──── A ──── B ──── C\n                  └── feature/login\n                        └── D ──── E"} lang={"bash"} title={"Branch-এর সমান্তরাল ধারণা"} />
+
+## ব্যবহার্য branch কমান্ড
+
+| কমান্ড | কী করে |
+| --- | --- |
+| git branch | সব লোকাল branch দেখায় (* বর্তমানটি) |
+| git branch -a | লোকাল + remote branch |
+| git branch name | নতুন branch তৈরি (switch না করে) |
+| git switch name | সেই branch-এ যাও |
+| git switch -c name | নতুন branch বানিয়ে তাতে যাও |
+| git checkout name | পুরোনো স্টাইলে switch |
+| git branch -d name | বিলুপ্ত branch মুছে ফেলো |
+| git branch -D name | জোর করে মুছে ফেলো |
+
+## নতুন branch নিয়ে কাজ করা
+
+<CodeBlock code={"git switch -c feature/contact-page\n# ... ফাইল edit ...\ngit add .\ngit commit -m \"feat: contact page added\"\ngit switch main\ngit branch -d feature/contact-page"} lang={"bash"} title={"Full workflow"} />
+
+## HEAD কী?
+
+<InParagraph text={"HEAD হলো pointer, যা বর্তমানে আপনি কোন commit/branch-এ আছেন তা নির্দেশ করে। `git log --oneline --graph --all` দিয়ে সব branch-এ দেখতে পারবেন।"} />
+
+## Branch-এর নামকরণের নিয়ম
+
+- `feature/...` — নতুন ফিচার
+- `bugfix/...` — বাগ সমাধান
+- `hotfix/...` — জরুরি ফিক্স
+- `docs/...` — ডকুমেন্টেশন
+- স্লাগ format: ছোট অক্ষর + dash
+
+## ভুল branch-এ কাজ হয়ে গেল?
+
+<CodeBlock code={"git stash                     # বর্তমান পরিবর্তন সেভ\ngit switch main\ngit switch -c feature/contact-page\ngit stash pop                  # আবার ফিরিয়ে আনি"} lang={"bash"} />
+
+<Tip tone={"info"} title={"মনে রাখুন"} text={"Branch তৈরি করা খুবই সস্তা (একটি pointer)। যে বড় পরিবর্তন করতে চাইবেন, তাকে আলাদা branch-এ শুরু করুন — ছোট পরীক্ষা-নিরীক্ষা পর্যন্ত আলাদা branch ব্যবহার করলে main সবসময় ডিপ্লয়যোগ্য থাকবে।"} />

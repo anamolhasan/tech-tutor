@@ -1,0 +1,27 @@
+{
+  "name": "tech-tutor",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@10.30.2",
+  "engines": {
+    "node": ">=18.18.0"
+  },
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "check-types": "turbo check-types",
+    "lint": "turbo lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md,mdx}\"",
+    "format:check": "turbo format:check",
+    "clean": "turbo clean && node -e \"require('fs').rmSync('node_modules',{recursive:true,force:true})\""
+  },
+  "devDependencies": {
+    "@tech-tutor/eslint-config": "workspace:*",
+    "@tech-tutor/typescript-config": "workspace:*",
+    "@types/node": "catalog:typescript5",
+    "prettier": "^3.5.3",
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "turbo": "^2.5.4",
+    "typescript": "catalog:typescript5"
+  }
+}

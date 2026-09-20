@@ -1,0 +1,15 @@
+---
+title: "Express + PostgreSQL — mini API"
+label: "TechShop API"
+order: 37
+level: "Intermediate"
+description: "পূর্বে শেখা pg + Express-এ products endpoints।"
+---
+
+<CodeBlock code={"import express from \"express\";\nimport { pool } from \"./db\";\n\nconst app = express();\napp.use(express.json());\n\napp.get(\"/api/products\", async (_req, res) => {\n  const result = await pool.query(\n    \"SELECT id, name, price, qty FROM products\"\n  );\n  res.json({ products: result.rows });\n});\n\napp.post(\"/api/products\", async (req, res) => {\n  const { name, price, qty } = req.body;\n  const result = await pool.query(\n    \"INSERT INTO products (name, price, qty) \" +\n    \"VALUES ($1, $2, $3) RETURNING *\",\n    [name, price, qty]\n  );\n  res.status(201).json(result.rows[0]);\n});\n\napp.listen(4000);"} lang={"ts"} title={"server.ts"} />
+
+- body-তে validation (zod) যোগ করুন
+- paginate — LIMIT/OFFSET query params
+- error middleware-এ 500 handle
+
+<Tip tone={"warning"} title={"বড় ডিল− N+1"} text={"React-এ loop-এ query-এর বদলে **এক JOIN query** — TechShop API-তে প্রতিটি endpoint যেন একটি query-তেই উত্তর দেয়।"} />

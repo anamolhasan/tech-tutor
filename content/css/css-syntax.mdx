@@ -1,0 +1,31 @@
+---
+title: "CSS Syntax (বাক্য গঠন)"
+label: "CSS Syntax"
+order: 3
+level: "Beginner"
+description: "CSS rule, selector, declaration block, property-value pair — CSS সিনট্যাক্স সম্পূর্ণ বাংলায়।"
+---
+
+<InParagraph text={"প্রতিটি CSS স্টাইল একটি **rule** (নিয়ম) দিয়ে লেখা হয়। একটি rule-এ থাকে selector এবং declaration block।"} />
+
+## Rule-এর গঠন
+
+<CodeBlock code={"h1 {\n  color: red;\n  font-size: 30px;\n}\n│       │\n│       └── declaration block\n└── selector"} lang={"css"} />
+
+- `{}` — declaration block
+- declaration — `property: value;`
+- `;` — প্রতিটি declaration শেষে সেমিকোলন
+
+## মন্তব্য (Comments)
+
+<CodeBlock code={"/* এটি একটি CSS কমেন্ট */\np {\n  font-size: 16px; /* লাইন-শেষের কমেন্ট */\n}"} lang={"css"} />
+
+## একাধিক selector
+
+<InParagraph text={"কমা দিয়ে একাধিক selector-এ একই স্টাইল দেওয়া যায়।"} />
+
+<CodeBlock code={"h1,\nh2,\nh3 {\n  font-family: sans-serif;\n  line-height: 1.3;\n}"} lang={"css"} />
+
+<Tip tone={"warning"} title={"সেমিকোলন ভুলবেন না"} text={"প্রতিটি declaration-এর শেষে `;` দেওয়া বাধ্যতামূলক নয় (শেষেরটি ছাড়া), তবে সবসময় দেওয়াই নিরাপদ — অন্যথায় পরের declaration ভুল হয়ে যেতে পারে।"} />
+
+<Tip tone={"success"} title={"সেমিকোলন বারবার ভুলে যাচ্ছেন?"} text={"অনেক developer **multi-line** স্টাইল লিখতে পছন্দ করেন, প্রতিটি property আলাদা লাইনে — এতে `;` ভোলার সম্ভাবনা কমে।"} />

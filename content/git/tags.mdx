@@ -1,0 +1,42 @@
+---
+title: "Tags — নির্দিষ্ট সংস্করণ চিহ্নিত করা"
+label: "Tags & Release"
+order: 15
+level: "Intermediate"
+description: "git tag দিয়ে release সংস্করণ চিহ্নিত করা — বাংলায়।"
+---
+
+## Tag কী?
+
+<InParagraph text={"Tag হলো একটি নির্দিষ্ট commit-এর **রেফারেন্স**, সাধারণত release সংস্করণ চিহ্নিত করতে ব্যবহৃত হয় — যেমন `v1.0.0`। Branch চলতে থাকে, tag স্থির থাকে।"} />
+
+## Tag তৈরি
+
+<CodeBlock code={"git tag v1.0.0                    # lightweight\ngit tag -a v1.0.0 -m \"Release v1.0.0\"   # annotated (বিস্তারিত তথ্যসহ)\ngit tag -a v1.1.0 -m \"...\" <commit-hash>   # নির্দিষ্ট commit-এ"} lang={"bash"} />
+
+## Tag দেখা, ঘটা
+
+<CodeBlock code={"git tag                     # সমস্ত tag\ngit tag -l \"v1.*\"\ngit show v1.0.0             # tag info\ngit switch v1.0.0           # সেই সংস্করণে যাও"} lang={"bash"} />
+
+## Remote-এ tag push
+
+<CodeBlock code={"git push origin v1.0.0\ngit push --tags                 # সব\ngit push origin --delete v1.0.0 # remote tag মুছে ফেলা"} lang={"bash"} />
+
+## Semantic Versioning
+
+<InParagraph text={"সংস্করণ দেখাতে **SemVer** ব্যবহার হয়: `MAJOR.MINOR.PATCH`"} />
+
+- **MAJOR** — ভাঙা পরিবর্তন (breaking change)
+- **MINOR** — নতুন ফিচার (backward compatible)
+- **PATCH** — বাগ ফিক্স
+- উদাহরণ: `v2.4.1` — main 2, revision 4, patch 1
+
+## Tag vs Branch
+
+| Tag | Branch |
+| --- | --- |
+| স্থির অবস্থায় থাকে | মোভিং pointer |
+| release চিহ্নিত | কাজের ধারা |
+| সাধারণত কখনো পরিবর্তন নয় | নতুন commit যোগ হয় |
+
+<Tip tone={"success"} title={"পরামর্শ"} text={"প্রতিটি production release-এর time -এ annotated tag দিন — পরে ঠিক কোন কোড production-এ ছিল তা নিশ্চিতভাবে জানা যায়।"} />

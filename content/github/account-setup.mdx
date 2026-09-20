@@ -1,0 +1,48 @@
+---
+title: "অ্যাকাউন্ট তৈরি ও SSH সেটআপ"
+label: "Account Setup"
+order: 2
+level: "Beginner"
+description: "GitHub অ্যাকাউন্ট তৈরি, profile বানানো ও SSH key — বাংলায়।"
+---
+
+## অ্যাকাউন্ট তৈরি
+
+- [github.com](https://github.com)-এ যান
+- Sign up — username, email, password
+- ভেরিফাই করতে email verify করুন
+- username — এটি আপনার পাবলিক পরিচয়, সাবধানে বাছুন
+
+## Profile ঝালাই করা
+
+- Bio — আপনি কী কাজ করেন
+- Avatar — নিজের ছবি বা মনোগ্রাম
+- Website — পোর্টফোলিও/ব্লগের লিংক
+- README profile — username-এর নামে repo-তে README লিখলে profile-এ দেখায়
+
+## দুইভাবে connect
+
+| পদ্ধতি | কখন | নিরাপত্তা |
+| --- | --- | --- |
+| HTTPS | সহজ শুরু, token টানতে হয় | মাঝারি |
+| SSH | সে জন্য বেশি ক্ষমতাশালী | দুই-উপায়ে বেশি নিরাপত্তা |
+
+## SSH key সেটআপ
+
+<CodeBlock code={"ssh-keygen -t ed25519 -C \"anamolhasan@example.com\"\n# Enter... (passphrase দিলে বেশি নিরাপদ)\ncat ~/.ssh/id_ed25519.pub  # এই public key কপি করুন"} lang={"bash"} title={"Local-এ key বানানো"} />
+
+## GitHub-এ key যোগ
+
+- GitHub → Settings → SSH and GPG keys
+- New SSH key → paste public key → Add
+- তাহলে push/pull এ password টাইপ করতে হয় না
+
+## Verify
+
+<CodeBlock code={"ssh -T git@github.com\n# Hi anamolhasan! You've successfully authenticated..."} lang={"bash"} />
+
+## Two-factor Authentication (2FA)
+
+<InParagraph text={"Settings → Password and authentication → Enable two-factor authentication। টোটালর মতো authenticator app ব্যবহার করলে অ্যাকাউন্ট বেশ নিরাপদ।"} />
+
+<Tip tone={"warning"} title={"সাবধান"} text={"SSH private key (id_ed25519) কখনো শেয়ার বা commit করবেন না। এটি আপনার পরিচয়ের চাবি।"} />

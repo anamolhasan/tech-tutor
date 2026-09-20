@@ -1,0 +1,46 @@
+---
+title: "Docker Installation ও প্রথম Container"
+label: "Installation"
+order: 4
+level: "Beginner"
+description: "Windows, macOS, Linux-এ Docker install এবং প্রথম hello-world container চালানো — বাংলায়।"
+---
+
+<InParagraph text={"প্রথম ধাপ — Docker install করা এবং নিশ্চিত হওয়া যে সব ঠিকঠাক কাজ করছে। চলুন শুরু করি।"} />
+
+## Windows ও macOS — Docker Desktop
+
+1. `docker.com/products/docker-desktop` থেকে **Docker Desktop** ডাউনলোড
+1. Windows-এ **WSL2** ব্যাকএন্ড (সেটআপের সময় Docker নিজে আপনাকে বলবে)
+1. ইনস্টলের পর Docker Desktop খুলুন এবং sign in করুন
+1. Terminal-এ `docker --version` চালিয়ে verify করুন
+
+## Linux — Docker Engine
+
+<CodeBlock code={"# official convenience script (এক-লাইনে install)\ncurl -fsSL https://get.docker.com | sh\n\n# current user-কে docker group-এ যোগ (sudo ছাড়া docker চালাতে)\nsudo usermod -aG docker $USER\n\n# লগআউট + লগইন করে verify\ndocker --version"} lang={"bash"} title={"Ubuntu/Debian install"} />
+
+## Install verify
+
+<CodeBlock code={"docker --version\n# Docker version 27.x.x, build xxxxx\n\ndocker info\n# Engine ও runtime-এর বিস্তারিত info\n\ndocker compose version\n# Docker Compose version v2.x.x"} lang={"bash"} title={"Docker ঠিক আছে কি?"} />
+
+## প্রথম container চালানো
+
+<CodeBlock code={"docker run hello-world"} lang={"bash"} title={"hello-world"} />
+
+<InParagraph text={"এই কমান্ডে Docker Hub থেকে tiny `hello-world` image pull করে একটি container চালায়। সফল হলে একটি বার্তা দেখবেন — 'Hello from Docker!'। এটাই আপনার প্রথম container!"} />
+
+## প্রয়োজনীয় কমান্ড
+
+| কমান্ড | কাজ |
+| --- | --- |
+| `docker --version` | Docker version দেখায় |
+| `docker info` | Engine তথ্য দেখায় |
+| `docker run <image>` | Image থেকে container চালায় |
+| `docker ps` | চলমান container list |
+| `docker ps -a` | সব (স্থগিতসহ) container list |
+| `docker images` | লোকাল image list |
+| `docker pull <image>` | Image ডাউনলোড |
+| `docker rm <id>` | Container মুছে |
+| `docker rmi <image>` | Image মুছে |
+
+<Tip tone={"success"} title={"টিপ্"} text={"WSL2/हmacOS-এ ডকুমেন্টেশন পড়ার সময় সব টার্মিনাল কমান্ড একইভাবে কাজ করে। Linux server-এ deploy করতে হলে একই command চলে।"} />

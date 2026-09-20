@@ -1,0 +1,31 @@
+---
+title: "JavaScript Operators (অপারেটর)"
+label: "Operators"
+order: 5
+level: "Beginner"
+description: "Arithmetic, assignment, comparison, logical, ternary — JavaScript-এ অপারেটরের সম্পূর্ণ বাংলা গাইড।"
+---
+
+<InParagraph text={"**অপারেটর** হলো সেই চিহ্ন যা মানগুলোর সাথে অপারেশন করে — যোগ, তুলনা, মিলানো ইত্যাদি।"} />
+
+## Arithmetic অপারেটর
+
+<CodeBlock code={"let a = 10;\nlet b = 3;\n\nconsole.log(a + b);  // 13  যোগ\nconsole.log(a - b);  // 7   বিয়োগ\nconsole.log(a * b);  // 30  গুণ\nconsole.log(a / b);  // 3.33 বিভাগ\nconsole.log(a % b);  // 1   ভাগশেষ\nconsole.log(a ** b); // 1000 ঘাত"} lang={"javascript"} />
+
+## Assignment অপারেটর
+
+<CodeBlock code={"let x = 5;\nx += 3;   // x = x + 3  → 8\nx -= 2;   // 6\nx *= 2;   // 12\nx /= 3;   // 4\nx++;      // 5 (1 বাড়াও)\nx--;      // 4 (1 কমান)"} lang={"javascript"} />
+
+## Comparison অপারেটর
+
+<CodeBlock code={"console.log(5 == \"5\");   // true  (মানে মাত্র)\nconsole.log(5 === \"5\");  // false (মানে ও টাইপ)\nconsole.log(5 !== 3);    // true\nconsole.log(5 > 3);      // true\nconsole.log(5 >= 5);     // true"} lang={"javascript"} />
+
+## Logical অপারেটর
+
+<CodeBlock code={"const age = 25;\nconst hasTicket = true;\n\nconsole.log(age >= 18 && hasTicket); // true  (উভয়)\nconsole.log(age < 18 || hasTicket);  // true  (যেকোনো এক)\nconsole.log(!hasTicket);             // false (বিপরীত)"} lang={"javascript"} />
+
+## Ternary অপারেটর
+
+<CodeBlock code={"const score = 80;\nconst result = score >= 60 ? \"পাস\" : \"ফেল\";\n\nconsole.log(result); // \"পাস\""} lang={"javascript"} />
+
+<Tip tone={"warning"} title={"== নাকি ==="} text={"সবসময় **`===`** ও **`!==`** ব্যবহার করুন — `==` টাইপকে আগে-পরে পরিবর্তন করে ফেলে, যা অপ্রত্যাশিত ফল দিতে পারে।"} />

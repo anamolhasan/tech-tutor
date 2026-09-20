@@ -1,0 +1,23 @@
+---
+title: "GROUP BY, HAVING — aggregate functions"
+label: "Aggregation"
+order: 15
+level: "Intermediate"
+description: "COUNT, SUM, AVG দিয়ে group-wise পরিসংখ্যান।"
+---
+
+<CodeBlock code={"SELECT status, COUNT(*) AS n, SUM(total) AS revenue\nFROM orders\nGROUP BY status;"} lang={"sql"} />
+
+| Function | কাজ |
+| --- | --- |
+| COUNT(*) | row count |
+| SUM(col) | sum |
+| AVG(col) | average |
+| MIN / MAX(col) | সর্বনিম্ন / সর্বোচ্চ |
+| COUNT(DISTINCT col) | unique count |
+
+<InParagraph text={"**HAVING** — group-এর উপর condition (WHERE group-এ নয়):"} />
+
+<CodeBlock code={"SELECT product_id, COUNT(*) AS sold\nFROM order_items\nGROUP BY product_id\nHAVING COUNT(*) >= 10;"} lang={"sql"} />
+
+<Tip tone={"warning"} title={"GROUP BY নিয়ম"} text={"SELECT-এ aggregate আর non-aggregate যেটা আছে, non-aggregate column-গুলো অবশ্যই `GROUP BY`-তে থাকতে হবে।"} />

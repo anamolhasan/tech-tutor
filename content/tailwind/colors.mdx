@@ -1,0 +1,41 @@
+---
+title: "Tailwind Colors"
+label: "Colors"
+order: 18
+level: "Beginner"
+description: "Tailwind-এর built-in color palette, color intensity scale এবং custom color — বাংলা গাইড।"
+---
+
+<InParagraph text={"Tailwind-এ ১০০+ built-in colors আছে। প্রতিটি color-এ ১০টি intensity shade (50-950) আছে।"} />
+
+## Color Intensity Scale
+
+| Shade | বৈশিষ্ট্য |
+| --- | --- |
+| 50 | সবচেয়ে হালকা (lightest) |
+| 100-200 | হালকা shades |
+| 300-400 | মাঝারি shades |
+| 500 | Default / base shade |
+| 600-700 | গাঢ় shades |
+| 800-900 | অতি গাঢ় |
+| 950 | সবচেয়ে গাঢ় (darkest) |
+
+## Background Color
+
+<CodeBlock code={"<div class=\"bg-blue-500\">Default blue</div>\n<div class=\"bg-blue-100\">Light blue</div>\n<div class=\"bg-blue-900\">Dark blue</div>\n<div class=\"bg-red-500\">Red background</div>\n<div class=\"bg-green-500\">Green background</div>"} lang={"html"} />
+
+## Text Color
+
+<CodeBlock code={"<p class=\"text-red-500\">লাল টেক্সট</p>\n<p class=\"text-gray-600\">ধূসর টেক্সট</p>\n<p class=\"text-emerald-700\">সবুজাভ টেক্সট</p>"} lang={"html"} />
+
+## Border Color
+
+<CodeBlock code={"<div class=\"border border-blue-500\">নীল border</div>\n<div class=\"border-2 border-red-300\">মোটা লাল border</div>"} lang={"html"} />
+
+## Custom Colors
+
+<CodeBlock code={"@import \"tailwindcss\";\n\n@theme {\n  --color-brand: #3b82f6;\n  --color-brand-light: #93c5fd;\n}"} lang={"css"} title={"Tailwind v4 CSS-first"} />
+
+<CodeBlock code={"<div class=\"bg-brand text-brand-light\">Custom color ব্যবহার</div>"} lang={"html"} />
+
+<Tip tone={"info"} title={"Color Palette দেখুন"} text={"Tailwind অফিসিয়াল সাইটে [colors page](https://tailwindcss.com/docs/customizing-colors) দেখুন — সব color-এর shade scale একসাথে দেখা যায়।"} />

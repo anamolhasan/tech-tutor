@@ -1,0 +1,23 @@
+---
+title: "Express Router"
+label: "Router"
+order: 7
+level: "Intermediate"
+description: "express.Router() দিয়ে modular route structure তৈরি — বাংলায়।"
+---
+
+<InParagraph text={"**express.Router()** দিয়ে আপনার routes-কে আলাদা আলাদা files-এ ভাগ করা যায় — বড় project-এ structure পরিষ্কার থাকে।"} />
+
+## Router তৈরি
+
+<CodeBlock code={"const express = require(\"express\");\nconst router = express.Router();\n\n// /api/users/\nrouter.get(\"/\", (req, res) => {\n  res.json([{ id: 1, name: \"রহিম\" }]);\n});\n\n// /api/users/:id\nrouter.get(\"/:id\", (req, res) => {\n  res.json({ id: req.params.id });\n});\n\n// /api/users/\nrouter.post(\"/\", (req, res) => {\n  res.status(201).json(req.body);\n});\n\nrouter.put(\"/:id\", (req, res) => {\n  res.json({ id: req.params.id, ...req.body });\n});\n\nrouter.delete(\"/:id\", (req, res) => {\n  res.json({ message: \"deleted\" });\n});\n\nmodule.exports = router;"} lang={"javascript"} title={"routes/users.js"} />
+
+<CodeBlock code={"const { Router } = require(\"express\");\nconst router = Router();\n\nrouter.get(\"/\", (req, res) => res.json({ posts: [] }));\nrouter.get(\"/:id\", (req, res) => res.json({ postId: req.params.id }));\n\nmodule.exports = router;"} lang={"javascript"} title={"routes/posts.js"} />
+
+<CodeBlock code={"const express = require(\"express\");\nconst app = express();\n\nconst userRoutes = require(\"./routes/users\");\nconst postRoutes = require(\"./routes/posts\");\n\n// মাউন্ট করা\napp.use(\"/api/users\", userRoutes);\napp.use(\"/api/posts\", postRoutes);\n\napp.listen(3000);"} lang={"javascript"} title={"index.js — সব router মাউন্ট"} />
+
+## Router-level Middleware
+
+<CodeBlock code={"const router = express.Router();\n\n// এই router-এর শুধু সব route-এ apply হবে\nrouter.use((req, res, next) => {\n  console.log(\"User routes hit:\", req.originalUrl);\n  next();\n});\n\n// mergParams — parent & child params\nconst child = express.Router({ mergeParams: true });\nchild.get(\"/\", (req, res) => {\n  res.json({ parentId: req.params.parentId });\n});\n\napp.use(\"/api/parents/:parentId/children\", child);"} lang={"javascript"} />
+
+<Tip tone={"success"} title={"Benefit"} text={"Router-এর ব্যবহারে code modular হয়, প্রতিটি resource নিজের ফাইলে থাকে — debugging ও maintain করা সহজ।"} />

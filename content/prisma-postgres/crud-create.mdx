@@ -1,0 +1,15 @@
+---
+title: "create, createMany, upsert"
+label: "Create & Upsert"
+order: 9
+level: "Intermediate"
+description: "insert একক বা বাল্ক — আর conflict-এ update।"
+---
+
+<CodeBlock code={"await prisma.user.create({\n  data: { email: \"a@b.com\", name: \"Anamul\" },\n});\n\nawait prisma.product.createMany({\n  data: [\n    { name: \"Mechanical Keyboard\", price: 4200 },\n    { name: \"Wireless Mouse\", price: 1800 },\n  ],\n});"} lang={"ts"} />
+
+<CodeBlock code={"await prisma.product.upsert({\n  where: { name: \"Wireless Mouse\" },\n  update: { qty: { increment: 5 } },\n  create: { name: \"Wireless Mouse\", price: 1800, qty: 5 },\n});"} lang={"ts"} title={"upsert"} />
+
+<InParagraph text={"**upsert** — `where`-এ unique field; পেলে `update`, না পেলে `create`। `increment` — atomic relative update।"} />
+
+<Tip tone={"warning"} title={"upsert কী"} text={"upsert-এ `where`-র key unique/NOT NULL হতে হবে — না হলে Prisma error (P2025)।"} />
